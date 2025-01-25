@@ -1,0 +1,61 @@
+@font-face {
+    font-family: 'Baloo';
+    src: url("/src/font/Baloo-Regular.ttf") format("truetype");
+    font-style: normal;
+}
+
+:root {
+    --background: #100429;
+    --semidark-purple: #271D3E;
+    --grey-purple: #6F687E;
+    --purple: #4A2574;
+    --light-purple: #CF96FF;
+    --stroke-gray: #6F687E;
+    --input-gray: #3F3653;
+    --placeholder: #9F9AA9;
+    --white: #ffff;
+    --basic-blue: #2E86C1;
+    --intermediate-yellow: #D4AC0D;
+    --advance-red: #C0392B;
+    --dark-blue: #174360;
+    --semidark-blue: #205D87;
+    --dark-yellow: #6A5606;
+    --semidark-yellow: #947809;
+    --dark-red: #601C15;
+    --semidark-red: #86271E;
+} 
+
+
+.signup-container {
+    width: 525px;
+}
+.signup-card {
+    background-color: var(--semidark-purple);
+    display: flex;
+    flex-direction: column;
+    justify-content: top;
+    align-items: center;
+    border-radius: 25px;
+    gap: 30px;
+}
+
+.signup-width {
+    width: 100%;    
+    height: 600px
+    
+}
+
+.input-height {
+    width: 380px;
+}
+
+.input {
+    gap: 15px;
+}
+.input:nth-of-type(1) .input-height:nth-of-type(1) {
+    width: 120px;
+}
+
+.input:nth-of-type(1) .input-height:nth-of-type(2) {
+    width: 245px;
+}
