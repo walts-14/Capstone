@@ -3,10 +3,21 @@ import { Form, Button } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { useNavigate } from 'react-router-dom'
 import '../css/LoginForm.css'
+import axios from 'axios'
 
 function LoginForm() {
 
   const navigate = useNavigate()
+
+  const [data, setData] = React.useState({
+    email: '',
+    password: '',
+  })
+
+  const loginUser = async () => {
+    e.preventDefault()
+    axios.get('/')
+  }
 
   return (
    <>
@@ -19,6 +30,8 @@ function LoginForm() {
                 type="email"
                 placeholder="Email"
                 className="login-input input-height"
+                value={data.email}
+                onChange={(e) => setData({ ...data, email: e.target.value })}
               />
             </Form.Group>
 
@@ -27,6 +40,8 @@ function LoginForm() {
                 type="password"
                 placeholder="Password"
                 className="login-input input-height"
+                value={data.password}
+                onChange={(e) => setData({ ...data, password: e.target.value })}
               />
             </Form.Group>
 
