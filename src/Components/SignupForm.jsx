@@ -3,6 +3,9 @@ import { Form, Button } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { useNavigate } from 'react-router-dom'
 import '../css/SignupForm.css'
+import axios from 'axios'
+import { toast } from 'react-hot-toast'
+
 function SignupForm() {
   const navigate = useNavigate()
 
@@ -11,12 +14,29 @@ function SignupForm() {
     year: '',
     name: '',
     username: '',
+    email: '',
     password: '',
     confirmPassword: '',
   })
 
-  const signupUser = async () => {
+  const signupUser = async (e) => {
     e.preventDefault()
+    const { age, year, name, username, email, password } = data
+    try {
+      const {data} = await axios.post('http://localhost:5000/signup',
+      { age, year, name, username, email, password }
+      )
+      // check if user is created successfully
+      if(data.error) {
+        toast.error(data.error)
+      } else {
+        setData({});
+        toast.success(data.message)
+        navigate('/login')
+      }
+    } catch (error) {
+      
+    }
   }
 
   return (
@@ -54,13 +74,25 @@ function SignupForm() {
 
           <Form.Group className="mb-2 ">
             <Form.Control
-              type="email"
+              type="text"
               placeholder="Username"
               className="login-input input-height"
               value={data.username}
               onChange={(e) => setData({ ...data, username: e.target.value })}
             />
           </Form.Group>
+
+          
+          <Form.Group className="mb-2 ">
+            <Form.Control
+              type="email"
+              placeholder="Email"
+              className="login-input input-height"
+              value={data.username}
+              onChange={(e) => setData({ ...data, username: e.target.value })}
+            />
+          </Form.Group>
+          
 
           <Form.Group className="mb-2 ">
             <Form.Control
