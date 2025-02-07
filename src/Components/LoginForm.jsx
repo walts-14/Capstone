@@ -1,26 +1,26 @@
-import React from 'react'
-import { Form, Button } from 'react-bootstrap'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import { useNavigate } from 'react-router-dom'
-import '../css/LoginForm.css'
-import axios from 'axios'
+import React from "react";
+import { Form, Button } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { useNavigate } from "react-router-dom";
+import "../css/LoginForm.css";
+import axios from "axios";
+import Dashboard from "./Dashboard";
 
 function LoginForm() {
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [data, setData] = React.useState({
-    email: '',
-    password: '',
-  })
+    email: "",
+    password: "",
+  });
 
   const loginUser = async () => {
-    e.preventDefault()
-    axios.get('/')
-  }
+    e.preventDefault();
+    axios.get("/");
+  };
 
   return (
-   <>
+    <>
       <div className="login-container ">
         <div className="login-card login-width ">
           <h1>LOGIN</h1>
@@ -56,14 +56,17 @@ function LoginForm() {
               </a>
             </div>
 
-            <Button className="button-login" onClick={() => navigate("#")}>
+            <Button
+              className="button-login"
+              onClick={() => navigate("/Dashboard")}
+            >
               Submit
             </Button>
           </Form>
 
           <div className="sign-up">
             <p className="text-center text-light">
-              Don't have an account? {" "}
+              Don't have an account?{" "}
               <a href="/signup " className="">
                 Sign up
               </a>
@@ -72,7 +75,7 @@ function LoginForm() {
         </div>
       </div>
     </>
-  )
+  );
 }
 
-export default LoginForm
+export default LoginForm;
