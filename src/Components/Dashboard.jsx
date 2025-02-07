@@ -2,6 +2,7 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import luffy from "../assets/luffy.jpg";
 import "../css/Dashboard.css";
+import Lesson from "./Lesson";
 
 function Dashboard() {
   return (
@@ -62,6 +63,7 @@ function Dashboard() {
           Log out
         </button>
       </div>
+      <Lesson />
     </>
   );
 }
