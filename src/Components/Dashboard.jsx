@@ -10,7 +10,7 @@ function Dashboard() {
       <div className="logo fw-bold">
         <p>We Sign</p>
       </div>
-      <div className="navbar-bg d-block p-5">
+      <div className="navbar-bg d-flex p-5">
         <nav className="sideNav d-flex flex-column fs-2 ">
           <div className="dashboard">
             <a className="nav-link mb-5" aria-current="page" href="#">
@@ -56,14 +56,38 @@ function Dashboard() {
         <p className="fs-2 fw-bold"> Monkey D. Luffy</p>
       </div>
       <div className="btns">
-        <button type="button" className="btn btn-primary btn-lg fw-bold fs-3">
+        <button
+          type="button"
+          className="btn btn-primary btn-lg fw-bold fs-3 rounded-5"
+        >
           Sign up
         </button>
-        <button type="button" className="btn btn-secondary btn-lg fw-bold fs-3">
+        <button
+          type="button"
+          className="btn btn-secondary btn-lg fw-bold fs-3 rounded-5"
+        >
           Log out
         </button>
       </div>
-      <Lesson />
+      <div className="basic-lessons">
+        <Lesson
+          buttonColors={["#174360", "#174360", "#174360", "#174360", "#174360"]}
+          shadowStyle="0 7px 0 #205d87"
+        />
+      </div>
+      <div className="intermediate-lessons">
+        <Lesson
+          buttonColors={["#DCBC3D", "#DCBC3D", "#DCBC3D", "#DCBC3D", "#DCBC3D"]}
+          shadowStyle="0 7px 0 #A9890A"
+        />
+      </div>
+
+      <div className="advanced-lessons">
+        <Lesson
+          buttonColors={["#CC6055", "#CC6055", "#CC6055", "#CC6055", "#CC6055"]}
+          shadowStyle="0 7px 0 #992D22"
+        />
+      </div>
     </>
   );
 }

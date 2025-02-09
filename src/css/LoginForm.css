@@ -1,108 +1,106 @@
 @font-face {
-    font-family: 'Baloo';
-    src: url("/src/font/Baloo-Regular.ttf") format("truetype");
-    font-style: normal;
+  font-family: "Baloo";
+  src: url("/src/font/Baloo-Regular.ttf") format("truetype");
+  font-style: normal;
 }
 
 :root {
-    --background: #100429;
-    --semidark-purple: #271D3E;
-    --grey-purple: #6F687E;
-    --purple: #4A2574;
-    --light-purple: #CF96FF;
-    --stroke-gray: #6F687E;
-    --input-gray: #3F3653;
-    --placeholder: #9F9AA9;
-    --white: #ffff;
-    --basic-blue: #2E86C1;
-    --intermediate-yellow: #D4AC0D;
-    --advance-red: #C0392B;
-    --dark-blue: #174360;
-    --semidark-blue: #205D87;
-    --dark-yellow: #6A5606;
-    --semidark-yellow: #947809;
-    --dark-red: #601C15;
-    --semidark-red: #86271E;
-} 
+  --background: #100429;
+  --semidark-purple: #271d3e;
+  --grey-purple: #6f687e;
+  --purple: #4a2574;
+  --light-purple: #cf96ff;
+  --stroke-gray: #6f687e;
+  --input-gray: #3f3653;
+  --placeholder: #9f9aa9;
+  --white: #ffff;
+  --basic-blue: #2e86c1;
+  --intermediate-yellow: #d4ac0d;
+  --advance-red: #c0392b;
+  --dark-blue: #174360;
+  --semidark-blue: #205d87;
+  --dark-yellow: #6a5606;
+  --semidark-yellow: #947809;
+  --dark-red: #601c15;
+  --semidark-red: #86271e;
+}
 
 body {
-    background-color: var(--background);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  background-color: var(--background);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 h1 {
-    font-family: 'Baloo';
-    font-size: 40px;
-    color: white;
-    margin: 25px 0 0 0;
+  font-family: "Baloo";
+  font-size: 40px;
+  color: white;
+  margin: 25px 0 0 0;
 }
 .login-container {
-    width: 500px;
-    
+  width: 500px;
 }
 .login-input {
-    padding: 20px;
+  padding: 20px;
 }
 
 .login-card {
-    background-color: var(--semidark-purple);
-    border-radius: 25px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 35px;
+  background-color: var(--semidark-purple);
+  border-radius: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 35px;
 }
 .login-width {
-    width: 100%;
-    height: 450px;
+  width: 100%;
+  height: 450px;
 }
 .login-input {
-        background-color: var(--input-gray);
-        border: 3px solid var(--stroke-gray);
-        border-radius: 12px;
-        color: white;
+  background-color: var(--input-gray);
+  border: 3px solid var(--stroke-gray);
+  border-radius: 12px;
+  color: white;
 }
-.login-input:focus { 
-    background-color: var(--input-gray);
-    color: white;
+.login-input:focus {
+  background-color: var(--input-gray);
+  color: white;
 }
 .login-input::placeholder {
-    color: var(--placeholder);
-    font-size: 16px;
-    font-weight: 500;
-    font-family: 'Baloo';
+  color: var(--placeholder);
+  font-size: 16px;
+  font-weight: 500;
+  font-family: "Baloo";
 }
 .input-height {
-    height: 55px;
-    width: 380px;
+  height: 55px;
+  width: 380px;
 }
 
-.check-box, .forgot-password {
-  
-    font-size: 12px;
+.check-box,
+.forgot-password {
+  font-size: 12px;
 }
 .forgot-password {
-    color: var(--light-purple);
-    text-decoration: none;
+  color: var(--light-purple);
+  text-decoration: none;
 }
 
 .button-login {
-    width: 100%;
-    font-family: 'Baloo';
-    font-size: 25px;
-    background-color: var(--purple);
-    border: none;
+  width: 100%;
+  font-family: "Baloo";
+  font-size: 25px;
+  background-color: var(--purple);
+  border: none;
 }
 .button-login:hover {
-    background-color: #613099;
+  background-color: #613099;
 }
 .button-login:active {
-    background-color: var(--background);
+  background-color: var(--background);
 }
 
 .sign-up a {
-    color: var(--light-purple);
-
+  color: var(--light-purple);
 }

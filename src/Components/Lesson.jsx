@@ -2,24 +2,24 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/Lesson.css";
 
-const Lesson = () => {
+const Lesson = ({ buttonColors = [], shadowStyle = "none" }) => {
   return (
-    <>
-      <div className="lessons-container text-white fs-1 fw-bold">
-        <div className="lessons">
-          <p>1</p>
-        </div>
-        <div className="lessons">
-          <p>2</p>
-        </div>
-        <div className="lessons">
-          <p>3</p>
-        </div>
-        <div className="lessons">
-          <p>4</p>
-        </div>
-      </div>
-    </>
+    <div className="lessons-container text-white fs-1 fw-bold gap-4 p-2">
+      {[1, 2, 3, 4, 5].map((num, index) => (
+        <button
+          key={num}
+          className="lessons p-1 rounded-4 text-white"
+          type="button"
+          style={{
+            backgroundColor: buttonColors[index] || "transparent",
+            boxShadow: shadowStyle,
+          }}
+          onClick={() => alert(`Button ${num} Clicked!`)}
+        >
+          {num}
+        </button>
+      ))}
+    </div>
   );
 };
 
