@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import LoginForm from "./Components/LoginForm.jsx";
 import SignupForm from "./Components/SignupForm.jsx";
 import Dashboard from "./Components/Dashboard.jsx";
+import Library from "./Components/Library.jsx";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
   {
     path: "dashboard",
     element: <Dashboard />,
+  },
+  {
+    path: "library",
+    element: <Library />,
   },
 ]);
 

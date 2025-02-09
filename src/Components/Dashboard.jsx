@@ -2,38 +2,14 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import luffy from "../assets/luffy.jpg";
 import "../css/Dashboard.css";
+import Sidenav from "./Sidenav";
 import Lesson from "./Lesson";
+import Library from "./Library";
 
 function Dashboard() {
   return (
     <>
-      <div className="logo fw-bold">
-        <p>We Sign</p>
-      </div>
-      <div className="navbar-bg d-flex p-5">
-        <nav className="sideNav d-flex flex-column fs-2 ">
-          <div className="dashboard">
-            <a className="nav-link mb-5" aria-current="page" href="#">
-              Dashboard
-            </a>
-          </div>
-          <div className="library mt-4 p-2 pt-4">
-            <a className="nav-link mb-5" href="#">
-              Library
-            </a>
-          </div>
-          <div className="leaderboard mt-4">
-            <a className="nav-link mb-5" href="#">
-              Leaderboard
-            </a>
-          </div>
-          <div className="settings mt-4">
-            <a className="nav-link mb-5" href="#">
-              Settings
-            </a>
-          </div>
-        </nav>
-      </div>
+      <Sidenav />
       <div className="player-info fw-bold">
         <div className="info-box">
           <p>Daily streak</p>
