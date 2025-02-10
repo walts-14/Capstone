@@ -7,6 +7,9 @@ import LoginForm from "./Components/LoginForm.jsx";
 import SignupForm from "./Components/SignupForm.jsx";
 import Dashboard from "./Components/Dashboard.jsx";
 import Library from "./Components/Library.jsx";
+import Leaderboard from "./Components/Leaderboard.jsx";
+import IntermediateLibrary from "./Components/IntermediateLibrary.jsx";
+import AdvancedLibrary from "./Components/AdvancedLibrary.jsx";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +31,18 @@ const router = createBrowserRouter([
   {
     path: "library",
     element: <Library />,
+  },
+  {
+    path: "leaderboard",
+    element: <Leaderboard />,
+  },
+  {
+    path: "intermediatelibrary",
+    element: <IntermediateLibrary />,
+  },
+  {
+    path: "advancedlibrary",
+    element: <AdvancedLibrary />,
   },
 ]);
 

@@ -4,6 +4,9 @@ import LoginForm from "./Components/LoginForm";
 import SignupForm from "./Components/SignupForm";
 import Dashboard from "./Components/Dashboard";
 import Library from "./Components/Library";
+import Leaderboard from "./Components/Leaderboard";
+import IntermediateLibrary from "./Components/IntermediateLibrary";
+import AdvancedLibrary from "./Components/AdvancedLibrary";
 import axios from "axios";
 import { Toaster } from "react-hot-toast";
 
@@ -41,6 +44,9 @@ function App() {
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/library" element={<Library />} />
+        <Route path="leaderboard" element={<Leaderboard />} />
+        <Route path="/intermediatelibrary" element={<IntermediateLibrary />} />
+        <Route path="/advancedlibrary" element={<AdvancedLibrary />} />
       </Routes>
     </>
   );

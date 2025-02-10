@@ -11,7 +11,7 @@ function Sidenav() {
       <div className="navbar-bg d-flex p-5">
         <nav className="sideNav d-flex flex-column fs-2 ">
           <div className="dashboard">
-            <a className="nav-link mb-5" aria-current="page" href="#">
+            <a className="nav-link mb-5" aria-current="page" href="/dashboard">
               Dashboard
             </a>
           </div>
@@ -21,7 +21,7 @@ function Sidenav() {
             </a>
           </div>
           <div className="leaderboard mt-4">
-            <a className="nav-link mb-5" href="#">
+            <a className="nav-link mb-5" href="/leaderboard">
               Leaderboard
             </a>
           </div>

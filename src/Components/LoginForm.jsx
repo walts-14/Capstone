@@ -58,7 +58,7 @@ function LoginForm() {
 
             <Button
               className="button-login"
-              onClick={() => navigate("/Dashboard")}
+              onClick={() => navigate("/dashboard")}
             >
               Submit
             </Button>
