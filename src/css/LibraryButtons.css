@@ -1,0 +1,59 @@
+@font-face {
+  font-family: "Baloo";
+  src: url("/src/font/Baloo-Regular.ttf") format("truetype");
+  font-style: normal;
+}
+
+:root {
+  --background: #100429;
+  --semidark-purple: #271d3e;
+  --dark-purple: #271d3e;
+  --mid-purple: #7338a0;
+  --grey-purple: #6f687e;
+  --purple: #4a2574;
+  --light-purple: #cf96ff;
+  --stroke-gray: #6f687e;
+  --input-gray: #3f3653;
+  --placeholder: #9f9aa9;
+  --white: #ffff;
+  --basic-blue: #2e86c1;
+  --intermediate-yellow: #d4ac0d;
+  --advance-red: #c0392b;
+  --dark-blue: #174360;
+  --semidark-blue: #205d87;
+  --dark-yellow: #6a5606;
+  --semidark-yellow: #947809;
+  --dark-red: #601c15;
+  --semidark-red: #86271e;
+  --midlight-red: #d7443e;
+  --midblue: #04aae0;
+}
+.library-contents {
+  display: flex;
+  flex-direction: row;
+  gap: 5rem;
+  font-family: "Baloo", sans-serif;
+  color: white;
+  position: relative;
+  margin-top: 2em;
+  margin-bottom: 27em;
+  margin-left: 16rem;
+}
+.library-contents .btns-content:nth-child(1) {
+  width: 9vw;
+  height: 7vh;
+  justify-content: center;
+  background-color: var(--basic-blue);
+}
+.library-contents .btns-content:nth-child(2) {
+  width: 13vw;
+  height: 7vh;
+  justify-content: center;
+  background-color: var(--intermediate-yellow);
+}
+.library-contents .btns-content:last-child {
+  width: 10vw;
+  height: 7vh;
+  justify-content: center;
+  background-color: var(--advance-red);
+}
