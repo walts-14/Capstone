@@ -12,7 +12,7 @@ function IntermediateLibrary() {
         <a href="#">
           <div className="inter-content rounded-3">
             <span className="fs-3"> Lesson 1 </span>
-            <span className="fs-4"> 25 items</span>
+            <span className="fs-4"> 30 items</span>
             <p className="fs-1">Basic Greetings & Introductions</p>
           </div>
         </a>
