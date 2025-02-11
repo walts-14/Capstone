@@ -10,6 +10,7 @@ import Library from "./Components/Library.jsx";
 import Leaderboard from "./Components/Leaderboard.jsx";
 import IntermediateLibrary from "./Components/IntermediateLibrary.jsx";
 import AdvancedLibrary from "./Components/AdvancedLibrary.jsx";
+import Settings from "./Components/Settings.jsx";
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
   {
     path: "advancedlibrary",
     element: <AdvancedLibrary />,
+  },
+  {
+    path: "settings",
+    element: <Settings />,
   },
 ]);
 

@@ -7,6 +7,7 @@ import Library from "./Components/Library";
 import Leaderboard from "./Components/Leaderboard";
 import IntermediateLibrary from "./Components/IntermediateLibrary";
 import AdvancedLibrary from "./Components/AdvancedLibrary";
+import Settings from "./Components/Settings";
 import axios from "axios";
 import { Toaster } from "react-hot-toast";
 
@@ -47,6 +48,7 @@ function App() {
         <Route path="leaderboard" element={<Leaderboard />} />
         <Route path="/intermediatelibrary" element={<IntermediateLibrary />} />
         <Route path="/advancedlibrary" element={<AdvancedLibrary />} />
+        <Route path="/settings" element={<Settings />} />
       </Routes>
     </>
   );

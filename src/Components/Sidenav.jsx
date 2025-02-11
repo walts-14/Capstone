@@ -26,7 +26,7 @@ function Sidenav() {
             </a>
           </div>
           <div className="settings mt-4">
-            <a className="nav-link mb-5" href="#">
+            <a className="nav-link mb-5" href="/settings">
               Settings
             </a>
           </div>
