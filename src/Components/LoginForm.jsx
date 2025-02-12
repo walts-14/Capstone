@@ -4,7 +4,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
 import "../css/LoginForm.css";
 import axios from "axios";
-import Dashboard from "./Dashboard";
 
 function LoginForm() {
   const navigate = useNavigate();
@@ -24,7 +23,7 @@ function LoginForm() {
       <div className="login-container ">
         <div className="login-card login-width ">
           <h1>LOGIN</h1>
-          <Form>
+          <Form onSubmit={loginUser}>
             <Form.Group className="mb-2">
               <Form.Control
                 type="email"
@@ -56,9 +55,8 @@ function LoginForm() {
               </a>
             </div>
 
-            <Button
-              className="button-login"
-              onClick={() => navigate("/dashboard")}
+            <Button type="submit"
+              className="button-login" onClick={() => navigate("/Dashboard")}  
             >
               Submit
             </Button>
