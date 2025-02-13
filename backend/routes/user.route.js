@@ -7,7 +7,7 @@
     router.use(
         cors({     
             withCredentials: true,
-            origin: 'http://localhost:5173/signup',
+            origin: 'http://localhost:5175/signup',
         })
     )
 

@@ -10,6 +10,8 @@ import { useUserStore } from "../handleUser/user";
 function SignupForm() {
   const navigate = useNavigate();
 
+  axios.post("/http://localhost:5000/signup");
+
   const [newUser, setNewUser] = React.useState({
     age: "",
     year: "",
@@ -22,7 +24,8 @@ function SignupForm() {
   const { createUser } = useUserStore();
 
   const signupUser = async (e) => {
-    
+    e.preventDefault();
+    axios.get("/login");
     const  { success, message } = await createUser(newUser);
 
     if (!success) {
@@ -111,7 +114,7 @@ function SignupForm() {
             />
           </Form.Group>
 
-          <Button type="submit" className="button-login" onSubmit={signupUser}>
+          <Button type="submit" className="button-login" onSubmit={signupUser} navigate ="/login">
             Submit
           </Button>
         </Form>
