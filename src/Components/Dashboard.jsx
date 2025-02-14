@@ -12,7 +12,6 @@ function Dashboard() {
   return (
     <>
       <Sidenav />
-    
       <div className="player-info fw-bold">
         <div className="info-box">
           <p>Daily streak</p>
@@ -38,12 +37,14 @@ function Dashboard() {
         <button
           type="button"
           className="btn btn-primary btn-lg fw-bold fs-3 rounded-5"
-        onClick={() => navigate("/signup")}>
+          onClick={() => navigate("/signup")}
+        >
           Sign up
         </button>
         <button
           type="button"
           className="btn btn-secondary btn-lg fw-bold fs-3 rounded-5"
+          onClick={() => navigate("/login")}
         >
           Log out
         </button>
