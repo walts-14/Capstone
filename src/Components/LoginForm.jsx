@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
 import "../css/LoginForm.css";
 import axios from "axios";
+import toast from "react-hot-toast"; // Import toast from react-hot-toast
 
 function LoginForm() {
   const navigate = useNavigate();
@@ -13,9 +14,17 @@ function LoginForm() {
     password: "",
   });
 
-  const loginUser = async () => {
+  const loginUser = async (e) => {
     e.preventDefault();
-    axios.get("/");
+    try {
+      const response = await axios.post("/api/login", data);
+      if (response.status === 200) {
+        toast.success("Login successful!");
+        navigate("/Dashboard");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Login failed");
+    }
   };
 
   return (
@@ -55,9 +64,7 @@ function LoginForm() {
               </a>
             </div>
 
-            <Button type="submit"
-              className="button-login" onClick={() => navigate("/Dashboard")}  
-            >
+            <Button type="submit" className="button-login">
               Submit
             </Button>
           </Form>

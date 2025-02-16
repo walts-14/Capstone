@@ -3,15 +3,11 @@ import { Form, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
 import "../css/SignupForm.css";
-import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useUserStore } from "../handleUser/user";
 
 function SignupForm() {
   const navigate = useNavigate();
-
-  axios.post("/http://localhost:5000/signup");
-
   const [newUser, setNewUser] = React.useState({
     age: "",
     year: "",
@@ -25,32 +21,30 @@ function SignupForm() {
 
   const signupUser = async (e) => {
     e.preventDefault();
-    axios.get("/login");
-    const  { success, message } = await createUser(newUser);
+    
+    const { success, message } = await createUser(newUser);
 
-    if (!success) {
-      toast ({
-        title: "Error",
-        description: message,
-        status: "error",
-        isClosable: true,
-      })}
-    else {
-      toast ({
-        title: "Success",
-        description: message,
-        status: "success",
-        isClosable: true,
-      })};
-
-      setNewUser({ age: "", year: "", name: "", email: "", password: "", confirmPassword: "" });
-    };
+    if (success) {
+      toast.success(message);
+      setNewUser({
+        age: "",
+        year: "",
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      });
+      navigate("/login");
+    } else {
+      toast.error(message);
+    }
+  };
 
   return (
     <div className="signup-container">
       <div className="signup-card signup-width">
         <h1>Sign Up</h1>
-        <Form >
+        <Form onSubmit={signupUser}>
           <Form.Group className="input d-flex mb-2">
             <Form.Control
               type="number"
@@ -114,7 +108,7 @@ function SignupForm() {
             />
           </Form.Group>
 
-          <Button type="submit" className="button-login" onSubmit={signupUser} navigate ="/login">
+          <Button type="submit" className="button-login">
             Submit
           </Button>
         </Form>

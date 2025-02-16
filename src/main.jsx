@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Toaster } from "react-hot-toast"; // Import Toaster from react-hot-toast
 import LoginForm from "./Components/LoginForm.jsx";
 import SignupForm from "./Components/SignupForm.jsx";
 import Dashboard from "./Components/Dashboard.jsx";
@@ -53,6 +54,18 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
+    {/* Wrap RouterProvider with Toaster component */}
+    <Toaster
+      position="top-center"
+      reverseOrder={false}
+      toastOptions={{
+        duration: 4000,
+        style: {
+          background: '#363636',
+          color: '#fff',
+        },
+      }}
+    />
     <RouterProvider router={router} />
   </StrictMode>
 );

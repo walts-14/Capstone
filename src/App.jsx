@@ -9,37 +9,14 @@ import IntermediateLibrary from "./Components/IntermediateLibrary";
 import AdvancedLibrary from "./Components/AdvancedLibrary";
 import Settings from "./Components/Settings";
 import axios from "axios";
-import { Toaster } from "react-hot-toast";
 
+// Configure axios defaults
 axios.defaults.baseURL = "http://localhost:5000";
 axios.defaults.withCredentials = true;
 
 function App() {
   return (
     <>
-      <Toaster
-        position="top-center"
-        reverseOrder={false}
-        gutter={8}
-        containerClassName=""
-        containerStyle={{}}
-        toastOptions={{
-          className: "",
-          duration: 5000,
-          removeDelay: 1000,
-          style: {
-            background: "#363636",
-            color: "#fff",
-          },
-          success: {
-            duration: 3000,
-            iconTheme: {
-              primary: "green",
-              secondary: "black",
-            },
-          },
-        }}
-      />
       <Routes>
         <Route path="/" element={<LoginForm />} />
         <Route path="/signup" element={<SignupForm />} />
@@ -53,4 +30,5 @@ function App() {
     </>
   );
 }
+
 export default App;
