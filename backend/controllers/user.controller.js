@@ -61,3 +61,19 @@ export const createUser = async (req, res) => {
         });
     }
 };
+
+
+export const loginUser = async (req, res) => {
+    const { email, password } = req.body;
+    
+    try {
+        const user = await User.findOne({ email: email });
+        if (user) {
+            res.json(user);
+        } else {
+            res.status(404).json({ message: "User not found" });
+        }
+    } catch (err) {
+        res.status(400).json({ error: "Error: " + err.message });
+    }
+};

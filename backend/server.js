@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import authRoutes from './routes/user.route.js';
 import { connectDB}  from './config/db.js';
-import mongoose from 'mongoose';
 
 //initializing express
 const app = express();
