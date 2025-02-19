@@ -2,9 +2,9 @@ import React from "react";
 import { Form, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
-import "../css/SignupForm.css";
+import "../../css/SignupForm.css";
 import { toast } from "react-hot-toast";
-import { useUserStore } from "../handleUser/user";
+import { useUserStore } from "../../handleUser/user";
 
 function SignupForm() {
   const navigate = useNavigate();

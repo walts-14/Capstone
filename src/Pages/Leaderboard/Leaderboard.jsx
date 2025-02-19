@@ -1,4 +1,4 @@
-import Sidenav from "./Sidenav";
+import Sidenav from "../../Components/Sidenav";
 
 function Leaderboard() {
   return (

@@ -1,7 +1,8 @@
 import React from "react";
-import Sidenav from "./Sidenav";
-import LibraryButtons from "./LibraryButtons";
-import "../css/AdvancedLibrary.css";
+import Sidenav from "../../Components/Sidenav";
+import LibraryButtons from "../Library/LibraryButtons";
+import "../../css/AdvancedLibrary.css"; // Ensure this path is correct
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function AdvancedLibrary() {
   return (
@@ -43,4 +44,5 @@ function AdvancedLibrary() {
     </>
   );
 }
+
 export default AdvancedLibrary;

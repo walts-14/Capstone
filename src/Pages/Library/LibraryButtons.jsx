@@ -1,6 +1,6 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "../css/LibraryButtons.css";
+import "../../css/LibraryButtons.css";
 import { useNavigate } from "react-router-dom";
 
 function LibraryButtons() {

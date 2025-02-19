@@ -1,7 +1,8 @@
 import React from "react";
-import Sidenav from "./Sidenav";
+import Sidenav from "../../Components/Sidenav";
 import LibraryButtons from "./LibraryButtons";
-import "../css/IntermediateLibrary.css";
+import "../../css/IntermediateLibrary.css"; // Ensure this path is correct
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function IntermediateLibrary() {
   return (

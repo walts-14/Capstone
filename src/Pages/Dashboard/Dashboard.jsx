@@ -1,10 +1,10 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import luffy from "../assets/luffy.jpg";
-import "../css/Dashboard.css";
-import Sidenav from "./Sidenav";
+import luffy from "../../assets/luffy.jpg";
+import "../../css/Dashboard.css";
+import Sidenav from "../../Components/Sidenav";
 import Lesson from "./Lesson";
-import Library from "./Library";
+import Library from "../Library/Library";
 import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
@@ -12,6 +12,7 @@ function Dashboard() {
   return (
     <>
       <Sidenav />
+
       <div className="player-info fw-bold">
         <div className="info-box">
           <p>Daily streak</p>
@@ -49,6 +50,7 @@ function Dashboard() {
           Log out
         </button>
       </div>
+      
       <div className="basic-lessons">
         <Lesson
           buttonColors={["#174360", "#174360", "#174360", "#174360", "#174360"]}

@@ -4,14 +4,14 @@ import "./index.css";
 import App from "./App.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Toaster } from "react-hot-toast"; // Import Toaster from react-hot-toast
-import LoginForm from "./Components/LoginForm.jsx";
-import SignupForm from "./Components/SignupForm.jsx";
-import Dashboard from "./Components/Dashboard.jsx";
-import Library from "./Components/Library.jsx";
-import Leaderboard from "./Components/Leaderboard.jsx";
-import IntermediateLibrary from "./Components/IntermediateLibrary.jsx";
-import AdvancedLibrary from "./Components/AdvancedLibrary.jsx";
-import Settings from "./Components/Settings.jsx";
+import LoginForm from "./Pages/Login/LoginForm.jsx";
+import SignupForm from "./Pages/Signup/SignupForm.jsx";
+import Dashboard from "./Pages/Dashboard/Dashboard.jsx";
+import Library from "./Pages/Library/Library.jsx";
+import Leaderboard from "./Pages/Leaderboard/Leaderboard.jsx";
+import IntermediateLibrary from "./Pages/Library/IntermediateLibrary.jsx";
+import AdvancedLibrary from "./Pages/Library/AdvancedLibrary.jsx";
+import Settings from "./Pages/Settings/Settings.jsx";
 
 const router = createBrowserRouter([
   {

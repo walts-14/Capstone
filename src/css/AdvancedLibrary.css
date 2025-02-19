@@ -28,6 +28,7 @@
   --midlight-red: #d7443e;
   --midblue: #04aae0;
 }
+
 .adv-container {
   display: flex;
   flex-direction: column;
@@ -39,9 +40,11 @@
   margin-top: -45em;
   margin-left: -2.5em;
 }
+
 a {
   text-decoration: none;
 }
+
 .adv-container .adv-content {
   display: flex;
   flex-direction: column;

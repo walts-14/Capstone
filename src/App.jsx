@@ -1,13 +1,14 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import LoginForm from "./Components/LoginForm";
-import SignupForm from "./Components/SignupForm";
-import Dashboard from "./Components/Dashboard";
-import Library from "./Components/Library";
-import Leaderboard from "./Components/Leaderboard";
-import IntermediateLibrary from "./Components/IntermediateLibrary";
-import AdvancedLibrary from "./Components/AdvancedLibrary";
-import Settings from "./Components/Settings";
+import LoginForm from "./Pages/Login/LoginForm.jsx";
+import SignupForm from "./Pages/Signup/SignupForm.jsx";
+import Dashboard from "./Pages/Dashboard/Dashboard.jsx";
+import Library from "./Pages/Library/Library.jsx";
+import Leaderboard from "./Pages/Leaderboard/Leaderboard.jsx";
+import IntermediateLibrary from "./Pages/Library/IntermediateLibrary.jsx";
+import AdvancedLibrary from "./Pages/Library/AdvancedLibrary.jsx";
+import Settings from "./Pages/Settings/Settings.jsx";
+import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 
 // Configure axios defaults

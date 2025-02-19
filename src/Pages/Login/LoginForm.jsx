@@ -2,7 +2,7 @@ import React from "react";
 import { Form, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
-import "../css/LoginForm.css";
+import "../../css/LoginForm.css";
 import axios from "axios";
 import toast from "react-hot-toast"; // Import toast from react-hot-toast
 

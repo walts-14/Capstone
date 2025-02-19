@@ -1,6 +1,6 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "../css/Lesson.css";
+import "../../css/Lesson.css";
 
 const Lesson = ({ buttonColors = [], shadowStyle = "none" }) => {
   return (
