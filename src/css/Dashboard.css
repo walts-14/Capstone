@@ -37,7 +37,7 @@ body {
   font-size: 4rem;
   position: fixed;
   top: 1rem;
-  left: 1.7rem;
+  left: 3rem;
 }
 .navbar-bg {
   background-color: var(--purple);

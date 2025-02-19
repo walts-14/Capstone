@@ -6,7 +6,7 @@ function Sidenav() {
   return (
     <>
       <div className="logo fw-bold">
-        <p>We Sign</p>
+        <p>WeSign</p>
       </div>
       <div className="navbar-bg d-flex p-5">
         <nav className="sideNav d-flex flex-column fs-2 ">
