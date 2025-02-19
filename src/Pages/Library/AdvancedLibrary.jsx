@@ -10,7 +10,7 @@ function AdvancedLibrary() {
       <Sidenav />
       <LibraryButtons />
       <div className="adv-container fw-bold mb-1">
-        <a href="#">
+        <a href="/Lessons/LessonOne">
           <div className="adv-content rounded-3">
             <span className="fs-3"> Lesson 1 </span>
             <span className="fs-4"> 30 items</span>
@@ -41,6 +41,7 @@ function AdvancedLibrary() {
           </div>
         </a>
       </div>
+      
     </>
   );
 }

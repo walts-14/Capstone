@@ -22,10 +22,10 @@ function App() {
         <Route path="/" element={<LoginForm />} />
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/library" element={<Library />} />
+        <Route path="/library" element={<Library />}/>
+        <Route path="intermediatelibrary" element={<IntermediateLibrary />} />
+         <Route path="advancedlibrary" element={<AdvancedLibrary />} />
         <Route path="leaderboard" element={<Leaderboard />} />
-        <Route path="/intermediatelibrary" element={<IntermediateLibrary />} />
-        <Route path="/advancedlibrary" element={<AdvancedLibrary />} />
         <Route path="/settings" element={<Settings />} />
       </Routes>
     </>

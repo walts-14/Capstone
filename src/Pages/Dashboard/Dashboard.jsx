@@ -53,7 +53,7 @@ function Dashboard() {
       
       <div className="basic-lessons">
         <Lesson
-          buttonColors={["#174360", "#174360", "#174360", "#174360", "#174360"]}
+          buttonColors={["#174360", "#174360", "#174360", "#174360", "#17a4360"]}
           shadowStyle="0 7px 0 #205d87"
         />
       </div>

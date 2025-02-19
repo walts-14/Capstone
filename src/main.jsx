@@ -7,8 +7,9 @@ import { Toaster } from "react-hot-toast"; // Import Toaster from react-hot-toas
 import LoginForm from "./Pages/Login/LoginForm.jsx";
 import SignupForm from "./Pages/Signup/SignupForm.jsx";
 import Dashboard from "./Pages/Dashboard/Dashboard.jsx";
-import Library from "./Pages/Library/Library.jsx";
 import Leaderboard from "./Pages/Leaderboard/Leaderboard.jsx";
+import Library from "./Pages/Library/Library.jsx";
+import LessonOne from "./Pages/Library/Lessons/LessonOne.jsx";
 import IntermediateLibrary from "./Pages/Library/IntermediateLibrary.jsx";
 import AdvancedLibrary from "./Pages/Library/AdvancedLibrary.jsx";
 import Settings from "./Pages/Settings/Settings.jsx";
@@ -35,9 +36,9 @@ const router = createBrowserRouter([
     element: <Library />,
   },  
   {
-    path: "leaderboard",
-    element: <Leaderboard />,
-  },
+    path: "lessonOne",
+    element: <LessonOne />,
+  },  
   {
     path: "intermediatelibrary",
     element: <IntermediateLibrary />,
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
     path: "advancedlibrary",
     element: <AdvancedLibrary />,
   },
+  {
+    path: "leaderboard",
+    element: <Leaderboard />,
+  }, 
   {
     path: "settings",
     element: <Settings />,
