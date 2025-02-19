@@ -11,7 +11,7 @@ function LibraryButtons() {
       <div className="library-contents d-flex fs-3 fw-bold">
         <button
           className="btns-content rounded-4"
-          onClick={() => navigate("/library")}
+          onClick={() => navigate("/BasicLibrary")}
         >
           BASIC
         </button>

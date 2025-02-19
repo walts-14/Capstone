@@ -16,7 +16,7 @@ function Sidenav() {
             </a>
           </div>
           <div className="library mt-4 p-2 pt-4">
-            <a className="nav-link mb-5" href="/library">
+            <a className="nav-link mb-5" href="/Library">
               Library
             </a>
           </div>

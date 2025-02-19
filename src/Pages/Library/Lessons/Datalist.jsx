@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const OneTerms = [
+const OneTerms = [
 
     {id: 1, terms:"Aa", definition:" Alphabet, Apple, Ant "},
     {id: 2, terms:"Bb", definition:" Banana, Butterfly, Ball "},  
@@ -32,3 +32,17 @@ export const OneTerms = [
 ];  
 
  
+
+function Lessonlist() {
+
+  return (
+    <>
+      {OneTerms.map((item) => (
+        <LessonCard key={item.id} item={item} />
+      ))}
+    </>
+
+  )
+}
+
+export default Lessonlist

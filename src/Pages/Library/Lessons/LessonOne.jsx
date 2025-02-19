@@ -2,16 +2,16 @@ import React from 'react'
 import Sidenav from '../../../Components/Sidenav'
 import LibraryButtons from '../LibraryButtons'
 
-function LessonOne() {
+function LessonCard() {
   return (
     <>  
           <Sidenav />
           <LibraryButtons/>
         <div>
-
+            
         </div>
     </>
   )
 }
 
-export default LessonOne
+export default LessonCard

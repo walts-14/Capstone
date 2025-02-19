@@ -10,9 +10,11 @@ import Dashboard from "./Pages/Dashboard/Dashboard.jsx";
 import Leaderboard from "./Pages/Leaderboard/Leaderboard.jsx";
 import Library from "./Pages/Library/Library.jsx";
 import LessonOne from "./Pages/Library/Lessons/LessonOne.jsx";
+import BasicLibrary from "./Pages/Library/BasicLibrary.jsx";
 import IntermediateLibrary from "./Pages/Library/IntermediateLibrary.jsx";
 import AdvancedLibrary from "./Pages/Library/AdvancedLibrary.jsx";
 import Settings from "./Pages/Settings/Settings.jsx";
+
 
 const router = createBrowserRouter([
   {
@@ -50,6 +52,10 @@ const router = createBrowserRouter([
   {
     path: "leaderboard",
     element: <Leaderboard />,
+  }, 
+  {
+    path: "basiclibrary",
+    element: <BasicLibrary />,
   }, 
   {
     path: "settings",

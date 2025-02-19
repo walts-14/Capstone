@@ -7,6 +7,7 @@ import Library from "./Pages/Library/Library.jsx";
 import Leaderboard from "./Pages/Leaderboard/Leaderboard.jsx";
 import IntermediateLibrary from "./Pages/Library/IntermediateLibrary.jsx";
 import AdvancedLibrary from "./Pages/Library/AdvancedLibrary.jsx";
+import BasicLibrary from "./Pages/Library/BasicLibrary.jsx";
 import Settings from "./Pages/Settings/Settings.jsx";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
@@ -24,7 +25,8 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/library" element={<Library />}/>
         <Route path="intermediatelibrary" element={<IntermediateLibrary />} />
-         <Route path="advancedlibrary" element={<AdvancedLibrary />} />
+        <Route path="advancedlibrary" element={<AdvancedLibrary />} />
+        <Route path="basiclibrary" element={<BasicLibrary />} />
         <Route path="leaderboard" element={<Leaderboard />} />
         <Route path="/settings" element={<Settings />} />
       </Routes>
