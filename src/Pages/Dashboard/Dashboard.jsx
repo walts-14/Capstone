@@ -6,15 +6,9 @@ import Sidenav from "../../Components/Sidenav";
 import Lesson from "./Lesson";
 import Library from "../Library/Library";
 import { useNavigate } from "react-router-dom";
-import { useUserStore } from "../../handleUser/user";
 
 function Dashboard() {
   const navigate = useNavigate();
-  const isLoggedIn = useUserStore().isLoggedIn;
-
-  if (!isLoggedIn) {
-    navigate("/");
-  }
   return (
     <>
       <Sidenav />
