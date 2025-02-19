@@ -5,7 +5,7 @@ import "../../css/LevelofDifficulty.css"; // Ensure this path is correct
 
 function BasicLibrary() {
   return (
-    <>
+    <div style={{ "--level-bg-start": "#174360", "--level-bg-end": "#205D87" }}>
          <Sidenav />
          <LibraryButtons />
          
@@ -40,7 +40,7 @@ function BasicLibrary() {
         </a>
       </div>
       
-    </>
+    </div>
    
 
   )

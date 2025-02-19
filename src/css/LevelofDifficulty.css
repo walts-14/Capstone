@@ -51,7 +51,7 @@ a {
   height: 15vh;
   width: 50vw;
   padding-left: 1rem;
-  background: linear-gradient(to bottom, #601c15 30%, #86271e 30%);
-  background-repeat: no repeat;
+  background: linear-gradient(to bottom, var(--level-bg-start) 30%, var(--level-bg-end) 30%);
+  background-repeat: no-repeat;
   color: var(--white);
 }

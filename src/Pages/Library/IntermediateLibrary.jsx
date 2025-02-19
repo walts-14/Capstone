@@ -6,7 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 function IntermediateLibrary() {
   return (
-    <>
+    <div style={{ "--level-bg-start": "#947809", "--level-bg-end": "#d4ac0d" }}>
       <Sidenav />
       <LibraryButtons />
       <div className="level-container fw-bold mb-1">
@@ -39,7 +39,7 @@ function IntermediateLibrary() {
           </div>
         </a>
       </div>
-    </>
+    </div>
   );
 }
 

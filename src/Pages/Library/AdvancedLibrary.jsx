@@ -6,11 +6,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 function AdvancedLibrary() {
   return (
-    <>
+    <div style={{ "--level-bg-start": "#601c15", "--level-bg-end": "#86271E" }}>
       <Sidenav />
       <LibraryButtons />
       <div className="level-container fw-bold mb-1">
-        <a href="/Lessons/LessonOne">
+        <a href="#">
           <div className="level-content rounded-3">
             <span className="fs-3"> Lesson 1 </span>
             <span className="fs-4"> 30 items</span>
@@ -41,8 +41,7 @@ function AdvancedLibrary() {
           </div>
         </a>
       </div>
-      
-    </>
+    </div>
   );
 }
 
