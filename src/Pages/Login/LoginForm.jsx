@@ -4,10 +4,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
 import "../../css/LoginForm.css";
 import axios from "axios";
-import toast from "react-hot-toast"; // Import toast from react-hot-toast
+import toast from "react-hot-toast";
+import { useUserStore } from "../../handleUser/user";
 
 function LoginForm() {
   const navigate = useNavigate();
+  const { login } = useUserStore();
 
   const [data, setData] = React.useState({
     email: "",
@@ -19,8 +21,9 @@ function LoginForm() {
     try {
       const response = await axios.post("/api/login", data);
       if (response.status === 200) {
+        login(); // Update login state
         toast.success("Login successful!");
-        navigate("/Dashboard");
+        navigate("/dashboard");
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Login failed");
