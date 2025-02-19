@@ -1,0 +1,75 @@
+@font-face {
+  font-family: "Baloo";
+  src: url("/src/font/Baloo-Regular.ttf") format("truetype");
+  font-style: normal;
+}
+
+:root {
+  --background: #100429;
+  --semidark-purple: #271d3e;
+  --dark-purple: #271d3e;
+  --mid-purple: #7338a0;
+  --grey-purple: #6f687e;
+  --purple: #4a2574;
+  --light-purple: #cf96ff;
+  --stroke-gray: #6f687e;
+  --input-gray: #3f3653;
+  --placeholder: #9f9aa9;
+  --white: #ffff;
+  --basic-blue: #2e86c1;
+  --intermediate-yellow: #d4ac0d;
+  --advance-red: #c0392b;
+  --dark-blue: #174360;
+  --semidark-blue: #205d87;
+  --dark-yellow: #6a5606;
+  --semidark-yellow: #947809;
+  --dark-red: #601c15;
+  --semidark-red: #86271e;
+  --midlight-red: #d7443e;
+  --midblue: #04aae0;
+}
+.back {
+  color: var(--purple);
+  font-size: 2rem;
+  position: absolute;
+  top: 1rem;
+  left: 5rem;
+}
+.lecture-quiz-container {
+  color: var(--white);
+  font-family: "Baloo", sans-serif;
+  font-size: 4rem;
+  margin-bottom: -10rem;
+  gap: 20rem;
+  height: 60vh;
+}
+.lecture-outer {
+  background-color: var(--advance-red);
+  text-align: center;
+  width: 30rem;
+}
+.lecture-inner {
+  border-radius: 3rem;
+  height: 10vh;
+  background-color: var(--dark-purple);
+  position: absolute;
+  bottom: 1.9em;
+  left: 5.2em;
+  height: 50vh;
+  width: 27rem;
+}
+.quiz-outer {
+  background-color: #f4d03f;
+  text-align: center;
+  width: 30rem;
+}
+.quiz-inner {
+  border: 1px solid white;
+  border-radius: 3rem;
+  height: 50vh;
+  width: 27rem;
+  background-color: var(--dark-purple);
+  position: absolute;
+  right: 21rem;
+  bottom: 1.9em;
+}

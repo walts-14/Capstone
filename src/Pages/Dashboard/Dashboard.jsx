@@ -2,9 +2,8 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import luffy from "../../assets/luffy.jpg";
 import "../../css/Dashboard.css";
+import Lesson from "./Lesson.jsx";
 import Sidenav from "../../Components/Sidenav";
-import Lesson from "./Lesson";
-import Library from "../Library/Library";
 import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
@@ -50,26 +49,7 @@ function Dashboard() {
           Log out
         </button>
       </div>
-      
-      <div className="basic-lessons">
-        <Lesson
-          buttonColors={["#174360", "#174360", "#174360", "#174360", "#17a4360"]}
-          shadowStyle="0 7px 0 #205d87"
-        />
-      </div>
-      <div className="intermediate-lessons">
-        <Lesson
-          buttonColors={["#DCBC3D", "#DCBC3D", "#DCBC3D", "#DCBC3D", "#DCBC3D"]}
-          shadowStyle="0 7px 0 #A9890A"
-        />
-      </div>
-
-      <div className="advanced-lessons">
-        <Lesson
-          buttonColors={["#CC6055", "#CC6055", "#CC6055", "#CC6055", "#CC6055"]}
-          shadowStyle="0 7px 0 #992D22"
-        />
-      </div>
+      <Lesson />
     </>
   );
 }

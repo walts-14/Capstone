@@ -9,6 +9,8 @@ import IntermediateLibrary from "./Pages/Library/IntermediateLibrary.jsx";
 import AdvancedLibrary from "./Pages/Library/AdvancedLibrary.jsx";
 import BasicLibrary from "./Pages/Library/BasicLibrary.jsx";
 import Settings from "./Pages/Settings/Settings.jsx";
+import Lesson from "./Pages/Dashboard/Lesson.jsx";
+import LectureorQuiz from "./Pages/Dashboard/LessonorQuiz.jsx";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 
@@ -23,12 +25,13 @@ function App() {
         <Route path="/" element={<LoginForm />} />
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/library" element={<Library />}/>
+        <Route path="/library" element={<Library />} />
         <Route path="intermediatelibrary" element={<IntermediateLibrary />} />
         <Route path="advancedlibrary" element={<AdvancedLibrary />} />
         <Route path="basiclibrary" element={<BasicLibrary />} />
         <Route path="leaderboard" element={<Leaderboard />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/lectureorquiz" element={<LectureorQuiz />} />
       </Routes>
     </>
   );

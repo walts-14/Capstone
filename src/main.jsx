@@ -14,7 +14,8 @@ import BasicLibrary from "./Pages/Library/BasicLibrary.jsx";
 import IntermediateLibrary from "./Pages/Library/IntermediateLibrary.jsx";
 import AdvancedLibrary from "./Pages/Library/AdvancedLibrary.jsx";
 import Settings from "./Pages/Settings/Settings.jsx";
-
+import Lesson from "./Pages/Dashboard/Lesson.jsx";
+import LectureorQuiz from "./Pages/Dashboard/LessonorQuiz.jsx";
 
 const router = createBrowserRouter([
   {
@@ -36,11 +37,11 @@ const router = createBrowserRouter([
   {
     path: "library",
     element: <Library />,
-  },  
+  },
   {
     path: "lessonOne",
     element: <LessonOne />,
-  },  
+  },
   {
     path: "intermediatelibrary",
     element: <IntermediateLibrary />,
@@ -52,14 +53,22 @@ const router = createBrowserRouter([
   {
     path: "leaderboard",
     element: <Leaderboard />,
-  }, 
+  },
   {
     path: "basiclibrary",
     element: <BasicLibrary />,
-  }, 
+  },
   {
     path: "settings",
     element: <Settings />,
+  },
+  {
+    path: "lesson",
+    element: <Lesson />,
+  },
+  {
+    path: "lectureorquiz",
+    element: <LectureorQuiz />,
   },
 ]);
 
@@ -72,8 +81,8 @@ createRoot(document.getElementById("root")).render(
       toastOptions={{
         duration: 4000,
         style: {
-          background: '#363636',
-          color: '#fff',
+          background: "#363636",
+          color: "#fff",
         },
       }}
     />
