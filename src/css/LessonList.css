@@ -1,0 +1,42 @@
+@font-face {
+    font-family: "Baloo";
+    src: url("/src/font/Baloo-Regular.ttf") format("truetype");
+    font-style: normal;
+  }
+  
+  :root {
+    --background: #100429;
+    --semidark-purple: #271d3e;
+    --dark-purple: #271d3e;
+    --mid-purple: #7338a0;
+    --grey-purple: #6f687e;
+    --purple: #4a2574;
+    --light-purple: #cf96ff;
+    --stroke-gray: #6f687e;
+    --input-gray: #3f3653;
+    --placeholder: #9f9aa9;
+    --white: #ffff;
+    --basic-blue: #2e86c1;
+    --intermediate-yellow: #d4ac0d;
+    --advance-red: #c0392b;
+    --semidark-blue: #174360;
+    --dark-blue: #205d87;
+    --dark-yellow: #6a5606;
+    --semidark-yellow: #947809;
+    --dark-red: #601c15;
+    --semidark-red: #86271e;
+    --midlight-red: #d7443e;
+    --midblue: #04aae0;
+    --lightblue: #579ecd;
+    --shadowblue: #246b9a;
+  }
+
+
+  .terms-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 35px;
+    padding: 5px;
+    
+   
+  }

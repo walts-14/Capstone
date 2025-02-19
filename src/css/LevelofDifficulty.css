@@ -29,27 +29,27 @@
   --midblue: #04aae0;
 }
 
-.adv-container {
+.level-container {
   display: flex;
   flex-direction: column;
   gap: 1rem;
   color: var(--white);
   font-family: "Baloo", sans-serif;
-  position: absolute;
+
   max-width: max-content;
-  margin-top: -45em;
-  margin-left: -2.5em;
+  margin-top: 50px;
+  
 }
 
 a {
   text-decoration: none;
 }
 
-.adv-container .adv-content {
+.level-container .level-content {
   display: flex;
   flex-direction: column;
   height: 15vh;
-  width: 75vw;
+  width: 50vw;
   padding-left: 1rem;
   background: linear-gradient(to bottom, #601c15 30%, #86271e 30%);
   background-repeat: no repeat;

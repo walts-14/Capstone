@@ -1,15 +1,16 @@
 import React from 'react'
-
+import "../../../css/LessonCard.css"
 
 function LessonCard({item}) {
   return (
-    <div>
-      <div className="item">
-        <div className="card-body">
-          <h5 className="card-term">{item.terms}</h5>
+    <>
+      
+        <div className="terms-card">
+          <h5 className="term-name">{item.terms}</h5>
         </div>
-      </div>
-    </div>
+   
+    </>
+      
   )
 }
 

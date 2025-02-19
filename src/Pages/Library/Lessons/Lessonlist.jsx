@@ -1,5 +1,6 @@
 import React from 'react'
-
+import LessonCard from './LessonCard'
+import "../../../css/Lessonlist.css"
 const OneTerms = [
 
     {id: 1, terms:"Aa", definition:" Alphabet, Apple, Ant "},
@@ -37,9 +38,12 @@ function Lessonlist() {
 
   return (
     <>
-      {OneTerms.map((item) => (
-        <LessonCard key={item.id} item={item} />
-      ))}
+      <div className="terms-list grid-container">
+        {OneTerms.map((item) => (
+          <LessonCard key={item.id} item={item} />
+        ))}
+      </div>
+     
     </>
 
   )

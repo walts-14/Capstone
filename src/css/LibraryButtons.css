@@ -31,13 +31,12 @@
 .library-contents {
   display: flex;
   flex-direction: row;
+  align-items: end;
   gap: 5rem;
   font-family: "Baloo", sans-serif;
   color: white;
   position: relative;
-  margin-top: 2em;
-  margin-bottom: 27em;
-  margin-left: 16rem;
+  
 }
 .library-contents .btns-content:nth-child(1) {
   width: 9vw;
