@@ -88,19 +88,16 @@ const router = createBrowserRouter([
     element: <Page1 />,
   },
   {
-<<<<<<< Updated upstream
     path: "correct",
     element: <Correct />,
   },
   {
     path: "wrong",
     element: <Wrong />,
-=======
     path: "VideoLecture/:title",
 
     element: <VideoLecture />,
 
->>>>>>> Stashed changes
   },
 ]);
 
