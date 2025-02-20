@@ -48,6 +48,12 @@ if (!quiz) {
             <p className="quiz-question">{quiz.question}</p> {/* ✅ Display question only */}
         </div>
 
+      <div className="grid text-center fw-bold rounded-4">
+        <div className="g-col-6">.g-col-6</div>
+        <div className="g-col-6">.g-col-6</div>
+        <div className="g-col-6">.g-col-6</div>
+        <div className="g-col-6">.g-col-6</div>
+      </div>
     </>
   );
 }
