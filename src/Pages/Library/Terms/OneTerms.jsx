@@ -1,5 +1,4 @@
 const OneTerms = [
-
     
     {id: 1, terms:"Aa", definition:" Alphabet, Apple, Ant "},
     {id: 2, terms:"Bb", definition:" Banana, Butterfly, Ball "},  

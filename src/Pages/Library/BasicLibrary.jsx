@@ -17,21 +17,21 @@ function BasicLibrary() {
             <p className="fs-1"> Introduction to Sign Language</p>
           </div>
         </a>
-        <a href="#">
+        <a href="/TermsTwo">
           <div className="level-content rounded-3">
             <span className="fs-3"> Lesson 2 </span>
             <span className="fs-4"> 30 items</span>
             <p className="fs-1">Common Everyday Signs</p>
           </div>
         </a>
-        <a href="#">
+        <a href="/TermsThree">
           <div className="level-content rounded-3">
             <span className="fs-3"> Lesson 3 </span>
             <span className="fs-4"> 30 items</span>
             <p className="fs-1"> Numbers and Days of the Week</p>
           </div>
         </a>
-        <a href="#">
+        <a href="/TermsFour">
           <div className="level-content rounded-3">
             <span className="fs-3"> Lesson 4 </span>
             <span className="fs-4"> 30 items</span>

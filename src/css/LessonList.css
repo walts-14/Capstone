@@ -33,13 +33,15 @@
 
   body {
     width: 100%;
-
+    height: 100%;
+    overflow: hidden; /* Prevent scrolling */
+   
   }
   .terms-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 45px;
-    padding: 30px;
+    padding: 50px;
     width: 1150px;
     height: 700px; /* Set a fixed height */
     overflow-y: auto; /* Enable vertical scrolling */
@@ -58,10 +60,10 @@
     color: var(--white);
     position: absolute;
     padding: 15px 30px;
-    width: 55%;
+    width: 59%;
     top: 18%;
     left: 30%;
     background-color: var(--semidark-blue);
     border-radius: 10px;
-    
+
   }

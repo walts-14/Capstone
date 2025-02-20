@@ -10,6 +10,9 @@ import Dashboard from "./Pages/Dashboard/Dashboard.jsx";
 import Leaderboard from "./Pages/Leaderboard/Leaderboard.jsx";
 import Library from "./Pages/Library/Library.jsx";
 import TermsOne from "./Pages/Library/Terms/TermsOne.jsx";
+import TermsTwo from "./Pages/Library/Terms/TermsTwo.jsx";
+import TermsThree from "./Pages/Library/Terms/TermsThree.jsx";
+import TermsFour from "./Pages/Library/Terms/TermsFour.jsx";
 import BasicLibrary from "./Pages/Library/BasicLibrary.jsx";
 import IntermediateLibrary from "./Pages/Library/IntermediateLibrary.jsx";
 import AdvancedLibrary from "./Pages/Library/AdvancedLibrary.jsx";
@@ -43,6 +46,18 @@ const router = createBrowserRouter([
   {
     path: "termsOne",
     element: <TermsOne />,
+  },
+  {
+    path: "termsTwo",
+    element: <TermsTwo />,
+  },
+  {
+    path: "termsThree",
+    element: <TermsThree />,
+  },
+  {
+    path: "termsFour",
+    element: <TermsFour />,
   },
   {
     path: "intermediatelibrary",
