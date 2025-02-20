@@ -2,6 +2,7 @@
     import cors from 'cors';
     import { createUser} from '../controllers/user.controller.js';
     import { loginUser } from '../controllers/user.controller.js';
+import { getRandomQuiz } from '../controllers/quiz.controller.js';
 
     const router = express.Router();
 
@@ -14,5 +15,8 @@
 
     router.post('/signup', createUser);
     router.post('/login', loginUser);
+    // Quiz route (fetches random quiz)
+    router.get('/quiz', getRandomQuiz);
+
 
     export default router;
