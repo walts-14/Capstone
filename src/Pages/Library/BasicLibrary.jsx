@@ -10,28 +10,28 @@ function BasicLibrary() {
          <LibraryButtons />
          
          <div className="level-container fw-bold mb-1">
-        <a href="/TermsOne">
+        <a href="/terms/termsone">
           <div className="level-content rounded-3">
             <span className="fs-3"> Lesson 1 </span>
             <span className="fs-4"> 30 items</span>
             <p className="fs-1"> Introduction to Sign Language</p>
           </div>
         </a>
-        <a href="/TermsTwo">
+        <a href="/terms/termstwo">
           <div className="level-content rounded-3">
             <span className="fs-3"> Lesson 2 </span>
             <span className="fs-4"> 30 items</span>
             <p className="fs-1">Common Everyday Signs</p>
           </div>
         </a>
-        <a href="/TermsThree">
+        <a href="/terms/termsthree">
           <div className="level-content rounded-3">
             <span className="fs-3"> Lesson 3 </span>
             <span className="fs-4"> 30 items</span>
             <p className="fs-1"> Numbers and Days of the Week</p>
           </div>
         </a>
-        <a href="/TermsFour">
+        <a href="/terms/termsfour">
           <div className="level-content rounded-3">
             <span className="fs-3"> Lesson 4 </span>
             <span className="fs-4"> 30 items</span>

@@ -5,9 +5,9 @@ import "../css/Lessonlist.css";
 function Lessonlist({ Lessons }) {
   return (
     <div className="lesson-list">
-      
-        <Lessonscard key={Lessons[6].id} item={Lessons[6]} />
-      
+      {Lessons.map((lesson) => (
+        <Lessonscard key={lesson.id} item={lesson} />
+      ))}
     </div>
   );
 }
