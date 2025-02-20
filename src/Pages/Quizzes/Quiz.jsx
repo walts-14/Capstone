@@ -44,10 +44,10 @@ function Quiz() {
 
       <div className="quiz-container fw-bold">
         <p className="quiz-question">{quiz.question}</p>{" "}
-        {/* ✅ Display question only */}
+        {/* Display question only */}
       </div>
 
-      <div className="grid text-center fw-bold rounded-4 p-5">
+      <div className="grid text-center fw-bold rounded-4">
         <div className="choices rounded-4 col-md-6 col-lg-11 m-5">
           <div className="choice-a rounded-4 m-4">a</div>
         </div>
@@ -64,6 +64,13 @@ function Quiz() {
           <div className="choice-d rounded-4 m-4">d</div>
         </div>
       </div>
+      <button
+        type="button"
+        className="continue d-flex rounded-4 p-2 pt-2 ms-auto"
+        onClick={() => navigate("#")}
+      >
+        Next
+      </button>
     </>
   );
 }
