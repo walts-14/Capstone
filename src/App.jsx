@@ -13,8 +13,13 @@ import Lesson from "./Pages/Dashboard/Lesson.jsx";
 import LectureorQuiz from "./Pages/Dashboard/LessonorQuiz.jsx";
 import Page1 from "./Pages/Dashboard/Page1.jsx";
 import Quiz from "./Pages/Quizzes/Quiz.jsx";
+<<<<<<< Updated upstream
 import Correct from "./Components/correct.jsx";
 import Wrong from "./Components/wrong.jsx";
+=======
+import VideoLecture from "./Pages/Library/Lectures/LectureVids.jsx";
+
+>>>>>>> Stashed changes
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 
@@ -39,8 +44,13 @@ function App() {
         <Route path="/page1" element={<Page1 />} />
         <Route path="/lectureorquiz" element={<LectureorQuiz />} />
         <Route path="/quiz" element={<Quiz />} />
+<<<<<<< Updated upstream
         <Route path="/correct" element={<Correct />} />
         <Route path="/wrong" element={<Wrong />} />
+=======
+        <Route path="/VideoLecture/:title" element={<VideoLecture />} />
+
+>>>>>>> Stashed changes
       </Routes>
     </>
   );

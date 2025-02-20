@@ -2,9 +2,10 @@
     import cors from 'cors';
     import { createUser} from '../controllers/user.controller.js';
     import { loginUser } from '../controllers/user.controller.js';
-import { getRandomQuiz } from '../controllers/quiz.controller.js';
+    import { getRandomQuiz } from '../controllers/quiz.controller.js';
+    import { getLecture } from '../controllers/lecture.controller.js';
 
-    const router = express.Router();
+    export const router = express.Router();
 
     router.use(
         cors({     
@@ -17,6 +18,8 @@ import { getRandomQuiz } from '../controllers/quiz.controller.js';
     router.post('/login', loginUser);
     // Quiz route (fetches random quiz)
     router.get('/quiz', getRandomQuiz);
+    // Lecture route (fetches lecture)
+    router.get('/lecture/:title', getLecture)
 
 
     export default router;
