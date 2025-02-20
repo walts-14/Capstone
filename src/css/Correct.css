@@ -38,13 +38,14 @@
   text-align: left;
   left: 1rem;
   top: 14rem;
+  gap: 2rem;
 }
-.grid {
+.gridd {
   font-family: "Baloo", sans-serif;
   color: var(--white);
   display: grid;
-  min-width: 80vw;
-  min-height: 70vh;
+  width: 80vw;
+  height: 70vh;
   justify-content: center;
   grid-template-columns: repeat(2, 25vw);
   grid-template-rows: repeat(1, 100px);
@@ -52,21 +53,47 @@
   gap: 2.3rem;
   padding-top: 9rem;
 }
-.choices {
+.picture-question {
+  background-color: #3f3653;
+  border: 1px solid white;
+  height: 10vh;
+  width: 10vw;
+  position: absolute;
+  left: 75em;
+  bottom: 36.5rem;
+}
+.correct-ans {
+  background-color: #20bf55;
+  color: #100429;
+  position: absolute;
+  top: 13rem;
+  height: 7vh;
+  width: 25rem;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+.correct-ans img {
+  min-height: 8vh;
+  justify-content: center;
+  position: relative;
+  bottom: 1.5rem;
+  left: 2rem;
+}
+.choicess {
   border: 4px solid #574f69;
   height: 11vh;
   position: relative;
   top: 10rem;
   right: 1.5rem;
 }
-.grid .choices:nth-child(1) {
+.gridd .choices:nth-child(1) {
   position: relative;
 }
-.grid .choices:nth-child(2) {
+.gridd .choices:nth-child(2) {
   position: relative;
 }
 
-.choice-a {
+.choicee-a {
   display: flex;
   background-color: #271d3e;
   border: 3px solid #574f69;
@@ -74,7 +101,7 @@
   font-size: clamp(2rem, 2vw, 2rem);
   justify-content: center;
 }
-.choice-b {
+.choicee-b {
   display: flex;
   background-color: #271d3e;
   border: 3px solid #574f69;
@@ -82,7 +109,7 @@
   font-size: clamp(2rem, 2vw, 2rem);
   justify-content: center;
 }
-.choice-c {
+.choicee-c {
   display: flex;
   background-color: #271d3e;
   border: 3px solid #574f69;
@@ -90,7 +117,7 @@
   font-size: clamp(2rem, 2vw, 2rem);
   justify-content: center;
 }
-.choice-d {
+.choicee-d {
   display: flex;
   background-color: #271d3e;
   border: 3px solid #574f69;
@@ -98,7 +125,7 @@
   font-size: clamp(2rem, 2vw, 2rem);
   justify-content: center;
 }
-.continue {
+.continuee {
   background-color: #7338a0;
   font-size: clamp(2rem, 1.8vw, 3rem);
   color: var(--white);
@@ -110,7 +137,7 @@
   position: relative;
   top: 1rem;
 }
-.continue img {
+.continuee img {
   min-height: 5vh;
   justify-content: center;
   position: relative;

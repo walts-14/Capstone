@@ -54,9 +54,9 @@
   height: 10vh;
   background-color: var(--dark-purple);
   position: absolute;
-  bottom: 1.9em;
+  bottom: 2em;
   left: 5.2em;
-  height: 50vh;
+  height: 48vh;
   width: 27rem;
   cursor: pointer;
 }
@@ -66,14 +66,13 @@
   width: 30rem;
 }
 .quiz-inner {
-  border: 1px solid white;
   border-radius: 3rem;
-  height: 50vh;
+  height: 48vh;
   width: 27rem;
   background-color: var(--dark-purple);
   position: absolute;
   right: 21rem;
-  bottom: 1.9em;
+  bottom: 2em;
   cursor: pointer;
 }
 .lecture-inner img {

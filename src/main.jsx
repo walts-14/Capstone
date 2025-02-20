@@ -18,6 +18,8 @@ import LectureorQuiz from "./Pages/Dashboard/LessonorQuiz.jsx";
 import Page1 from "./Pages/Dashboard/Page1.jsx";
 import Quiz from "./Pages/Quizzes/Quiz.jsx";
 import Termspage from "./Pages/Library/Terms/Termspage.jsx";
+import Correct from "./Components/correct.jsx";
+import Wrong from "./Components/wrong.jsx";
 
 const router = createBrowserRouter([
   {
@@ -79,6 +81,14 @@ const router = createBrowserRouter([
   {
     path: "page1",
     element: <Page1 />,
+  },
+  {
+    path: "correct",
+    element: <Correct />,
+  },
+  {
+    path: "wrong",
+    element: <Wrong />,
   },
 ]);
 

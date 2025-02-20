@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import backkpoint from "../../assets/backkpoint.png";
+import arrow from "../../assets/arrow.png";
 import "../../css/Quiz.css";
 import axios from "axios";
 
@@ -64,12 +65,19 @@ function Quiz() {
           <div className="choice-d rounded-4 m-4">d</div>
         </div>
       </div>
+
       <button
         type="button"
-        className="continue d-flex rounded-4 p-2 pt-2 ms-auto"
-        onClick={() => navigate("#")}
+        className="continue d-flex rounded-4 p-3 pt-2 ms-auto"
+        onClick={() => navigate("/correct")}
       >
         Next
+        <img
+          src={arrow}
+          class="img-fluid d-flex ms-auto p-1 mt-1  "
+          alt="arrow img"
+          onClick={() => navigate("/correct")}
+        />
       </button>
     </>
   );
