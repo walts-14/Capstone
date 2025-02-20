@@ -41,13 +41,10 @@ function App() {
         <Route path="/page1" element={<Page1 />} />
         <Route path="/lectureorquiz" element={<LectureorQuiz />} />
         <Route path="/quiz" element={<Quiz />} />
-<<<<<<< Updated upstream
         <Route path="/correct" element={<Correct />} />
         <Route path="/wrong" element={<Wrong />} />
-=======
         <Route path="/VideoLecture/:title" element={<VideoLecture />} />
 
->>>>>>> Stashed changes
       </Routes>
     </>
   );

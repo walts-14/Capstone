@@ -17,14 +17,11 @@ import Lesson from "./Pages/Dashboard/Lesson.jsx";
 import LectureorQuiz from "./Pages/Dashboard/LessonorQuiz.jsx";
 import Page1 from "./Pages/Dashboard/Page1.jsx";
 import Quiz from "./Pages/Quizzes/Quiz.jsx";
-<<<<<<< Updated upstream
 import Termspage from "./Pages/Library/Terms/Termspage.jsx";
 import Correct from "./Components/correct.jsx";
 import Wrong from "./Components/wrong.jsx";
-=======
 import VideoLecture from "./Pages/Library/Lectures/LectureVids.jsx";
 
->>>>>>> Stashed changes
 
 const router = createBrowserRouter([
   {
@@ -94,10 +91,10 @@ const router = createBrowserRouter([
   {
     path: "wrong",
     element: <Wrong />,
+  },
+  {
     path: "VideoLecture/:title",
-
     element: <VideoLecture />,
-
   },
 ]);
 
