@@ -16,6 +16,8 @@ import AdvancedLibrary from "./Pages/Library/AdvancedLibrary.jsx";
 import Settings from "./Pages/Settings/Settings.jsx";
 import Lesson from "./Pages/Dashboard/Lesson.jsx";
 import LectureorQuiz from "./Pages/Dashboard/LessonorQuiz.jsx";
+import Page1 from "./Pages/Dashboard/Page1.jsx";
+import Quiz from "./Pages/Quizzes/Quiz.jsx";
 
 const router = createBrowserRouter([
   {
@@ -69,6 +71,14 @@ const router = createBrowserRouter([
   {
     path: "lectureorquiz",
     element: <LectureorQuiz />,
+  },
+  {
+    path: "quiz",
+    element: <Quiz />,
+  },
+  {
+    path: "page1",
+    element: <Page1 />,
   },
 ]);
 
