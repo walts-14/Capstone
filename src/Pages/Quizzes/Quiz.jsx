@@ -21,10 +21,13 @@ function Quiz() {
         <p>Back</p>
       </div>
       <div className="grid text-center fw-bold rounded-4">
-        <div className="g-col-6">.g-col-6</div>
-        <div className="g-col-6">.g-col-6</div>
-        <div className="g-col-6">.g-col-6</div>
-        <div className="g-col-6">.g-col-6</div>
+        <div className="choices"> a</div>
+
+        <div className="choices"> b</div>
+
+        <div className="choices"> c</div>
+
+        <div className="choices"> d</div>
       </div>
     </>
   );

@@ -36,3 +36,7 @@
   min-height: 70vh;
   background-color: var(--dark-purple);
 }
+.grid .choices:nth-child(1) {
+  grid-column: 1;
+  grid-row: 1;
+}
