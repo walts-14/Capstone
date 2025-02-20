@@ -3,7 +3,7 @@ import Sidenav from '../../../Components/Sidenav';
 import LibraryButtons from '../LibraryButtons';
 import Termslist from './Termslist';
 import OneTerms from './OneTerms';
-import Lessonlist from '../../../Components/Lessonlist'; // Ensure consistent casing
+import Lessonlist from '../../../Components/lessonList'; // Ensure consistent casing
 import Lessons from '../../../Components/dataLessons';
 
 function TermsOne() {
