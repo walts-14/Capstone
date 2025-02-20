@@ -23,7 +23,7 @@ function LectureorQuiz() {
         <p>Back</p>
       </div>
 
-      <div className="lecture-quiz-container d-flex fw-bold">
+      <div className="lecture-quiz-container d-flex fw-bold col-md-6:">
         <div className="lecture-outer rounded-5">
           <p>Lecture</p>
           <div className="lecture-inner">

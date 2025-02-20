@@ -28,6 +28,17 @@
   --midlight-red: #d7443e;
   --midblue: #04aae0;
 }
+.quiz-container {
+  font-size: clamp(2.5rem, 2vw, 1.5rem);
+  max-width: 80%;
+  margin: 0 auto;
+  color: var(--white);
+  font-family: "Baloo", sans-serif;
+  position: relative;
+  text-align: left;
+  left: 1rem;
+  top: 10rem;
+}
 .grid {
   font-family: "Baloo", sans-serif;
   color: var(--white);
@@ -36,8 +47,10 @@
   min-height: 65vh;
   justify-content: center;
   grid-template-columns: repeat(2, 25vw);
-  grid-template-rows: repeat (5, 100px);
+  grid-template-rows: repeat(1, 100px);
   background-color: var(--dark-purple);
+  gap: 2.3rem;
+  padding-top: 9rem;
 }
 .choices {
   border: 4px solid #574f69;
@@ -47,28 +60,17 @@
 }
 .grid .choices:nth-child(1) {
   position: relative;
-  top: 13rem;
 }
 .grid .choices:nth-child(2) {
   position: relative;
-  top: 13rem;
 }
-.quiz-container {
-  font-size: 2rem;
-  width: max-content;
-  color: var(--white);
-  font-family: "Baloo", sans-serif;
-  position: relative;
-  text-align: left;
-  left: 5rem;
-  top: 10rem;
-}
+
 .choice-a {
   display: flex;
   background-color: #271d3e;
   border: 3px solid #574f69;
   max-width: 3vw;
-  font-size: 2rem;
+  font-size: clamp(2rem, 2vw, 2rem);
   justify-content: center;
 }
 .choice-b {
@@ -76,7 +78,7 @@
   background-color: #271d3e;
   border: 3px solid #574f69;
   max-width: 3vw;
-  font-size: 2rem;
+  font-size: clamp(2rem, 2vw, 2rem);
   justify-content: center;
 }
 .choice-c {
@@ -84,7 +86,7 @@
   background-color: #271d3e;
   border: 3px solid #574f69;
   max-width: 3vw;
-  font-size: 2rem;
+  font-size: clamp(2rem, 2vw, 2rem);
   justify-content: center;
 }
 .choice-d {
@@ -92,6 +94,18 @@
   background-color: #271d3e;
   border: 3px solid #574f69;
   max-width: 3vw;
-  font-size: 2rem;
+  font-size: clamp(2rem, 2vw, 2rem);
   justify-content: center;
+}
+.continue {
+  background-color: #7338a0;
+  font-size: clamp(2rem, 1.8vw, 3rem);
+  color: var(--white);
+  font-family: "Baloo", sans-serif;
+  height: 7vh;
+  min-width: 10vw;
+  text-align: center;
+  justify-content: center;
+  position: relative;
+  top: 1rem;
 }
