@@ -1,11 +1,13 @@
 import mongoose from 'mongoose';
 import User from '../models/user.js';
+import { hashedPassword, comparePassword } from '../middlewares/auth.js';
 
 /**
  * Creates a new user in the database
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
  */
+
 export const createUser = async (req, res) => {
     const user = req.body;
 
@@ -62,18 +64,26 @@ export const createUser = async (req, res) => {
     }
 };
 
-
 export const loginUser = async (req, res) => {
-    const { email, password } = req.body;
-    
     try {
+        const { email, password } = req.body;
         const user = await User.findOne({ email: email });
-        if (user && password === user.password) {
-            res.json(user);
-        } else {
-            res.status(404).json({ message: "User not found" });
-        }
-    } catch (err) {
+        if (!user) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid email or password'
+        })
+    } else{
+        user && password === user.password
+        res.json(user);
+    }
+        const match = await comparePassword(password, user.password);
+        if(match){
+            return res.status(200).json({
+                success: true,
+                message: 'Login Successful'
+        }, user)
+}} catch (err) {
         res.status(400).json({ error: "Error: " + err.message });
     }
 };
