@@ -10,7 +10,7 @@ function BasicLibrary() {
          <LibraryButtons />
          
          <div className="level-container fw-bold mb-1">
-        <a href="/LessonOne">
+        <a href="/TermsOne">
           <div className="level-content rounded-3">
             <span className="fs-3"> Lesson 1 </span>
             <span className="fs-4"> 30 items</span>

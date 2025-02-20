@@ -1,8 +1,10 @@
 import React from 'react'
-import LessonCard from './LessonCard'
+import TermsCard from './TermsCard'
 import "../../../css/Lessonlist.css"
+
 const OneTerms = [
 
+    
     {id: 1, terms:"Aa", definition:" Alphabet, Apple, Ant "},
     {id: 2, terms:"Bb", definition:" Banana, Butterfly, Ball "},  
     {id: 3, terms:"Cc", definition:" Cat, Car, Cloud "}, 
@@ -29,18 +31,21 @@ const OneTerms = [
     {id: 24, terms:"Xx", definition:" Xylophone, X-ray, Xenon "}, 
     {id: 25, terms:"Yy", definition:" Yacht, Yo-yo, Yak "}, 
     {id: 26, terms:"Zz", definition:" Zebra, Zipper, Zoo "}, 
-
+    {id: 27, terms:"Hello", definition:" Zebra, Zipper, Zoo "}, 
+    {id: 28, terms:"World", definition:" Zebra, Zipper, Zoo "}, 
+    {id: 29, terms:"Morning", definition:" Zebra, Zipper, Zoo "}, 
+    {id: 30, terms:"Goodnight", definition:" Zebra, Zipper, Zoo "}, 
 ];  
 
  
 
-function Lessonlist() {
+function Termslist() {
 
   return (
     <>
       <div className="terms-list grid-container">
         {OneTerms.map((item) => (
-          <LessonCard key={item.id} item={item} />
+          <TermsCard key={item.id} item={item} />
         ))}
       </div>
      
@@ -49,4 +54,4 @@ function Lessonlist() {
   )
 }
 
-export default Lessonlist
+export default Termslist

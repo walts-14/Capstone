@@ -33,18 +33,20 @@
   }
 
 .terms-card {
-    background-color: var(--white);
+    display: inline-block; /* Allow the card to adjust its width based on content */
     text-align: center;
     padding: 20px 2px;
     border-radius: 10px;
     background-color: var(--lightblue);
     box-shadow: 0 5px 1px 8px var(--shadowblue);
+    height: 100px;
     
 }
 
 .term-name {
-    font-size: 3rem;
-    font-weight: bold;
-    color: white;
-    font-family: "Baloo";
+  font-size: 2.8rem;
+  font-weight: bold;
+  color: white;
+  font-family: "Baloo";
+
 }

@@ -1,17 +1,16 @@
 import React from 'react'
 import "../../../css/LessonCard.css"
 
-function LessonCard({item}) {
+function TermsCard({item}) {
   return (
     <>
-      
-        <div className="terms-card">
+      <a className="terms-card" href="">
           <h5 className="term-name">{item.terms}</h5>
-        </div>
+      </a>
    
     </>
       
   )
 }
 
-export default LessonCard
+export default TermsCard

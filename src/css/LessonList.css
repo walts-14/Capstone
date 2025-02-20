@@ -33,16 +33,33 @@
 
   body {
     width: 100%;
-    
+
   }
   .terms-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: 35px;
-    padding: 20px;
-    margin-top: 120px;
-    width: 800px;
-    height: 650px; /* Set a fixed height */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 45px;
+    padding: 30px;
+    width: 1150px;
+    height: 700px; /* Set a fixed height */
     overflow-y: auto; /* Enable vertical scrolling */
-    
+    position: absolute;
+    top: 27%;
+    left: 29%;
+  }
+
+  .lessonTitle {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    font-family: "Baloo";
+    font-size: 20px;
+    color: var(--white);
+    position: absolute;
+    padding: 15px 30px;
+    width: 55%;
+    top: 18%;
+    left: 30%;
+    background-color: var(--semidark-blue);
+    border-radius: 10px;
   }
