@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import backkpoint from "../../assets/backkpoint.png";
-import "../../css/LessonorQuiz.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "../../css/Quiz.css";
 
 function Quiz() {
   const navigate = useNavigate();
@@ -18,6 +19,12 @@ function Quiz() {
           onClick={() => navigate("/page1")}
         />
         <p>Back</p>
+      </div>
+      <div className="grid text-center fw-bold rounded-4">
+        <div className="g-col-6">.g-col-6</div>
+        <div className="g-col-6">.g-col-6</div>
+        <div className="g-col-6">.g-col-6</div>
+        <div className="g-col-6">.g-col-6</div>
       </div>
     </>
   );
