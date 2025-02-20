@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import backkpoint from "../../assets/backkpoint.png";
-import "../../css/LessonorQuiz.css";
+import "../../css/Quiz.css";
 import axios from "axios";
 
 function Quiz() {
-
   const [quiz, setQuiz] = useState(null);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [result, setResult] = useState(null);
@@ -13,20 +12,20 @@ function Quiz() {
 
   useEffect(() => {
     const fetchQuiz = async () => {
-        try {
-            const response = await axios.get("http://localhost:5000/api/quiz");
-            console.log("Quiz data:", response.data);
-            setQuiz(response.data); // ✅ Store full quiz object
-        } catch (error) {
-            console.error("Error fetching quiz:", error);
-        }
+      try {
+        const response = await axios.get("http://localhost:5000/api/quiz");
+        console.log("Quiz data:", response.data);
+        setQuiz(response.data); // ✅ Store full quiz object
+      } catch (error) {
+        console.error("Error fetching quiz:", error);
+      }
     };
     fetchQuiz();
-}, []);
+  }, []);
 
-if (!quiz) {
+  if (!quiz) {
     return <div>Loading quiz...</div>;
-}
+  }
 
   return (
     <>
@@ -43,19 +42,27 @@ if (!quiz) {
         <p>Back</p>
       </div>
 
-      <div className="quiz-container">
-            <h2>Quiz Question</h2>
-            <p className="quiz-question">{quiz.question}</p> {/* ✅ Display question only */}
+      <div className="quiz-container fw-bold">
+        <p className="quiz-question">{quiz.question}</p>{" "}
+        {/* ✅ Display question only */}
+      </div>
+
+      <div className="grid text-center fw-bold rounded-4 p-5">
+        <div className="choices rounded-4 col-md-6 col-lg-11 m-5">
+          <div className="choice-a rounded-4 m-4">a</div>
         </div>
 
-      <div className="grid text-center fw-bold rounded-4">
-        <div className="choices"> a</div>
+        <div className="choices rounded-4 col-md-6 col-lg-11 m-5">
+          <div className="choice-b rounded-4 m-4">b</div>
+        </div>
 
-        <div className="choices"> b</div>
+        <div className="choices rounded-4 col-md-6 col-lg-11 m-5">
+          <div className="choice-c rounded-4 m-4">c</div>
+        </div>
 
-        <div className="choices"> c</div>
-
-        <div className="choices"> d</div>
+        <div className="choices rounded-4 col-md-6 col-lg-11 m-5">
+          <div className="choice-d rounded-4 m-4">d</div>
+        </div>
       </div>
     </>
   );

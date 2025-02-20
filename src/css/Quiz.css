@@ -33,10 +33,65 @@
   color: var(--white);
   display: grid;
   min-width: 70vw;
-  min-height: 70vh;
+  min-height: 65vh;
+  justify-content: center;
+  grid-template-columns: repeat(2, 25vw);
+  grid-template-rows: repeat (5, 100px);
   background-color: var(--dark-purple);
 }
+.choices {
+  border: 4px solid #574f69;
+  height: 11vh;
+  position: relative;
+  top: 5rem;
+}
 .grid .choices:nth-child(1) {
-  grid-column: 1;
-  grid-row: 1;
+  position: relative;
+  top: 13rem;
+}
+.grid .choices:nth-child(2) {
+  position: relative;
+  top: 13rem;
+}
+.quiz-container {
+  font-size: 2rem;
+  width: max-content;
+  color: var(--white);
+  font-family: "Baloo", sans-serif;
+  position: relative;
+  text-align: left;
+  left: 5rem;
+  top: 10rem;
+}
+.choice-a {
+  display: flex;
+  background-color: #271d3e;
+  border: 3px solid #574f69;
+  max-width: 3vw;
+  font-size: 2rem;
+  justify-content: center;
+}
+.choice-b {
+  display: flex;
+  background-color: #271d3e;
+  border: 3px solid #574f69;
+  max-width: 3vw;
+  font-size: 2rem;
+  justify-content: center;
+}
+.choice-c {
+  display: flex;
+  background-color: #271d3e;
+  border: 3px solid #574f69;
+  max-width: 3vw;
+  font-size: 2rem;
+  justify-content: center;
+}
+.choice-d {
+  display: flex;
+  background-color: #271d3e;
+  border: 3px solid #574f69;
+  max-width: 3vw;
+  font-size: 2rem;
+  justify-content: center;
 }
