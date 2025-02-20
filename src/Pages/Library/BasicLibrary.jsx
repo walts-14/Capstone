@@ -35,7 +35,7 @@ function BasicLibrary() {
           <div className="level-content rounded-3">
             <span className="fs-3"> Lesson 4 </span>
             <span className="fs-4"> 30 items</span>
-            <p className="fs-1"> Matching and Memory Game</p>
+            <p className="fs-1"> Basic Classroom Vocabulary </p>
           </div>
         </a>
       </div>

@@ -30,7 +30,7 @@ function AdvancedLibrary() {
           <div className="level-content rounded-3">
             <span className="fs-3"> Lesson 3 </span>
             <span className="fs-4"> 30 items</span>
-            <p className="fs-1"> Cul tural Insights and Idioms</p>
+            <p className="fs-1"> Cultural Insights and Idioms</p>
           </div>
         </a>
         <a href="#">
