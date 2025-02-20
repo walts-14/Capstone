@@ -1,7 +1,3 @@
-import React from 'react'
-import TermsCard from './TermsCard'
-import "../../../css/Lessonlist.css"
-
 const OneTerms = [
 
     
@@ -36,22 +32,4 @@ const OneTerms = [
     {id: 29, terms:"Morning", definition:" Zebra, Zipper, Zoo "}, 
     {id: 30, terms:"Goodnight", definition:" Zebra, Zipper, Zoo "}, 
 ];  
-
- 
-
-function Termslist() {
-
-  return (
-    <>
-      <div className="terms-list grid-container">
-        {OneTerms.map((item) => (
-          <TermsCard key={item.id} item={item} />
-        ))}
-      </div>
-     
-    </>
-
-  )
-}
-
-export default Termslist
+export default OneTerms

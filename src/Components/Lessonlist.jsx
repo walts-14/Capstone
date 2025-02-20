@@ -1,17 +1,15 @@
-import React from 'react'
+import React from 'react';
+import Lessonscard from './Lessonscard';
+import "../css/Lessonlist.css";
 
-const Lessons = [
-    
-];
-
-function lessonList() {
+function Lessonlist({ Lessons }) {
   return (
-    <div className="lesson-list grid-container">
-        {Lessons.map((item) => (
-        <TermsCard key={item.id} item={item} />
-        ))}
-  </div>   
-  )
+    <div className="lesson-list">
+      {Lessons.map((lesson) => (
+        <Lessonscard key={lesson.id} item={lesson} />
+      ))}
+    </div>
+  );
 }
 
-export default lessonList
+export default Lessonlist;

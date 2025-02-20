@@ -9,7 +9,7 @@ import SignupForm from "./Pages/Signup/SignupForm.jsx";
 import Dashboard from "./Pages/Dashboard/Dashboard.jsx";
 import Leaderboard from "./Pages/Leaderboard/Leaderboard.jsx";
 import Library from "./Pages/Library/Library.jsx";
-import TermsOne from "./Pages/Library/Lessons/TermsOne.jsx";
+import TermsOne from "./Pages/Library/Terms/TermsOne.jsx";
 import BasicLibrary from "./Pages/Library/BasicLibrary.jsx";
 import IntermediateLibrary from "./Pages/Library/IntermediateLibrary.jsx";
 import AdvancedLibrary from "./Pages/Library/AdvancedLibrary.jsx";
