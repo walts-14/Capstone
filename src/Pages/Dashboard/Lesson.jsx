@@ -10,7 +10,7 @@ function Lesson() {
       <div className="lessons-container">
         <div
           className="lessons d-flex rounded-4"
-          onClick={() => navigate("/page1")}
+          onClick={() => navigate("/page")}
         >
           1
         </div>

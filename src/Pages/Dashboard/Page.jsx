@@ -1,7 +1,7 @@
 import React from "react";
 import LectureorQuiz from "./LessonorQuiz";
 
-function Page1() {
+function Page() {
   return (
     <div>
       <LectureorQuiz />
@@ -9,4 +9,4 @@ function Page1() {
   );
 }
 
-export default Page1;
+export default Page;

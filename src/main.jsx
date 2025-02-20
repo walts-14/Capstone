@@ -15,12 +15,13 @@ import AdvancedLibrary from "./Pages/Library/AdvancedLibrary.jsx";
 import Settings from "./Pages/Settings/Settings.jsx";
 import Lesson from "./Pages/Dashboard/Lesson.jsx";
 import LectureorQuiz from "./Pages/Dashboard/LessonorQuiz.jsx";
-import Page1 from "./Pages/Dashboard/Page1.jsx";
+import Page from "./Pages/Dashboard/Page.jsx";
 import Quiz from "./Pages/Quizzes/Quiz.jsx";
 import Termspage from "./Pages/Library/Terms/Termspage.jsx";
 import Correct from "./Components/correct.jsx";
 import Wrong from "./Components/wrong.jsx";
 import VideoLecture from "./Pages/Library/Lectures/LectureVids.jsx";
+import LessonButtons from "./Pages/Dashboard/LessonButtons.jsx";
 
 
 const router = createBrowserRouter([
@@ -77,12 +78,16 @@ const router = createBrowserRouter([
     element: <LectureorQuiz />,
   },
   {
+    path: "lessonbutton",
+    element: <LessonButtons />,
+  },
+  {
     path: "quiz",
     element: <Quiz />,
   },
   {
-    path: "page1",
-    element: <Page1 />,
+    path: "page",
+    element: <Page />,
   },
   {
     path: "correct",

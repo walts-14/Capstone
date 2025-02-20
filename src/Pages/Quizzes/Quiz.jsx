@@ -32,13 +32,13 @@ function Quiz() {
     <>
       <div
         className="back fs-1 fw-bold d-flex"
-        onClick={() => navigate("/page1")}
+        onClick={() => navigate("/page")}
       >
         <img
           src={backkpoint}
           class="img-fluid w-50 h-50 p-1 mt-2"
           alt="ideas image"
-          onClick={() => navigate("/page1")}
+          onClick={() => navigate("/page")}
         />
         <p>Back</p>
       </div>

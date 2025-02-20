@@ -10,6 +10,7 @@ function LectureorQuiz() {
   const navigate = useNavigate();
   return (
     <>
+      
       <div
         className="back fs-1 fw-bold d-flex"
         onClick={() => navigate("/dashboard")}

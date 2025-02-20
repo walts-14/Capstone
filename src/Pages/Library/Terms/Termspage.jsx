@@ -10,12 +10,12 @@ import Lessons from "../../../Components/dataLessons";
 
 function Termspage() {
   const { termId } = useParams(); // Get dynamic term ID from the URL
-
+  
   const lesson = Lessons[termId]; // Fetch correct lesson data
 
   return (
     <div className="lesson-content">
-      <Lessonlist Lessons={lesson} />
+      {lesson ? <Lessonlist Lessons={lesson} /> : <h1>No Data Found</h1>}
       <Sidenav />
       <LibraryButtons />
       <Termslist OneTerms={OneTerms} />

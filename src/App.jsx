@@ -11,7 +11,7 @@ import BasicLibrary from "./Pages/Library/BasicLibrary.jsx";
 import Settings from "./Pages/Settings/Settings.jsx";
 import Lesson from "./Pages/Dashboard/Lesson.jsx";
 import LectureorQuiz from "./Pages/Dashboard/LessonorQuiz.jsx";
-import Page1 from "./Pages/Dashboard/Page1.jsx";
+import Page from "./Pages/Dashboard/Page.jsx";
 import Quiz from "./Pages/Quizzes/Quiz.jsx";
 import Correct from "./Components/correct.jsx";
 import Wrong from "./Components/wrong.jsx";
@@ -38,7 +38,7 @@ function App() {
         <Route path="leaderboard" element={<Leaderboard />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/lesson" element={<Lesson />} />
-        <Route path="/page1" element={<Page1 />} />
+        <Route path="/page" element={<Page />} />
         <Route path="/lectureorquiz" element={<LectureorQuiz />} />
         <Route path="/quiz" element={<Quiz />} />
         <Route path="/correct" element={<Correct />} />

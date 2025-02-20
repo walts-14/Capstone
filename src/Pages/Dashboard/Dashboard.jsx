@@ -5,6 +5,7 @@ import "../../css/Dashboard.css";
 import Lesson from "./Lesson.jsx";
 import Sidenav from "../../Components/Sidenav";
 import { useNavigate } from "react-router-dom";
+import LessonButtons from "./LessonButtons.jsx";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -49,7 +50,7 @@ function Dashboard() {
           Log out
         </button>
       </div>
-      <Lesson />
+      <LessonButtons />
     </>
   );
 }
