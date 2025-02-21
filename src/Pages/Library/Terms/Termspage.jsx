@@ -14,7 +14,7 @@ function Termspage() {
   const lesson = Lessons[termId]; // Fetch correct lesson data
 
   return (
-    <div className="lesson-content">
+    <div className="termspage-content">
       {lesson ? <Lessonlist Lessons={lesson} /> : <h1>No Data Found</h1>}
       <Sidenav />
       <LibraryButtons />

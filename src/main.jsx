@@ -50,6 +50,10 @@ const router = createBrowserRouter([
     element: <Termspage />,
   },
   {
+    path: "page/:termId",
+    element: <Page />,
+  },
+  {
     path: "intermediatelibrary",
     element: <IntermediateLibrary />,
   },

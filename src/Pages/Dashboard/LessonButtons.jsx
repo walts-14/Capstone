@@ -18,7 +18,7 @@ const lessonRoutes = [
           <div
             key={lesson.id}
             className="lessons d-flex rounded-4"
-            onClick={() => navigate(`/terms/${lesson.termId}`)}
+            onClick={() => navigate(`/page/${lesson.termId}`)}
           >
             {lesson.id}
           </div>
