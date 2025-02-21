@@ -10,7 +10,7 @@ function AdvancedLibrary() {
       <Sidenav />
       <LibraryButtons />
       <div className="level-container fw-bold mb-1">
-        <a href="#">
+        <a href="/terms/termsnine">
           <div className="level-content rounded-3">
             <span className="fs-3"> Lesson 1 </span>
             <span className="fs-4"> 30 items</span>
@@ -19,21 +19,21 @@ function AdvancedLibrary() {
             </p>
           </div>
         </a>
-        <a href="#">
+        <a href="/terms/termsten">
           <div className="level-content rounded-3">
             <span className="fs-3"> Lesson 2 </span>
             <span className="fs-4"> 30 items</span>
             <p className="fs-1">Storytelling Basics</p>
           </div>
         </a>
-        <a href="#">
+        <a href="/terms/termseleven">
           <div className="level-content rounded-3">
             <span className="fs-3"> Lesson 3 </span>
             <span className="fs-4"> 30 items</span>
             <p className="fs-1"> Cultural Insights and Idioms</p>
           </div>
         </a>
-        <a href="#">
+        <a href="/terms/termstwelve">
           <div className="level-content rounded-3">
             <span className="fs-3"> Lesson 4 </span>
             <span className="fs-4"> 30 items</span>
