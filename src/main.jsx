@@ -22,6 +22,7 @@ import Correct from "./Components/correct.jsx";
 import Wrong from "./Components/wrong.jsx";
 import VideoLecture from "./Pages/Library/Lectures/LectureVids.jsx";
 import LessonButtons from "./Pages/Dashboard/LessonButtons.jsx";
+import LesoneContent from "./Pages/Library/VideoLesson/lesoneContent.jsx";
 
 
 const router = createBrowserRouter([
@@ -105,6 +106,10 @@ const router = createBrowserRouter([
     path: "VideoLecture/:title",
     element: <VideoLecture />,
   },
+  {
+    path: "lesonecontent",
+    element: <LesoneContent />,
+  }
 ]);
 
 createRoot(document.getElementById("root")).render(

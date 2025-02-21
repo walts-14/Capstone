@@ -1,0 +1,100 @@
+:root {
+    --background: #100429;
+    --semidark-purple: #271d3e;
+    --dark-purple: #271d3e;
+    --mid-purple: #7338a0;
+    --grey-purple: #6f687e;
+    --purple: #4a2574;
+    --light-purple: #cf96ff;
+    --stroke-gray: #6f687e;
+    --input-gray: #3f3653;
+    --placeholder: #9f9aa9;
+    --white: #ffff;
+    --basic-blue: #2e86c1;
+    --intermediate-yellow: #d4ac0d;
+    --advance-red: #c0392b;
+    --semidark-blue: #174360;
+    --dark-blue: #205d87;
+    --dark-yellow: #6a5606;
+    --semidark-yellow: #947809;
+    --dark-red: #601c15;
+    --semidark-red: #86271e;
+    --midlight-red: #d7443e;
+    --midblue: #04aae0;
+    --lightblue: #579ecd;
+    --shadowblue: #246b9a;
+  }
+
+  /* TryOne.css */
+@font-face {
+    font-family: "Baloo";
+    src: url("/src/font/Baloo-Regular.ttf") format("truetype");
+    font-style: normal;
+  }
+  
+  body {
+    overflow-y: hidden;
+  }
+  
+  .tryone-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: -50px;
+    position: relative;
+  }
+  
+  .tryone-container video {
+    border: 10px solid #271D3E;  /* Adds a white border */
+    border-radius: 10px;  /* Rounds the corners */
+   bottom: 600px;
+  }
+  
+  .back-button {
+    font-weight: bold;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+  }
+  
+  .text-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .letter-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px; /* Space between arrows and the letter */
+    margin-top: 20px;
+  }
+  
+  .text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .textOne {
+    font-family: "Baloo", sans-serif;
+    font-size: 2.0rem;
+    margin-bottom: 50px;
+    background: #4da6ff;
+    border-radius: 22px;
+    padding: 10px 65px;
+    text-decoration: none;
+    box-shadow: 0 5px 1px 3px var(--shadowblue);
+    width: fit-content;
+    font-weight: bold;
+    color: white;
+  }
+  
+  .arrow {
+    width: 40px; 
+    height: auto;
+    cursor: pointer;
+    margin-top: -40px;
+  }
+  
