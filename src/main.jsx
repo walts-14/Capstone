@@ -22,7 +22,8 @@ import Correct from "./Components/correct.jsx";
 import Wrong from "./Components/wrong.jsx";
 import VideoLecture from "./Pages/Library/Lectures/LectureVids.jsx";
 import LessonButtons from "./Pages/Dashboard/LessonButtons.jsx";
-import LesoneContent from "./Pages/Library/VideoLesson/lesoneContent.jsx";
+import LesoneContent from "./Pages/Library/VideoLesson/LesoneContent.jsx";
+
 
 
 const router = createBrowserRouter([

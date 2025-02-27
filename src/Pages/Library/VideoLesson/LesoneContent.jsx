@@ -6,7 +6,7 @@ import rightArrow from '../../../assets/rightArrow.png';
 import "../../../css/lesoneContent.css";
 const LesoneContent = () => {
   
-  const poster = "https://static.vecteezy.com/system/resources/previews/001/984/164/original/color-abstract-background-sun-rise-can-be-used-in-poster-banner-flyer-ans-website-free-vector.jpg";
+  
   return (
     <>
     <div className="tryone-container">
@@ -15,7 +15,7 @@ const LesoneContent = () => {
       </video>
       </div>
       <div className="back-button">
-        <a href="/lessonone"> 
+        <a href="/terms/termsone"> 
           <img src={Back} />
         </a>
         </div> 
