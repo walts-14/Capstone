@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import User from '../models/user.js';
 import { hashedPassword, comparePassword } from '../middlewares/auth.js';
 
@@ -67,23 +66,34 @@ export const createUser = async (req, res) => {
 export const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
-        const user = await User.findOne({ email: email });
+        const user = await User.findOne({ email });
+
         if (!user) {
             return res.status(400).json({
                 success: false,
                 message: 'Invalid email or password'
-        })
-    } else{
-        user && password === user.password
-        res.json(user);
-    }
+            });
+        }
+
+        // Compare passwords
         const match = await comparePassword(password, user.password);
-        if(match){
-            return res.status(200).json({
-                success: true,
-                message: 'Login Successful'
-        }, user)
-}} catch (err) {
-        res.status(400).json({ error: "Error: " + err.message });
+        if (!match) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid email or password'
+            });
+        }
+
+        // Successful login response
+        res.status(200).json({
+            status: "ok",
+            success: true,
+            message: "Login Successful",
+            userType: user.role, // Ensure your User model has a `role` field
+            data: "fake-jwt-token" // Replace this with real token generation
+        });
+
+    } catch (err) {
+        res.status(500).json({ error: "Server error: " + err.message });
     }
 };

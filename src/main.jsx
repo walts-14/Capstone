@@ -2,8 +2,9 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast"; // Import Toaster from react-hot-toast
+import ProtectedRoutes from "./ProtectedRoutes.jsx";
 import LoginForm from "./Pages/Login/LoginForm.jsx";
 import SignupForm from "./Pages/Signup/SignupForm.jsx";
 import Dashboard from "./Pages/Dashboard/Dashboard.jsx";
@@ -25,92 +26,42 @@ import LessonButtons from "./Pages/Dashboard/LessonButtons.jsx";
 import LesoneContent from "./Pages/Library/VideoLesson/LesoneContent.jsx";
 
 
-
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
-  },
-  {
-    path: "login",
     element: <LoginForm />,
+    children: [
+      { path: "login", element: <LoginForm /> },
+      { path: "signup", element: <SignupForm /> },
+
+      // Protected Routes
+      {
+        element: <ProtectedRoutes />, // Wrap protected routes
+        children: [
+          { path: "dashboard", element: <Dashboard /> },
+          { path: "library", element: <Library /> },
+          { path: "basiclibrary", element: <BasicLibrary /> },
+          { path: "intermediatelibrary", element: <IntermediateLibrary /> },
+          { path: "advancedlibrary", element: <AdvancedLibrary /> },
+          { path: "leaderboard", element: <Leaderboard /> },
+          { path: "settings", element: <Settings /> },
+          { path: "lesson", element: <Lesson /> },
+          { path: "lectureorquiz", element: <LectureorQuiz /> },
+          { path: "lessonbutton", element: <LessonButtons /> },
+          { path: "quiz", element: <Quiz /> },
+          { path: "page/:termId", element: <Page /> },
+          { path: "terms/:termId", element: <Termspage /> },
+          { path: "correct", element: <Correct /> },
+          { path: "wrong", element: <Wrong /> },
+          { path: "VideoLecture/:title", element: <VideoLecture /> },
+          { path: "lesonecontent", element: <LesoneContent /> },
+        ],
+      },
+
+      // Redirect unknown routes
+      { path: "*", element: <LoginForm /> },
+    ],
   },
-  {
-    path: "signup",
-    element: <SignupForm />,
-  },
-  {
-    path: "dashboard",
-    element: <Dashboard />,
-  },
-  {
-    path: "library",
-    element: <Library />,
-  },
-  {
-    path: "terms/:termId",
-    element: <Termspage />,
-  },
-  {
-    path: "page/:termId",
-    element: <Page />,
-  },
-  {
-    path: "intermediatelibrary",
-    element: <IntermediateLibrary />,
-  },
-  {
-    path: "advancedlibrary",
-    element: <AdvancedLibrary />,
-  },
-  {
-    path: "leaderboard",
-    element: <Leaderboard />,
-  },
-  {
-    path: "basiclibrary",
-    element: <BasicLibrary />,
-  },
-  {
-    path: "settings",
-    element: <Settings />,
-  },
-  {
-    path: "lesson",
-    element: <Lesson />,
-  },
-  {
-    path: "lectureorquiz",
-    element: <LectureorQuiz />,
-  },
-  {
-    path: "lessonbutton",
-    element: <LessonButtons />,
-  },
-  {
-    path: "quiz",
-    element: <Quiz />,
-  },
-  {
-    path: "page",
-    element: <Page />,
-  },
-  {
-    path: "correct",
-    element: <Correct />,
-  },
-  {
-    path: "wrong",
-    element: <Wrong />,
-  },
-  {
-    path: "VideoLecture/:title",
-    element: <VideoLecture />,
-  },
-  {
-    path: "lesonecontent",
-    element: <LesoneContent />,
-  }
 ]);
 
 createRoot(document.getElementById("root")).render(
@@ -130,3 +81,6 @@ createRoot(document.getElementById("root")).render(
     <RouterProvider router={router} />
   </StrictMode>
 );
+
+
+export default router;

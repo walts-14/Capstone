@@ -1,8 +1,8 @@
-import Quiz from "../models/quiz.schema.js"; 
+import quizTwo from "../../../models/LessonOne/quizTwo.schema.js";
 
-export const getRandomQuiz = async (req, res) => {
+export const getRandomQuizTwo = async (req, res) => {
     try {
-        const quiz = await Quiz.aggregate([{ $sample: { size: 1 } }]); // Get 1 random question
+        const quiz = await quizTwo.aggregate([{ $sample: { size: 1 } }]); // Get 1 random question
 
         if (quiz.length === 0) {
             return res.status(404).json({ error: "No questions found" });
