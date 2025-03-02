@@ -20,6 +20,8 @@ import Quiz from "./Pages/Quizzes/Quiz.jsx";
 import Termspage from "./Pages/Library/Terms/Termspage.jsx";
 import Correct from "./Components/correct.jsx";
 import Wrong from "./Components/wrong.jsx";
+import Repeat from "./Components/Repeat.jsx";
+import Finish from "./Components/Finish.jsx";
 import VideoLecture from "./Pages/Library/Lectures/LectureVids.jsx";
 import LessonButtons from "./Pages/Dashboard/LessonButtons.jsx";
 import LesoneContent from "./Pages/Library/VideoLesson/LesoneContent.jsx";
@@ -49,6 +51,8 @@ const router = createBrowserRouter([
       { path: "terms/:termId", element: <Termspage /> },
       { path: "correct", element: <Correct /> },
       { path: "wrong", element: <Wrong /> },
+      { path: "repeat", element: <Repeat /> },
+      { path: "finish", element: <Finish /> },
       { path: "VideoLecture/:title", element: <VideoLecture /> },
       { path: "lesonecontent", element: <LesoneContent /> },
     ],
