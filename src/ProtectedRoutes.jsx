@@ -1,13 +1,18 @@
-import React from "react";
-import { Navigate, Outlet } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Outlet, Navigate } from "react-router-dom";
 
 const ProtectedRoutes = () => {
-  const isAuthenticated = window.localStorage.getItem("loggedIn") === "true";
+  const [isAuthenticated, setIsAuthenticated] = useState(null); // ✅ Start as null
 
-  console.log("ProtectedRoutes Loaded");
-  console.log("User Authenticated:", isAuthenticated);
+  useEffect(() => {
+    const token = window.localStorage.getItem("token");
+    console.log("🔄 Checking token in ProtectedRoutes:", token);
+    setIsAuthenticated(token ? true : false);
+  }, []); // ✅ Run only once on mount
 
-  return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
+  if (isAuthenticated === null) return <p>Loading...</p>; // ⏳ Prevent infinite loop
+
+  return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
 export default ProtectedRoutes;

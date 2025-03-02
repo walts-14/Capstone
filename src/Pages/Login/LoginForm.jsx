@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
@@ -8,56 +8,50 @@ import toast from "react-hot-toast";
 
 function LoginForm() {
   const navigate = useNavigate();
-
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [data, setData] = useState({
     email: "",
     password: "",
   });
 
   const loginUser = async (e) => {
-    e.preventDefault();
+      e.preventDefault();
+      
+      try {
+        const response = await axios.post("http://localhost:5000/api/login", {
+          email: data.email,
+          password: data.password,
+        });
     
-    // Extract email and password from state
-    const { email, password } = data;
+        console.log("Login response:", response.data); // Debugging
     
-    console.log(email, password); // Debugging
-    
-    try {
-      const response = await axios.post("http://localhost:5000/api/login", {
-        email,
-        password,
-      }, {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      });
-  
-      if (response.status === 200) {
-        const resData = response.data;
-        console.log(resData, "userRegister");
-  
-        if (resData.status === "ok") {
+        if (response.status === 200 && response.data.status === "ok") {
           toast.success("Login successful!");
-  
-          // Store token in localStorage
-          window.localStorage.setItem("token", resData.data);
-          window.localStorage.setItem("loggedIn", "true");
-  
-          // Redirect to the dashboard
-          console.log("Navigating to dashboard"); // Debugging
-          navigate("/dashboard");
+          
+          localStorage.setItem("token", response.data.data);
+          localStorage.setItem("loggedIn", "true");
+    
+          console.log("✅ Token stored:", localStorage.getItem("token"));
+    
+          // ✅ Use React Router's navigate instead of full page reload
+          navigate("/dashboard", { replace: true });
         } else {
-          toast.error(resData.message || "Login failed");
+          toast.error(response.data.message || "Login failed");
         }
-      } else {
-        toast.error("Login failed with status: " + response.status);
+      } catch (error) {
+        console.error("Login error:", error);
+        toast.error(error.response?.data?.message || "Login failed");
       }
-    } catch (error) {
-      console.error("Login error:", error);
-      toast.error(error.response?.data?.message || "Login failed");
-    }
-  };
+    };
+    
+    // ✅ Run only once on mount to check token
+    useEffect(() => {
+      if (localStorage.getItem("token")) {
+        console.log("✅ Token exists, redirecting to /dashboard...");
+        navigate("/dashboard", { replace: true });
+      }
+    }, []); // ✅ Empty dependency array ensures it runs only once
+    
 
   return (
     <div className="login-container">
