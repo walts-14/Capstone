@@ -29,6 +29,8 @@
   --midblue: #04aae0;
 }
 .finishtext {
+  justify-content: space-between;
+  width: 100%;
   top: -2em;
 }
 .finishtext p {
@@ -38,4 +40,41 @@
 .finishtext img {
   height: auto;
   width: 10vw;
+}
+.dia-reward img,
+.dia-reward p {
+  color: #5dade2;
+  width: auto;
+  height: 6vh;
+}
+.stats-quiz img {
+  width: auto;
+  height: 6vh;
+}
+.stats-quiz p {
+  color: var(--white);
+}
+.finishbuttons {
+  background-color: var(--semidark-purple);
+  height: 14vh;
+  width: 33vw;
+}
+.finishbuttons .dashboard-button {
+  background-color: var(--mid-purple);
+  height: 7vh;
+  width: 12vw;
+  font-family: "Baloo", sans-serif;
+  color: var(--white);
+}
+.finishbuttons .dashboard-button:hover {
+  background-color: #100429;
+}
+.finishbuttons .continue {
+  background-color: var(--mid-purple);
+  height: 7vh;
+  width: 13vw;
+}
+.dashboard-button img {
+  height: auto;
+  width: 3vw;
 }
