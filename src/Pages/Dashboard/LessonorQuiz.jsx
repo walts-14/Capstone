@@ -10,7 +10,6 @@ function LectureorQuiz() {
   const navigate = useNavigate();
   return (
     <>
-      
       <div
         className="back fs-1 fw-bold d-flex"
         onClick={() => navigate("/dashboard")}
@@ -24,17 +23,20 @@ function LectureorQuiz() {
         <p>Back</p>
       </div>
 
-      <div className="lecture-quiz-container d-flex fw-bold col-md-6:">
-        <div className="lecture-outer rounded-5">
+      <div className="lecture-quiz-container d-flex justify-content-center fw-bold col-md-6:">
+        <div className="lecture-outer justify-content-center rounded-5">
           <p>Lecture</p>
-          <div className="lecture-inner">
+          <div className="lecture-inner justify-content-center align-items-center">
             <img src={Video} class="img-fluid" alt="video image" />
           </div>
         </div>
-        <div className="quiz-outer rounded-5">
+        <div className="quiz-outer justify-content-center rounded-5">
           <p>Quiz</p>
 
-          <div className="quiz-inner" onClick={() => navigate("/quiz")}>
+          <div
+            className="quiz-inner justify-content-center"
+            onClick={() => navigate("/quiz")}
+          >
             <img
               src={Ideas}
               class="img-fluid"

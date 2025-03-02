@@ -34,8 +34,8 @@
 
 .ButtonContainer {
   max-height: 100vh; /* Adjust the height as needed */
-  overflow-y: auto; /* Enable vertical scrolling */
-
+  overflow: scroll;
+  scrollbar-width: none;
 }
 .lessons-container .lessons1 {
   font-family: "Baloo", sans-serif;
@@ -47,7 +47,6 @@
   color: var(--white);
   background-color: var(--lightblue);
   box-shadow: 0px 10px 0px var(--shadowblue);
-  
 }
 
 /* Section 2: Lessons 6-10 */

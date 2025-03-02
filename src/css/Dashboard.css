@@ -41,6 +41,7 @@ body {
 }
 .navbar-bg {
   background-color: var(--purple);
+  flex-wrap: wrap;
   width: 21em;
   position: fixed;
   top: 7em;
