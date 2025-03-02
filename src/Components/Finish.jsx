@@ -50,13 +50,13 @@ function Finish() {
         </div>
         <button
           type="button"
-          className="continue d-flex rounded-4 pt-2 mb-4 ms-auto me-5 "
+          className="continue d-flex justify-content-center rounded-4 pt-2 mb-4 ms-auto me-5 "
           onClick={() => navigate("/correct")}
         >
           Continue
           <img
             src={arrow}
-            className="img-fluid d-flex ms-5 p-1 mt-1"
+            className="img-fluid d-flex ms-2 p-1 mt-1"
             alt="arrow img"
             onClick={() => navigate("/correct")}
           />
