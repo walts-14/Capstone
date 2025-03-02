@@ -1,13 +1,13 @@
 import React from "react";
-import { Outlet, Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 
 const ProtectedRoutes = () => {
-  const isAuthenticated = false; // Change this to true temporarily
+  const isAuthenticated = window.localStorage.getItem("loggedIn") === "true";
 
-  console.log("ProtectedRoutes Loaded"); 
+  console.log("ProtectedRoutes Loaded");
   console.log("User Authenticated:", isAuthenticated);
 
-  return isAuthenticated ? <Outlet /> : <Navigate to="/" replace />;
+  return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
 };
 
 export default ProtectedRoutes;

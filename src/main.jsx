@@ -25,42 +25,44 @@ import VideoLecture from "./Pages/Library/Lectures/LectureVids.jsx";
 import LessonButtons from "./Pages/Dashboard/LessonButtons.jsx";
 import LesoneContent from "./Pages/Library/VideoLesson/LesoneContent.jsx";
 
-
 const router = createBrowserRouter([
   {
     path: "/",
     element: <LoginForm />,
+  },
+  {
+    path: "login",
+    element: <LoginForm />,
+  },
+  {
+    path: "signup",
+    element: <SignupForm />,
+  },
+  {
+    element: <ProtectedRoutes />, // Wrap protected routes
     children: [
-      { path: "login", element: <LoginForm /> },
-      { path: "signup", element: <SignupForm /> },
-
-      // Protected Routes
-      {
-        element: <ProtectedRoutes />, // Wrap protected routes
-        children: [
-          { path: "dashboard", element: <Dashboard /> },
-          { path: "library", element: <Library /> },
-          { path: "basiclibrary", element: <BasicLibrary /> },
-          { path: "intermediatelibrary", element: <IntermediateLibrary /> },
-          { path: "advancedlibrary", element: <AdvancedLibrary /> },
-          { path: "leaderboard", element: <Leaderboard /> },
-          { path: "settings", element: <Settings /> },
-          { path: "lesson", element: <Lesson /> },
-          { path: "lectureorquiz", element: <LectureorQuiz /> },
-          { path: "lessonbutton", element: <LessonButtons /> },
-          { path: "quiz", element: <Quiz /> },
-          { path: "page/:termId", element: <Page /> },
-          { path: "terms/:termId", element: <Termspage /> },
-          { path: "correct", element: <Correct /> },
-          { path: "wrong", element: <Wrong /> },
-          { path: "VideoLecture/:title", element: <VideoLecture /> },
-          { path: "lesonecontent", element: <LesoneContent /> },
-        ],
-      },
-
-      // Redirect unknown routes
-      { path: "*", element: <LoginForm /> },
+      { path: "dashboard", element: <Dashboard /> },
+      { path: "library", element: <Library /> },
+      { path: "basiclibrary", element: <BasicLibrary /> },
+      { path: "intermediatelibrary", element: <IntermediateLibrary /> },
+      { path: "advancedlibrary", element: <AdvancedLibrary /> },
+      { path: "leaderboard", element: <Leaderboard /> },
+      { path: "settings", element: <Settings /> },
+      { path: "lesson", element: <Lesson /> },
+      { path: "lectureorquiz", element: <LectureorQuiz /> },
+      { path: "lessonbutton", element: <LessonButtons /> },
+      { path: "quiz", element: <Quiz /> },
+      { path: "page/:termId", element: <Page /> },
+      { path: "terms/:termId", element: <Termspage /> },
+      { path: "correct", element: <Correct /> },
+      { path: "wrong", element: <Wrong /> },
+      { path: "VideoLecture/:title", element: <VideoLecture /> },
+      { path: "lesonecontent", element: <LesoneContent /> },
     ],
+  },
+  {
+    path: "*",
+    element: <LoginForm />,
   },
 ]);
 
@@ -81,6 +83,5 @@ createRoot(document.getElementById("root")).render(
     <RouterProvider router={router} />
   </StrictMode>
 );
-
 
 export default router;

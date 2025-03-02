@@ -45,10 +45,13 @@ function LoginForm() {
           window.localStorage.setItem("loggedIn", "true");
   
           // Redirect to the dashboard
+          console.log("Navigating to dashboard"); // Debugging
           navigate("/dashboard");
         } else {
           toast.error(resData.message || "Login failed");
         }
+      } else {
+        toast.error("Login failed with status: " + response.status);
       }
     } catch (error) {
       console.error("Login error:", error);
