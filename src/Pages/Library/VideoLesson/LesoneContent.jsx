@@ -1,6 +1,5 @@
-import React from "react";
-import video from "../../../video/A.mp4";
-import Back from '../../../assets/BackButton.png'
+import React, { useEffect, useRef } from "react";
+import Back from '../../../assets/BackButton.png';
 import leftArrow from '../../../assets/leftArrow.png';
 import rightArrow from '../../../assets/rightArrow.png';
 import "../../../css/lesoneContent.css";
@@ -10,25 +9,33 @@ import OneTerms from "../Terms/OneTerms";
 const LesoneContent = () => {
   const { termId } = useParams(); // Get the term ID from URL
   const navigate = useNavigate();
+  const videoRef = useRef(null); // Reference to video element
 
   const termData = OneTerms.find(term => term.id === parseInt(termId)); // Find the matching term
-  
   if (!termData) {
     return <p>Term not found</p>; // Handle invalid term ID
   }
 
   const { terms, definition, video } = termData;
 
-  // Handle previous and next buttons
+  // Find previous and next terms (loop around at start/end)
   const currentIndex = OneTerms.findIndex(term => term.id === parseInt(termId));
-  const prevTerm = OneTerms[currentIndex - 1] || OneTerms[OneTerms.length - 1]; // Loop back if at the start
-  const nextTerm = OneTerms[currentIndex + 1] || OneTerms[0]; // Loop back if at the end
+  const prevTerm = OneTerms[currentIndex - 1] || OneTerms[OneTerms.length - 1]; // Wrap to last item if at start
+  const nextTerm = OneTerms[currentIndex + 1] || OneTerms[0]; // Wrap to first item if at end
+
+  // Auto-play video when term changes
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.load(); // Reload video source
+      videoRef.current.play().catch(error => console.error("Video play error:", error));
+    }
+  }, [termId]); // Runs whenever termId changes (user clicks next/previous)
 
   return (
     <>
       <div className="tryone-container">
-        <video width="650" height="400" controls>
-          <source src={video} />
+        <video ref={videoRef} key={video} width="650" height="400" controls autoPlay loop>
+          <source src={video} type="video/mp4" />
         </video>
       </div>
 
@@ -62,4 +69,3 @@ const LesoneContent = () => {
 };
 
 export default LesoneContent;
-
