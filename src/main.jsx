@@ -13,7 +13,6 @@ import BasicLibrary from "./Pages/Library/BasicLibrary.jsx";
 import IntermediateLibrary from "./Pages/Library/IntermediateLibrary.jsx";
 import AdvancedLibrary from "./Pages/Library/AdvancedLibrary.jsx";
 import Settings from "./Pages/Settings/Settings.jsx";
-import Lesson from "./Pages/Dashboard/Lesson.jsx";
 import LectureorQuiz from "./Pages/Dashboard/LessonorQuiz.jsx";
 import Page from "./Pages/Dashboard/Page.jsx";
 import Quiz from "./Pages/Quizzes/Quiz.jsx";
@@ -43,7 +42,6 @@ const router = createBrowserRouter([
       { path: "advancedlibrary", element: <AdvancedLibrary /> },
       { path: "leaderboard", element: <Leaderboard /> },
       { path: "settings", element: <Settings /> },
-      { path: "lesson", element: <Lesson /> },
       { path: "lectureorquiz", element: <LectureorQuiz /> },
       { path: "lessonbutton", element: <LessonButtons /> },
       { path: "quiz", element: <Quiz /> },

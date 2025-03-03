@@ -2,7 +2,6 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import luffy from "../../assets/luffy.jpg";
 import "../../css/Dashboard.css";
-import Lesson from "./Lesson.jsx";
 import Sidenav from "../../Components/Sidenav";
 import { useNavigate } from "react-router-dom";
 import LessonButtons from "./LessonButtons.jsx";
