@@ -52,7 +52,8 @@ const router = createBrowserRouter([
       { path: "repeat", element: <Repeat /> },
       { path: "finish", element: <Finish /> },
       { path: "VideoLecture/:title", element: <VideoLecture /> },
-      { path: "lesonecontent", element: <LesoneContent /> },
+      { path: "lesonecontent/:termId", element: <LesoneContent /> },
+      
     ],
   },
 

@@ -1,16 +1,20 @@
 
-import React from 'react'
-import "../../../css/LessonCard.css"
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import "../../../css/LessonCard.css";
 
-function TermsCard({item}) {
+function TermsCard({ item }) {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/lesonecontent/${item.id}`); // Navigate dynamically
+  };
+
   return (
-    <>
-      <a className="terms-card" href="/lesonecontent">
-          <h5 className="term-name">{item.terms}</h5>
-      </a>
-      
-    </>
-      
-  )
+    <button className="terms-card" onClick={handleClick}>
+      <h5 className="term-name">{item.terms}</h5>
+    </button>
+  );
 }
-export default TermsCard
+
+export default TermsCard;
