@@ -1,13 +1,13 @@
 import React from "react";
-import "../css/Finish.css";
+import "../../css/Finish.css";
 import { useNavigate } from "react-router-dom";
-import Applause from "../assets/Applause.png";
-import diamond from "../assets/diamond.png";
-import check from "../assets/check.png";
-import ekis from "../assets/ekis.png";
-import repeatLogo from "../assets/repeat logo.png";
-import arrow from "../assets/arrow.png";
-import dashboardlogo from "../assets/dashboardlogo.png";
+import Applause from "../../assets/Applause.png";
+import diamond from "../../assets/diamond.png";
+import check from "../../assets/check.png";
+import ekis from "../../assets/ekis.png";
+import repeatLogo from "../../assets/repeat logo.png";
+import arrow from "../../assets/arrow.png";
+import dashboardlogo from "../../assets/dashboardlogo.png";
 
 function Finish() {
   const navigate = useNavigate();

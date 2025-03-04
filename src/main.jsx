@@ -1,7 +1,11 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
+} from "react-router-dom";
 import { Toaster } from "react-hot-toast"; // Import Toaster from react-hot-toast
 import ProtectedRoutes from "./ProtectedRoutes.jsx";
 import LoginForm from "./Pages/Login/LoginForm.jsx";
@@ -17,10 +21,10 @@ import LectureorQuiz from "./Pages/Dashboard/LessonorQuiz.jsx";
 import Page from "./Pages/Dashboard/Page.jsx";
 import Quiz from "./Pages/Quizzes/Quiz.jsx";
 import Termspage from "./Pages/Library/Terms/Termspage.jsx";
-import Correct from "./Components/correct.jsx";
-import Wrong from "./Components/wrong.jsx";
-import Repeat from "./Components/Repeat.jsx";
-import Finish from "./Components/Finish.jsx";
+import Correct from "./Pages/Quizzes/Correct.jsx";
+import Wrong from "./Pages/Quizzes/Wrong.jsx";
+import Repeat from "./Pages/Quizzes/Repeat.jsx";
+import Finish from "./Pages/Quizzes/Finish.jsx";
 import VideoLecture from "./Pages/Library/Lectures/LectureVids.jsx";
 import LessonButtons from "./Pages/Dashboard/LessonButtons.jsx";
 import LesoneContent from "./Pages/Library/VideoLesson/LesoneContent.jsx";

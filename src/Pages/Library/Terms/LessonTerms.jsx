@@ -1,7 +1,5 @@
-
-    
-    const OneTerms = [
-        
+const LessonTerms = {
+    termsone: [
         {id: 1, terms:"Aa", definition:" Alphabet, Apple, Ant ",video: "/video/A.mp4"},
         {id: 2, terms:"Bb", definition:" Banana, Butterfly, Ball ", video:"/video/B.mp4"},  
         {id: 3, terms:"Cc", definition:" Cat, Car, Cloud ", video:"/video/C.mp4"}, 
@@ -32,5 +30,20 @@
         {id: 28, terms:"World", definition:" Zebra, Zipper, Zoo ", video:"/video/C.mp4"}, 
         {id: 29, terms:"Morning", definition:" Zebra, Zipper, Zoo ", video:"/video/C.mp4"}, 
         {id: 30, terms:"Goodnight", definition:" Zebra, Zipper, Zoo ", video:"/video/C.mp4"}, 
-    ];  
-    export default OneTerms
+    ],
+    termstwo: [
+        { id: 1, terms: "Hello", definition: "Greeting", video: "/video/Hello.mp4" },
+        { id: 2, terms: "World", definition: "Earth", video: "/video/World.mp4" }
+    ],
+    termsthree: [
+        { id: 1, terms: "Bembang", definition: "Greeting", video: "/video/Hello.mp4" },
+        { id: 2, terms: "Love you", definition: "Earth", video: "/video/World.mp4" }
+    ],
+    termsfour: [
+        { id: 1, terms: "Hatdog", definition: "Greeting", video: "/video/Hello.mp4" },
+        { id: 2, terms: "Itlog", definition: "Earth", video: "/video/World.mp4" }
+    ],
+    // Add more lessons here
+};
+
+export default LessonTerms;
