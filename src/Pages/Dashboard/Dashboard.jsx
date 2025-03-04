@@ -4,16 +4,23 @@ import luffy from "../../assets/luffy.jpg";
 import "../../css/Dashboard.css";
 import Sidenav from "../../Components/Sidenav";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import LessonButtons from "./LessonButtons.jsx";
 
 function Dashboard() {
   const navigate = useNavigate();
+  const [userName, setUserName] = React.useState("");
 
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("loggedIn"); // Also clear logged-in state
     navigate("/login", { replace: true }); // Ensure redirection
   };
+
+  useEffect(() => {
+    const userName = localStorage.getItem("userName");
+    setUserName(userName);
+  })
 
   return (
     <>
@@ -35,10 +42,10 @@ function Dashboard() {
       </div>
       <div className="profile-pic">
         <img src={luffy} className="img-fluid" alt="profile" />
-        <p className="fs-1">Monkey D. Luffy</p>
+        <p className="fs-1">{userName}</p>
       </div>
       <div className="position-lb">
-        <p className="fs-2 fw-bold"> Monkey D. Luffy</p>
+        <p className="fs-2 fw-bold">{userName}</p>
       </div>
       <div className="btns">
         <button

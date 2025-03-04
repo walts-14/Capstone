@@ -97,7 +97,8 @@ export const loginUser = async (req, res) => {
             status: "ok",
             success: true,
             message: "Login Successful",
-            data: token  // Send real token instead of "fake-jwt-token"
+            data: token, // Send real token instead of "fake-jwt-token"
+            user: {name: user.name, email: user.email}
         });
 
     } catch (err) {

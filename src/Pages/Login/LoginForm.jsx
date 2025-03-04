@@ -30,6 +30,7 @@ function LoginForm() {
 
             // ✅ Ensure token is stored correctly
             localStorage.setItem("token", response.data.data);
+            localStorage.setItem("userName", response.data.user.name);
             localStorage.setItem("loggedIn", "true");
 
             console.log("✅ Token stored:", localStorage.getItem("token")); // Debugging
