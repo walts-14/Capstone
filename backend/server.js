@@ -1,8 +1,9 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import authRoutes from './routes/user.route.js';
+import userRoutes from './routes/user.route.js';
 import LessonOneQuiz from './routes/LessonRoutes/LessonOne/quizOne.route.js';
+import authRoutes from './routes/authRoutes.js';
 import { connectDB}  from './config/db.js';
 
 //initializing express
@@ -19,8 +20,9 @@ app.use(
     })
 )
 
-app.use("/api", authRoutes);
+app.use("/api", userRoutes);
 app.use("/api", LessonOneQuiz);
+app.use("/api", authRoutes);
 
 app.listen(5000, () => {
     connectDB();

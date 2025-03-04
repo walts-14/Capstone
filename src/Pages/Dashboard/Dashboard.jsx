@@ -8,6 +8,13 @@ import LessonButtons from "./LessonButtons.jsx";
 
 function Dashboard() {
   const navigate = useNavigate();
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("loggedIn"); // Also clear logged-in state
+    navigate("/login", { replace: true }); // Ensure redirection
+  };
+
   return (
     <>
       <Sidenav />
@@ -44,7 +51,7 @@ function Dashboard() {
         <button
           type="button"
           className="btn btn-secondary btn-lg fw-bold fs-3 rounded-5"
-          onClick={() => navigate("/login")}
+          onClick={(logout)}
         >
           Log out
         </button>

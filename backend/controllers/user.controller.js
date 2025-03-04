@@ -1,4 +1,5 @@
 import User from '../models/user.js';
+import jwt from 'jsonwebtoken';
 import { hashedPassword, comparePassword } from '../middlewares/auth.js';
 
 /**
@@ -84,16 +85,23 @@ export const loginUser = async (req, res) => {
             });
         }
 
-        // Successful login response
+        // ✅ Generate JWT Token
+        const token = jwt.sign(
+            { id: user._id, email: user.email }, 
+            process.env.JWT_SECRET, 
+            { expiresIn: "1h" } // Token expires in 1 hour
+        );
+
+        // ✅ Return real JWT token
         res.status(200).json({
             status: "ok",
             success: true,
             message: "Login Successful",
-            userType: user.role, // Ensure your User model has a `role` field
-            data: "fake-jwt-token" // Replace this with real token generation
+            data: token  // Send real token instead of "fake-jwt-token"
         });
 
     } catch (err) {
         res.status(500).json({ error: "Server error: " + err.message });
     }
 };
+

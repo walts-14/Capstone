@@ -15,42 +15,65 @@ function LoginForm() {
   });
 
   const loginUser = async (e) => {
-      e.preventDefault();
-      
-      try {
+    e.preventDefault();
+
+    try {
         const response = await axios.post("http://localhost:5000/api/login", {
-          email: data.email,
-          password: data.password,
+            email: data.email,
+            password: data.password,
         });
-    
+
         console.log("Login response:", response.data); // Debugging
-    
+
         if (response.status === 200 && response.data.status === "ok") {
-          toast.success("Login successful!");
-          
-          localStorage.setItem("token", response.data.data);
-          localStorage.setItem("loggedIn", "true");
-    
-          console.log("✅ Token stored:", localStorage.getItem("token"));
-    
-          // ✅ Use React Router's navigate instead of full page reload
-          navigate("/dashboard", { replace: true });
+            toast.success("Login successful!");
+
+            // ✅ Ensure token is stored correctly
+            localStorage.setItem("token", response.data.data);
+            localStorage.setItem("loggedIn", "true");
+
+            console.log("✅ Token stored:", localStorage.getItem("token")); // Debugging
+
+            // ✅ Ensure navigation happens without delay
+            navigate("/dashboard", { replace: true });
+
         } else {
-          toast.error(response.data.message || "Login failed");
+            toast.error(response.data.message || "Login failed");
         }
-      } catch (error) {
+    } catch (error) {
         console.error("Login error:", error);
         toast.error(error.response?.data?.message || "Login failed");
-      }
-    };
+    }
+};
+
     
-    // ✅ Run only once on mount to check token
     useEffect(() => {
-      if (localStorage.getItem("token")) {
-        console.log("✅ Token exists, redirecting to /dashboard...");
-        navigate("/dashboard", { replace: true });
-      }
-    }, []); // ✅ Empty dependency array ensures it runs only once
+      const verifyToken = async () => {
+        const token = localStorage.getItem("token");
+    
+        if (!token) return; // No token, no redirection
+    
+        try {
+          const response = await axios.get("http://localhost:5000/api/verify-token", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+    
+          if (response.status === 200) {
+            console.log("✅ Token valid, redirecting...");
+            navigate("/dashboard", { replace: true });
+          } else {
+            console.log("❌ Token invalid, clearing storage...");
+            localStorage.removeItem("token");
+          }
+        } catch (error) {
+          console.error("❌ Token verification failed:", error);
+          localStorage.removeItem("token");
+        }
+      };
+    
+      verifyToken();
+    }, []);
+    
     
 
   return (

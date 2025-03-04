@@ -30,10 +30,10 @@ const router = createBrowserRouter([
   { path: "/login", element: <LoginForm /> },
   { path: "/signup", element: <SignupForm /> },
 
-  // Protected Routes
+  // ✅ Wrap Protected Routes Properly
   {
     path: "/",
-    element: <ProtectedRoutes />, // Wrap protected routes
+    element: <ProtectedRoutes />, // ✅ Only logged-in users can access
     children: [
       { path: "dashboard", element: <Dashboard /> },
       { path: "library", element: <Library /> },
@@ -53,11 +53,10 @@ const router = createBrowserRouter([
       { path: "finish", element: <Finish /> },
       { path: "VideoLecture/:title", element: <VideoLecture /> },
       { path: "lesonecontent/:termId", element: <LesoneContent /> },
-      
     ],
   },
 
-  // Catch-all route (redirect unknown routes)
+  // ✅ Catch-all redirect to prevent broken links
   { path: "*", element: <Navigate to="/login" replace /> },
 ]);
 
