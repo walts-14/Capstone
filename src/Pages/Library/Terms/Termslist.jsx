@@ -5,12 +5,12 @@ import "../../../css/Lessonlist.css"
 
 
 
-function Termslist({ OneTerms }) {
+function Termslist({ LessonTerms }) {
 
   return (
     <>
       <div className="terms-list grid-container">
-        {OneTerms.map((item) => (
+        {LessonTerms.map((item) => (
           <TermsCard key={item.id} item={item} />
         ))}
       </div>

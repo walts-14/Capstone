@@ -19,7 +19,7 @@ function Termspage() {
             {lesson ? <Lessonlist Lessons={lesson} /> : <h1>No Data Found</h1>}
             <Sidenav />
             <LibraryButtons />
-            <Termslist OneTerms={terms} /> {/* Now dynamically loads correct terms */}
+            <Termslist LessonTerms={terms} /> {/* Now dynamically loads correct terms */}
         </div>
     );
 }
