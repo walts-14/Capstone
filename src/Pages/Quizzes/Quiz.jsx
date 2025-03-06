@@ -1,47 +1,59 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import backkpoint from "../../assets/backkpoint.png";
+import { questions } from "./QuizQuestions/Questions";
 import arrow from "../../assets/arrow.png";
 import "../../css/Quiz.css";
 import toast from "react-hot-toast";
 
 function Quiz() {
+  const navigate = useNavigate();
+  const totalQuestions = 10;
   const [quiz, setQuiz] = useState(null);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
-  const [attempts, setAttempts] = useState(0); // Track attempts
-  const navigate = useNavigate();
+  const [attempts, setAttempts] = useState(0);
+  
+  // Store remaining questions
+  const [remainingQuestions, setRemainingQuestions] = useState([...questions.lessson1_Part1]);
 
-  // Fetch quiz when the component mounts
   useEffect(() => {
-    fetchQuiz();
-  }, []);
+    selectRandomQuestion();
+  }, []); // Run once when component mounts
 
-  const fetchQuiz = async () => {
-    try {
-      const response = await axios.get("http://localhost:5000/api/quiz");
-      console.log("Quiz data:", response.data);
-      setQuiz(response.data);
-      setSelectedAnswer(null); // Reset selection for the new question
-    } catch (error) {
-      console.error("Error fetching quiz:", error);
+  const selectRandomQuestion = () => {
+    if (remainingQuestions.length === 0) {
+      toast.success("Quiz completed!");
+      navigate("/finish");
+      return;
     }
+
+    const randomIndex = Math.floor(Math.random() * remainingQuestions.length);
+    const selectedQuiz = remainingQuestions[randomIndex];
+
+    // Update remaining questions **before updating state**
+    const newRemainingQuestions = remainingQuestions.filter((_, index) => index !== randomIndex);
+    setRemainingQuestions(newRemainingQuestions);
+
+    // Ensure full question, including choices, updates
+    setQuiz({ ...selectedQuiz });
+
+    setSelectedAnswer(null); // Reset selected answer for the new question
   };
+
+  useEffect(() => {
+    if (quiz) {
+      console.log("Updated Question:", quiz.question);
+      console.log("Updated Choices:", quiz.answerOptions);
+    }
+  }, [quiz]); // Log changes to verify updates
 
   if (!quiz) {
     return <div>Loading quiz...</div>;
   }
 
-  const handleChoiceClick = (choice) => {
-    setSelectedAnswer(choice);
-
-    if (choice === quiz.answer) {
-      console.log("✅ Correct answer selected:", choice);
-      navigate("/correct"); // Redirect to correct page
-    } else {
-    //  navigate("/wrong");
-      console.log("❌ Wrong answer:", choice);
-    }
+  const handleChoiceClick = (index) => {
+    setSelectedAnswer(index);
+    console.log(quiz.answerOptions[index].isCorrect ? "✅ Correct answer" : "❌ Wrong answer", index);
   };
 
   const handleNext = () => {
@@ -50,22 +62,14 @@ function Quiz() {
       return;
     }
 
-    setAttempts((prev) => prev + 1); // Increase attempt count
-    if (attempts >= 10) {
-      toast.success("Quiz completed!"); // Optional: Redirect to summary page
+    setAttempts((prev) => prev + 1);
+    if (attempts + 1 >= totalQuestions) {
+      toast.success("Quiz completed!");
       navigate("/finish");
       return;
     }
 
-    fetchQuiz(); // Fetch a new quiz when clicking "Next"
-  };
-
-  const handleNextClick = () => {
-    // Increase progress by 10% each time but cap at 100%
-    setProgress((prev) => (prev + 10 > 100 ? 100 : prev + 10));
-
-    // Navigate to the next page
-    navigate("/correct");
+    selectRandomQuestion(); // Select a new question on next click
   };
 
   return (
@@ -75,8 +79,8 @@ function Quiz() {
         <p>Back</p>
       </div>
 
-      <div className="progress" role="progressbar" aria-valuenow={(attempts / 10) * 100} aria-valuemin="0" aria-valuemax="100">
-        <div className="progress-bar" style={{ width: `${(attempts / 10) * 100}%` }}></div>
+      <div className="progress" role="progressbar" aria-valuenow={(attempts / totalQuestions) * 100} aria-valuemin="0" aria-valuemax="100">
+        <div className="progress-bar" style={{ width: `${(attempts / totalQuestions) * 100}%` }}></div>
       </div>
 
       <div className="quiz-container fw-bold">
@@ -84,14 +88,18 @@ function Quiz() {
       </div>
 
       <div className="grid text-center fw-bold rounded-4">
-        {["a", "b", "c", "d"].map((choice, index) => (
+        {quiz.answerOptions.map((option, index) => (
           <div
-            key={index}
-            className={`choices rounded-4 col-md-6 col-lg-11 m-5 ${selectedAnswer === choice ? "selected" : ""}`}
-            onClick={() => handleChoiceClick(choice)}
+            key={`${quiz.question}-${index}`} // Unique key to ensure re-render
+            className={`choices rounded-4 col-md-6 col-lg-11 m-5 ${selectedAnswer === index ? "selected" : ""}`}
+            onClick={() => handleChoiceClick(index)}
           >
-            <div className={`choice-${choice} rounded-4 m-4 ${selectedAnswer === choice ? "selected" : ""}`}>
-              {choice}
+            <div className={`choice-${["A", "B", "C", "D"][index].toLowerCase()} rounded-4 m-4 ${selectedAnswer === index ? "selected" : ""}`}>
+              <strong>{["A", "B", "C", "D"][index]}</strong>
+              <video width="200" height="150" controls>
+                <source src={option.video} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
             </div>
           </div>
         ))}
