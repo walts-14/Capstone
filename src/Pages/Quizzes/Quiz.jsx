@@ -8,6 +8,7 @@ import axios from "axios";
 function Quiz() {
   const [quiz, setQuiz] = useState(null);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [progress, setProgress] = useState(1); // Start at 1%
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,6 +32,14 @@ function Quiz() {
     setSelectedAnswer(choice);
   };
 
+  const handleNextClick = () => {
+    // Increase progress by 10% each time but cap at 100%
+    setProgress((prev) => (prev + 10 > 100 ? 100 : prev + 10));
+
+    // Navigate to the next page
+    navigate("/correct");
+  };
+
   return (
     <>
       <div
@@ -41,19 +50,19 @@ function Quiz() {
           src={backkpoint}
           className="img-fluid w-50 h-50 p-1 mt-2"
           alt="ideas image"
-          onClick={() => navigate("/page/termsone")}
         />
         <p>Back</p>
       </div>
 
+      {/* Progress Bar */}
       <div
         className="progress"
         role="progressbar"
-        aria-valuenow="75"
+        aria-valuenow={progress}
         aria-valuemin="0"
         aria-valuemax="100"
       >
-        <div className="progress-bar w-75"></div>
+        <div className="progress-bar" style={{ width: `${progress}%` }}></div>
       </div>
 
       <div className="quiz-container fw-bold">
@@ -83,7 +92,7 @@ function Quiz() {
       <button
         type="button"
         className="continue d-flex rounded-4 p-3 pt-2 ms-auto"
-        onClick={() => navigate("/correct")}
+        onClick={handleNextClick}
       >
         Next
         <img
