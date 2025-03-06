@@ -2,6 +2,9 @@ import React from "react";
 import { useLocation } from "react-router-dom";
 import "../css/Dashboard.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import dashboardlogo from "../assets/dashboardlogo.png";
+import libicon from "../assets/libicon.png";
+import leaderboardicon from "../assets/leaderboardicon.png";
 
 function Sidenav() {
   const location = useLocation();
