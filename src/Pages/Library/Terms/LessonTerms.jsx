@@ -33,7 +33,15 @@ const LessonTerms = {
     ],
     termstwo: [
         { id: 1, terms: "Hello", definition: "Greeting", video: "/video/Hello.mp4" },
-        { id: 2, terms: "World", definition: "Earth", video: "/video/World.mp4" }
+        { id: 2, terms: "World", definition: "Earth", video: "/video/World.mp4" },
+        {id: 3, terms:"Cc", definition:" Cat, Car, Cloud ", video:"/video/Basic/Lesson1/C.mp4"}, 
+        {id: 4, terms:"Dd", definition:" Dog, Drum, Dolphin ", video:"/video/Basic/Lesson1/D.mp4"}, 
+        {id: 5, terms:"Ee", definition:" Elephant, Egg, Earth ", video:"/video/Basic/Lesson1/E.mp4"}, 
+        {id: 6, terms:"Ff", definition:" Fish, Flag, Flower ", video:"/video/Basic/Lesson1/F.mp4"}, 
+        {id: 7, terms:"Gg", definition:" Giraffe, Guitar, Grapes ", video:"/video/Basic/Lesson1/G.mp4"}, 
+        {id: 8, terms:"Hh", definition:" Horse, House, Hat ", video:"/video/Basic/Lesson1/H.mp4"}, 
+        {id: 9, terms:"Ii", definition:" Ice, Igloo, Insect ", video:"/video/Basic/Lesson1/I.mp4"}, 
+        {id: 10, terms:"Jj", definition:" Jellyfish, Jacket, Juice ", video:"/video/Basic/Lesson1/J.mp4"}, 
     ],
     termsthree: [
         { id: 1, terms: "Bembang", definition: "Greeting", video: "/video/Hello.mp4" },
