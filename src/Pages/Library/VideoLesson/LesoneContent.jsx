@@ -4,14 +4,17 @@ import leftArrow from '../../../assets/leftArrow.png';
 import rightArrow from '../../../assets/rightArrow.png';
 import "../../../css/lesoneContent.css";
 import { useParams, useNavigate } from "react-router-dom";
-import OneTerms from "../Terms/OneTerms";
+import LessonTerms from "../Terms/LessonTerms";
 
 const LesoneContent = () => {
   const { termId } = useParams(); // Get the term ID from URL
   const navigate = useNavigate();
   const videoRef = useRef(null); // Reference to video element
 
-  const termData = OneTerms.find(term => term.id === parseInt(termId)); // Find the matching term
+  // Access the specific array within LessonTerms
+  const termsArray = LessonTerms.termsone; // Change this to the appropriate array if needed
+
+  const termData = termsArray.find(term => term.id === parseInt(termId)); // Find the matching term
   if (!termData) {
     return <p>Term not found</p>; // Handle invalid term ID
   }
@@ -19,9 +22,9 @@ const LesoneContent = () => {
   const { terms, definition, video } = termData;
 
   // Find previous and next terms (loop around at start/end)
-  const currentIndex = OneTerms.findIndex(term => term.id === parseInt(termId));
-  const prevTerm = OneTerms[currentIndex - 1] || OneTerms[OneTerms.length - 1]; // Wrap to last item if at start
-  const nextTerm = OneTerms[currentIndex + 1] || OneTerms[0]; // Wrap to first item if at end
+  const currentIndex = termsArray.findIndex(term => term.id === parseInt(termId));
+  const prevTerm = termsArray[currentIndex - 1] || termsArray[termsArray.length - 1]; // Wrap to last item if at start
+  const nextTerm = termsArray[currentIndex + 1] || termsArray[0]; // Wrap to first item if at end
 
   // Auto-play video when term changes
   useEffect(() => {
