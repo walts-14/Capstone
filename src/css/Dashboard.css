@@ -205,11 +205,5 @@ body {
   font-family: "Baloo", sans-serif;
   width: 35%;
   height: 7vh;
-  background-color: var(--midblue);
-}
-.btns .btn:nth-child(2) {
-  font-family: "Baloo", sans-serif;
-  width: 35%;
-  height: 7vh;
   background-color: var(--midlight-red);
 }

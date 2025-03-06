@@ -8,7 +8,6 @@ import axios from "axios";
 function Quiz() {
   const [quiz, setQuiz] = useState(null);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
-  const [result, setResult] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,7 +15,7 @@ function Quiz() {
       try {
         const response = await axios.get("http://localhost:5000/api/quiz");
         console.log("Quiz data:", response.data);
-        setQuiz(response.data); // ✅ Store full quiz object
+        setQuiz(response.data);
       } catch (error) {
         console.error("Error fetching quiz:", error);
       }
@@ -28,6 +27,10 @@ function Quiz() {
     return <div>Loading quiz...</div>;
   }
 
+  const handleChoiceClick = (choice) => {
+    setSelectedAnswer(choice);
+  };
+
   return (
     <>
       <div
@@ -36,7 +39,7 @@ function Quiz() {
       >
         <img
           src={backkpoint}
-          class="img-fluid w-50 h-50 p-1 mt-2"
+          className="img-fluid w-50 h-50 p-1 mt-2"
           alt="ideas image"
           onClick={() => navigate("/page/termsone")}
         />
@@ -46,7 +49,6 @@ function Quiz() {
       <div
         className="progress"
         role="progressbar"
-        aria-label="Basic example"
         aria-valuenow="75"
         aria-valuemin="0"
         aria-valuemax="100"
@@ -55,26 +57,27 @@ function Quiz() {
       </div>
 
       <div className="quiz-container fw-bold">
-        <p className="quiz-question">{quiz.question}</p>{" "}
-        {/* Display question only */}
+        <p className="quiz-question">{quiz.question}</p>
       </div>
 
       <div className="grid text-center fw-bold rounded-4">
-        <div className="choices rounded-4 col-md-6 col-lg-11 m-5">
-          <div className="choice-a rounded-4 m-4">a</div>
-        </div>
-
-        <div className="choices rounded-4 col-md-6 col-lg-11 m-5">
-          <div className="choice-b rounded-4 m-4">b</div>
-        </div>
-
-        <div className="choices rounded-4 col-md-6 col-lg-11 m-5">
-          <div className="choice-c rounded-4 m-4">c</div>
-        </div>
-
-        <div className="choices rounded-4 col-md-6 col-lg-11 m-5">
-          <div className="choice-d rounded-4 m-4">d</div>
-        </div>
+        {["a", "b", "c", "d"].map((choice, index) => (
+          <div
+            key={index}
+            className={`choices rounded-4 col-md-6 col-lg-11 m-5 ${
+              selectedAnswer === choice ? "selected" : ""
+            }`}
+            onClick={() => handleChoiceClick(choice)}
+          >
+            <div
+              className={`choice-${choice} rounded-4 m-4 ${
+                selectedAnswer === choice ? "selected" : ""
+              }`}
+            >
+              {choice}
+            </div>
+          </div>
+        ))}
       </div>
 
       <button
@@ -85,9 +88,8 @@ function Quiz() {
         Next
         <img
           src={arrow}
-          class="img-fluid d-flex ms-auto p-1 mt-1  "
+          className="img-fluid d-flex ms-auto p-1 mt-1"
           alt="arrow img"
-          onClick={() => navigate("/correct")}
         />
       </button>
     </>

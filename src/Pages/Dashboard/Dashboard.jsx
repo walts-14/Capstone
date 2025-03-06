@@ -20,7 +20,7 @@ function Dashboard() {
   useEffect(() => {
     const userName = localStorage.getItem("userName");
     setUserName(userName);
-  })
+  });
 
   return (
     <>
@@ -50,15 +50,8 @@ function Dashboard() {
       <div className="btns">
         <button
           type="button"
-          className="btn btn-primary btn-lg fw-bold fs-3 rounded-5"
-          onClick={() => navigate("/signup")}
-        >
-          Sign up
-        </button>
-        <button
-          type="button"
           className="btn btn-secondary btn-lg fw-bold fs-3 rounded-5"
-          onClick={(logout)}
+          onClick={logout}
         >
           Log out
         </button>

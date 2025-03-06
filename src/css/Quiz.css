@@ -59,6 +59,7 @@
   position: relative;
   top: 10rem;
   right: 1.5rem;
+  cursor: pointer;
 }
 .grid .choices:nth-child(1) {
   position: relative;
@@ -74,6 +75,7 @@
   max-width: 3vw;
   font-size: clamp(2rem, 2vw, 2rem);
   justify-content: center;
+  cursor: pointer;
 }
 .choice-b {
   display: flex;
@@ -123,4 +125,23 @@
 .progress {
   background-color: var(--input-gray);
   margin-top: 4rem;
+}
+selected {
+  background-color: #924dbf !important; /* Highlight color */
+  border-color: #fff !important;
+  color: #fff !important;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.choices.selected {
+  background-color: #271d3e !important;
+  border-color: #6f42c1 !important;
+}
+.choice-a.selected,
+.choice-b.selected,
+.choice-c.selected,
+.choice-d.selected {
+  background-color: #271d3e !important;
+  border-color: #6f42c1 !important;
+  color: white !important;
 }
