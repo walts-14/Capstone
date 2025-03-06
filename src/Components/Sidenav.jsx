@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import dashboardlogo from "../assets/dashboardlogo.png";
 import libicon from "../assets/libicon.png";
 import leaderboardicon from "../assets/leaderboardicon.png";
+import settingsicon from "../assets/settingsicon.png";
 
 function Sidenav() {
   const location = useLocation();
@@ -21,6 +22,11 @@ function Sidenav() {
               location.pathname === "/dashboard" ? "active" : ""
             }`}
           >
+            <img
+              src={dashboardlogo}
+              className="img-fluid ms-5"
+              alt="dashboard logo"
+            />
             <a className="nav-link mb-5" href="/dashboard">
               Dashboard
             </a>
@@ -30,6 +36,7 @@ function Sidenav() {
               location.pathname === "/Library" ? "active" : ""
             }`}
           >
+            <img src={libicon} className="img-fluid ms-5" alt="library logo" />
             <a className="nav-link mb-5" href="/Library">
               Library
             </a>
@@ -39,6 +46,11 @@ function Sidenav() {
               location.pathname === "/leaderboard" ? "active" : ""
             }`}
           >
+            <img
+              src={leaderboardicon}
+              className="img-fluid ms-5"
+              alt="leaderboard logo"
+            />
             <a className="nav-link mb-5" href="/leaderboard">
               Leaderboard
             </a>
@@ -48,6 +60,11 @@ function Sidenav() {
               location.pathname === "/settings" ? "active" : ""
             }`}
           >
+            <img
+              src={settingsicon}
+              className="img-fluid ms-5"
+              alt="settings logo"
+            />
             <a className="nav-link mb-5" href="/settings">
               Settings
             </a>

@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import '../../css/Lesson.css';
+import "../../css/Lesson.css";
 // Lesson Data
 const lessonRoutes = [
   { id: 1, termId: "termsone" },
@@ -31,12 +31,19 @@ function LessonButtons() {
   }
 
   // CSS class mapping for different sections
-  const sectionClasses = ["lessons-container", "lessons-container2", "lessons-container3"];
+  const sectionClasses = [
+    "lessons-container",
+    "lessons-container2",
+    "lessons-container3",
+  ];
 
   return (
     <div className="ButtonContainer">
       {lessonGroups.map((group, index) => (
-        <div key={index} className={sectionClasses[index] || "lessons-container"}>
+        <div
+          key={index}
+          className={sectionClasses[index] || "lessons-container"}
+        >
           {group.map((lesson) => (
             <div
               key={lesson.id}
