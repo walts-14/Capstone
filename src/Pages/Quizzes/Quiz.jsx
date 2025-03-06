@@ -53,10 +53,19 @@ function Quiz() {
     setAttempts((prev) => prev + 1); // Increase attempt count
     if (attempts >= 10) {
       toast.success("Quiz completed!"); // Optional: Redirect to summary page
+      navigate("/finish");
       return;
     }
 
     fetchQuiz(); // Fetch a new quiz when clicking "Next"
+  };
+
+  const handleNextClick = () => {
+    // Increase progress by 10% each time but cap at 100%
+    setProgress((prev) => (prev + 10 > 100 ? 100 : prev + 10));
+
+    // Navigate to the next page
+    navigate("/correct");
   };
 
   return (

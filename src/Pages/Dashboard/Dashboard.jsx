@@ -42,7 +42,7 @@ function Dashboard() {
       </div>
       <div className="profile-pic">
         <img src={luffy} className="img-fluid" alt="profile" />
-        <p className="fs-1">{userName}</p>
+        <p className="fs-2">{userName}</p>
       </div>
       <div className="position-lb">
         <p className="fs-2 fw-bold">{userName}</p>

@@ -124,6 +124,11 @@ body {
   background-color: var(--semidark-purple);
   border: 4px solid var(--mid-purple);
 }
+.active {
+  background-color: var(--semidark-purple) !important;
+  border: 4px solid var(--mid-purple) !important;
+}
+
 .player-info {
   display: flex;
   flex-wrap: wrap;
