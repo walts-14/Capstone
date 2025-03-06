@@ -51,6 +51,17 @@ function Repeat() {
         <p>Back</p>
       </div>
 
+      <div
+        className="progress"
+        role="progressbar"
+        aria-label="Basic example"
+        aria-valuenow="75"
+        aria-valuemin="0"
+        aria-valuemax="100"
+      >
+        <div className="progress-bar w-75"></div>
+      </div>
+
       <div className="quiz-container fw-bold">
         <p className="quiz-question">{quiz.question}</p>
         {/* Display question only */}

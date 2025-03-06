@@ -52,6 +52,7 @@
   background-color: var(--dark-purple);
   gap: 2.3rem;
   padding-top: 9rem;
+  margin-top: -3rem;
 }
 .picture-question {
   background-color: #3f3653;
@@ -142,4 +143,11 @@
   justify-content: center;
   position: relative;
   bottom: 0.2rem;
+}
+.progress-bar {
+  background-color: #924dbf;
+}
+.progress {
+  background-color: var(--input-gray);
+  margin-top: 4rem;
 }
