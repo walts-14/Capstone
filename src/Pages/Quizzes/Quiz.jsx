@@ -12,9 +12,11 @@ function Quiz() {
   const [quiz, setQuiz] = useState(null);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [attempts, setAttempts] = useState(0);
-  
+
   // Store remaining questions
-  const [remainingQuestions, setRemainingQuestions] = useState([...questions.lessson1_Part1]);
+  const [remainingQuestions, setRemainingQuestions] = useState([
+    ...questions.lessson1_Part1,
+  ]);
 
   useEffect(() => {
     selectRandomQuestion();
@@ -31,7 +33,9 @@ function Quiz() {
     const selectedQuiz = remainingQuestions[randomIndex];
 
     // Update remaining questions **before updating state**
-    const newRemainingQuestions = remainingQuestions.filter((_, index) => index !== randomIndex);
+    const newRemainingQuestions = remainingQuestions.filter(
+      (_, index) => index !== randomIndex
+    );
     setRemainingQuestions(newRemainingQuestions);
 
     // Ensure full question, including choices, updates
@@ -53,7 +57,12 @@ function Quiz() {
 
   const handleChoiceClick = (index) => {
     setSelectedAnswer(index);
-    console.log(quiz.answerOptions[index].isCorrect ? "✅ Correct answer" : "❌ Wrong answer", index);
+    console.log(
+      quiz.answerOptions[index].isCorrect
+        ? "✅ Correct answer"
+        : "❌ Wrong answer",
+      index
+    );
   };
 
   const handleNext = () => {
@@ -74,13 +83,29 @@ function Quiz() {
 
   return (
     <>
-      <div className="back fs-1 fw-bold d-flex" onClick={() => navigate("/page/termsone")}>
-        <img src={backkpoint} className="img-fluid w-50 h-50 p-1 mt-2" alt="Back" />
+      <div
+        className="back fs-1 fw-bold d-flex"
+        onClick={() => navigate("/page/termsone")}
+      >
+        <img
+          src={backkpoint}
+          className="img-fluid w-50 h-50 p-1 mt-2"
+          alt="Back"
+        />
         <p>Back</p>
       </div>
 
-      <div className="progress" role="progressbar" aria-valuenow={(attempts / totalQuestions) * 100} aria-valuemin="0" aria-valuemax="100">
-        <div className="progress-bar" style={{ width: `${(attempts / totalQuestions) * 100}%` }}></div>
+      <div
+        className="progress"
+        role="progressbar"
+        aria-valuenow={(attempts / totalQuestions) * 100}
+        aria-valuemin="0"
+        aria-valuemax="100"
+      >
+        <div
+          className="progress-bar"
+          style={{ width: `${(attempts / totalQuestions) * 100}%` }}
+        ></div>
       </div>
 
       <div className="quiz-container fw-bold">
@@ -91,10 +116,18 @@ function Quiz() {
         {quiz.answerOptions.map((option, index) => (
           <div
             key={`${quiz.question}-${index}`} // Unique key to ensure re-render
-            className={`choices rounded-4 col-md-6 col-lg-11 m-5 ${selectedAnswer === index ? "selected" : ""}`}
+            className={`choices d-flex justify-content-between align-items-center rounded-4 col-md-6 col-lg-11 m-5 ${
+              selectedAnswer === index ? "selected" : ""
+            }`}
             onClick={() => handleChoiceClick(index)}
           >
-            <div className={`choice-${["A", "B", "C", "D"][index].toLowerCase()} rounded-4 m-4 ${selectedAnswer === index ? "selected" : ""}`}>
+            <div
+              className={`choice-${["A", "B", "C", "D"][
+                index
+              ].toLowerCase()} rounded-4 m-4 ${
+                selectedAnswer === index ? "selected" : ""
+              }`}
+            >
               <strong>{["A", "B", "C", "D"][index]}</strong>
               <video width="200" height="150" controls>
                 <source src={option.video} type="video/mp4" />
@@ -105,9 +138,17 @@ function Quiz() {
         ))}
       </div>
 
-      <button type="button" className="continue d-flex rounded-4 p-3 pt-2 ms-auto" onClick={handleNext}>
+      <button
+        type="button"
+        className="continue d-flex rounded-4 p-3 pt-2 ms-auto"
+        onClick={handleNext}
+      >
         Next
-        <img src={arrow} className="img-fluid d-flex ms-auto p-1 mt-1" alt="Next" />
+        <img
+          src={arrow}
+          className="img-fluid d-flex ms-auto p-1 mt-1"
+          alt="Next"
+        />
       </button>
     </>
   );

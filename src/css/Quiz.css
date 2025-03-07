@@ -72,7 +72,7 @@
   display: flex;
   background-color: #271d3e;
   border: 3px solid #574f69;
-  max-width: 3vw;
+  min-width: 3vw;
   font-size: clamp(2rem, 2vw, 2rem);
   justify-content: center;
   cursor: pointer;
@@ -81,7 +81,7 @@
   display: flex;
   background-color: #271d3e;
   border: 3px solid #574f69;
-  max-width: 3vw;
+  min-width: 3vw;
   font-size: clamp(2rem, 2vw, 2rem);
   justify-content: center;
 }
@@ -89,7 +89,7 @@
   display: flex;
   background-color: #271d3e;
   border: 3px solid #574f69;
-  max-width: 3vw;
+  min-width: 3vw;
   font-size: clamp(2rem, 2vw, 2rem);
   justify-content: center;
 }
@@ -97,7 +97,7 @@
   display: flex;
   background-color: #271d3e;
   border: 3px solid #574f69;
-  max-width: 3vw;
+  min-width: 3vw;
   font-size: clamp(2rem, 2vw, 2rem);
   justify-content: center;
 }
@@ -150,4 +150,11 @@ selected {
   background-color: #271d3e !important;
   border-color: #fff !important;
   color: white !important;
+}
+.choices video {
+  width: 8vw; /* Prevents video from taking too much space */
+  height: auto;
+  position: absolute;
+  left: 12rem;
+  bottom: 0.2rem;
 }
