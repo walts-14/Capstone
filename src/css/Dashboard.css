@@ -160,7 +160,21 @@ body {
   background-color: var(--semidark-purple) !important;
   border: 4px solid var(--mid-purple) !important;
 }
-
+.textt-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.number {
+  position: absolute;
+  font-family: "Baloo", sans-serif;
+  top: -2.2em; /* Adjust as needed */
+  left: 0.1em; /* Adjust as needed */
+  font-size: 2rem; /* Smaller font for the number */
+  font-weight: bold;
+  color: var(--white); /* Adjust color */
+}
 .player-info {
   display: flex;
   flex-wrap: wrap;
@@ -171,6 +185,7 @@ body {
   position: fixed;
   top: 5em;
   right: 4em;
+  width: 23vw;
 }
 .player-info .info-box {
   background-color: var(--dark-purple);
@@ -179,6 +194,7 @@ body {
   text-align: center;
   height: 4.5em;
 }
+
 .info-box p {
   padding-top: 2.8em;
 }
@@ -216,17 +232,17 @@ body {
   color: var(--white);
   border-radius: 1.4rem;
   background-color: var(--dark-purple);
-  height: 7vh;
+  height: 9vh;
   width: 23vw;
   position: fixed;
   right: 4em;
-  bottom: 17.5em;
+  bottom: 16em;
   font-family: "Baloo", sans-serif;
 }
 .position-lb p {
   justify-content: center;
   padding-top: 0.5em;
-  padding-left: 2em;
+  padding-left: 1em;
 }
 .btns {
   display: flex;

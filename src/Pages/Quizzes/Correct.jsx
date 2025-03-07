@@ -44,7 +44,7 @@ function Correct() {
       >
         <img
           src={backkpoint}
-          class="img-fluid w-50 h-50 p-1 mt-2"
+          className="img-fluid w-50 h-50 p-1 mt-2"
           alt="ideas image"
           onClick={() => navigate("/page")}
         />

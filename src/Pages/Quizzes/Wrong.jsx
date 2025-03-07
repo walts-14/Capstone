@@ -44,8 +44,8 @@ function Wrong() {
       >
         <img
           src={backkpoint}
-          class="img-fluid w-50 h-50 p-1 mt-2"
-          alt="ideas image"
+          className="img-fluid w-50 h-50 p-1 mt-2"
+          alt="arrow image"
           onClick={() => navigate("/page")}
         />
         <p>Back</p>

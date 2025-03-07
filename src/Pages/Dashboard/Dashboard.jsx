@@ -1,6 +1,11 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import luffy from "../../assets/luffy.jpg";
+import fire from "../../assets/fire.png";
+import trophy from "../../assets/trophy.png";
+import check from "../../assets/check.png";
+import ekis from "../../assets/ekis.png";
+import repeat from "../../assets/repeat logo.png";
 import "../../css/Dashboard.css";
 import Sidenav from "../../Components/Sidenav";
 import { useNavigate } from "react-router-dom";
@@ -27,24 +32,62 @@ function Dashboard() {
       <Sidenav />
 
       <div className="player-info fw-bold">
-        <div className="info-box">
-          <p>Daily streak</p>
+        <div className="info-box d-flex align-items-center gap-3">
+          <img
+            src={fire}
+            className="h-auto mt-3 ms-4 mb-3 img-fluid"
+            alt="fire image"
+          />
+          <div className="textt-container">
+            <p className="number">5</p>
+            <p className="mt-3">Daily streak</p>
+          </div>
         </div>
-        <div className="info-box">
-          <p>Right anwers</p>
+        <div className="info-box d-flex align-items-center gap-1">
+          <img
+            src={check}
+            className="h-auto mt-3 ms-2 mb-3 img-fluid"
+            alt="check image"
+          />
+          <div className="textt-container">
+            <p className="number">5</p>
+            <p className="mt-3">Right anwers</p>
+          </div>
         </div>
-        <div className="info-box">
-          <p> Wrong answers</p>
+        <div className="info-box d-flex align-items-center gap-1">
+          <img
+            src={ekis}
+            className="h-auto mt-3 ms-2 mb-3 img-fluid"
+            alt="ekis image"
+          />
+          <div className="textt-container">
+            <p className="number">5</p>
+            <p className="mt-3  "> Wrong answers</p>
+          </div>
         </div>
-        <div className="info-box">
-          <p>Repeated items</p>
+        <div className="info-box d-flex align-items-center gap-1">
+          <img
+            src={repeat}
+            className="h-auto mt-4 ms-3 mb-3 img-fluid"
+            alt="repeat image"
+          />
+          <div className="textt-container">
+            <p className="number ms-3">5</p>
+            <p className="mt-1 ms-3">Repeated items</p>
+          </div>
         </div>
       </div>
       <div className="profile-pic">
         <img src={luffy} className="img-fluid" alt="profile" />
         <p className="fs-2">{userName}</p>
       </div>
-      <div className="position-lb">
+      <div className="position-lb d-flex align-items-center gap-1">
+        <img
+          src={trophy}
+          className="h-auto mt-4 ms-3 mb-3 img-fluid"
+          alt="trophy image"
+        />
+        <p className="fw-5 fs-1 mr-5">#1</p>
         <p className="fs-2 fw-bold">{userName}</p>
       </div>
       <div className="btns">
