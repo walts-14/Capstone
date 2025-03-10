@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import backkpoint from "../../assets/backkpoint.png";
 import { questions } from "./QuizQuestions/Questions";
 import arrow from "../../assets/arrow.png";
+import check from "../../assets/check.png";
+import ekis from "../../assets/ekis.png";
 import "../../css/Quiz.css";
 import toast from "react-hot-toast";
 
@@ -12,18 +14,18 @@ function Quiz() {
   const [quiz, setQuiz] = useState(null);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [attempts, setAttempts] = useState(0);
-
-  // Store remaining questions
+  const [showResult, setShowResult] = useState(false);
+  const [isCorrect, setIsCorrect] = useState(false);
   const [remainingQuestions, setRemainingQuestions] = useState([
     ...questions.lessson1_Part1,
   ]);
 
   useEffect(() => {
     selectRandomQuestion();
-  }, []); // Run once when component mounts
+  }, []);
 
   const selectRandomQuestion = () => {
-    if (remainingQuestions.length === 0) {
+    if (remainingQuestions.length === 0 || attempts >= totalQuestions) {
       toast.success("Quiz completed!");
       navigate("/finish");
       return;
@@ -32,42 +34,28 @@ function Quiz() {
     const randomIndex = Math.floor(Math.random() * remainingQuestions.length);
     const selectedQuiz = remainingQuestions[randomIndex];
 
-    // Update remaining questions **before updating state**
-    const newRemainingQuestions = remainingQuestions.filter(
-      (_, index) => index !== randomIndex
+    setRemainingQuestions((prev) =>
+      prev.filter((_, index) => index !== randomIndex)
     );
-    setRemainingQuestions(newRemainingQuestions);
-
-    // Ensure full question, including choices, updates
     setQuiz({ ...selectedQuiz });
-
-    setSelectedAnswer(null); // Reset selected answer for the new question
+    setSelectedAnswer(null);
+    setShowResult(false);
   };
 
-  useEffect(() => {
-    if (quiz) {
-      console.log("Updated Question:", quiz.question);
-      console.log("Updated Choices:", quiz.answerOptions);
-    }
-  }, [quiz]); // Log changes to verify updates
-
-  if (!quiz) {
-    return <div>Loading quiz...</div>;
-  }
-
   const handleChoiceClick = (index) => {
+    if (showResult) return; // Prevent clicking after answer is shown
     setSelectedAnswer(index);
-    console.log(
-      quiz.answerOptions[index].isCorrect
-        ? "✅ Correct answer"
-        : "❌ Wrong answer",
-      index
-    );
+    setIsCorrect(quiz.answerOptions[index].isCorrect);
   };
 
   const handleNext = () => {
     if (selectedAnswer === null) {
       toast.error("Please select an answer before proceeding.");
+      return;
+    }
+
+    if (!showResult) {
+      setShowResult(true); // Show the result first
       return;
     }
 
@@ -78,8 +66,12 @@ function Quiz() {
       return;
     }
 
-    selectRandomQuestion(); // Select a new question on next click
+    selectRandomQuestion();
   };
+
+  if (!quiz) {
+    return <div>Loading quiz...</div>;
+  }
 
   return (
     <>
@@ -115,11 +107,12 @@ function Quiz() {
       <div className="grid text-center fw-bold rounded-4">
         {quiz.answerOptions.map((option, index) => (
           <div
-            key={`${quiz.question}-${index}`} // Unique key to ensure re-render
+            key={`${quiz.question}-${index}`}
             className={`choices d-flex justify-content-between align-items-center rounded-4 col-md-6 col-lg-11 m-5 ${
               selectedAnswer === index ? "selected" : ""
             }`}
             onClick={() => handleChoiceClick(index)}
+            style={{ pointerEvents: showResult ? "none" : "auto" }}
           >
             <div
               className={`choice-${["A", "B", "C", "D"][
@@ -129,7 +122,7 @@ function Quiz() {
               }`}
             >
               <strong>{["A", "B", "C", "D"][index]}</strong>
-              <video width="200" height="150" controls>
+              <video width="200" height="150" autoPlay muted loop>
                 <source src={option.video} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
@@ -137,6 +130,21 @@ function Quiz() {
           </div>
         ))}
       </div>
+      {showResult && (
+        <div
+          className={`result-ans d-flex justify-content-between text-center ps-5 pt-3 fs-2 ${
+            isCorrect ? "correct-ans" : "wrong-ans"
+          }`}
+        >
+          <span className="me-auto">
+            {isCorrect ? "Correct answer" : "Wrong answer"}
+          </span>
+          {isCorrect && (
+            <img src={check} className="check-icon mt-5" alt="Correct" />
+          )}
+          {!isCorrect && <img src={ekis} className="ekis-icon" alt="Wrong" />}
+        </div>
+      )}
 
       <button
         type="button"

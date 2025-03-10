@@ -158,3 +158,33 @@ selected {
   left: 12rem;
   bottom: 0.2rem;
 }
+.result-ans {
+  align-items: center;
+  padding: 10px 20px;
+  border-radius: 10px;
+  width: fit-content;
+}
+
+.correct-ans {
+  background-color: #2ecc71;
+  font-weight: bold;
+  border-radius: 10px;
+  font-family: "Baloo", sans-serif;
+}
+.wrong-ans {
+  background-color: #e74c3c;
+  padding: 15px;
+  font-weight: bold;
+  border-radius: 10px;
+  position: relative;
+  font-family: "Baloo", sans-serif;
+}
+
+.ekis-icon {
+  width: 3.5vw;
+  height: auto;
+  position: absolute;
+  right: 1em;
+  top: 50%;
+  transform: translateY(-50%);
+}
