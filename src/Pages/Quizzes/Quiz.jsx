@@ -14,6 +14,8 @@ function Quiz() {
   const [quiz, setQuiz] = useState(null);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [attempts, setAttempts] = useState(0);
+  const [correctAnswers, setCorrectAnswers] = useState(0);
+  const [wrongAnswers, setWrongAnswers] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [remainingQuestions, setRemainingQuestions] = useState([
@@ -27,7 +29,7 @@ function Quiz() {
   const selectRandomQuestion = () => {
     if (remainingQuestions.length === 0 || attempts >= totalQuestions) {
       toast.success("Quiz completed!");
-      navigate("/finish");
+      navigate("/finish", { state: { correctAnswers, wrongAnswers } }); // Pass scores here
       return;
     }
 
@@ -45,7 +47,8 @@ function Quiz() {
   const handleChoiceClick = (index) => {
     if (showResult) return; // Prevent clicking after answer is shown
     setSelectedAnswer(index);
-    setIsCorrect(quiz.answerOptions[index].isCorrect);
+    const isCorrectAnswer = quiz.answerOptions[index].isCorrect;
+    setIsCorrect(isCorrectAnswer);
   };
 
   const handleNext = () => {
@@ -56,13 +59,18 @@ function Quiz() {
 
     if (!showResult) {
       setShowResult(true); // Show the result first
+      if (isCorrect) {
+        setCorrectAnswers((prev) => prev + 1);
+      } else {
+        setWrongAnswers((prev) => prev + 1);
+      }
       return;
     }
 
     setAttempts((prev) => prev + 1);
     if (attempts + 1 >= totalQuestions) {
       toast.success("Quiz completed!");
-      navigate("/finish");
+      navigate("/finish", { state: { correctAnswers, wrongAnswers } }); // Pass scores
       return;
     }
 
