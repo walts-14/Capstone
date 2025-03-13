@@ -242,7 +242,8 @@ body {
 .position-lb p {
   justify-content: center;
   padding-top: 0.5em;
-  padding-left: 1em;
+  padding-left: 0.5em;
+  font-size: 1.5rem;
 }
 .btns {
   display: flex;

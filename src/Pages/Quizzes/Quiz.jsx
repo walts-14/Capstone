@@ -130,7 +130,14 @@ function Quiz() {
               }`}
             >
               <strong>{["A", "B", "C", "D"][index]}</strong>
-              <video width="200" height="150" autoPlay muted loop>
+              <video
+                width="200"
+                height="150"
+                className="rounded-2"
+                autoPlay
+                muted
+                loop
+              >
                 <source src={option.video} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>

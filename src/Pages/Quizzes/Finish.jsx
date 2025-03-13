@@ -28,12 +28,6 @@ function Finish() {
           <p className="check-number ms-2"> {correctAnswers} </p>
           <img src={ekis} className="mali img-fluid p-1 ms-5" alt="ekis img" />
           <p className="ekis-number ms-2"> {wrongAnswers} </p>
-          <img
-            src={repeatLogo}
-            className="ulit img-fluid p-1 ms-5"
-            alt="repeat img"
-          />
-          <p className="repeat-number"> 3 </p>
         </div>
       </div>
       <div className="finishbuttons rounded-4 d-flex align-items-center justify-content-center">

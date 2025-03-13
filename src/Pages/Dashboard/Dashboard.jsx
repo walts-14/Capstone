@@ -87,8 +87,8 @@ function Dashboard() {
           className="h-auto mt-4 ms-3 mb-3 img-fluid"
           alt="trophy image"
         />
-        <p className="fw-5 fs-1 mr-5">#1</p>
-        <p className="fs-2 fw-bold">{userName}</p>
+        <p className="fs-1">#1</p>
+        <p className="text-nowrap">{userName}</p>
       </div>
       <div className="btns">
         <button
