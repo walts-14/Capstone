@@ -1,14 +1,15 @@
-import User from "../models/user.js";
-
 export const getLeaderboard = async (req, res) => {
     try {
-        const topUsers = await User.find()
-        .sort({ points: -1 })   // ✅ Sort by points in descending order
-        .select("name points"); // ✅ Only return name and points
+        const users = await User.find().sort({ points: -1 });
 
-    res.json(topUsers);
-    }catch (error) {
-        console.error("❌ Error getting leaderboard:", error);
-        res.status(500).json({ message: "Server error", error: error.message });
+        // Add default points if missing
+        const updatedUsers = users.map(user => ({
+            ...user,
+            points: user.points ?? 0
+        }));
+
+        res.status(200).json(updatedUsers);
+    } catch (error) {
+        res.status(500).json({ message: "Error fetching leaderboard" });
     }
-}
+};

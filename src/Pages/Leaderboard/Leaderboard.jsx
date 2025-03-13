@@ -1,3 +1,5 @@
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import Sidenav from "../../Components/Sidenav";
 import "../../css/Leaderboard.css";
 import medal1 from "../../assets/medal1.png";
@@ -9,6 +11,21 @@ import profile3 from "../../assets/profile3.png";
 import diamond from "../../assets/diamond.png";
 
 function Leaderboard() {
+  const [leaderboard, setLeaderboard] = useState([]);
+
+  useEffect(() => {
+    const fetchLeaderboard = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/leaderboard");
+        console.log("✅ Leaderboard Data:", response.data); 
+        setLeaderboard([...response.data]);  // Force state refresh
+      } catch (error) {
+        console.error("❌ Error fetching leaderboard:", error.response?.data || error.message);
+      }
+    };
+    fetchLeaderboard();
+  }, []);
+
   return (
     <>
       <Sidenav />
@@ -65,7 +82,20 @@ function Leaderboard() {
         <span className="text-white fs-3 me-auto ms-5"> Users</span>
         <span className="text-white fs-3 me-5"> Points</span>
       </div>
-      <div className="lb-users"></div>
+      <div className="lb-users">
+  {leaderboard && leaderboard.length > 0 ? (
+    <ul>
+      {leaderboard.map((user, index) => (
+        <li key={user._id}>
+          {index + 1}. {user.name} - {user.points || 0} points
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <p className="text-white text-center mt-3">No leaderboard data available.</p>
+  )}
+</div>
+
     </>
   );
 }

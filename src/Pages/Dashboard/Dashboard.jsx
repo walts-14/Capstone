@@ -11,10 +11,12 @@ import Sidenav from "../../Components/Sidenav";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import LessonButtons from "./LessonButtons.jsx";
+import axios from "axios";
 
 function Dashboard() {
   const navigate = useNavigate();
   const [userName, setUserName] = React.useState("");
+  const [streak, setStreak] = React.useState(0);
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -26,6 +28,42 @@ function Dashboard() {
     const userName = localStorage.getItem("userName");
     setUserName(userName);
   });
+
+  useEffect(() => {
+    const storedUserEmail = localStorage.getItem("userEmail");
+
+    if (!storedUserEmail) {
+        console.error("❌ No email found in localStorage");
+        return;
+    }
+
+    const fetchStreak = async () => {
+      const storedUserEmail = localStorage.getItem("userEmail");
+      console.log("📩 Email sent from Frontend:", storedUserEmail);  // ✅ Verify email
+  
+      if (!storedUserEmail) {
+          console.error("❌ No email found in localStorage");
+          return;
+      }
+  
+      try {
+          const response = await axios.post("/api/update-streak", {
+              email: storedUserEmail
+          });
+  
+          console.log("🔥 Streak Response Data:", response.data);
+          if (response.data.streak !== undefined) {
+              setStreak(response.data.streak); 
+          } else {
+              console.warn("⚠️ No streak data found in response");
+          }
+      } catch (error) {
+          console.error("❌ Error fetching streak data:", error.response?.data || error.message);
+      }
+  };
+  
+    fetchStreak();
+}, []);
 
   return (
     <>
@@ -39,7 +77,7 @@ function Dashboard() {
             alt="fire image"
           />
           <div className="textt-container">
-            <p className="number">5</p>
+            <p className="number">{streak}</p>
             <p className="mt-3">Daily streak</p>
           </div>
         </div>
