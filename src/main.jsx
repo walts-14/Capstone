@@ -46,7 +46,7 @@ const router = createBrowserRouter([
       { path: "advancedlibrary", element: <AdvancedLibrary /> },
       { path: "leaderboard", element: <Leaderboard /> },
       { path: "settings", element: <Settings /> },
-      { path: "lectureorquiz", element: <LectureorQuiz /> },
+      { path: "lectureorquiz/:termId", element: <LectureorQuiz /> },
       { path: "lessonbutton", element: <LessonButtons /> },
       { path: "quiz", element: <Quiz /> },
       { path: "page/:termId", element: <Page /> },
@@ -56,7 +56,8 @@ const router = createBrowserRouter([
       { path: "repeat", element: <Repeat /> },
       { path: "finish", element: <Finish /> },
       { path: "VideoLecture/:title", element: <VideoLecture /> },
-      { path: "lesonecontent/:termId", element: <LesoneContent /> },
+      { path: "lesonecontent/:lessonKey/:termId", element: <LesoneContent /> },
+,
     ],
   },
 
