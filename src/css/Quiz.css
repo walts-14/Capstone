@@ -155,8 +155,13 @@ selected {
   width: 8vw; /* Prevents video from taking too much space */
   height: auto;
   position: absolute;
-  left: 12rem;
+  left: 10rem;
   bottom: 0.2rem;
+  transition: transform 0.3s ease-in-out;
+}
+.choices video:hover {
+  transform: scale(3.5);
+  z-index: 1;
 }
 .result-ans {
   align-items: center;
