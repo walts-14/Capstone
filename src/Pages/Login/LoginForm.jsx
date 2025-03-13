@@ -8,7 +8,6 @@ import toast from "react-hot-toast";
 
 function LoginForm() {
   const navigate = useNavigate();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -23,27 +22,29 @@ function LoginForm() {
             password: data.password,
         });
 
-        console.log("Login response:", response.data); // Debugging
+        console.log("📩 Login response:", response.data);  // ✅ Improved log for clarity
 
         if (response.status === 200 && response.data.status === "ok") {
-            toast.success("Login successful!");
+            toast.success("✅ Login successful!");
 
-            // ✅ Ensure token is stored correctly
+            // ✅ Store important data in localStorage
             localStorage.setItem("token", response.data.data);
             localStorage.setItem("userName", response.data.user.name);
+            localStorage.setItem("userEmail", response.data.user.email); // ✅ Added
             localStorage.setItem("loggedIn", "true");
 
-            console.log("✅ Token stored:", localStorage.getItem("token")); // Debugging
+            console.log("✅ Token stored:", localStorage.getItem("token")); 
+            console.log("✅ Email stored:", localStorage.getItem("userEmail")); // ✅ Added for clarity
 
             // ✅ Ensure navigation happens without delay
             navigate("/dashboard", { replace: true });
 
         } else {
-            toast.error(response.data.message || "Login failed");
+            toast.error(response.data.message || "❌ Login failed");
         }
     } catch (error) {
-        console.error("Login error:", error);
-        toast.error(error.response?.data?.message || "Login failed");
+        console.error("❌ Login error:", error);
+        toast.error(error.response?.data?.message || "❌ Login failed");
     }
 };
 

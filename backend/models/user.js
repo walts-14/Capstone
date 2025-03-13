@@ -25,6 +25,13 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    points: {
+       type: Number, 
+       default: 0 }, 
+    streak:{
+      count: {type: Number, default: 0},
+      lastActiveDate: {type: Date, default: new Date()}
+    },
   },
   { timestamps: true }
 );
