@@ -28,8 +28,10 @@ import Finish from "./Pages/Quizzes/Finish.jsx";
 import VideoLecture from "./Pages/Library/Lectures/LectureVids.jsx";
 import LessonButtons from "./Pages/Dashboard/LessonButtons.jsx";
 import LesoneContent from "./Pages/Library/VideoLesson/LesoneContent.jsx";
+import ConnectionStatus from "./ConnectionStatus.jsx";
 
 const router = createBrowserRouter([
+  <ConnectionStatus />,
   { path: "/", element: <Navigate to="/login" replace /> }, // Redirect "/" to "/login"
   { path: "/login", element: <LoginForm /> },
   { path: "/signup", element: <SignupForm /> },
