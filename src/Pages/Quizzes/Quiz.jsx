@@ -1,16 +1,31 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import backkpoint from "../../assets/backkpoint.png";
-import { questions } from "./QuizQuestions/Questions";
 import arrow from "../../assets/arrow.png";
 import check from "../../assets/check.png";
 import ekis from "../../assets/ekis.png";
 import "../../css/Quiz.css";
 import toast from "react-hot-toast";
+import { questions } from "./QuizQuestions/Questions";
 
 function Quiz() {
   const navigate = useNavigate();
+  const { lessonKey } = useParams(); // e.g., "termsone", "termstwo", etc.
+
+  // Mapping of lessonKey to question set
+  const quizMapping = {
+    termsone: questions.lesson1_Part1,
+    termstwo: questions.lesson2_Part1,
+    termsthree: questions.lesson3_Part1,
+    termsfour: questions.lesson4_Part1,
+    termsfive: questions.lesson5_Part1,
+    // Add additional mappings as needed...
+  };
+
+  // Select the appropriate quiz questions based on the lessonKey
+  const quizQuestions = quizMapping[lessonKey] || [];
   const totalQuestions = 10;
+
   const [quiz, setQuiz] = useState(null);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [attempts, setAttempts] = useState(0);
@@ -18,12 +33,11 @@ function Quiz() {
   const [wrongAnswers, setWrongAnswers] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
-  const [remainingQuestions, setRemainingQuestions] = useState([
-    ...questions.lessson1_Part1,
-  ]);
+  const [remainingQuestions, setRemainingQuestions] = useState([...quizQuestions]);
 
   useEffect(() => {
     selectRandomQuestion();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const selectRandomQuestion = () => {
@@ -70,7 +84,7 @@ function Quiz() {
     setAttempts((prev) => prev + 1);
     if (attempts + 1 >= totalQuestions) {
       toast.success("Quiz completed!");
-      navigate("/finish", { state: { correctAnswers, wrongAnswers } }); // Pass scores
+      navigate("/finish", { state: { correctAnswers, wrongAnswers } });
       return;
     }
 
@@ -85,7 +99,7 @@ function Quiz() {
     <>
       <div
         className="back fs-1 fw-bold d-flex"
-        onClick={() => navigate("/page/termsone")}
+        onClick={() => navigate(`/page/${lessonKey}`)}
       >
         <img
           src={backkpoint}
@@ -123,9 +137,7 @@ function Quiz() {
             style={{ pointerEvents: showResult ? "none" : "auto" }}
           >
             <div
-              className={`choice-${["A", "B", "C", "D"][
-                index
-              ].toLowerCase()} rounded-4 m-4 ${
+              className={`choice-${["A", "B", "C", "D"][index].toLowerCase()} rounded-4 m-4 ${
                 selectedAnswer === index ? "selected" : ""
               }`}
             >

@@ -49,7 +49,7 @@ function LectureorQuiz({ termId, LessonTerms }) {
           <p>Quiz</p>
           <div
             className="quiz-inner justify-content-center"
-            onClick={() => navigate("/quiz")}
+            onClick={() => navigate(`/quiz/${termId}`)} // Navigates using the lesson key.
           >
             <img src={Ideas} className="img-fluid" alt="Quiz Icon" />
           </div>

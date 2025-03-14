@@ -99,10 +99,10 @@ const LessonTerms = {
         {id: 33, terms:"Hunyo ", definition:" Zebra, Zipper, Zoo ", video:"/video/Basic/Lesson1/C.mp4"}, 
         {id: 34, terms:"Hulyo ", definition:" Zebra, Zipper, Zoo ", video:"/video/Basic/Lesson1/C.mp4"}, 
         {id: 35, terms:"Agosto ", definition:" Zebra, Zipper, Zoo ", video:"/video/Basic/Lesson1/C.mp4"},
-        {id: 35, terms:"Setyembre  ", definition:" Zebra, Zipper, Zoo ", video:"/video/Basic/Lesson1/C.mp4"}, 
-        {id: 35, terms:"Oktubre  ", definition:" Zebra, Zipper, Zoo ", video:"/video/Basic/Lesson1/C.mp4"}, 
-        {id: 35, terms:"Nobyembre  ", definition:" Zebra, Zipper, Zoo ", video:"/video/Basic/Lesson1/C.mp4"},
-        {id: 35, terms:"Disyembre  ", definition:" Zebra, Zipper, Zoo ", video:"/video/Basic/Lesson1/C.mp4"},   
+        {id: 36, terms:"Setyembre  ", definition:" Zebra, Zipper, Zoo ", video:"/video/Basic/Lesson1/C.mp4"}, 
+        {id: 37, terms:"Oktubre  ", definition:" Zebra, Zipper, Zoo ", video:"/video/Basic/Lesson1/C.mp4"}, 
+        {id: 38, terms:"Nobyembre  ", definition:" Zebra, Zipper, Zoo ", video:"/video/Basic/Lesson1/C.mp4"},
+        {id: 39, terms:"Disyembre  ", definition:" Zebra, Zipper, Zoo ", video:"/video/Basic/Lesson1/C.mp4"},   
 
         
     ],

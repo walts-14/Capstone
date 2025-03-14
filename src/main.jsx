@@ -48,7 +48,7 @@ const router = createBrowserRouter([
       { path: "settings", element: <Settings /> },
       { path: "lectureorquiz/:termId", element: <LectureorQuiz /> },
       { path: "lessonbutton", element: <LessonButtons /> },
-      { path: "quiz", element: <Quiz /> },
+      { path: "quiz/:lessonKey", element: <Quiz /> },
       { path: "page/:termId", element: <Page /> },
       { path: "terms/:termId", element: <Termspage /> },
       { path: "correct", element: <Correct /> },
