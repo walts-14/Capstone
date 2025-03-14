@@ -86,7 +86,7 @@ const LesoneContent = () => {
          {/* Show special button only if `showButton` is true */}
       {showButton && isLastTerm &&  (
         <div className="special-button-container"
-          onClick={() => navigate("/quiz")}>
+          onClick={() => navigate(`/quiz/${lessonKey}`)} >
           <button className="special-button">This is a Special Button</button>
         </div>
       )}
