@@ -16,11 +16,16 @@ function Leaderboard() {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/leaderboard");
-        console.log("✅ Leaderboard Data:", response.data); 
-        setLeaderboard([...response.data]);  // Force state refresh
+        const response = await axios.get(
+          "http://localhost:5000/api/leaderboard"
+        );
+        console.log("✅ Leaderboard Data:", response.data);
+        setLeaderboard([...response.data]); // Force state refresh
       } catch (error) {
-        console.error("❌ Error fetching leaderboard:", error.response?.data || error.message);
+        console.error(
+          "❌ Error fetching leaderboard:",
+          error.response?.data || error.message
+        );
       }
     };
     fetchLeaderboard();
@@ -83,19 +88,20 @@ function Leaderboard() {
         <span className="text-white fs-3 me-5"> Points</span>
       </div>
       <div className="lb-users">
-  {leaderboard && leaderboard.length > 0 ? (
-    <ul>
-      {leaderboard.map((user, index) => (
-        <li key={user._id}>
-          {index + 1}. {user.name} - {user.points || 0} points
-        </li>
-      ))}
-    </ul>
-  ) : (
-    <p className="text-white text-center mt-3">No leaderboard data available.</p>
-  )}
-</div>
-
+        {leaderboard && leaderboard.length > 0 ? (
+          <ul>
+            {leaderboard.map((user, index) => (
+              <li key={user._id}>
+                {index + 1}. {user.name} - {user.points || 0} points
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-white text-center mt-3">
+            No leaderboard data available.
+          </p>
+        )}
+      </div>
     </>
   );
 }
