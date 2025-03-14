@@ -48,7 +48,7 @@
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  flex-direction: row; /* Ensures row layout by default */
+  flex-direction: column; /* Ensures row layout by default */
 }
 
 .lecture-outer,
