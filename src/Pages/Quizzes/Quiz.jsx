@@ -35,15 +35,18 @@ function Quiz() {
   const [isCorrect, setIsCorrect] = useState(false);
   const [remainingQuestions, setRemainingQuestions] = useState([...quizQuestions]);
 
+  // Lives system (Only added this part)
+  const [lives, setLives] = useState(5); // Default lives
+  const [streak, setStreak] = useState(0);
+
   useEffect(() => {
     selectRandomQuestion();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const selectRandomQuestion = () => {
-    if (remainingQuestions.length === 0 || attempts >= totalQuestions) {
+    if (remainingQuestions.length === 0 || attempts >= totalQuestions || lives <= 0) {
       toast.success("Quiz completed!");
-      navigate("/finish", { state: { correctAnswers, wrongAnswers } }); // Pass scores here
+      navigate("/finish", { state: { correctAnswers, wrongAnswers } });
       return;
     }
 
@@ -59,7 +62,7 @@ function Quiz() {
   };
 
   const handleChoiceClick = (index) => {
-    if (showResult) return; // Prevent clicking after answer is shown
+    if (showResult || lives <= 0) return; // Prevent clicking if out of lives
     setSelectedAnswer(index);
     const isCorrectAnswer = quiz.answerOptions[index].isCorrect;
     setIsCorrect(isCorrectAnswer);
@@ -72,17 +75,30 @@ function Quiz() {
     }
 
     if (!showResult) {
-      setShowResult(true); // Show the result first
+      setShowResult(true);
       if (isCorrect) {
         setCorrectAnswers((prev) => prev + 1);
+        setStreak((prev) => prev + 1);
+
+        // Gain a life every 5 correct answers
+        if ((streak + 1) % 5 === 0) {
+          setLives((prev) => prev + 1);
+          toast.success("Streak bonus! +1 life");
+        }
       } else {
         setWrongAnswers((prev) => prev + 1);
+        setLives((prev) => prev - 1);
+        setStreak(0); // Reset streak on wrong answer
+
+        if (lives - 1 === 0) {
+          toast.error("You're out of lives! Try again later.");
+        }
       }
       return;
     }
 
     setAttempts((prev) => prev + 1);
-    if (attempts + 1 >= totalQuestions) {
+    if (attempts + 1 >= totalQuestions || lives <= 0) {
       toast.success("Quiz completed!");
       navigate("/finish", { state: { correctAnswers, wrongAnswers } });
       return;
@@ -108,6 +124,10 @@ function Quiz() {
         />
         <p>Back</p>
       </div>
+
+      {/* Lives & Streak Display */}
+      <h3>❤️ Lives: {lives}</h3>
+      <h4>🔥 Streak: {streak}</h4>
 
       <div
         className="progress"
@@ -157,6 +177,7 @@ function Quiz() {
           </div>
         ))}
       </div>
+
       {showResult && (
         <div
           className={`result-ans d-flex justify-content-between text-center ps-5 pt-3 fs-2 ${
@@ -177,6 +198,7 @@ function Quiz() {
         type="button"
         className="continue d-flex rounded-4 p-3 pt-2 ms-auto"
         onClick={handleNext}
+        disabled={lives <= 0} // Prevent next button when out of lives
       >
         Next
         <img

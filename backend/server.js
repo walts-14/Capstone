@@ -7,6 +7,7 @@ import authRoutes from './routes/authRoutes.js';
 import { connectDB}  from './config/db.js';
 import streakRoutes from "./routes/streakRoutes.js";
 import leaderboardRoutes from "./routes/leaderboardRoutes.js";
+import livesRoutes from "./routes/livesRoutes.js";
 
 //initializing express
 const app = express();
@@ -27,6 +28,7 @@ app.use("/api", LessonOneQuiz);
 app.use("/api", authRoutes);
 app.use("/api", streakRoutes);
 app.use("/api", leaderboardRoutes);
+app.use("/api", livesRoutes);
 
 app.listen(5000, () => {
     connectDB();

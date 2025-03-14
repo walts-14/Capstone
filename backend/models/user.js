@@ -26,8 +26,10 @@ const userSchema = new Schema(
       required: true,
     },
     points: {
-       type: Number, 
-       default: 0 }, 
+       type: Number, default: 0 }, 
+    lives: { 
+       type: Number, default: 5 },
+    lastLifeTime: { type: Date, default: Date.now },
     streak:{
       count: {type: Number, default: 0},
       lastActiveDate: {type: Date, default: new Date()}
@@ -48,6 +50,8 @@ userSchema.pre("save", async function (next) {
     return next(error);
   }
 });
+
+
 
 const User = mongoose.model("User", userSchema);
 export default User;

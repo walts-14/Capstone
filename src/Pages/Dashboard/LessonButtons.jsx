@@ -1,30 +1,32 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "../../css/Lesson.css";
 import heart from "../../assets/heart.png";
 import diamond from "../../assets/diamond.png";
 
 const lessonRoutes = [
-  { id: 1, termId: "termsone" },
-  { id: 2, termId: "termstwo" },
-  { id: 3, termId: "termsthree" },
-  { id: 4, termId: "termsfour" },
-  { id: 5, termId: "termsfive" },
-  { id: 6, termId: "termssix" },
-  { id: 7, termId: "termsseven" },
-  { id: 8, termId: "termseight" },
-  { id: 9, termId: "termsnine" },
-  { id: 10, termId: "termsten" },
-  { id: 11, termId: "termseleven" },
-  { id: 12, termId: "termstwelve" },
-  { id: 13, termId: "termsthirteen" },
-  { id: 14, termId: "termsfourteen" },
-  { id: 15, termId: "termsfifteen" },
+  { id: 1, termId: "termsone", unlocked: true },
+  { id: 2, termId: "termstwo", unlocked: true },
+  { id: 3, termId: "termsthree", unlocked: false }, // Example locked lesson
+  { id: 4, termId: "termsfour", unlocked: false },
+  { id: 5, termId: "termsfive", unlocked: false },
+  { id: 6, termId: "termssix", unlocked: false },
+  { id: 7, termId: "termsseven", unlocked: false },
+  { id: 8, termId: "termseight", unlocked: false },
+  { id: 9, termId: "termsnine", unlocked: false },
+  { id: 10, termId: "termsten", unlocked: false },
+  { id: 11, termId: "termseleven", unlocked: false },
+  { id: 12, termId: "termstwelve", unlocked: false },
+  { id: 13, termId: "termsthirteen", unlocked: false },
+  { id: 14, termId: "termsfourteen", unlocked: false },
+  { id: 15, termId: "termsfifteen", unlocked: false },
 ];
 
 function LessonButtons() {
   const navigate = useNavigate();
   const [difficulty, setDifficulty] = useState("BASIC");
+  const [lives, setLives] = useState(5); // Lives are now dynamic
   const buttonContainerRef = useRef(null);
 
   const difficultyColors = {
@@ -66,6 +68,21 @@ function LessonButtons() {
     };
   }, []);
 
+  useEffect(() => {
+    // Fetch lives from the backend
+    const fetchLives = async () => {
+      try {
+        const userId = "yourUserId"; // Replace with actual user ID
+        const response = await axios.get(`/api/lives/${userId}`);
+        setLives(response.data.lives);
+      } catch (error) {
+        console.error("Error fetching lives:", error);
+      }
+    };
+
+    fetchLives();
+  }, []);
+
   const chunkSize = 5;
   const lessonGroups = [];
   for (let i = 0; i < lessonRoutes.length; i += chunkSize) {
@@ -89,7 +106,7 @@ function LessonButtons() {
         </div>
         <div className="d-flex align-items-center gap-1">
           <img src={heart} className="heart-logo img-fluid" alt="lives logo" />
-          <p className="heart-num m-0 text-danger fw-bold">5</p>
+          <p className="heart-num m-0 text-danger fw-bold">{lives}</p> {/* Now dynamic */}
         </div>
         <div className="d-flex align-items-center gap-1">
           <img
@@ -109,7 +126,15 @@ function LessonButtons() {
             <div
               key={lesson.id}
               className={`lessons lessons${index + 1} d-flex rounded-4`}
-              onClick={() => navigate(`/page/${lesson.termId}`)}
+              onClick={() => {
+                if (lesson.unlocked) {
+                  navigate(`/page/${lesson.termId}`);
+                }
+              }}
+              style={{
+                cursor: lesson.unlocked ? "pointer" : "not-allowed",
+                opacity: lesson.unlocked ? 1 : 0.5,
+              }}
             >
               {lesson.id}
             </div>

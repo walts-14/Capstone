@@ -83,7 +83,7 @@ function Dashboard() {
         </div>
         <div className="info-box d-flex align-items-center gap-1">
           <img
-            src={check}
+            src={check} 
             className="h-auto mt-3 ms-2 mb-3 img-fluid"
             alt="check image"
           />
