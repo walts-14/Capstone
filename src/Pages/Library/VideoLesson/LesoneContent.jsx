@@ -13,7 +13,12 @@ const LesoneContent = () => {
   const videoRef = useRef(null);
   const location = useLocation();
 
+  // Retrieve passed state
   const showButton = location.state?.showButton || false;
+  const fromLecture = location.state?.fromLecture || false;
+
+  console.log("fromLecture:", fromLecture); // Add this line to debug
+
   // Get the correct array based on the lessonKey (e.g., LessonTerms["termsthree"])
   const termsArray = LessonTerms[lessonKey] || [];
   console.log("LessonTerms for lessonKey:", lessonKey, termsArray);
@@ -38,6 +43,16 @@ const LesoneContent = () => {
 
   const isLastTerm = currentIndex === termsArray.length - 1;
 
+  // Dynamic Back Button: If fromLecture is true, navigate back to LectureorQuiz; else, to term list.
+  const handleBack = () => {
+    if (location.state?.fromLecture) {
+      navigate(`/lectureorquiz/${lessonKey}`, { state: { lessonKey } });
+    } else {
+      navigate(`/terms/${lessonKey}`, { state: { lessonKey } });
+    }
+  };
+  
+
   return (
     <>
       <div className="tryone-container">
@@ -47,16 +62,16 @@ const LesoneContent = () => {
       </div>
 
       <div className="back-button">
-        <button onClick={() => navigate(`/terms/${lessonKey}`)}>
+        <button onClick={handleBack}>
           <img src={Back} alt="Back" />
         </button>
       </div>
 
       <div className="text-container">
         <div className="letter-container">
-        <button
+          <button
             onClick={() => navigate(`/lesonecontent/${lessonKey}/${prevTerm.id}`, {
-              state: { showButton } // Preserve showButton state
+              state: { showButton, fromLecture }
             })}
           >
             <img src={leftArrow} alt="Left Arrow" className="arrow" />
@@ -65,33 +80,29 @@ const LesoneContent = () => {
           <div className="textOne">
             <p className="m-0">{terms}</p>
           </div>
-          
+
           <button
             onClick={() => navigate(`/lesonecontent/${lessonKey}/${nextTerm.id}`, {
-              state: { showButton } // Preserve showButton state
+              state: { showButton, fromLecture }
             })}
           >
             <img src={rightArrow} alt="Right Arrow" className="arrow" />
-          </button>  
-
-          
-
-          
+          </button>
         </div>
 
         <div className="textOne">
           <p>{definition}</p>
         </div>
-        
-         {/* Show special button only if `showButton` is true */}
-      {showButton && isLastTerm &&  (
+      </div>
+
+      {/* Show special button only if `showButton` is true AND it's the last term */}
+      {showButton && isLastTerm && (
         <div className="special-button-container"
-          onClick={() => navigate(`/quiz/${lessonKey}`)} >
+          onClick={() => navigate(`/quiz/${lessonKey}`)}
+        >
           <button className="special-button">This is a Special Button</button>
         </div>
       )}
-
-      </div>
     </>
   );
 };
