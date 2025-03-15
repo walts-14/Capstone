@@ -46,7 +46,7 @@ const LesoneContent = () => {
   // Dynamic Back Button: If fromLecture is true, navigate back to LectureorQuiz; else, to term list.
   const handleBack = () => {
     if (location.state?.fromLecture) {
-      navigate(`/lectureorquiz/${lessonKey}`, { state: { lessonKey } });
+      navigate(`/page/${lessonKey}`, { state: { lessonKey } });
     } else {
       navigate(`/terms/${lessonKey}`, { state: { lessonKey } });
     }
