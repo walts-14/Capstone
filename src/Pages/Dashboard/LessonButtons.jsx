@@ -8,25 +8,26 @@ import diamond from "../../assets/diamond.png";
 const lessonRoutes = [
   { id: 1, termId: "termsone", unlocked: true },
   { id: 2, termId: "termstwo", unlocked: true },
-  { id: 3, termId: "termsthree", unlocked: false }, // Example locked lesson
-  { id: 4, termId: "termsfour", unlocked: false },
-  { id: 5, termId: "termsfive", unlocked: false },
-  { id: 6, termId: "termssix", unlocked: false },
-  { id: 7, termId: "termsseven", unlocked: false },
-  { id: 8, termId: "termseight", unlocked: false },
-  { id: 9, termId: "termsnine", unlocked: false },
-  { id: 10, termId: "termsten", unlocked: false },
-  { id: 11, termId: "termseleven", unlocked: false },
-  { id: 12, termId: "termstwelve", unlocked: false },
-  { id: 13, termId: "termsthirteen", unlocked: false },
-  { id: 14, termId: "termsfourteen", unlocked: false },
-  { id: 15, termId: "termsfifteen", unlocked: false },
+  { id: 3, termId: "termsthree", unlocked: true },
+  { id: 4, termId: "termsfour", unlocked: true },
+  { id: 5, termId: "termsfive", unlocked: true },
+  { id: 6, termId: "termssix", unlocked: true },
+  { id: 7, termId: "termsseven", unlocked: true },
+  { id: 8, termId: "termseight", unlocked: true },
+  { id: 9, termId: "termsnine", unlocked: true },
+  { id: 10, termId: "termsten", unlocked: true },
+  { id: 11, termId: "termseleven", unlocked: true },
+  { id: 12, termId: "termstwelve", unlocked: true },
+  { id: 13, termId: "termsthirteen", unlocked: true },
+  { id: 14, termId: "termsfourteen", unlocked: true },
+  { id: 15, termId: "termsfifteen", unlocked: true },
 ];
 
 function LessonButtons() {
   const navigate = useNavigate();
   const [difficulty, setDifficulty] = useState("BASIC");
-  const [lives, setLives] = useState(5); // Lives are now dynamic
+  const [lives, setLives] = useState(5);
+  const [points, setPoints] = useState(0);
   const buttonContainerRef = useRef(null);
 
   const difficultyColors = {
@@ -35,6 +36,7 @@ function LessonButtons() {
     ADVANCED: "#cc6055",
   };
 
+  // Handle scrolling to update difficulty text
   useEffect(() => {
     const handleScroll = () => {
       if (!buttonContainerRef.current) return;
@@ -68,12 +70,18 @@ function LessonButtons() {
     };
   }, []);
 
+  // Fetch lives from the backend every 5 seconds
   useEffect(() => {
-    // Fetch lives from the backend
     const fetchLives = async () => {
       try {
-        const userId = "yourUserId"; // Replace with actual user ID
-        const response = await axios.get(`/api/lives/${userId}`);
+        const userEmail = localStorage.getItem("userEmail");
+        if (!userEmail) {
+          console.error("User email not found in localStorage.");
+          return;
+        }
+        const response = await axios.get(
+          `http://localhost:5000/api/lives/email/${userEmail}`
+        );
         setLives(response.data.lives);
       } catch (error) {
         console.error("Error fetching lives:", error);
@@ -81,8 +89,57 @@ function LessonButtons() {
     };
 
     fetchLives();
+    const livesInterval = setInterval(fetchLives, 5000);
+    return () => clearInterval(livesInterval);
   }, []);
 
+  // Regenerate lives every 1 minute
+  useEffect(() => {
+    const regenerateLives = async () => {
+      try {
+        const userEmail = localStorage.getItem("userEmail");
+        if (!userEmail) {
+          console.error("User email not found in localStorage.");
+          return;
+        }
+        const response = await axios.post(
+          `http://localhost:5000/api/lives/email/${userEmail}/regenerate`
+        );
+        setLives(response.data.lives);
+      } catch (error) {
+        console.error("Error regenerating lives:", error);
+      }
+    };
+
+    regenerateLives();
+    const regenInterval = setInterval(regenerateLives, 60000);
+    return () => clearInterval(regenInterval);
+  }, []);
+
+  // Fetch points from the backend every 5 seconds
+  useEffect(() => {
+    const fetchPoints = async () => {
+      try {
+        const userEmail = localStorage.getItem("userEmail");
+        if (!userEmail) {
+          console.error("User email not found in localStorage.");
+          return;
+        }
+        const response = await axios.get(
+          `http://localhost:5000/api/points/email/${userEmail}`
+        );
+        setPoints(response.data.points);
+      } catch (error) {
+        console.error("Error fetching points:", error);
+      }
+    };
+
+    fetchPoints();
+    const pointsInterval = setInterval(fetchPoints, 5000);
+    return () => clearInterval(pointsInterval);
+  }, []);
+
+  // Chunk lessonRoutes into groups for display
   const chunkSize = 5;
   const lessonGroups = [];
   for (let i = 0; i < lessonRoutes.length; i += chunkSize) {
@@ -106,15 +163,11 @@ function LessonButtons() {
         </div>
         <div className="d-flex align-items-center gap-1">
           <img src={heart} className="heart-logo img-fluid" alt="lives logo" />
-          <p className="heart-num m-0 text-danger fw-bold">{lives}</p> {/* Now dynamic */}
+          <p className="heart-num m-0 text-danger fw-bold">{lives}</p>
         </div>
         <div className="d-flex align-items-center gap-1">
-          <img
-            src={diamond}
-            className="dia-logo img-fluid"
-            alt="diamond logo"
-          />
-          <p className="dia-num m-0 fw-bold">100</p>
+          <img src={diamond} className="dia-logo img-fluid" alt="diamond logo" />
+          <p className="dia-num m-0 fw-bold">{points}</p>
         </div>
       </div>
       {lessonGroups.map((group, index) => (

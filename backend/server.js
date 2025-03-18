@@ -8,6 +8,7 @@ import { connectDB}  from './config/db.js';
 import streakRoutes from "./routes/streakRoutes.js";
 import leaderboardRoutes from "./routes/leaderboardRoutes.js";
 import livesRoutes from "./routes/livesRoutes.js";
+import pointsRoutes from "./routes/pointsRoutes.js";
 
 //initializing express
 const app = express();
@@ -29,6 +30,7 @@ app.use("/api", authRoutes);
 app.use("/api", streakRoutes);
 app.use("/api", leaderboardRoutes);
 app.use("/api", livesRoutes);
+app.use("/api", pointsRoutes);
 
 app.listen(5000, () => {
     connectDB();

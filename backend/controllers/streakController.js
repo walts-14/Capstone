@@ -29,11 +29,11 @@ export const updateStreak = async (req, res) => {
             return res.json({ message: "Streak already counted for today", streak: user.streak.count }); // ✅ Only one response
         }
 
-        if (today - lastActive === 86400000) {
+        if (new Date().getDate() - new Date(lastActive).getDate() === 1) {
             user.streak.count += 1;
-        } else {
-            user.streak.count = 1;
-        }
+        } else if (new Date().getDate() !== new Date(lastActive).getDate()) {
+            user.streak.count = 1; // Reset streak only if it's not consecutive days
+        }        
 
         user.streak.lastActiveDate = new Date();
         await user.save();

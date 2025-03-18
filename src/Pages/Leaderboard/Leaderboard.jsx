@@ -16,26 +16,23 @@ function Leaderboard() {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:5000/api/leaderboard"
-        );
+        const response = await axios.get("http://localhost:5000/api/leaderboard");
         console.log("✅ Leaderboard Data:", response.data);
-        setLeaderboard([...response.data]); // Force state refresh
+        setLeaderboard(response.data);
       } catch (error) {
-        console.error(
-          "❌ Error fetching leaderboard:",
-          error.response?.data || error.message
-        );
+        console.error("❌ Error fetching leaderboard:", error.response?.data || error.message);
       }
     };
     fetchLeaderboard();
   }, []);
 
+  console.log("Leaderboard state:", leaderboard);
+
   return (
     <>
       <Sidenav />
       <div className="lb-top d-flex justify-content-center align-items-end gap-5">
-        {/* Second Place */}
+        {/* Second Place (Static Example) */}
         <div className="second-place d-flex align-items-center gap-2">
           <img src={medal2} className="img-fluid" alt="medal img" />
           <div className="d-flex flex-column align-items-start">
@@ -50,11 +47,8 @@ function Leaderboard() {
           </div>
         </div>
 
-        {/* First Place - Adjusted Higher */}
-        <div
-          className="first-place d-flex align-items-center gap-2"
-          style={{ marginBottom: "5rem" }}
-        >
+        {/* First Place (Static Example) */}
+        <div className="first-place d-flex align-items-center gap-2" style={{ marginBottom: "5rem" }}>
           <img src={medal1} className="img-fluid ms-5" alt="medal img" />
           <div className="d-flex flex-column align-items-start">
             <div className="profile-first d-flex align-items-center gap-2">
@@ -68,7 +62,7 @@ function Leaderboard() {
           </div>
         </div>
 
-        {/* Third Place */}
+        {/* Third Place (Static Example) */}
         <div className="third-place d-flex align-items-center gap-2">
           <img src={medal3} className="img-fluid" alt="medal img" />
           <div className="d-flex flex-column align-items-start">
@@ -83,26 +77,32 @@ function Leaderboard() {
           </div>
         </div>
       </div>
+
       <div className="user-points rounded-5 d-flex text-center justify-content-center pt-3">
-        <span className="text-white fs-3 me-auto ms-5"> Users</span>
-        <span className="text-white fs-3 me-5"> Points</span>
+        <span className="text-white fs-3 me-auto ms-5">Users</span>
+        <span className="text-white fs-3 me-5">Points</span>
       </div>
+
       <div className="lb-users">
         {leaderboard && leaderboard.length > 0 ? (
-          <ul>
-            {leaderboard.map((user, index) => (
-              <li key={user._id}>
-                {index + 1}. {user.name} - {user.points || 0} points
-              </li>
-            ))}
+          <ul className="list-unstyled text-center mt-1 fs-5 text-white fw-bold">
+            {leaderboard.map((user, index) => {
+              // Debug each user object
+              console.log("User object:", user);
+              return (
+                <li key={user._id || index}>
+                  {/* Fallback for name and points */}
+                  {user.name || user.username || "No Name"} - {user.points || 0} points
+                </li>
+              );
+            })}
           </ul>
         ) : (
-          <p className="text-white text-center mt-3">
-            No leaderboard data available.
-          </p>
+          <p className="text-white text-center mt-3">No leaderboard data available.</p>
         )}
       </div>
     </>
   );
 }
+
 export default Leaderboard;

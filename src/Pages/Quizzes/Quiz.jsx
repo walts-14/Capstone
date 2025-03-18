@@ -7,6 +7,7 @@ import ekis from "../../assets/ekis.png";
 import "../../css/Quiz.css";
 import toast from "react-hot-toast";
 import { questions } from "./QuizQuestions/Questions";
+import axios from "axios";
 
 function Quiz() {
   const navigate = useNavigate();
@@ -35,14 +36,38 @@ function Quiz() {
   const [isCorrect, setIsCorrect] = useState(false);
   const [remainingQuestions, setRemainingQuestions] = useState([...quizQuestions]);
 
-  // Lives system (Only added this part)
+  // Lives system
   const [lives, setLives] = useState(5); // Default lives
   const [streak, setStreak] = useState(0);
+
+  // Set your backend URL
+  const backendURL = "http://localhost:5000";
+
+  // Fetch lives from backend using user email when component mounts
+  useEffect(() => {
+    const fetchLives = async () => {
+      try {
+        const userEmail = localStorage.getItem("userEmail"); // Email stored during login
+        if (!userEmail) {
+          console.error("User email not found in localStorage.");
+          return;
+        }
+        const response = await axios.get(`${backendURL}/api/lives/email/${userEmail}`);
+        setLives(response.data.lives);
+      } catch (error) {
+        console.error("Error fetching lives:", error);
+        toast.error("Failed to fetch lives. Please try again.");
+      }
+    };
+
+    fetchLives();
+  }, []);
 
   useEffect(() => {
     selectRandomQuestion();
   }, []);
 
+  // Shuffle answer options for the selected question
   const selectRandomQuestion = () => {
     if (remainingQuestions.length === 0 || attempts >= totalQuestions || lives <= 0) {
       toast.success("Quiz completed!");
@@ -52,11 +77,14 @@ function Quiz() {
 
     const randomIndex = Math.floor(Math.random() * remainingQuestions.length);
     const selectedQuiz = remainingQuestions[randomIndex];
+    // Shuffle answer options randomly
+    const shuffledOptions = [...selectedQuiz.answerOptions].sort(() => Math.random() - 0.5);
+    const updatedQuiz = { ...selectedQuiz, answerOptions: shuffledOptions };
 
     setRemainingQuestions((prev) =>
       prev.filter((_, index) => index !== randomIndex)
     );
-    setQuiz({ ...selectedQuiz });
+    setQuiz(updatedQuiz);
     setSelectedAnswer(null);
     setShowResult(false);
   };
@@ -68,7 +96,9 @@ function Quiz() {
     setIsCorrect(isCorrectAnswer);
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
+    const userEmail = localStorage.getItem("userEmail"); // Use email instead of userId
+
     if (selectedAnswer === null) {
       toast.error("Please select an answer before proceeding.");
       return;
@@ -76,24 +106,32 @@ function Quiz() {
 
     if (!showResult) {
       setShowResult(true);
-      if (isCorrect) {
-        setCorrectAnswers((prev) => prev + 1);
-        setStreak((prev) => prev + 1);
+      try {
+        if (!isCorrect) {
+          // Deduct a life in the backend (POST request)
+          await axios.post(`${backendURL}/api/lives/email/${userEmail}/lose-life`);
+          setLives((prev) => Math.max(0, prev - 1));
+          setStreak(0); // Reset streak when wrong answer is selected
+          setWrongAnswers((prev) => prev + 1);
+        } else {
+          setCorrectAnswers((prev) => prev + 1);
+          setStreak((prev) => prev + 1);
 
-        // Gain a life every 5 correct answers
-        if ((streak + 1) % 5 === 0) {
-          setLives((prev) => prev + 1);
-          toast.success("Streak bonus! +1 life");
-        }
-      } else {
-        setWrongAnswers((prev) => prev + 1);
-        setLives((prev) => prev - 1);
-        setStreak(0); // Reset streak on wrong answer
+          // Gain a life every 3 correct answers (adjust as needed)
+          if ((streak + 1) % 3 === 0) {
+            await axios.post(`${backendURL}/api/lives/email/${userEmail}/gain-life`);
+            setLives((prev) => prev + 1);
+            toast.success("Streak bonus! +1 life");
+          }
 
-        if (lives - 1 === 0) {
-          toast.error("You're out of lives! Try again later.");
+          // Update points on correct answer (e.g., gain 10 points per correct answer)
+          await axios.post(`${backendURL}/api/points/email/${userEmail}/gain-points`, { points: 10 });
         }
+      } catch (error) {
+        console.error("Error updating lives/points:", error);
+        toast.error("Failed to update lives/points. Please try again.");
       }
+      // Instant feedback is shown here; wait for user to trigger next step
       return;
     }
 

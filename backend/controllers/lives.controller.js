@@ -1,13 +1,12 @@
 import User from "../models/user.js";
+import mongoose from "mongoose";
 
-// Get lives for a user
+// Get lives for a user by email
 export const getLives = async (req, res) => {
     try {
-        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-            return res.status(400).json({ message: "Invalid user ID" });
-        }
+        const { email } = req.params;
 
-        const user = await User.findById(req.params.id);
+        const user = await User.findOne({ email });
         if (!user) return res.status(404).json({ message: "User not found" });
 
         res.json({ lives: user.lives });
@@ -16,10 +15,12 @@ export const getLives = async (req, res) => {
     }
 };
 
-// Deduct a life on a wrong answer
+// Deduct a life on a wrong answer by email
 export const loseLife = async (req, res) => {
     try {
-        const user = await User.findById(req.params.id);
+        const { email } = req.params;
+
+        const user = await User.findOne({ email });
         if (!user) return res.status(404).json({ message: "User not found" });
 
         if (user.lives > 0) {
@@ -34,10 +35,12 @@ export const loseLife = async (req, res) => {
     }
 };
 
-// Gain a life (streak rewards or purchases)
+// Gain a life (streak rewards or purchases) by email
 export const gainLife = async (req, res) => {
     try {
-        const user = await User.findById(req.params.id);
+        const { email } = req.params;
+
+        const user = await User.findOne({ email });
         if (!user) return res.status(404).json({ message: "User not found" });
 
         if (user.lives < 5) {
@@ -50,3 +53,35 @@ export const gainLife = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+export const regenerateLives = async (req, res) => {
+    try {
+      const { email } = req.params;
+      const user = await User.findOne({ email });
+      if (!user) return res.status(404).json({ message: "User not found" });
+  
+      // Ensure lastLifeTime is defined
+      const lastTime = user.lastLifeTime ? new Date(user.lastLifeTime) : new Date();
+      const now = new Date();
+  
+      // Calculate minutes passed since last life update
+      const minutesPassed = Math.floor((now - lastTime) / (1000 * 60));
+  
+      // Calculate the number of additional lives based on full 10-minute intervals
+      const additionalLives = Math.floor(minutesPassed / 10);
+  
+      // Only update if at least one full 10-minute interval has passed and user hasn't reached max lives
+      if (additionalLives > 0 && user.lives < 5) {
+          // Increase lives but cap at 5
+          user.lives = Math.min(user.lives + additionalLives, 5);
+          // Instead of resetting to now, increment lastLifeTime by the amount of time used
+          user.lastLifeTime = new Date(lastTime.getTime() + additionalLives * 10 * 60 * 1000);
+          await user.save();
+      }
+  
+      res.json({ lives: user.lives });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+};
+

@@ -1,8 +1,11 @@
+import User from "../models/user.js";
+
 export const getLeaderboard = async (req, res) => {
     try {
-        const users = await User.find().sort({ points: -1 });
+        // Use .lean() to get plain objects instead of Mongoose documents.
+        const users = await User.find().sort({ points: -1 }).lean();
 
-        // Add default points if missing
+        // Map over the plain objects and add default points if missing
         const updatedUsers = users.map(user => ({
             ...user,
             points: user.points ?? 0
@@ -10,6 +13,7 @@ export const getLeaderboard = async (req, res) => {
 
         res.status(200).json(updatedUsers);
     } catch (error) {
-        res.status(500).json({ message: "Error fetching leaderboard" });
+        console.error("❌ Error fetching leaderboard:", error);
+        res.status(500).json({ message: error.message });
     }
 };
