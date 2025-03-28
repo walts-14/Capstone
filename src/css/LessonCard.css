@@ -1,46 +1,44 @@
 @font-face {
-    font-family: "Baloo";
-    src: url("/src/font/Baloo-Regular.ttf") format("truetype");
-    font-style: normal;
-  }
-  
-  :root {
-    --background: #100429;
-    --semidark-purple: #271d3e;
-    --dark-purple: #271d3e;
-    --mid-purple: #7338a0;
-    --grey-purple: #6f687e;
-    --purple: #4a2574;
-    --light-purple: #cf96ff;
-    --stroke-gray: #6f687e;
-    --input-gray: #3f3653;
-    --placeholder: #9f9aa9;
-    --white: #ffff;
-    --basic-blue: #2e86c1;
-    --intermediate-yellow: #d4ac0d;
-    --advance-red: #c0392b;
-    --semidark-blue: #174360;
-    --dark-blue: #205d87;
-    --dark-yellow: #6a5606;
-    --semidark-yellow: #947809;
-    --dark-red: #601c15;
-    --semidark-red: #86271e;
-    --midlight-red: #d7443e;
-    --midblue: #04aae0;
-    --lightblue: #5DADE2;
-    --shadowblue: #2E86C1;
-    
-  }
+  font-family: "Baloo";
+  src: url("/src/font/Baloo-Regular.ttf") format("truetype");
+  font-style: normal;
+}
+
+:root {
+  --background: #100429;
+  --semidark-purple: #271d3e;
+  --dark-purple: #271d3e;
+  --mid-purple: #7338a0;
+  --grey-purple: #6f687e;
+  --purple: #4a2574;
+  --light-purple: #cf96ff;
+  --stroke-gray: #6f687e;
+  --input-gray: #3f3653;
+  --placeholder: #9f9aa9;
+  --white: #ffff;
+  --basic-blue: #2e86c1;
+  --intermediate-yellow: #d4ac0d;
+  --advance-red: #c0392b;
+  --semidark-blue: #174360;
+  --dark-blue: #205d87;
+  --dark-yellow: #6a5606;
+  --semidark-yellow: #947809;
+  --dark-red: #601c15;
+  --semidark-red: #86271e;
+  --midlight-red: #d7443e;
+  --midblue: #04aae0;
+  --lightblue: #5dade2;
+  --shadowblue: #2e86c1;
+}
 
 .terms-card {
-    display: inline-block; /* Allow the card to adjust its width based on content */
-    text-align: center;
-    padding: 20px 2px;
-    border-radius: 10px;
-    background-color: var(--lightblue);
-    box-shadow: 0 5px 1px 8px var(--shadowblue);
-    height: 100px;
-    
+  display: inline-block; /* Allow the card to adjust its width based on content */
+  text-align: center;
+  padding: 20px 2px;
+  border-radius: 10px;
+  background-color: var(--lightblue);
+  box-shadow: 0 5px 1px 8px var(--shadowblue);
+  height: 100px;
 }
 
 .term-name {
@@ -48,5 +46,4 @@
   font-weight: bold;
   color: white;
   font-family: "Baloo";
-
 }

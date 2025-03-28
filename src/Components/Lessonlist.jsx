@@ -1,5 +1,5 @@
-import React from 'react';
-import Lessonscard from './Lessonscard';
+import React from "react";
+import Lessonscard from "./Lessonscard";
 import "../css/Lessonlist.css";
 
 function Lessonlist({ Lessons }) {

@@ -166,7 +166,11 @@ function LessonButtons() {
           <p className="heart-num m-0 text-danger fw-bold">{lives}</p>
         </div>
         <div className="d-flex align-items-center gap-1">
-          <img src={diamond} className="dia-logo img-fluid" alt="diamond logo" />
+          <img
+            src={diamond}
+            className="dia-logo img-fluid"
+            alt="diamond logo"
+          />
           <p className="dia-num m-0 fw-bold">{points}</p>
         </div>
       </div>
@@ -181,7 +185,13 @@ function LessonButtons() {
               className={`lessons lessons${index + 1} d-flex rounded-4`}
               onClick={() => {
                 if (lesson.unlocked) {
-                  navigate(`/page/${lesson.termId}`);
+                  let difficulty = "BASIC";
+                  if (lesson.id >= 6 && lesson.id <= 10)
+                    difficulty = "INTERMEDIATE";
+                  if (lesson.id >= 11 && lesson.id <= 15)
+                    difficulty = "ADVANCED";
+
+                  navigate(`/page/${lesson.termId}`, { state: { difficulty } });
                 }
               }}
               style={{
