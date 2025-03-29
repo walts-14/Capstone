@@ -9,6 +9,7 @@ import streakRoutes from "./routes/streakRoutes.js";
 import leaderboardRoutes from "./routes/leaderboardRoutes.js";
 import livesRoutes from "./routes/livesRoutes.js";
 import pointsRoutes from "./routes/pointsRoutes.js";
+import videoRoutes from "./routes/videoRoutes.js";
 
 //initializing express
 const app = express();
@@ -31,6 +32,7 @@ app.use("/api", streakRoutes);
 app.use("/api", leaderboardRoutes);
 app.use("/api", livesRoutes);
 app.use("/api", pointsRoutes);
+app.use("/api", videoRoutes);
 
 app.listen(5000, () => {
     connectDB();
