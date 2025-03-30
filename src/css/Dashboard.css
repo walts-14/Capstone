@@ -175,59 +175,9 @@ body {
   font-weight: bold;
   color: var(--white); /* Adjust color */
 }
-.player-info {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.7rem;
-  color: var(--grey-purple);
-  font-size: 1rem;
-  font-family: "Baloo", sans-serif;
-  position: fixed;
-  top: 5em;
-  right: 4em;
-  width: 23vw;
-}
-.player-info .info-box {
-  background-color: var(--dark-purple);
-  border-radius: 1.4rem;
-  flex: 1 1 calc(40% - 10px);
-  text-align: center;
-  height: 4.5em;
-}
-
-.info-box p {
-  padding-top: 2.8em;
-}
-.profile-pic {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: var(--white);
-  border-radius: 1.4rem;
-  background-color: var(--dark-purple);
-  height: 35vh;
-  width: 23vw;
-  position: fixed;
-  right: 4em;
-  top: 16em;
-  font-family: "Baloo", sans-serif;
-}
-.profile-pic img {
-  vertical-align: center;
-  max-width: 75%;
-  border-radius: 45%;
-  object-fit: cover;
-  height: auto;
-  position: absolute;
-  top: 2rem;
-}
-.profile-pic p {
-  position: absolute;
-  bottom: 1.5rem;
-}
 .position-lb {
   display: flex;
-  justify-content: center;
+  justify-content: left;
   align-items: center;
   color: var(--white);
   border-radius: 1.4rem;
@@ -236,7 +186,7 @@ body {
   width: 23vw;
   position: fixed;
   right: 4em;
-  bottom: 16em;
+  top: 5em;
   font-family: "Baloo", sans-serif;
 }
 .position-lb p {
@@ -245,19 +195,72 @@ body {
   padding-left: 0.5em;
   font-size: 1.5rem;
 }
-.btns {
-  display: flex;
-  position: fixed;
-  bottom: 10em;
-  right: 2.4em;
-  width: 30em;
-  justify-content: center;
-  align-items: center;
-  gap: 1em;
-}
-.btns .btn:nth-child(1) {
+.lessonTracker {
+  position: absolute;
+  top: 12em;
+  right: 3rem;
+  background-color: var(--dark-purple);
+  max-height: 45em;
+  height: auto;
+  width: 25vw;
   font-family: "Baloo", sans-serif;
-  width: 35%;
-  height: 7vh;
-  background-color: var(--midlight-red);
+  overflow-y: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: var(--input-gray) transparent;
+}
+.basicTracker,
+.intermediateTracker,
+.advancedTracker {
+  background-color: var(--input-gray);
+  border: 3px solid var(--input-gray);
+}
+.basicTitle {
+  background-color: var(--basic-blue);
+  height: auto;
+  width: 12vw;
+  border-radius: 20px 10px 70px 0;
+}
+.basic1tracker,
+.basic2tracker,
+.basic3tracker,
+.basic4tracker,
+.basic5tracker {
+  background-color: var(--semidark-blue);
+  height: auto;
+  width: 20vw;
+  font-size: 2rem;
+}
+.interTitle {
+  background-color: var(--intermediate-yellow);
+  height: auto;
+  width: 15vw;
+  font-size: 2vw;
+  border-radius: 20px 10px 70px 0;
+}
+.inter1tracker,
+.inter2tracker,
+.inter3tracker,
+.inter4tracker,
+.inter5tracker {
+  background-color: var(--semidark-yellow);
+  height: auto;
+  width: 20vw;
+  font-size: 2rem;
+}
+.advancedTitle {
+  background-color: #c0392b;
+  height: auto;
+  width: 12vw;
+  border-radius: 20px 10px 70px 0;
+  font-size: 2vw;
+}
+.advanced1tracker,
+.advanced2tracker,
+.advanced3tracker,
+.advanced4tracker,
+.advanced5tracker {
+  background-color: #cc6055;
+  height: auto;
+  width: 20vw;
+  font-size: 2rem;
 }
