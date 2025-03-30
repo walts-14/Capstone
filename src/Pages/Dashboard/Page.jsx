@@ -13,6 +13,7 @@ function Page() {
   return (
     <div className="page-content">
       {lesson ? <Lessonlist Lessons={lesson} /> : <h1>No Data Found</h1>}
+      
       <LectureorQuiz termId={termId} LessonTerms={terms} />
     </div>
   );

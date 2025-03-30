@@ -80,7 +80,7 @@ function LoginForm() {
 
   return (
     <div className="login-container">
-      <div className="login-card login-width">
+      <div className="login-card login-width ">
         <h1>LOGIN</h1>
         <Form onSubmit={loginUser}>
           <Form.Group className="mb-2">

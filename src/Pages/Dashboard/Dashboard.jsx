@@ -45,7 +45,7 @@ function Dashboard() {
           console.error("❌ No email found in localStorage");
           return;
       }
-  
+
       try {
           const response = await axios.post("/api/update-streak", {
               email: storedUserEmail

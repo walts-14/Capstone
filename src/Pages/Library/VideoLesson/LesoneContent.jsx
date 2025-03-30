@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Back from '../../../assets/BackButton.png';
 import leftArrow from '../../../assets/leftArrow.png';
 import rightArrow from '../../../assets/rightArrow.png';
@@ -7,51 +7,66 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import LessonTerms from "../Terms/LessonTerms";
 
 const LesoneContent = () => {
-  // Expect two URL parameters: lessonKey (e.g., "termsthree") and termId (numeric as string)
   const { lessonKey, termId } = useParams();
   const navigate = useNavigate();
   const videoRef = useRef(null);
   const location = useLocation();
-
-  // Retrieve passed state
+  
   const showButton = location.state?.showButton || false;
   const fromLecture = location.state?.fromLecture || false;
-
-  console.log("fromLecture:", fromLecture); // Add this line to debug
-
-  // Get the correct array based on the lessonKey (e.g., LessonTerms["termsthree"])
+  
   const termsArray = LessonTerms[lessonKey] || [];
-  console.log("LessonTerms for lessonKey:", lessonKey, termsArray);
+  
+  // Track current step
+  const [step, setStep] = useState(parseInt(termId, 10) > 15 ? 2 : 1);
 
-  // Find the current term using the numerical termId
-  const currentTerm = termsArray.find(term => term.id === parseInt(termId, 10));
-  if (!currentTerm) {
-    return <p>Term not found</p>;
-  }
+  // Define term ranges for each step
+  const firstPageTerms = termsArray.slice(0, 15);  // Terms 1-15
+  const secondPageTerms = termsArray.slice(15, 30); // Terms 16-30
 
-  const { terms, definition, video } = currentTerm;
-  const currentIndex = termsArray.findIndex(term => term.id === parseInt(termId, 10));
-  const prevTerm = termsArray[(currentIndex - 1 + termsArray.length) % termsArray.length];
-  const nextTerm = termsArray[(currentIndex + 1) % termsArray.length];
+  const currentStepTerms = step === 1 ? firstPageTerms : secondPageTerms;
+  const currentIndex = currentStepTerms.findIndex(term => term.id === parseInt(termId, 10));
 
+  // If term not found in the current step, reset to the first term of that step
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.load();
-      videoRef.current.play().catch(error => console.error("Video play error:", error));
+    if (currentIndex === -1) {
+      const firstTermId = currentStepTerms.length > 0 ? currentStepTerms[0].id : null;
+      if (firstTermId) {
+        navigate(`/lesonecontent/${lessonKey}/${firstTermId}`, { state: { showButton, fromLecture } });
+      }
     }
-  }, [termId]);
+  }, [step]);
 
-  const isLastTerm = currentIndex === termsArray.length - 1;
+  if (currentIndex === -1) return <p>Loading...</p>;
 
-  // Dynamic Back Button: If fromLecture is true, navigate back to LectureorQuiz; else, to term list.
-  const handleBack = () => {
-    if (location.state?.fromLecture) {
-      navigate(`/page/${lessonKey}`, { state: { lessonKey } });
-    } else {
-      navigate(`/terms/${lessonKey}`, { state: { lessonKey } });
+  const { terms, definition, video } = currentStepTerms[currentIndex];
+
+  // Get previous and next terms within the step
+  const prevTerm = currentStepTerms[currentIndex - 1] || currentStepTerms[0];
+  const nextTerm = currentStepTerms[currentIndex + 1] || currentStepTerms[currentStepTerms.length - 1];
+
+  const handleNavigation = (direction) => {
+    if (direction === "prev" && currentIndex > 0) {
+      navigate(`/lesonecontent/${lessonKey}/${prevTerm.id}`, {
+        state: { showButton, fromLecture }
+      });
+    }
+    if (direction === "next" && currentIndex < currentStepTerms.length - 1) {
+      navigate(`/lesonecontent/${lessonKey}/${nextTerm.id}`, {
+        state: { showButton, fromLecture }
+      });
     }
   };
-  
+
+  const handleStepChange = (newStep) => {
+    if (newStep !== step) {
+      setStep(newStep);
+      const firstTermId = newStep === 1 ? firstPageTerms[0].id : secondPageTerms[0].id;
+      navigate(`/lesonecontent/${lessonKey}/${firstTermId}`, {
+        state: { showButton, fromLecture }
+      });
+    }
+  };
 
   return (
     <>
@@ -62,18 +77,16 @@ const LesoneContent = () => {
       </div>
 
       <div className="back-button">
-        <button onClick={handleBack}>
+        <button onClick={() => navigate(`/page/${lessonKey}`, { state: { lessonKey } })}>
           <img src={Back} alt="Back" />
         </button>
       </div>
 
+    
+
       <div className="text-container">
         <div className="letter-container">
-          <button
-            onClick={() => navigate(`/lesonecontent/${lessonKey}/${prevTerm.id}`, {
-              state: { showButton, fromLecture }
-            })}
-          >
+          <button onClick={() => handleNavigation("prev")} disabled={currentIndex === 0}>
             <img src={leftArrow} alt="Left Arrow" className="arrow" />
           </button>
 
@@ -81,11 +94,7 @@ const LesoneContent = () => {
             <p className="m-0">{terms}</p>
           </div>
 
-          <button
-            onClick={() => navigate(`/lesonecontent/${lessonKey}/${nextTerm.id}`, {
-              state: { showButton, fromLecture }
-            })}
-          >
+          <button onClick={() => handleNavigation("next")} disabled={currentIndex === currentStepTerms.length - 1}>
             <img src={rightArrow} alt="Right Arrow" className="arrow" />
           </button>
         </div>
@@ -95,11 +104,8 @@ const LesoneContent = () => {
         </div>
       </div>
 
-      {/* Show special button only if `showButton` is true AND it's the last term */}
-      {showButton && isLastTerm && (
-        <div className="special-button-container"
-          onClick={() => navigate(`/quiz/${lessonKey}`)}
-        >
+      {showButton && currentIndex === currentStepTerms.length - 1 && (
+        <div className="special-button-container" onClick={() => navigate(`/quiz/${lessonKey}`)}>
           <button className="special-button">This is a Special Button</button>
         </div>
       )}
