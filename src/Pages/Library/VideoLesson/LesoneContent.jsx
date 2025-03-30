@@ -58,15 +58,15 @@ const LesoneContent = () => {
     }
   };
 
-  const handleStepChange = (newStep) => {
-    if (newStep !== step) {
-      setStep(newStep);
-      const firstTermId = newStep === 1 ? firstPageTerms[0].id : secondPageTerms[0].id;
-      navigate(`/lesonecontent/${lessonKey}/${firstTermId}`, {
-        state: { showButton, fromLecture }
-      });
+   // Dynamic Back Button: If fromLecture is true, navigate back to LectureorQuiz; else, to term list.
+  const handleBack = () => {
+    if (location.state?.fromLecture) {
+      navigate(`/lectureorquiz/${lessonKey}`, { state: { lessonKey } });
+      navigate(`/page/${lessonKey}`, { state: { lessonKey } });
+    } else {
+      navigate(`/terms/${lessonKey}`, { state: { lessonKey } });
     }
-  };
+  }
 
   return (
     <>
@@ -77,7 +77,7 @@ const LesoneContent = () => {
       </div>
 
       <div className="back-button">
-        <button onClick={() => navigate(`/page/${lessonKey}`, { state: { lessonKey } })}>
+        <button onClick={handleBack}>
           <img src={Back} alt="Back" />
         </button>
       </div>
@@ -105,10 +105,16 @@ const LesoneContent = () => {
       </div>
 
       {showButton && currentIndex === currentStepTerms.length - 1 && (
-        <div className="special-button-container" onClick={() => navigate(`/quiz/${lessonKey}`)}>
-          <button className="special-button">This is a Special Button</button>
+        <div
+          className="special-button-container"
+          onClick={() => navigate(`/quiz/${lessonKey}`, { state: { currentStep: step } })}
+        >
+          <button className="special-button">
+            {step === 1 ? "Go to Step 1 Quiz" : "Go to Step 2 Quiz"}
+          </button>
         </div>
       )}
+
     </>
   );
 };

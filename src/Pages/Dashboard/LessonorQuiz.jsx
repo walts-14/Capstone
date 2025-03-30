@@ -33,21 +33,29 @@ function LectureorQuiz({ LessonTerms: propLessonTerms }) {
   // (The Lecture button already uses the filtered terms as needed.)
   const handleLectureClick = () => {
     if (lessonKey && LessonTerms.length > 0) {
-      // Navigate to LesoneContent using the first term of the current step.
-      // (Assuming you've already filtered for lecture as needed.)
-      navigate(`/lesonecontent/${lessonKey}/${LessonTerms[0].id}`, {
-        state: {
-          showButton: true,
-          fromLecture: true,
-          lessonKey,
-          termId: LessonTerms[0].id,
-        },
-      });
+      // Determine which set of terms to use based on the step
+      const filteredTerms =
+        currentStep === 1
+          ? LessonTerms.slice(0, 15) // Terms 1-15
+          : LessonTerms.slice(15, 30); // Terms 16-30
+  
+      if (filteredTerms.length > 0) {
+        navigate(`/lesonecontent/${lessonKey}/${filteredTerms[0].id}`, {
+          state: {
+            showButton: true,
+            fromLecture: true,
+            lessonKey,
+            termId: filteredTerms[0].id,
+          },
+        });
+      } else {
+        console.log("No valid terms for the selected step!");
+      }
     } else {
       console.log("No valid lesson data found!");
     }
   };
-
+  
   return (
     <>
       <div
