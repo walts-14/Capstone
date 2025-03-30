@@ -14,7 +14,7 @@ function LectureorQuiz({ LessonTerms: propLessonTerms }) {
   const params = useParams();
   const location = useLocation();
   const difficulty = location.state?.difficulty || "BASIC"; // Default to BASIC
-  const [currentStep, setCurrentStep] = useState(1); // Track progress step
+  const [currentStep, setCurrentStep] = useState(1); // Track progress bar step
 
   const difficultyColors = {
     BASIC: "#3498db", // Blue
@@ -22,43 +22,47 @@ function LectureorQuiz({ LessonTerms: propLessonTerms }) {
     ADVANCED: "#cc6055", // Red
   };
 
+  // Our route gives us a parameter named termId, but we treat that as the lesson key.
   const routeTermId = params.termId;
   const { lessonKey: stateLessonKey } = location.state || {};
   const lessonKey = stateLessonKey || routeTermId;
 
-  // Get terms based on the lessonKey
+  // Get terms based on the lesson key
   const LessonTerms = propLessonTerms || (lessonKey ? LessonTermsData[lessonKey] || [] : []);
 
-  // Define filtered terms based on step
-  const firstPageTerms = LessonTerms.slice(0, 15); // Step 1 (1-15)
-  const secondPageTerms = LessonTerms.slice(15, 30); // Step 2 (16-30)
-
-  // Get correct terms based on current step
-  const filteredTerms = currentStep === 1 ? firstPageTerms : secondPageTerms;
-
-  // Navigate to Lecture
+  // (The Lecture button already uses the filtered terms as needed.)
   const handleLectureClick = () => {
-    if (lessonKey && filteredTerms.length > 0) {
-      navigate(`/lesonecontent/${lessonKey}/${filteredTerms[0].id}`, {
+    if (lessonKey && LessonTerms.length > 0) {
+      // Navigate to LesoneContent using the first term of the current step.
+      // (Assuming you've already filtered for lecture as needed.)
+      navigate(`/lesonecontent/${lessonKey}/${LessonTerms[0].id}`, {
         state: {
           showButton: true,
           fromLecture: true,
           lessonKey,
-          termId: filteredTerms[0].id,
+          termId: LessonTerms[0].id,
         },
       });
+    } else {
+      console.log("No valid lesson data found!");
     }
   };
 
   return (
     <>
-      <div className="back fs-1 fw-bold d-flex" onClick={() => navigate("/dashboard")}>
+      <div
+        className="back fs-1 fw-bold d-flex"
+        onClick={() => navigate("/dashboard")}
+      >
         <img src={backkpoint} className="img-fluid p-1 mt-1" alt="Back" />
         <p>Back</p>
       </div>
 
       <div className="status-bar">
-        <div className="difficulty text-center" style={{ backgroundColor: difficultyColors[difficulty] }}>
+        <div
+          className="difficulty text-center"
+          style={{ backgroundColor: difficultyColors[difficulty] }}
+        >
           {difficulty}
         </div>
         <div className="lives">
@@ -89,13 +93,21 @@ function LectureorQuiz({ LessonTerms: propLessonTerms }) {
       </div>
 
       <div className="lecture-quiz-container d-flex justify-content-center fw-bold col-md-6">
-        <div className="lecture-outer justify-content-center rounded-5" onClick={handleLectureClick}>
+        <div
+          className="lecture-outer justify-content-center rounded-5"
+          onClick={handleLectureClick}
+        >
           <p className="fs-md-5">Lecture</p>
           <div className="lecture-inner justify-content-center align-items-center">
             <img src={Video} className="img-fluid" alt="Lecture Video" />
           </div>
         </div>
-        <div className="quiz-outer justify-content-center rounded-5" onClick={() => navigate(`/quiz/${lessonKey}`)}>
+        <div
+          className="quiz-outer justify-content-center rounded-5"
+          onClick={() =>
+            navigate(`/quiz/${lessonKey}`, { state: { currentStep } })
+          }
+        >
           <p>Quiz</p>
           <div className="quiz-inner justify-content-center">
             <img src={Ideas} className="img-fluid" alt="Quiz Icon" />

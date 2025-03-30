@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams,useLocation } from "react-router-dom";
 import backkpoint from "../../assets/backkpoint.png";
 import arrow from "../../assets/arrow.png";
 import check from "../../assets/check.png";
@@ -12,19 +12,29 @@ import axios from "axios";
 function Quiz() {
   const navigate = useNavigate();
   const { lessonKey } = useParams(); // e.g., "termsone", "termstwo", etc.
+  const location = useLocation();
+  const currentStep = location.state?.currentStep || 1; // Default to step 1 if not passed
 
   // Mapping of lessonKey to question set
   const quizMapping = {
-    termsone: questions.lesson1_Part1,
-    termstwo: questions.lesson2_Part1,
+    termsone: {
+      1: questions.lesson1_Part1,
+      2: questions.lesson1_Part2,
+    },
+    termstwo: {
+      1: questions.lesson2_Part1,
+      2: questions.lesson2_Part2,
+    },
     termsthree: questions.lesson3_Part1,
     termsfour: questions.lesson4_Part1,
     termsfive: questions.lesson5_Part1,
     // Add additional mappings as needed...
   };
 
-  // Select the appropriate quiz questions based on the lessonKey
-  const quizQuestions = quizMapping[lessonKey] || [];
+
+  const quizQuestions = quizMapping[lessonKey]
+    ? quizMapping[lessonKey][currentStep] || []
+    : [];
   const totalQuestions = 10;
 
   const [quiz, setQuiz] = useState(null);
