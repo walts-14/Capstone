@@ -10,17 +10,14 @@ const lessonRoutes = [
   { id: 2, termId: "termstwo", unlocked: true },
   { id: 3, termId: "termsthree", unlocked: true },
   { id: 4, termId: "termsfour", unlocked: true },
-  { id: 5, termId: "termsfive", unlocked: true },
-  { id: 6, termId: "termssix", unlocked: true },
-  { id: 7, termId: "termsseven", unlocked: true },
-  { id: 8, termId: "termseight", unlocked: true },
-  { id: 9, termId: "termsnine", unlocked: true },
-  { id: 10, termId: "termsten", unlocked: true },
-  { id: 11, termId: "termseleven", unlocked: true },
-  { id: 12, termId: "termstwelve", unlocked: true },
-  { id: 13, termId: "termsthirteen", unlocked: true },
-  { id: 14, termId: "termsfourteen", unlocked: true },
-  { id: 15, termId: "termsfifteen", unlocked: true },
+  { id: 5, termId: "termssix", unlocked: true },
+  { id: 6, termId: "termsseven", unlocked: true },
+  { id: 7, termId: "termseight", unlocked: true },
+  { id: 8, termId: "termsnine", unlocked: true },
+  { id: 9, termId: "termsten", unlocked: true },
+  { id: 10, termId: "termseleven", unlocked: true },
+  { id: 11, termId: "termstwelve", unlocked: true },
+  { id: 12, termId: "termsthirteen", unlocked: true },
 ];
 
 function LessonButtons() {
@@ -36,7 +33,6 @@ function LessonButtons() {
     ADVANCED: "#cc6055",
   };
 
-  // Handle scrolling to update difficulty text
   useEffect(() => {
     const handleScroll = () => {
       if (!buttonContainerRef.current) return;
@@ -70,7 +66,6 @@ function LessonButtons() {
     };
   }, []);
 
-  // Fetch lives from the backend every 5 seconds
   useEffect(() => {
     const fetchLives = async () => {
       try {
@@ -93,30 +88,6 @@ function LessonButtons() {
     return () => clearInterval(livesInterval);
   }, []);
 
-  // Regenerate lives every 1 minute
-  useEffect(() => {
-    const regenerateLives = async () => {
-      try {
-        const userEmail = localStorage.getItem("userEmail");
-        if (!userEmail) {
-          console.error("User email not found in localStorage.");
-          return;
-        }
-        const response = await axios.post(
-          `http://localhost:5000/api/lives/email/${userEmail}/regenerate`
-        );
-        setLives(response.data.lives);
-      } catch (error) {
-        console.error("Error regenerating lives:", error);
-      }
-    };
-
-    regenerateLives();
-    const regenInterval = setInterval(regenerateLives, 60000);
-    return () => clearInterval(regenInterval);
-  }, []);
-
-  // Fetch points from the backend every 5 seconds
   useEffect(() => {
     const fetchPoints = async () => {
       try {
@@ -139,8 +110,7 @@ function LessonButtons() {
     return () => clearInterval(pointsInterval);
   }, []);
 
-  // Chunk lessonRoutes into groups for display
-  const chunkSize = 5;
+  const chunkSize = 4;
   const lessonGroups = [];
   for (let i = 0; i < lessonRoutes.length; i += chunkSize) {
     lessonGroups.push(lessonRoutes.slice(i, i + chunkSize));
@@ -186,9 +156,9 @@ function LessonButtons() {
               onClick={() => {
                 if (lesson.unlocked) {
                   let difficulty = "BASIC";
-                  if (lesson.id >= 6 && lesson.id <= 10)
+                  if (lesson.id >= 5 && lesson.id <= 8)
                     difficulty = "INTERMEDIATE";
-                  if (lesson.id >= 11 && lesson.id <= 15)
+                  if (lesson.id >= 9 && lesson.id <= 12)
                     difficulty = "ADVANCED";
 
                   navigate(`/page/${lesson.termId}`, { state: { difficulty } });

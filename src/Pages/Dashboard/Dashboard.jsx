@@ -96,9 +96,6 @@ function Dashboard() {
             <div className="basic4tracker d-flex ms-3 mb-3 rounded-4 p-2 justify-content-between">
               Lesson 4 <span>0%</span>
             </div>
-            <div className="basic5tracker d-flex ms-3 mb-3 rounded-4 p-2 justify-content-between">
-              Lesson 5 <span>0%</span>
-            </div>
           </div>
           <div className="intermediateTracker rounded-4 m-2 mb-4">
             <div className="interTitle text-center mb-3">Intermediate</div>
@@ -114,9 +111,6 @@ function Dashboard() {
             <div className="inter4tracker d-flex ms-3 mb-3 rounded-4 p-2 justify-content-between">
               Lesson 4 <span>0%</span>
             </div>
-            <div className="inter5tracker d-flex ms-3 mb-3 rounded-4 p-2 justify-content-between">
-              Lesson 5 <span>0%</span>
-            </div>
           </div>
           <div className="advancedTracker rounded-4 m-2 mb-4">
             <div className="advancedTitle  text-center mb-3">Advanced</div>
@@ -131,9 +125,6 @@ function Dashboard() {
             </div>
             <div className="advanced4tracker d-flex ms-3 mb-3 rounded-4 p-2 justify-content-between">
               Lesson 4 <span>0%</span>
-            </div>
-            <div className="advanced5tracker d-flex ms-3 mb-3 rounded-4 p-2 justify-content-between">
-              Lesson 5 <span>0%</span>
             </div>
           </div>
         </div>

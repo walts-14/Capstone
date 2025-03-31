@@ -223,8 +223,7 @@ body {
 .basic1tracker,
 .basic2tracker,
 .basic3tracker,
-.basic4tracker,
-.basic5tracker {
+.basic4tracker {
   background-color: var(--semidark-blue);
   height: auto;
   width: 20vw;
@@ -240,8 +239,7 @@ body {
 .inter1tracker,
 .inter2tracker,
 .inter3tracker,
-.inter4tracker,
-.inter5tracker {
+.inter4tracker {
   background-color: var(--semidark-yellow);
   height: auto;
   width: 20vw;
@@ -257,8 +255,7 @@ body {
 .advanced1tracker,
 .advanced2tracker,
 .advanced3tracker,
-.advanced4tracker,
-.advanced5tracker {
+.advanced4tracker {
   background-color: #cc6055;
   height: auto;
   width: 20vw;
