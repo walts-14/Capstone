@@ -1,0 +1,189 @@
+@font-face {
+    font-family: "Baloo";
+    src: url("/src/font/Baloo-Regular.ttf") format("truetype");
+    font-style: normal;
+  }
+  
+  body {
+      margin: 1;
+      font-family: "Baloo";
+      background-color: #100429;
+  }
+    .Dashboard {
+      height: 80px;
+       margin-right: 50px;
+       font-family: "Baloo";
+  }
+    .Dashboard h2{
+      width: 20%;;
+      text-align: center;
+      font-family: "Baloo";
+      font-weight:bold;
+      color: #FFFFFF;
+      font-size: 60px;
+    }
+    
+    button {
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      height: 40px; 
+      width: auto; 
+      padding: 0 10px; 
+      border-radius: 5px; 
+      border: none; 
+      cursor: pointer; 
+    }
+    
+    
+    .Create {
+      color: #FFFFFF;
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      cursor: pointer;
+      position: absolute; /* Use absolute positioning */
+      bottom: 900px; 
+      right: 250px; 
+    }
+  
+    
+    
+    .dashboard-table {
+      font-size: 1.5rem;
+      width: 80%; 
+      margin: auto;
+      margin-top: 20px; 
+      border-collapse: collapse;
+      font-family: "Baloo"; 
+      background-color: #2E2E4D; 
+      border-radius: 10px;
+      overflow: hidden;
+    
+    }
+    
+    .dashboard-table th {
+      color: #FFFFFF; 
+      padding: 15px;
+      text-align: justify;
+      background-color: #7338A0;
+    }
+    
+    .dashboard-table td {
+      font-family: "Baloo";
+      color: #FFFFFF; 
+      padding: 15px;
+      text-align: justify;
+    }
+    
+    .dashboard-table tr:nth-child(even) {
+      background-color: #3F3653; 
+    }
+    
+    .dashboard-table tr:nth-child(odd) {
+      background-color: #271D3E; 
+    }
+  
+    .button-icon-container {
+      display: flex;
+      flex-direction: column; 
+      align-items: center; 
+      gap: 20px; 
+    }
+  
+  .btn-logout {
+    height: 60px;
+    color :#FFFFFF;
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    cursor: pointer;
+    margin-top: -10px;
+    margin-left: 10px;
+  }
+  
+  .img-action {
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+   
+  }
+  
+   .img-action {
+    margin-left: 20px; /* Add spacing between images */
+  }
+  
+  
+  
+  .popup-form {
+    font-family: "Baloo";
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #271d3e;
+    padding: 30px;
+    border-radius: 10px;
+    z-index: 1000;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+  }
+  
+  .popup-form h3 {
+    font-family: "Baloo";
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ffffff;
+  }
+  
+  .popup-form .form-control {
+    width: 100%;
+    background-color: #3f3653;
+    color: #ffffff;
+    font-size: 1rem;
+    padding: 10px;
+    border: 1px solid #6f687e; /* Add stroke with the specified color */
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+  
+  .popup-form .btn {
+    
+    background-color: #7338a0;
+    border-radius: 5px;
+    font-weight: bold;
+    padding: 10px;
+    font-size: 1rem;
+    color: #ffffff;
+    width: 100%;
+  }
+  
+  .popup-form .btn-create {
+    font-family: "Baloo";
+    background-color: #4A2574;
+    border-radius: 5px;
+    font-weight: bold;
+    padding: 10px;
+    font-size: 1rem;
+    color: #ffffff;
+    width: 50%;
+    margin-bottom: 10px;
+    margin-top: 15px;
+    margin-left: 100px;
+  }
+  
+  .popup-form .btn-cancel {
+    font-family: "Baloo";
+    background-color: #d7443e;
+    border-radius: 5px;
+    font-weight: bold;
+    padding: 10px;
+    font-size: 1rem;
+    color: #ffffff;
+    width: 50%;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    margin-left: 100px;
+  }
