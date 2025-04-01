@@ -31,6 +31,7 @@ import LesoneContent from "./Pages/Library/VideoLesson/LesoneContent.jsx";
 import VideoUpload from "./Pages/VideoUpload.jsx";
 import SuperAdmin from "./Pages/Login/Admin/SuperAdmin.jsx";
 import Admin from "./Pages/Login/Admin/AdminDashboard.jsx";
+import ProgressTracker from "./Pages/Dashboard/ProgressTracker.jsx";
 
 const router = createBrowserRouter([
   { path: "/", element: <Navigate to="/login" replace /> }, // Redirect "/" to "/login"
@@ -62,7 +63,8 @@ const router = createBrowserRouter([
       { path: "lesonecontent/:lessonKey/:termId", element: <LesoneContent /> },
       { path: "videoupload", element: <VideoUpload/> },
       { path: "admin", element: <Admin/> },
-      { path: "superadmin", element: <SuperAdmin/> }
+      { path: "superadmin", element: <SuperAdmin/> },
+      { path: "progresstracker", element: <ProgressTracker/> }
 ,
     ],
   },
