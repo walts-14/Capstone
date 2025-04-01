@@ -29,6 +29,8 @@ import VideoLecture from "./Pages/Library/Lectures/LectureVids.jsx";
 import LessonButtons from "./Pages/Dashboard/LessonButtons.jsx";
 import LesoneContent from "./Pages/Library/VideoLesson/LesoneContent.jsx";
 import VideoUpload from "./Pages/VideoUpload.jsx";
+import SuperAdmin from "./Pages/Login/Admin/SuperAdmin.jsx";
+import Admin from "./Pages/Login/Admin/AdminDashboard.jsx";
 
 const router = createBrowserRouter([
   { path: "/", element: <Navigate to="/login" replace /> }, // Redirect "/" to "/login"
@@ -58,7 +60,9 @@ const router = createBrowserRouter([
       { path: "finish", element: <Finish /> },
       { path: "VideoLecture/:title", element: <VideoLecture /> },
       { path: "lesonecontent/:lessonKey/:termId", element: <LesoneContent /> },
-      { path: "videoupload", element: <VideoUpload/> }
+      { path: "videoupload", element: <VideoUpload/> },
+      { path: "admin", element: <Admin/> },
+      { path: "superadmin", element: <SuperAdmin/> }
 ,
     ],
   },

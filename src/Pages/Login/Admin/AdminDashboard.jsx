@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom"; 
 import { FaUserPlus } from "react-icons/fa";
-import EditIcon from "../../assets/Edit.png";
-import RemoveIcon from "../../assets/Remove.png";
-import "../../css/Admin.css";
+import EditIcon from "../../../assets/Edit.png"; 
+import RemoveIcon from "../../../assets/Remove.png"; 
+import "../../../css/Admin.css";
 
 const DashboardAdmin = () => {
   const [users, setUsers] = useState([

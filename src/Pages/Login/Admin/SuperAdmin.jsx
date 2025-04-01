@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { FaUserPlus } from "react-icons/fa";
-import EditIcon from "../../assets/Edit.png"; 
-import RemoveIcon from "../../assets/Remove.png"; 
-import "../../css/SuperAdmin.css";
+import EditIcon from "../../../assets/Edit.png"; 
+import RemoveIcon from "../../../assets/Remove.png"; 
+import "../../../css/SuperAdmin.css";
 const SuperAdmin = () => {
   const [users, setUsers] = useState([
     { id: 1, name: "Curry", username: "curry123", email: "Curry@gmail.com", password: "********" },
