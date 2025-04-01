@@ -1,33 +1,32 @@
-import React, { useEffect, useRef, useState } from "react";
+// LesoneContent.js
+import React, { useEffect, useState, useContext } from "react";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+import LessonTerms from "../Terms/LessonTerms";
+import { ProgressContext } from "../../../Pages/Dashboard/ProgressContext"; // adjust the import path as needed
 import Back from '../../../assets/BackButton.png';
 import leftArrow from '../../../assets/leftArrow.png';
 import rightArrow from '../../../assets/rightArrow.png';
 import "../../../css/lesoneContent.css";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
-import LessonTerms from "../Terms/LessonTerms";
 
 const LesoneContent = () => {
   const { lessonKey, termId } = useParams();
   const navigate = useNavigate();
-  const videoRef = useRef(null);
   const location = useLocation();
-  
+  const { updateProgress } = useContext(ProgressContext);
+
   const showButton = location.state?.showButton || false;
   const fromLecture = location.state?.fromLecture || false;
   
   const termsArray = LessonTerms[lessonKey] || [];
-  
-  // Track current step
+  // Determine step from termId: if termId > 15 then it's step 2, otherwise step 1
   const [step, setStep] = useState(parseInt(termId, 10) > 15 ? 2 : 1);
-
-  // Define term ranges for each step
-  const firstPageTerms = termsArray.slice(0, 15);  // Terms 1-15
-  const secondPageTerms = termsArray.slice(15, 30); // Terms 16-30
+  
+  const firstPageTerms = termsArray.slice(0, 15);
+  const secondPageTerms = termsArray.slice(15, 30);
 
   const currentStepTerms = step === 1 ? firstPageTerms : secondPageTerms;
   const currentIndex = currentStepTerms.findIndex(term => term.id === parseInt(termId, 10));
 
-  // If term not found in the current step, reset to the first term of that step
   useEffect(() => {
     if (currentIndex === -1) {
       const firstTermId = currentStepTerms.length > 0 ? currentStepTerms[0].id : null;
@@ -35,13 +34,11 @@ const LesoneContent = () => {
         navigate(`/lesonecontent/${lessonKey}/${firstTermId}`, { state: { showButton, fromLecture } });
       }
     }
-  }, [step]);
+  }, [step, currentIndex, currentStepTerms, lessonKey, navigate, showButton, fromLecture]);
 
   if (currentIndex === -1) return <p>Loading...</p>;
 
   const { terms, definition, video } = currentStepTerms[currentIndex];
-
-  // Get previous and next terms within the step
   const prevTerm = currentStepTerms[currentIndex - 1] || currentStepTerms[0];
   const nextTerm = currentStepTerms[currentIndex + 1] || currentStepTerms[currentStepTerms.length - 1];
 
@@ -58,7 +55,16 @@ const LesoneContent = () => {
     }
   };
 
-   // Dynamic Back Button: If fromLecture is true, navigate back to LectureorQuiz; else, to term list.
+  // For simplicity, assume lessons with keys starting with "terms" are basic;
+  // adjust this logic if you have intermediate/advanced lessons.
+  const level = lessonKey.startsWith("terms") ? "basic" : "intermediate";
+
+  const handleUpdateProgress = () => {
+    const progressKey = step === 1 ? "step1Lecture" : "step2Lecture";
+    updateProgress(level, lessonKey, progressKey);
+    console.log(`Updated progress for ${lessonKey} ${progressKey}`);
+  };
+
   const handleBack = () => {
     if (location.state?.fromLecture) {
       navigate(`/lectureorquiz/${lessonKey}`, { state: { lessonKey } });
@@ -66,12 +72,12 @@ const LesoneContent = () => {
     } else {
       navigate(`/terms/${lessonKey}`, { state: { lessonKey } });
     }
-  }
+  };
 
   return (
     <>
       <div className="tryone-container">
-        <video ref={videoRef} key={video} width="650" height="400" controls autoPlay loop>
+        <video width="650" height="400" controls autoPlay loop>
           <source src={video} type="video/mp4" />
         </video>
       </div>
@@ -81,8 +87,6 @@ const LesoneContent = () => {
           <img src={Back} alt="Back" />
         </button>
       </div>
-
-    
 
       <div className="text-container">
         <div className="letter-container">
@@ -104,6 +108,16 @@ const LesoneContent = () => {
         </div>
       </div>
 
+      {/* When the user reaches the last term, show a button to update progress */}
+      {currentIndex === currentStepTerms.length - 1 && (
+        <div className="update-progress-container" style={{ textAlign: "center", marginTop: "20px" }}>
+          <button onClick={handleUpdateProgress} className="btn btn-primary">
+            {step === 1 ? "Complete Step 1 Lecture (25%)" : "Complete Step 2 Lecture (75%)"}
+          </button>
+        </div>
+      )}
+
+      {/* Navigate to the Quiz component when ready */}
       {showButton && currentIndex === currentStepTerms.length - 1 && (
         <div
           className="special-button-container"
@@ -114,7 +128,6 @@ const LesoneContent = () => {
           </button>
         </div>
       )}
-
     </>
   );
 };

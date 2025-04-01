@@ -32,6 +32,7 @@ import VideoUpload from "./Pages/VideoUpload.jsx";
 import SuperAdmin from "./Pages/Login/Admin/SuperAdmin.jsx";
 import Admin from "./Pages/Login/Admin/AdminDashboard.jsx";
 import ProgressTracker from "./Pages/Dashboard/ProgressTracker.jsx";
+import { ProgressProvider } from "../src/Pages/Dashboard/ProgressContext.jsx"; // adjust the path accordingly
 
 const router = createBrowserRouter([
   { path: "/", element: <Navigate to="/login" replace /> }, // Redirect "/" to "/login"
@@ -84,7 +85,9 @@ createRoot(document.getElementById("root")).render(
         style: { background: "#363636", color: "#fff" },
       }}
     />
-    <RouterProvider router={router} />
+     <ProgressProvider>
+      <RouterProvider router={router} />
+    </ProgressProvider>
   </StrictMode>
 );
 
