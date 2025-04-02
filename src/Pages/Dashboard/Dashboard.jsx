@@ -82,6 +82,7 @@ function Dashboard() {
           <p className="fs-1 text-center ms-4 ">#1</p>
           <p className="text-nowrap fs-2">{userName}</p>
         </div>
+        <button onClick={logout}></button>
         <ProgressTracker />
       </div>
 
