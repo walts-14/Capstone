@@ -52,7 +52,9 @@ function Quiz() {
   const [wrongAnswers, setWrongAnswers] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
-  const [remainingQuestions, setRemainingQuestions] = useState([...quizQuestions]);
+  const [remainingQuestions, setRemainingQuestions] = useState([
+    ...quizQuestions,
+  ]);
   const [quizFinished, setQuizFinished] = useState(false); // Flag when quiz is complete
 
   // Lives system
@@ -73,7 +75,9 @@ function Quiz() {
           console.error("User email not found in localStorage.");
           return;
         }
-        const response = await axios.get(`${backendURL}/api/lives/email/${userEmail}`);
+        const response = await axios.get(
+          `${backendURL}/api/lives/email/${userEmail}`
+        );
         setLives(response.data.lives);
       } catch (error) {
         console.error("Error fetching lives:", error);
@@ -93,7 +97,11 @@ function Quiz() {
 
   // Shuffle answer options for the selected question
   const selectRandomQuestion = () => {
-    if (remainingQuestions.length === 0 || attempts >= totalQuestions || lives <= 0) {
+    if (
+      remainingQuestions.length === 0 ||
+      attempts >= totalQuestions ||
+      lives <= 0
+    ) {
       // Mark quiz as finished instead of immediately navigating to finish page
       setQuizFinished(true);
       toast.success("Quiz completed!");
@@ -103,7 +111,9 @@ function Quiz() {
     const randomIndex = Math.floor(Math.random() * remainingQuestions.length);
     const selectedQuiz = remainingQuestions[randomIndex];
     // Shuffle answer options randomly
-    const shuffledOptions = [...selectedQuiz.answerOptions].sort(() => Math.random() - 0.5);
+    const shuffledOptions = [...selectedQuiz.answerOptions].sort(
+      () => Math.random() - 0.5
+    );
     const updatedQuiz = { ...selectedQuiz, answerOptions: shuffledOptions };
 
     setRemainingQuestions((prev) =>
@@ -133,7 +143,9 @@ function Quiz() {
       setShowResult(true);
       try {
         if (!isCorrect) {
-          await axios.post(`${backendURL}/api/lives/email/${userEmail}/lose-life`);
+          await axios.post(
+            `${backendURL}/api/lives/email/${userEmail}/lose-life`
+          );
           setLives((prev) => Math.max(0, prev - 1));
           setStreak(0);
           setWrongAnswers((prev) => prev + 1);
@@ -141,11 +153,16 @@ function Quiz() {
           setCorrectAnswers((prev) => prev + 1);
           setStreak((prev) => prev + 1);
           if ((streak + 1) % 3 === 0) {
-            await axios.post(`${backendURL}/api/lives/email/${userEmail}/gain-life`);
+            await axios.post(
+              `${backendURL}/api/lives/email/${userEmail}/gain-life`
+            );
             setLives((prev) => prev + 1);
             toast.success("Streak bonus! +1 life");
           }
-          await axios.post(`${backendURL}/api/points/email/${userEmail}/gain-points`, { points: 10 });
+          await axios.post(
+            `${backendURL}/api/points/email/${userEmail}/gain-points`,
+            { points: 10 }
+          );
         }
       } catch (error) {
         console.error("Error updating lives/points:", error);
@@ -187,11 +204,7 @@ function Quiz() {
         className="back fs-1 fw-bold d-flex"
         onClick={() => navigate(`/page/${lessonKey}`)}
       >
-        <img
-          src={backkpoint}
-          className="img-fluid w-50 h-50 p-1 mt-2"
-          alt="Back"
-        />
+        <img src={backkpoint} className="img-fluid p-1 mt-2" alt="Back" />
         <p>Back</p>
       </div>
 
@@ -215,8 +228,13 @@ function Quiz() {
       {quizFinished ? (
         // Once quiz is finished, show a button to update quiz progress and complete this step.
         <div style={{ textAlign: "center", marginTop: "20px" }}>
-          <button onClick={handleUpdateQuizProgress} className="btn btn-primary">
-            {currentStep === 1 ? "Complete Step 1 Quiz (50%)" : "Complete Step 2 Quiz (100%)"}
+          <button
+            onClick={handleUpdateQuizProgress}
+            className="btn btn-primary"
+          >
+            {currentStep === 1
+              ? "Complete Step 1 Quiz (50%)"
+              : "Complete Step 2 Quiz (100%)"}
           </button>
         </div>
       ) : (
@@ -229,12 +247,18 @@ function Quiz() {
             {quiz.answerOptions.map((option, index) => (
               <div
                 key={`${quiz.question}-${index}`}
-                className={`choices d-flex justify-content-between align-items-center rounded-4 col-md-6 col-lg-11 m-5 ${selectedAnswer === index ? "selected" : ""}`}
+                className={`choices d-flex justify-content-between align-items-center rounded-4 col-md-6 col-lg-11 m-5 ${
+                  selectedAnswer === index ? "selected" : ""
+                }`}
                 onClick={() => handleChoiceClick(index)}
                 style={{ pointerEvents: showResult ? "none" : "auto" }}
               >
                 <div
-                  className={`choice-${["A", "B", "C", "D"][index].toLowerCase()} rounded-4 m-4 ${selectedAnswer === index ? "selected" : ""}`}
+                  className={`choice-${["A", "B", "C", "D"][
+                    index
+                  ].toLowerCase()} rounded-4 m-4 ${
+                    selectedAnswer === index ? "selected" : ""
+                  }`}
                 >
                   <strong>{["A", "B", "C", "D"][index]}</strong>
                   <video
@@ -254,14 +278,20 @@ function Quiz() {
           </div>
 
           {showResult && (
-            <div className={`result-ans d-flex justify-content-between text-center ps-5 pt-3 fs-2 ${isCorrect ? "correct-ans" : "wrong-ans"}`}>
+            <div
+              className={`result-ans d-flex justify-content-between text-center ps-5 pt-3 fs-2 ${
+                isCorrect ? "correct-ans" : "wrong-ans"
+              }`}
+            >
               <span className="me-auto">
                 {isCorrect ? "Correct answer" : "Wrong answer"}
               </span>
               {isCorrect && (
                 <img src={check} className="check-icon mt-5" alt="Correct" />
               )}
-              {!isCorrect && <img src={ekis} className="ekis-icon" alt="Wrong" />}
+              {!isCorrect && (
+                <img src={ekis} className="ekis-icon" alt="Wrong" />
+              )}
             </div>
           )}
 
