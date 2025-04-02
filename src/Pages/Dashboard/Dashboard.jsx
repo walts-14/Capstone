@@ -8,66 +8,44 @@ import ekis from "../../assets/ekis.png";
 import repeat from "../../assets/repeat logo.png";
 import "../../css/Dashboard.css";
 import Sidenav from "../../Components/Sidenav";
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 import LessonButtons from "./LessonButtons.jsx";
 import axios from "axios";
 import ProgressTracker from "./ProgressTracker.jsx"; // Import ProgressTracker component
 
 function Dashboard() {
-  const navigate = useNavigate();
   const [userName, setUserName] = React.useState("");
   const [streak, setStreak] = React.useState(0);
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("loggedIn"); // Also clear logged-in state
-    navigate("/login", { replace: true }); // Ensure redirection
-  };
-
-  useEffect(() => {
-    const userName = localStorage.getItem("userName");
-    setUserName(userName);
-  });
-
-  useEffect(() => {
+  const fetchStreak = async () => {
     const storedUserEmail = localStorage.getItem("userEmail");
+    console.log("📩 Email sent from Frontend:", storedUserEmail); // ✅ Verify email
 
     if (!storedUserEmail) {
       console.error("❌ No email found in localStorage");
       return;
     }
 
-    const fetchStreak = async () => {
-      const storedUserEmail = localStorage.getItem("userEmail");
-      console.log("📩 Email sent from Frontend:", storedUserEmail); // ✅ Verify email
+    try {
+      const response = await axios.post("/api/update-streak", {
+        email: storedUserEmail,
+      });
 
-      if (!storedUserEmail) {
-        console.error("❌ No email found in localStorage");
-        return;
+      console.log("🔥 Streak Response Data:", response.data);
+      if (response.data.streak !== undefined) {
+        setStreak(response.data.streak);
+      } else {
+        console.warn("⚠️ No streak data found in response");
       }
+    } catch (error) {
+      console.error(
+        "❌ Error fetching streak data:",
+        error.response?.data || error.message
+      );
+    }
+  };
 
-      try {
-        const response = await axios.post("/api/update-streak", {
-          email: storedUserEmail,
-        });
-
-        console.log("🔥 Streak Response Data:", response.data);
-        if (response.data.streak !== undefined) {
-          setStreak(response.data.streak);
-        } else {
-          console.warn("⚠️ No streak data found in response");
-        }
-      } catch (error) {
-        console.error(
-          "❌ Error fetching streak data:",
-          error.response?.data || error.message
-        );
-      }
-    };
-
-    fetchStreak();
-  }, []);
+  fetchStreak();
+  [];
 
   return (
     <>
