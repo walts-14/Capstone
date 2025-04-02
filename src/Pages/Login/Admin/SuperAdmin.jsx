@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { FaUserPlus } from "react-icons/fa";
-import EditIcon from "../../../assets/Edit.png"; 
-import RemoveIcon from "../../../assets/Remove.png"; 
+import EditIcon from "../../../assets/Edit.png";
+import RemoveIcon from "../../../assets/Remove.png";
 import "../../../css/SuperAdmin.css";
+
 const SuperAdmin = () => {
   const [users, setUsers] = useState([
     { id: 1, name: "Curry", username: "curry123", email: "Curry@gmail.com", password: "********" },
@@ -14,8 +15,11 @@ const SuperAdmin = () => {
     { id: 2, name: "Taylor", username: "taylor456", email: "Taylor@gmail.com", password: "********" },
   ]);
 
-  const [activeTab, setActiveTab] = useState("Users"); 
+  const [activeTab, setActiveTab] = useState("Users");
   const [showForm, setShowForm] = useState(false);
+  const [showSelectionModal, setShowSelectionModal] = useState(false); // For the selection modal
+  const [formMode, setFormMode] = useState("create"); // Tracks whether it's "create" or "edit"
+  const [formType, setFormType] = useState(""); // Tracks whether it's "Student" or "Teacher"
   const [formData, setFormData] = useState({
     id: null,
     name: "",
@@ -23,6 +27,7 @@ const SuperAdmin = () => {
     email: "",
     password: "",
     confirmPassword: "",
+    
   });
 
   const handleInputChange = (e) => {
@@ -32,22 +37,23 @@ const SuperAdmin = () => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
+
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
 
     const updatedEntry = {
-      id: formData.id || (activeTab === "Users" ? users.length + 1 : teachers.length + 1),
+      id: formData.id || (formType === "Student" ? users.length + 1 : teachers.length + 1),
       name: formData.name,
       username: formData.username,
       email: formData.email,
       password: formData.password,
     };
 
-    if (formData.id) {
+    if (formMode === "edit") {
       // Editing an existing entry
-      if (activeTab === "Users") {
+      if (formType === "Student") {
         const updatedUsers = users.map((user) =>
           user.id === formData.id ? updatedEntry : user
         );
@@ -60,10 +66,12 @@ const SuperAdmin = () => {
       }
     } else {
       // Adding a new entry
-      if (activeTab === "Users") {
-        setUsers([...users, updatedEntry]);
+      if (formType === "Student") {
+        setUsers([...users, updatedEntry]); // Add to Users
+        setActiveTab("Users"); // Switch to Users tab
       } else {
-        setTeachers([...teachers, updatedEntry]);
+        setTeachers([...teachers, updatedEntry]); // Add to Teachers
+        setActiveTab("Teacher"); // Switch to Teacher tab
       }
     }
 
@@ -76,7 +84,7 @@ const SuperAdmin = () => {
       password: "",
       confirmPassword: "",
     });
-    setShowForm(false);
+    setShowForm(false); // Close the form
   };
 
   const handleDeleteUser = (id) => {
@@ -91,86 +99,75 @@ const SuperAdmin = () => {
   };
 
   const handleEditUser = (id) => {
-    console.log("Edit button clicked for ID:", id); // Debugging log
-
-    const dataToEdit = activeTab === "Users" 
-      ? users.find((user) => user.id === id) 
+    const dataToEdit = activeTab === "Users"
+      ? users.find((user) => user.id === id)
       : teachers.find((teacher) => teacher.id === id);
 
     if (dataToEdit) {
       setFormData({
-        id: dataToEdit.id, // Include the ID to indicate edit mode
+        id: dataToEdit.id,
         name: dataToEdit.name,
         username: dataToEdit.username,
         email: dataToEdit.email || "",
         password: dataToEdit.password,
-        confirmPassword: dataToEdit.password, // Pre-fill confirm password
+        confirmPassword: dataToEdit.password,
       });
-      setShowForm(true); // Show the form for editing
-      console.log("Form data set for editing:", dataToEdit); // Debugging log
+      setFormMode("edit"); // Set form mode to "edit"
+      setShowForm(true);
     }
+  };
+
+  const handleCreateUser = () => {
+    setShowSelectionModal(true); // Open the selection modal
   };
 
   const dataToDisplay = activeTab === "Users" ? users : teachers;
 
   return (
     <div className="Dashboard">
-    <div
-      className="container-fluid"
-      style={{
-        borderRadius: "10px",
-        color: "#FFFFFF",
-      }}
-    >
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2
-          className="text-light Dashboard px-5 py-2"
-          style={{
-            backgroundColor: "#7338A0",
-            borderRadius: "10px",
-            display: "inline-block",
-            margin: "0",
-          }}
-        >
-          Dashboard
-        </h2>
+      <div className="AdminDashboard">
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <h2>Dashboard</h2>
+        </div>
       </div>
-    </div>
-      {/* Header */}
-      <div className="Create ">
+
+      {/* Create Button */}
+      <div className="CreateAccount">
         <button
-          className="btn text-light px-5 py-3"
+          className="btn text-light px-6 py-4"
           style={{
             backgroundColor: "#4A2574",
             color: "#FFFFFF",
             borderRadius: "10px",
             fontWeight: "bold",
-            fontSize: "1.5rem", // Increase font size
-            padding: "30px", // Increase padding
+            fontSize: "1.5rem",
+            padding: "30px",
+            display: "flex",
+            alignItems: "center",
+            textAlign: "center",
           }}
-          onClick={() => {
-            setShowForm(true);
-            console.log("Form is now visible");
-          }}
+          onClick={handleCreateUser}
         >
           <FaUserPlus /> Create
         </button>
       </div>
 
       {/* Tabs */}
-      <div className="tabs">
-        <button
-          className={`tab ${activeTab === "Users" ? "active" : ""}`}
-          onClick={() => setActiveTab("Users")}
-        >
-          Users
-        </button>
-        <button
-          className={`tab ${activeTab === "Teacher" ? "active" : ""}`}
-          onClick={() => setActiveTab("Teacher")}
-        >
-          Teacher
-        </button>
+      <div className="divtabs">
+        <div className="tabs">
+          <button
+            className={`tabss ${activeTab === "Users" ? "active" : ""}`}
+            onClick={() => setActiveTab("Users")}
+          >
+            Users
+          </button>
+          <button
+            className={`tabss ${activeTab === "Teacher" ? "active" : ""}`}
+            onClick={() => setActiveTab("Teacher")}
+          >
+            Teacher
+          </button>
+        </div>
       </div>
 
       {/* Table */}
@@ -183,7 +180,7 @@ const SuperAdmin = () => {
               <th>Username</th>
               <th>Email</th>
               <th>Password</th>
-              <th>Actions</th>
+              <th> </th>
             </tr>
           </thead>
           <tbody>
@@ -221,12 +218,13 @@ const SuperAdmin = () => {
         </table>
       </div>
 
+      {/* Popup Form */}
       {showForm && (
         <div
           className="popup-form"
           style={{
             position: "fixed",
-            top: "25%",
+            top: "30%",
             left: "50%",
             transform: "translate(-50%, -50%)",
             backgroundColor: "#271D3E",
@@ -247,7 +245,9 @@ const SuperAdmin = () => {
               color: "#FFFFFF",
             }}
           >
-            {formData.id ? "Edit Account" : "Add Account"}
+            {formMode === "edit"
+              ? `Edit ${formType} Account`
+              : `Add ${formType} Account`}
           </h3>
           <form onSubmit={handleFormSubmit}>
             <div className="mb-3">
@@ -264,7 +264,7 @@ const SuperAdmin = () => {
                   color: "#FFFFFF",
                   fontSize: "1rem",
                   padding: "10px",
-                  border: "1px solid #6F687E", // Add stroke with the specified color
+                  border: "1px solid #6F687E",
                   borderRadius: "10px",
                   marginBottom: "10px",
                 }}
@@ -285,7 +285,7 @@ const SuperAdmin = () => {
                   color: "#FFFFFF",
                   fontSize: "1rem",
                   padding: "10px",
-                  border: "1px solid #6F687E", // Add stroke with the specified color
+                  border: "1px solid #6F687E",
                   borderRadius: "10px",
                   marginBottom: "10px",
                 }}
@@ -306,7 +306,7 @@ const SuperAdmin = () => {
                   color: "#FFFFFF",
                   fontSize: "1rem",
                   padding: "10px",
-                  border: "1px solid #6F687E", // Add stroke with the specified color
+                  border: "1px solid #6F687E",
                   borderRadius: "10px",
                   marginBottom: "10px",
                 }}
@@ -327,7 +327,7 @@ const SuperAdmin = () => {
                   color: "#FFFFFF",
                   fontSize: "1rem",
                   padding: "10px",
-                  border: "1px solid #6F687E", // Add stroke with the specified color
+                  border: "1px solid #6F687E",
                   borderRadius: "10px",
                   marginBottom: "10px",
                 }}
@@ -348,52 +348,113 @@ const SuperAdmin = () => {
                   color: "#FFFFFF",
                   fontSize: "1rem",
                   padding: "10px",
-                  border: "1px solid #6F687E", // Add stroke with the specified color
+                  border: "1px solid #6F687E",
                   borderRadius: "10px",
                   marginBottom: "10px",
                 }}
                 required
               />
             </div>
-            <button type="submit"
-             className="btn-create">
-              Create
+            <button type="submit" className="btn-create">
+              {formMode === "edit" ? "Save Changes" : "Create"}
             </button>
             <button
               type="button"
               className="btn-cancel"
               onClick={() => setShowForm(false)}
-            ><script type="module" src=""></script>
+            >
               Cancel
             </button>
           </form>
         </div>
       )}
-<div
-        className="Logout mt-3"
-        style={{
-          display: "flex",
-          justifyContent: "center", // Center the button horizontally
-          marginTop: "20px", // Add spacing from the table
-        }}
-      >
 
-<button
-          className="btn-logout px-5 py-3"
+      {/* Selection Modal */}
+      {showSelectionModal && (
+        <div
+          className="popup-modal"
           style={{
-            backgroundColor: "#D7443E",
-            color: "#FFFFFF",
-            borderRadius: "30px",
-            fontWeight: "bold",
-            fontSize: "1.5rem",
-            padding: "10px 30px", // Adjust padding for better appearance
+            position: "fixed",
+            top: "30%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            backgroundColor: "#271D3E",
+            padding: "30px",
+            borderRadius: "10px",
+            zIndex: 1000,
+            width: "90%",
+            maxWidth: "400px",
+            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.25)",
           }}
         >
-          Log out
-        </button>
+          <h3
+            className="text-light mb-3"
+            style={{
+              textAlign: "center",
+              fontSize: "2rem",
+              fontWeight: "bold",
+              color: "#FFFFFF",
+            }}
+          >
+            Create Account
+          </h3>
+          <div style={{ display: "flex", justifyContent: "space-around" }}>
+            <button
+              className="btn btn-student"
+              style={{
+                backgroundColor: "#4A2574",
+                color: "#FFFFFF",
+                borderRadius: "10px",
+                fontWeight: "bold",
+                fontSize: "1.2rem",
+                padding: "10px 20px",
+              }}
+              onClick={() => {
+                setFormType("Student"); // Set form type to Student
+                setShowSelectionModal(false); // Close the modal
+                setShowForm(true); // Open the form
+              }}
+            >
+              Student
+            </button>
+            <button
+              className="btn btn-teacher"
+              style={{
+                backgroundColor: "#4A2574",
+                color: "#FFFFFF",
+                borderRadius: "10px",
+                fontWeight: "bold",
+                fontSize: "1.2rem",
+                padding: "10px 20px",
+              }}
+              onClick={() => {
+                setFormType("Teacher"); // Set form type to Teacher
+                setShowSelectionModal(false); // Close the modal
+                setShowForm(true); // Open the form
+              }}
+            >
+              Teacher
+            </button>
+          </div>
         </div>
-      </div>
+      )}
+    </div>
   );
 };
-
+<div className="Logout">
+<button
+  className="btn-logout px-5 py-3"
+  style={{
+    backgroundColor: "#D7443E",
+    color: "#FFFFFF",
+    borderRadius: "30px",
+    fontWeight: "bold",
+    fontSize: "1.5rem",
+    padding: "10px 30px", // Adjust padding for better appearance
+  }}
+>
+  Log out
+</button>
+</div>
 export default SuperAdmin;
+

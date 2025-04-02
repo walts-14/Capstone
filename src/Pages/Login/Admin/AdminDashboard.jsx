@@ -89,7 +89,7 @@ const DashboardAdmin = () => {
   };
 
   return (
-    <div className="Dashboard">
+    <div className="DashboardAdmin">
       <div
         className="container-fluid"
         style={{

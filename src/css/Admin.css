@@ -9,19 +9,24 @@
       font-family: "Baloo";
       background-color: #100429;
   }
-    .Dashboard {
-      height: 80px;
-       margin-right: 50px;
-       font-family: "Baloo";
-  }
-    .Dashboard h2{
-      width: 20%;;
-      text-align: center;
-      font-family: "Baloo";
-      font-weight:bold;
-      color: #FFFFFF;
-      font-size: 60px;
-    }
+ .Dashboard h2{
+  text-align: center;
+  position: relative;
+  width: 120%;
+  text-align: center;
+  font-family: "Baloo";
+  font-weight:bold;
+  color: #FFFFFF;
+  font-size: 60px;
+  background-color: #7338a0;
+  color: #ffffff;
+  background-color: #7338a0;
+  padding: 10px 20px; /* Optional: Add padding for spacing */
+  border-radius: 10px; 
+  top: -450px; /* Adjust the vertical position */
+  left: -230%; /* Center horizontally */
+}
+
     
     button {
       display: flex; 
@@ -98,7 +103,7 @@
     justify-content: center; 
     align-items: center; 
     cursor: pointer;
-    margin-top: -10px;
+    margin-top: -20px;
     margin-left: 10px;
   }
   
