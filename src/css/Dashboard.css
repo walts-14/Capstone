@@ -261,19 +261,3 @@ body {
   width: 20vw;
   font-size: 2rem;
 }
-.btns {
-  display: flex;
-  position: fixed;
-  bottom: 10em;
-  right: 2.4em;
-  width: 30em;
-  justify-content: center;
-  align-items: center;
-  gap: 1em;
-}
-.btns .btn:nth-child(1) {
-  font-family: "Baloo", sans-serif;
-  width: 35%;
-  height: 7vh;
-  background-color: var(--midlight-red);
-}
