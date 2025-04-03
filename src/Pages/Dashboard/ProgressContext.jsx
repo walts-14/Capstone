@@ -1,5 +1,5 @@
 // ProgressContext.js
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 
 export const ProgressContext = createContext();
 
@@ -24,8 +24,19 @@ const initialProgress = {
   }
 };
 
+const PROGRESS_STORAGE_KEY = 'progressData';
+
 export const ProgressProvider = ({ children }) => {
-  const [progressData, setProgressData] = useState(initialProgress);
+  // Try to initialize from localStorage, else use initialProgress
+  const [progressData, setProgressData] = useState(() => {
+    const storedData = localStorage.getItem(PROGRESS_STORAGE_KEY);
+    return storedData ? JSON.parse(storedData) : initialProgress;
+  });
+
+  // Save progressData to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(progressData));
+  }, [progressData]);
 
   // Update progress for a given level, lessonKey, and part (e.g., "step1Lecture")
   const updateProgress = (level, lessonKey, part) => {
