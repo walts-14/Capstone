@@ -131,7 +131,7 @@ const DashboardAdmin = () => {
           className="popup-form"
           style={{
             position: "fixed",
-            top: "25%",
+            top: "35%",
             left: "50%",
             transform: "translate(-50%, -50%)",
             backgroundColor: "#271D3E",

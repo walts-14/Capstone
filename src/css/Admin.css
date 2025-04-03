@@ -154,7 +154,7 @@
   .popup-form {
     font-family: "Baloo";
     position: fixed;
-    top: 50%;
+    top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: #271d3e;
@@ -204,10 +204,10 @@
     padding: 10px;
     font-size: 1rem;
     color: #ffffff;
-    width: 50%;
+    width: 70%;
     margin-bottom: 10px;
     margin-top: 15px;
-    margin-left: 100px;
+    margin-left: 50px;
   }
   
   .popup-form .btn-cancel {
@@ -218,10 +218,10 @@
     padding: 10px;
     font-size: 1rem;
     color: #ffffff;
-    width: 50%;
+    width: 70%;
     margin-bottom: 10px;
     margin-top: 10px;
-    margin-left: 100px;
+    margin-left: 50px;
   }  
   
   /* Log Out Button */
