@@ -27,7 +27,6 @@ const SuperAdmin = () => {
     email: "",
     password: "",
     confirmPassword: "",
-    
   });
 
   const handleInputChange = (e) => {
@@ -124,6 +123,7 @@ const SuperAdmin = () => {
   const dataToDisplay = activeTab === "Users" ? users : teachers;
 
   return (
+  <div class="superadmin-body">
     <div className="Dashboard">
       <div className="AdminDashboard">
         <div className="d-flex justify-content-between align-items-center mb-3">
@@ -134,7 +134,7 @@ const SuperAdmin = () => {
       {/* Create Button */}
       <div className="CreateAccount">
         <button
-          className="btn text-light px-6 py-4"
+          className="btn text-light px-1 py-1"
           style={{
             backgroundColor: "#4A2574",
             color: "#FFFFFF",
@@ -410,9 +410,9 @@ const SuperAdmin = () => {
                 padding: "10px 20px",
               }}
               onClick={() => {
-                setFormType("Student"); // Set form type to Student
-                setShowSelectionModal(false); // Close the modal
-                setShowForm(true); // Open the form
+                setFormType("Student");
+                setShowSelectionModal(false);
+                setShowForm(true);
               }}
             >
               Student
@@ -428,9 +428,9 @@ const SuperAdmin = () => {
                 padding: "10px 20px",
               }}
               onClick={() => {
-                setFormType("Teacher"); // Set form type to Teacher
-                setShowSelectionModal(false); // Close the modal
-                setShowForm(true); // Open the form
+                setFormType("Teacher");
+                setShowSelectionModal(false);
+                setShowForm(true);
               }}
             >
               Teacher
@@ -438,23 +438,25 @@ const SuperAdmin = () => {
           </div>
         </div>
       )}
+
+<div className="SuperAdminLogout">
+<button
+          className="btn-logout px-4 py-3"
+          style={{
+            backgroundColor: "#D7443E",
+            color: "#FFFFFF",
+            borderRadius: "40px",
+            fontWeight: "bold",
+            fontSize: "1.5rem",
+          }}
+        >
+    Log out
+  </button>
+</div>
     </div>
+   </div>
   );
 };
-<div className="Logout">
-<button
-  className="btn-logout px-5 py-3"
-  style={{
-    backgroundColor: "#D7443E",
-    color: "#FFFFFF",
-    borderRadius: "30px",
-    fontWeight: "bold",
-    fontSize: "1.5rem",
-    padding: "10px 30px", // Adjust padding for better appearance
-  }}
->
-  Log out
-</button>
-</div>
+
 export default SuperAdmin;
 

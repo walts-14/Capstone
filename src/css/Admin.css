@@ -4,89 +4,131 @@
     font-style: normal;
   }
   
+  /* Ensure the body allows vertical scrolling */
   body {
-      margin: 1;
-      font-family: "Baloo";
-      background-color: #100429;
+    overflow-y: auto;
   }
- .Dashboard h2{
-  text-align: center;
+ 
+  /* Dashboard Container */
+  .admin-body {
   position: relative;
-  width: 120%;
-  text-align: center;
-  font-family: "Baloo";
-  font-weight:bold;
-  color: #FFFFFF;
-  font-size: 60px;
-  background-color: #7338a0;
-  color: #ffffff;
-  background-color: #7338a0;
-  padding: 10px 20px; /* Optional: Add padding for spacing */
-  border-radius: 10px; 
-  top: -450px; /* Adjust the vertical position */
-  left: -230%; /* Center horizontally */
-}
+  width: 100%;
+  min-height: 100vh;
+  background-color: #100429;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 20px;
+  box-sizing: border-box;
+  }
 
+  /* Dashboard Heading */
+  .DashboardAdmin h2 {
+    width: 20%;
+    margin-left: -40px;
+    text-align: center;
+    font-family: "Baloo";
+    font-weight: bold;
+    color: #FFFFFF;
+    font-size: 60px;
+    background-color: #7338a0;
+    padding: 10px 20px; /* Add padding for spacing */
+    border-radius: 10px;
+  }
     
-    button {
-      display: flex; 
-      justify-content: center; 
-      align-items: center; 
-      height: 40px; 
-      width: auto; 
-      padding: 0 10px; 
-      border-radius: 5px; 
-      border: none; 
-      cursor: pointer; 
-    }
-    
-    
+    /* Create Button */
     .Create {
+      position: absolute;
+      top: 80px; /* Adjust position relative to the top */
+      right: 210px; /* Align to the right */
+      background-color: #4A2574;
       color: #FFFFFF;
-      display: flex; 
-      justify-content: center; 
-      align-items: center; 
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 1.2rem;
+      padding: 10px 20px;
       cursor: pointer;
-      position: absolute; /* Use absolute positioning */
-      bottom: 900px; 
-      right: 250px; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .Create:hover {
+      background-color: #5b2d8a; /* Slightly lighter on hover */
     }
   
+    /* Table Container */
+    .contentdiv {
+      max-height: calc(100vh - 200px); /* Adjust height dynamically */
+      margin-top: 20px; /* Add spacing above the table */
+    }
+
+    /* For Webkit Browsers (Chrome, Edge, Safari) */
+    .contentdiv::-webkit-scrollbar {
+      width: 8px; /* Set the width of the scrollbar */
+    }
+
+    .contentdiv::-webkit-scrollbar-thumb {
+      background-color: #7338a0; /* Set the color of the scrollbar thumb */
+      border-radius: 10px; /* Make the scrollbar thumb rounded */
+    }
+
+    .contentdiv::-webkit-scrollbar-track {
+      background-color: #100429; /* Set the color of the scrollbar track */
+    }
     
-    
+    /* Table */
     .dashboard-table {
       font-size: 1.5rem;
-      width: 80%; 
-      margin: auto;
-      margin-top: 20px; 
-      border-collapse: collapse;
-      font-family: "Baloo"; 
-      background-color: #2E2E4D; 
-      border-radius: 10px;
-      overflow: hidden;
+      width: 80%; /* Expand to fit the container */
+      margin: 20px auto; /* Center the table horizontally and add spacing */
+      color: #FFFFFF;
+      border-collapse: separate; /* Use 'separate' to allow border radius */
+      border-spacing: 0; /* Remove spacing between cells */
+      table-layout: fixed;
+      border-radius: 10px; /* Add border radius */
+      overflow: hidden; /* Ensure content respects the border radius */
+      background-color: #2E2E4D; /* Background color for the table */
+      position: relative; /* Ensure it behaves as part of the normal flow */
+    }
     
+    .dashboard-table th,
+    .dashboard-table td {
+      padding: 10px;
+      text-align: center;
+      white-space: nowrap; /* Prevents text wrapping inside cells */
+      overflow: hidden;
+      text-overflow: ellipsis; /* Ensures content stays within the cell */
     }
     
     .dashboard-table th {
-      color: #FFFFFF; 
-      padding: 15px;
-      text-align: justify;
-      background-color: #7338A0;
-    }
-    
-    .dashboard-table td {
-      font-family: "Baloo";
-      color: #FFFFFF; 
-      padding: 15px;
-      text-align: justify;
+      background-color: #7338a0;
+      color: #FFFFFF;
     }
     
     .dashboard-table tr:nth-child(even) {
-      background-color: #3F3653; 
+      background-color: #271d3e;
     }
     
     .dashboard-table tr:nth-child(odd) {
-      background-color: #271D3E; 
+      background-color: #3f3653;
+    }
+    
+    /* Add border radius to the first and last rows */
+    .dashboard-table tr:first-child th:first-child {
+      border-top-left-radius: 10px; /* Top-left corner */
+    }
+    
+    .dashboard-table tr:first-child th:last-child {
+      border-top-right-radius: 10px; /* Top-right corner */
+    }
+    
+    .dashboard-table tr:last-child td:first-child {
+      border-bottom-left-radius: 10px; /* Bottom-left corner */
+    }
+    
+    .dashboard-table tr:last-child td:last-child {
+      border-bottom-right-radius: 10px; /* Bottom-right corner */
     }
   
     .button-icon-container {
@@ -95,17 +137,6 @@
       align-items: center; 
       gap: 20px; 
     }
-  
-  .btn-logout {
-    height: 60px;
-    color :#FFFFFF;
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    cursor: pointer;
-    margin-top: -20px;
-    margin-left: 10px;
-  }
   
   .img-action {
     width: 35px;
@@ -191,4 +222,13 @@
     margin-bottom: 10px;
     margin-top: 10px;
     margin-left: 100px;
+  }  
+  
+  /* Log Out Button */
+  .Logout{
+    margin-left: 1370px;
+    display: flex;
+    justify-content: center; /* Center the button horizontally */
+    align-items: center;
   }
+ 

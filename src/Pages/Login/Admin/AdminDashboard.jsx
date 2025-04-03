@@ -89,39 +89,38 @@ const DashboardAdmin = () => {
   };
 
   return (
+    <div className="admin-body"> 
     <div className="DashboardAdmin">
-      <div
-        className="container-fluid"
-        style={{
-          borderRadius: "10px",
-          color: "#FFFFFF",
-        }}
-      >
-        <div className="d-flex justify-content-between align-items-center mb-3">
-          <h2
-            className="text-light Dashboard px-5 py-2"
-            style={{
-              backgroundColor: "#7338A0",
-              borderRadius: "10px",
-              display: "inline-block",
-              margin: "0",
-            }}
-          >
+          <h2>
             Dashboard
           </h2>
-        </div>
       </div>
-      <div className="Create">
-        <button
+      <div className="Create ">
+      <button
+          className="btn text-light px-1 py-1"
           style={{
             backgroundColor: "#4A2574",
             color: "#FFFFFF",
             borderRadius: "10px",
             fontWeight: "bold",
-            fontSize: "1.5rem", 
-            padding: "30px", 
+            fontSize: "1.5rem",
+            padding: "30px",
+            display: "flex",
+            alignItems: "center",
+            textAlign: "center",
           }}
-          onClick={() => setShowForm(true)}
+          onClick={() => {
+            // Reset formData for creating a new user
+            setFormData({
+              id: null, // Ensure no ID is set for new users
+              name: "",
+              username: "",
+              email: "",
+              password: "",
+              confirmPassword: "",
+            });
+            setShowForm(true); // Show the form
+          }}
         >
           <FaUserPlus /> Create
         </button>
@@ -294,7 +293,7 @@ const DashboardAdmin = () => {
           </form>
         </div>
       )}
-
+    <div className="contentdiv">
       <table
         className="dashboard-table text-light mt-4"
         style={{
@@ -335,7 +334,20 @@ const DashboardAdmin = () => {
                     marginRight: "30px",
                     cursor: "pointer",
                   }}
-                  onClick={() => handleEditUser(user.id)} // Pass the user ID
+                  onClick={() => {
+                    const userToEdit = users.find((user) => user.id === user.id); // Find the user by ID
+                    if (userToEdit) {
+                      setFormData({
+                        id: userToEdit.id, // Set the ID to indicate edit mode
+                        name: userToEdit.name,
+                        username: userToEdit.username,
+                        email: userToEdit.email || "",
+                        password: userToEdit.password,
+                        confirmPassword: userToEdit.password, // Pre-fill confirm password
+                      });
+                      setShowForm(true); // Show the form for editing
+                    }
+                  }}
                 />
                 <img
                   src={RemoveIcon}
@@ -348,6 +360,7 @@ const DashboardAdmin = () => {
           ))}
         </tbody>
       </table>
+      </div>
       <div
         className="Logout mt-3"
         style={{
@@ -356,13 +369,13 @@ const DashboardAdmin = () => {
           marginTop: "20px", // Add spacing from the table
         }}
       >
-        
+        <div className="admin-logout">
         <button
-          className="btn-logout px-5 py-3"
+          className="btn-logout px-4 py-3"
           style={{
             backgroundColor: "#D7443E",
             color: "#FFFFFF",
-            borderRadius: "30px",
+            borderRadius: "40px",
             fontWeight: "bold",
             fontSize: "1.5rem",
             padding: "10px 30px", // Adjust padding for better appearance
@@ -371,6 +384,7 @@ const DashboardAdmin = () => {
           Log out
         </button>
       </div>
+    </div>
     </div>
   );
 };
