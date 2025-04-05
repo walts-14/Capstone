@@ -1,30 +1,90 @@
 // ProgressContext.js
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect } from "react";
 
 export const ProgressContext = createContext();
 
 const initialProgress = {
   basic: {
-    termsone: { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
-    termstwo: { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
-    termsthree: { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
-    termsfour: { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
+    termsone: {
+      step1Lecture: false,
+      step1Quiz: false,
+      step2Lecture: false,
+      step2Quiz: false,
+    },
+    termstwo: {
+      step1Lecture: false,
+      step1Quiz: false,
+      step2Lecture: false,
+      step2Quiz: false,
+    },
+    termsthree: {
+      step1Lecture: false,
+      step1Quiz: false,
+      step2Lecture: false,
+      step2Quiz: false,
+    },
+    termsfour: {
+      step1Lecture: false,
+      step1Quiz: false,
+      step2Lecture: false,
+      step2Quiz: false,
+    },
   },
   intermediate: {
-    lesson1: { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
-    lesson2: { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
-    lesson3: { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
-    lesson4: { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
+    lesson1: {
+      step1Lecture: false,
+      step1Quiz: false,
+      step2Lecture: false,
+      step2Quiz: false,
+    },
+    lesson2: {
+      step1Lecture: false,
+      step1Quiz: false,
+      step2Lecture: false,
+      step2Quiz: false,
+    },
+    lesson3: {
+      step1Lecture: false,
+      step1Quiz: false,
+      step2Lecture: false,
+      step2Quiz: false,
+    },
+    lesson4: {
+      step1Lecture: false,
+      step1Quiz: false,
+      step2Lecture: false,
+      step2Quiz: false,
+    },
   },
   advanced: {
-    lesson1: { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
-    lesson2: { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
-    lesson3: { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
-    lesson4: { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
-  }
+    lesson1: {
+      step1Lecture: false,
+      step1Quiz: false,
+      step2Lecture: false,
+      step2Quiz: false,
+    },
+    lesson2: {
+      step1Lecture: false,
+      step1Quiz: false,
+      step2Lecture: false,
+      step2Quiz: false,
+    },
+    lesson3: {
+      step1Lecture: false,
+      step1Quiz: false,
+      step2Lecture: false,
+      step2Quiz: false,
+    },
+    lesson4: {
+      step1Lecture: false,
+      step1Quiz: false,
+      step2Lecture: false,
+      step2Quiz: false,
+    },
+  },
 };
 
-const PROGRESS_STORAGE_KEY = 'progressData';
+const PROGRESS_STORAGE_KEY = "progressData";
 
 export const ProgressProvider = ({ children }) => {
   // Try to initialize from localStorage, else use initialProgress
@@ -40,7 +100,7 @@ export const ProgressProvider = ({ children }) => {
 
   // Update progress for a given level, lessonKey, and part (e.g., "step1Lecture")
   const updateProgress = (level, lessonKey, part) => {
-    setProgressData(prev => ({
+    setProgressData((prev) => ({
       ...prev,
       [level]: {
         ...prev[level],

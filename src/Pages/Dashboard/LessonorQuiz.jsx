@@ -8,6 +8,7 @@ import backkpoint from "../../assets/backkpoint.png";
 import heart from "../../assets/heart.png";
 import diamond from "../../assets/diamond.png";
 import LessonTermsData from "../Library/Terms/LessonTerms";
+import LivesandDiamonds from "../../Components/LivesandDiamonds";
 
 function LectureorQuiz({ LessonTerms: propLessonTerms }) {
   const navigate = useNavigate();
@@ -28,7 +29,8 @@ function LectureorQuiz({ LessonTerms: propLessonTerms }) {
   const lessonKey = stateLessonKey || routeTermId;
 
   // Get terms based on the lesson key
-  const LessonTerms = propLessonTerms || (lessonKey ? LessonTermsData[lessonKey] || [] : []);
+  const LessonTerms =
+    propLessonTerms || (lessonKey ? LessonTermsData[lessonKey] || [] : []);
 
   // (The Lecture button already uses the filtered terms as needed.)
   const handleLectureClick = () => {
@@ -38,7 +40,7 @@ function LectureorQuiz({ LessonTerms: propLessonTerms }) {
         currentStep === 1
           ? LessonTerms.slice(0, 15) // Terms 1-15
           : LessonTerms.slice(15, 30); // Terms 16-30
-  
+
       if (filteredTerms.length > 0) {
         navigate(`/lesonecontent/${lessonKey}/${filteredTerms[0].id}`, {
           state: {
@@ -55,7 +57,7 @@ function LectureorQuiz({ LessonTerms: propLessonTerms }) {
       console.log("No valid lesson data found!");
     }
   };
-  
+
   return (
     <>
       <div
@@ -73,14 +75,7 @@ function LectureorQuiz({ LessonTerms: propLessonTerms }) {
         >
           {difficulty}
         </div>
-        <div className="lives">
-          <img src={heart} className="img-fluid" alt="Lives" />
-          <span>5</span>
-        </div>
-        <div className="diamonds">
-          <img src={diamond} className="img-fluid" alt="Diamonds" />
-          <span>100</span>
-        </div>
+        <LivesandDiamonds />
       </div>
 
       {/* Progress Bar */}
