@@ -15,38 +15,45 @@ function LoginForm() {
 
   const loginUser = async (e) => {
     e.preventDefault();
-
+  
     try {
-        const response = await axios.post("http://localhost:5000/api/login", {
-            email: data.email,
-            password: data.password,
-        });
-
-        console.log("📩 Login response:", response.data);  // ✅ Improved log for clarity
-
-        if (response.status === 200 && response.data.status === "ok") {
-            toast.success("✅ Login successful!");
-
-            // ✅ Store important data in localStorage
-            localStorage.setItem("token", response.data.data);
-            localStorage.setItem("userName", response.data.user.name);
-            localStorage.setItem("userEmail", response.data.user.email); // ✅ Added
-            localStorage.setItem("loggedIn", "true");
-
-            console.log("✅ Token stored:", localStorage.getItem("token")); 
-            console.log("✅ Email stored:", localStorage.getItem("userEmail")); // ✅ Added for clarity
-
-            // ✅ Ensure navigation happens without delay
-            navigate("/dashboard", { replace: true });
-
+      const response = await axios.post("http://localhost:5000/api/login", {
+        email: data.email,
+        password: data.password,
+      });
+  
+      console.log("📩 Login response:", response.data);
+  
+      if (response.status === 200 && response.data.status === "ok") {
+        toast.success("✅ Login successful!");
+  
+        // Store token and user data
+        localStorage.setItem("token", response.data.data);
+        localStorage.setItem("userName", response.data.user.name);
+        localStorage.setItem("userEmail", response.data.user.email);
+        localStorage.setItem("loggedIn", "true");
+  
+        console.log("✅ Token stored:", localStorage.getItem("token"));
+        console.log("✅ Email stored:", localStorage.getItem("userEmail"));
+  
+        // Role-based redirection:
+        const role = response.data.user.role;
+        if (role === "super_admin") {
+          navigate("/superadmin", { replace: true });
+        } else if (role === "admin") {
+          navigate("/admin", { replace: true });
         } else {
-            toast.error(response.data.message || "❌ Login failed");
+          navigate("/dashboard", { replace: true });
         }
+      } else {
+        toast.error(response.data.message || "❌ Login failed");
+      }
     } catch (error) {
-        console.error("❌ Login error:", error);
-        toast.error(error.response?.data?.message || "❌ Login failed");
+      console.error("❌ Login error:", error);
+      toast.error(error.response?.data?.message || "❌ Login failed");
     }
-};
+  };
+  
 
     
     useEffect(() => {

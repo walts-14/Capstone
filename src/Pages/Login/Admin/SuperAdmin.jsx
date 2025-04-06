@@ -1,462 +1,516 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaUserPlus } from "react-icons/fa";
 import EditIcon from "../../../assets/Edit.png";
 import RemoveIcon from "../../../assets/Remove.png";
 import "../../../css/SuperAdmin.css";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const SuperAdmin = () => {
-  const [users, setUsers] = useState([
-    { id: 1, name: "Curry", username: "curry123", email: "Curry@gmail.com", password: "********" },
-    { id: 2, name: "EDNIS", username: "ednis456", email: "SINDI@gmail.com", password: "********" },
-  ]);
-
-  const [teachers, setTeachers] = useState([
-    { id: 1, name: "Smith", username: "smith123", email: "Smith@gmail.com", password: "********" },
-    { id: 2, name: "Taylor", username: "taylor456", email: "Taylor@gmail.com", password: "********" },
-  ]);
-
-  const [activeTab, setActiveTab] = useState("Users");
-  const [showForm, setShowForm] = useState(false);
-  const [showSelectionModal, setShowSelectionModal] = useState(false); // For the selection modal
-  const [formMode, setFormMode] = useState("create"); // Tracks whether it's "create" or "edit"
-  const [formType, setFormType] = useState(""); // Tracks whether it's "Student" or "Teacher"
   const [formData, setFormData] = useState({
-    id: null,
     name: "",
     username: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
+  const [users, setUsers] = useState([]); // Students (role: "user")
+  const [teachers, setTeachers] = useState([]); // Teachers (role: "admin")
+  const [activeTab, setActiveTab] = useState("Users");
+  const [showForm, setShowForm] = useState(false);
+  const [showSelectionModal, setShowSelectionModal] = useState(false);
+  const [formMode, setFormMode] = useState("create");
+  const [formType, setFormType] = useState(""); // "Student" or "Teacher"
+
+  // Set token on axios default headers
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      console.log("Token from localStorage:", token);
+      try {
+        const decoded = JSON.parse(atob(token.split('.')[1]));
+        console.log("Decoded token payload:", decoded);
+      } catch (err) {
+        console.error("Error decoding token:", err);
+      }
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    }
+  }, []);
+
+  // Fetch student and teacher accounts
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/superadmin/users");
+        setUsers(response.data.data);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+
+    const fetchTeachers = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/superadmin/admins");
+        setTeachers(response.data.data);
+      } catch (error) {
+        console.error("Error fetching teachers:", error);
+      }
+    };
+
+    fetchUsers();
+    fetchTeachers();
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+      toast.error("Passwords do not match!");
       return;
     }
 
-    const updatedEntry = {
-      id: formData.id || (formType === "Student" ? users.length + 1 : teachers.length + 1),
+    if (!formData.name || !formData.username || !formData.email || !formData.password) {
+      toast.error("All fields are required!");
+      return;
+    }
+
+    // Map formType to role: "Teacher" becomes "admin", "Student" becomes "user"
+    const role = formType === "Teacher" ? "admin" : "user";
+    const createEndpoint = "http://localhost:5000/api/superadmin/create-account";
+
+    const newUser = {
       name: formData.name,
       username: formData.username,
       email: formData.email,
       password: formData.password,
+      role,
     };
 
-    if (formMode === "edit") {
-      // Editing an existing entry
-      if (formType === "Student") {
-        const updatedUsers = users.map((user) =>
-          user.id === formData.id ? updatedEntry : user
-        );
-        setUsers(updatedUsers);
+    try {
+      if (formMode === "edit") {
+        const updateUrl =
+          role === "admin"
+            ? `http://localhost:5000/api/superadmin/admins/${formData.email}`
+            : `http://localhost:5000/api/superadmin/users/${formData.email}`;
+        // Remove email from the request body since it's in the URL
+        const { email, ...updateData } = newUser;
+        await axios.put(updateUrl, updateData);
+        toast.success("User updated successfully!");
       } else {
-        const updatedTeachers = teachers.map((teacher) =>
-          teacher.id === formData.id ? updatedEntry : teacher
-        );
-        setTeachers(updatedTeachers);
+        await axios.post(createEndpoint, newUser);
+        toast.success(`${formType} account created successfully!`);
       }
-    } else {
-      // Adding a new entry
-      if (formType === "Student") {
-        setUsers([...users, updatedEntry]); // Add to Users
-        setActiveTab("Users"); // Switch to Users tab
-      } else {
-        setTeachers([...teachers, updatedEntry]); // Add to Teachers
-        setActiveTab("Teacher"); // Switch to Teacher tab
-      }
+
+      // Refresh lists
+      const userResponse = await axios.get("http://localhost:5000/api/superadmin/users");
+      setUsers(userResponse.data.data);
+      const teacherResponse = await axios.get("http://localhost:5000/api/superadmin/admins");
+      setTeachers(teacherResponse.data.data);
+    } catch (error) {
+      console.error("Error details:", error.response?.data);
+      toast.error("Error: " + (error.response?.data?.message || "An error occurred"));
     }
 
-    // Reset form data
+    // Reset form and close modal
     setFormData({
-      id: null,
       name: "",
       username: "",
       email: "",
       password: "",
       confirmPassword: "",
     });
-    setShowForm(false); // Close the form
+    setShowForm(false);
   };
 
-  const handleDeleteUser = (id) => {
+  const handleDeleteUser = async (email, role) => {
     const confirmDelete = window.confirm("Are you sure you want to delete this account?");
     if (confirmDelete) {
-      if (activeTab === "Users") {
-        setUsers(users.filter((user) => user.id !== id));
-      } else {
-        setTeachers(teachers.filter((teacher) => teacher.id !== id));
+      try {
+        const deleteUrl =
+          role === "admin"
+            ? `http://localhost:5000/api/superadmin/admins/${email}`
+            : `http://localhost:5000/api/superadmin/users/${email}`;
+        await axios.delete(deleteUrl);
+        toast.success(`${role === "admin" ? "Teacher" : "Student"} account deleted successfully!`);
+
+        // Refresh lists
+        const userResponse = await axios.get("http://localhost:5000/api/superadmin/users");
+        setUsers(userResponse.data.data);
+        const teacherResponse = await axios.get("http://localhost:5000/api/superadmin/admins");
+        setTeachers(teacherResponse.data.data);
+      } catch (error) {
+        console.error("Error deleting user:", error);
+        toast.error("Error deleting user: " + (error.response?.data?.message || "An error occurred"));
       }
     }
   };
 
-  const handleEditUser = (id) => {
-    const dataToEdit = activeTab === "Users"
-      ? users.find((user) => user.id === id)
-      : teachers.find((teacher) => teacher.id === id);
-
+  const handleEditUser = (email, role) => {
+    const dataToEdit =
+      role === "admin"
+        ? teachers.find((user) => user.email === email)
+        : users.find((user) => user.email === email);
     if (dataToEdit) {
       setFormData({
-        id: dataToEdit.id,
         name: dataToEdit.name,
         username: dataToEdit.username,
-        email: dataToEdit.email || "",
+        email: dataToEdit.email,
         password: dataToEdit.password,
         confirmPassword: dataToEdit.password,
       });
-      setFormMode("edit"); // Set form mode to "edit"
+      setFormType(role === "admin" ? "Teacher" : "Student");
+      setFormMode("edit");
       setShowForm(true);
     }
   };
 
   const handleCreateUser = () => {
-    setShowSelectionModal(true); // Open the selection modal
+    setShowSelectionModal(true);
+  };
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("userEmail");
+    localStorage.removeItem("loggedIn");
+    window.location.reload();
   };
 
   const dataToDisplay = activeTab === "Users" ? users : teachers;
 
   return (
-  <div class="superadmin-body">
-    <div className="Dashboard">
-      <div className="AdminDashboard">
-        <div className="d-flex justify-content-between align-items-center mb-3">
-          <h2>Dashboard</h2>
+    <div className="superadmin-body">
+      <div className="Dashboard">
+        <div className="AdminDashboard">
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h2>Dashboard</h2>
+          </div>
         </div>
-      </div>
 
-      {/* Create Button */}
-      <div className="CreateAccount">
-        <button
-          className="btn text-light px-1 py-1"
-          style={{
-            backgroundColor: "#4A2574",
-            color: "#FFFFFF",
-            borderRadius: "10px",
-            fontWeight: "bold",
-            fontSize: "1.5rem",
-            padding: "30px",
-            display: "flex",
-            alignItems: "center",
-            textAlign: "center",
-          }}
-          onClick={handleCreateUser}
-        >
-          <FaUserPlus /> Create
-        </button>
-      </div>
-
-      {/* Tabs */}
-      <div className="divtabs">
-        <div className="tabs">
+        <div className="CreateAccount">
           <button
-            className={`tabss ${activeTab === "Users" ? "active" : ""}`}
-            onClick={() => setActiveTab("Users")}
+            className="btn text-light px-1 py-1"
+            style={{
+              backgroundColor: "#4A2574",
+              color: "#FFFFFF",
+              borderRadius: "10px",
+              fontWeight: "bold",
+              fontSize: "1.5rem",
+              padding: "30px",
+              display: "flex",
+              alignItems: "center",
+              textAlign: "center",
+            }}
+            onClick={handleCreateUser}
           >
-            Users
-          </button>
-          <button
-            className={`tabss ${activeTab === "Teacher" ? "active" : ""}`}
-            onClick={() => setActiveTab("Teacher")}
-          >
-            Teacher
+            <FaUserPlus /> Create
           </button>
         </div>
-      </div>
 
-      {/* Table */}
-      <div className="content">
-        <table className="data-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Username</th>
-              <th>Email</th>
-              <th>Password</th>
-              <th> </th>
-            </tr>
-          </thead>
-          <tbody>
-            {dataToDisplay.map((entry) => (
-              <tr key={entry.id}>
-                <td>{entry.id}</td>
-                <td>{entry.name}</td>
-                <td>{entry.username}</td>
-                <td>{entry.email}</td>
-                <td>{entry.password}</td>
-                <td>
-                  <img
-                    src={EditIcon}
-                    alt="Edit"
-                    className="img-action"
-                    style={{
-                      marginRight: "30px",
-                      cursor: "pointer",
-                    }}
-                    onClick={() => handleEditUser(entry.id)}
-                  />
-                  <img
-                    src={RemoveIcon}
-                    alt="Remove"
-                    className="img-action"
-                    style={{
-                      cursor: "pointer",
-                    }}
-                    onClick={() => handleDeleteUser(entry.id)}
-                  />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Popup Form */}
-      {showForm && (
-        <div
-          className="popup-form"
-          style={{
-            position: "fixed",
-            top: "30%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            backgroundColor: "#271D3E",
-            padding: "30px",
-            borderRadius: "10px",
-            zIndex: 1000,
-            width: "90%",
-            maxWidth: "400px",
-            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.25)",
-          }}
-        >
-          <h3
-            className="text-light mb-3"
-            style={{
-              textAlign: "center",
-              fontSize: "2.3rem",
-              fontWeight: "bold",
-              color: "#FFFFFF",
-            }}
-          >
-            {formMode === "edit"
-              ? `Edit ${formType} Account`
-              : `Add ${formType} Account`}
-          </h3>
-          <form onSubmit={handleFormSubmit}>
-            <div className="mb-3">
-              <input
-                type="text"
-                name="name"
-                placeholder="Name"
-                value={formData.name}
-                onChange={handleInputChange}
-                className="form-control"
-                style={{
-                  width: "95%",
-                  backgroundColor: "#3F3653",
-                  color: "#FFFFFF",
-                  fontSize: "1rem",
-                  padding: "10px",
-                  border: "1px solid #6F687E",
-                  borderRadius: "10px",
-                  marginBottom: "10px",
-                }}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <input
-                type="text"
-                name="username"
-                placeholder="Username"
-                value={formData.username || ""}
-                onChange={handleInputChange}
-                className="form-control"
-                style={{
-                  width: "95%",
-                  backgroundColor: "#3F3653",
-                  color: "#FFFFFF",
-                  fontSize: "1rem",
-                  padding: "10px",
-                  border: "1px solid #6F687E",
-                  borderRadius: "10px",
-                  marginBottom: "10px",
-                }}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <input
-                type="text"
-                name="email"
-                placeholder="Email"
-                value={formData.email}
-                onChange={handleInputChange}
-                className="form-control"
-                style={{
-                  width: "95%",
-                  backgroundColor: "#3F3653",
-                  color: "#FFFFFF",
-                  fontSize: "1rem",
-                  padding: "10px",
-                  border: "1px solid #6F687E",
-                  borderRadius: "10px",
-                  marginBottom: "10px",
-                }}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <input
-                type="password"
-                name="password"
-                placeholder="Your password"
-                value={formData.password}
-                onChange={handleInputChange}
-                className="form-control"
-                style={{
-                  width: "95%",
-                  backgroundColor: "#3F3653",
-                  color: "#FFFFFF",
-                  fontSize: "1rem",
-                  padding: "10px",
-                  border: "1px solid #6F687E",
-                  borderRadius: "10px",
-                  marginBottom: "10px",
-                }}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <input
-                type="password"
-                name="confirmPassword"
-                placeholder="Repeat password"
-                value={formData.confirmPassword}
-                onChange={handleInputChange}
-                className="form-control"
-                style={{
-                  width: "95%",
-                  backgroundColor: "#3F3653",
-                  color: "#FFFFFF",
-                  fontSize: "1rem",
-                  padding: "10px",
-                  border: "1px solid #6F687E",
-                  borderRadius: "10px",
-                  marginBottom: "10px",
-                }}
-                required
-              />
-            </div>
-            <button type="submit" className="btn-create">
-              {formMode === "edit" ? "Save Changes" : "Create"}
-            </button>
+        <div className="divtabs">
+          <div className="tabs">
             <button
-              type="button"
-              className="btn-cancel"
-              onClick={() => setShowForm(false)}
+              className={`tabss ${activeTab === "Users" ? "active" : ""}`}
+              onClick={() => setActiveTab("Users")}
             >
-              Cancel
-            </button>
-          </form>
-        </div>
-      )}
-
-      {/* Selection Modal */}
-      {showSelectionModal && (
-        <div
-          className="popup-modal"
-          style={{
-            position: "fixed",
-            top: "30%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            backgroundColor: "#271D3E",
-            padding: "30px",
-            borderRadius: "10px",
-            zIndex: 1000,
-            width: "90%",
-            maxWidth: "400px",
-            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.25)",
-          }}
-        >
-          <h3
-            className="text-light mb-3"
-            style={{
-              textAlign: "center",
-              fontSize: "2rem",
-              fontWeight: "bold",
-              color: "#FFFFFF",
-            }}
-          >
-            Create Account
-          </h3>
-          <div style={{ display: "flex", justifyContent: "space-around" }}>
-            <button
-              className="btn btn-student"
-              style={{
-                backgroundColor: "#4A2574",
-                color: "#FFFFFF",
-                borderRadius: "10px",
-                fontWeight: "bold",
-                fontSize: "1.2rem",
-                padding: "10px 20px",
-              }}
-              onClick={() => {
-                setFormType("Student");
-                setShowSelectionModal(false);
-                setShowForm(true);
-              }}
-            >
-              Student
+              Users
             </button>
             <button
-              className="btn btn-teacher"
-              style={{
-                backgroundColor: "#4A2574",
-                color: "#FFFFFF",
-                borderRadius: "10px",
-                fontWeight: "bold",
-                fontSize: "1.2rem",
-                padding: "10px 20px",
-              }}
-              onClick={() => {
-                setFormType("Teacher");
-                setShowSelectionModal(false);
-                setShowForm(true);
-              }}
+              className={`tabss ${activeTab === "Teacher" ? "active" : ""}`}
+              onClick={() => setActiveTab("Teacher")}
             >
               Teacher
             </button>
           </div>
         </div>
-      )}
 
-<div className="SuperAdminLogout">
-<button
-          className="btn-logout px-4 py-3"
-          style={{
-            backgroundColor: "#D7443E",
-            color: "#FFFFFF",
-            borderRadius: "40px",
-            fontWeight: "bold",
-            fontSize: "1.5rem",
-          }}
-        >
-    Log out
-  </button>
-</div>
+        <div className="content">
+          <table className="data-table">
+            <thead>
+              <tr>
+                <th>Email</th>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Password</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {dataToDisplay.map((entry) => (
+                <tr key={entry.email}>
+                  <td>{entry.email}</td>
+                  <td>{entry.name}</td>
+                  <td>{entry.username}</td>
+                  <td>{entry.password}</td>
+                  <td>
+                    <img
+                      src={EditIcon}
+                      alt="Edit"
+                      className="img-action"
+                      style={{ marginRight: "30px", cursor: "pointer" }}
+                      onClick={() => handleEditUser(entry.email, entry.role)}
+                    />
+                    <img
+                      src={RemoveIcon}
+                      alt="Remove"
+                      className="img-action"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => handleDeleteUser(entry.email, entry.role)}
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {showForm && (
+          <div
+            className="popup-form"
+            style={{
+              position: "fixed",
+              top: "30%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              backgroundColor: "#271D3E",
+              padding: "30px",
+              borderRadius: "10px",
+              zIndex: 1000,
+              width: "90%",
+              maxWidth: "400px",
+              boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.25)",
+            }}
+          >
+            <h3
+              className="text-light mb-3"
+              style={{
+                textAlign: "center",
+                fontSize: "2.3rem",
+                fontWeight: "bold",
+                color: "#FFFFFF",
+              }}
+            >
+              {formMode === "edit" ? `Edit ${formType} Account` : `Add ${formType} Account`}
+            </h3>
+            <form onSubmit={handleFormSubmit}>
+              <div className="mb-3">
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  className="form-control"
+                  style={{
+                    width: "95%",
+                    backgroundColor: "#3F3653",
+                    color: "#FFFFFF",
+                    fontSize: "1rem",
+                    padding: "10px",
+                    border: "1px solid #6F687E",
+                    borderRadius: "10px",
+                    marginBottom: "10px",
+                  }}
+                  required
+                />
+              </div>
+              <div className="mb-3">
+                <input
+                  type="text"
+                  name="username"
+                  placeholder="Username"
+                  value={formData.username || ""}
+                  onChange={handleInputChange}
+                  className="form-control"
+                  style={{
+                    width: "95%",
+                    backgroundColor: "#3F3653",
+                    color: "#FFFFFF",
+                    fontSize: "1rem",
+                    padding: "10px",
+                    border: "1px solid #6F687E",
+                    borderRadius: "10px",
+                    marginBottom: "10px",
+                  }}
+                  required
+                />
+              </div>
+              <div className="mb-3">
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  className="form-control"
+                  style={{
+                    width: "95%",
+                    backgroundColor: "#3F3653",
+                    color: "#FFFFFF",
+                    fontSize: "1rem",
+                    padding: "10px",
+                    border: "1px solid #6F687E",
+                    borderRadius: "10px",
+                    marginBottom: "10px",
+                  }}
+                  required
+                />
+              </div>
+              <div className="mb-3">
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  className="form-control"
+                  style={{
+                    width: "95%",
+                    backgroundColor: "#3F3653",
+                    color: "#FFFFFF",
+                    fontSize: "1rem",
+                    padding: "10px",
+                    border: "1px solid #6F687E",
+                    borderRadius: "10px",
+                    marginBottom: "10px",
+                  }}
+                  required
+                />
+              </div>
+              <div className="mb-3">
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  placeholder="Confirm Password"
+                  value={formData.confirmPassword}
+                  onChange={handleInputChange}
+                  className="form-control"
+                  style={{
+                    width: "95%",
+                    backgroundColor: "#3F3653",
+                    color: "#FFFFFF",
+                    fontSize: "1rem",
+                    padding: "10px",
+                    border: "1px solid #6F687E",
+                    borderRadius: "10px",
+                    marginBottom: "10px",
+                  }}
+                  required
+                />
+              </div>
+              <div className="d-flex justify-content-center align-items-center">
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  style={{
+                    backgroundColor: "#4A2574",
+                    color: "#FFFFFF",
+                    borderRadius: "10px",
+                    fontWeight: "bold",
+                    fontSize: "1.5rem",
+                    padding: "15px",
+                    width: "100%",
+                  }}
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
+
+        {showSelectionModal && (
+          <div
+            className="popup-modal"
+            style={{
+              position: "fixed",
+              top: "30%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              backgroundColor: "#271D3E",
+              padding: "30px",
+              borderRadius: "10px",
+              zIndex: 1000,
+              width: "90%",
+              maxWidth: "400px",
+              boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.25)",
+            }}
+          >
+            <h3
+              className="text-light mb-3"
+              style={{
+                textAlign: "center",
+                fontSize: "2rem",
+                fontWeight: "bold",
+                color: "#FFFFFF",
+              }}
+            >
+              Create Account
+            </h3>
+            <div style={{ display: "flex", justifyContent: "space-around" }}>
+              <button
+                className="btn btn-student"
+                style={{
+                  backgroundColor: "#4A2574",
+                  color: "#FFFFFF",
+                  borderRadius: "10px",
+                  fontWeight: "bold",
+                  fontSize: "1.2rem",
+                  padding: "10px 20px",
+                }}
+                onClick={() => {
+                  setFormType("Student"); // This will create a student (role: "user")
+                  setShowSelectionModal(false);
+                  setShowForm(true);
+                }}
+              >
+                Student
+              </button>
+              <button
+                className="btn btn-teacher"
+                style={{
+                  backgroundColor: "#4A2574",
+                  color: "#FFFFFF",
+                  borderRadius: "10px",
+                  fontWeight: "bold",
+                  fontSize: "1.2rem",
+                  padding: "10px 20px",
+                }}
+                onClick={() => {
+                  setFormType("Teacher"); // This will create a teacher (role: "admin")
+                  setShowSelectionModal(false);
+                  setShowForm(true);
+                }}
+              >
+                Teacher
+              </button>
+            </div>
+          </div>
+        )}
+
+        <div className="SuperAdminLogout">
+          <button
+            onClick={logout}
+            className="btn-logout px-4 py-3"
+            style={{
+              backgroundColor: "#D7443E",
+              color: "#FFFFFF",
+              borderRadius: "40px",
+              fontWeight: "bold",
+              fontSize: "1.5rem",
+            }}
+          >
+            Log out
+          </button>
+        </div>
+      </div>
     </div>
-   </div>
   );
 };
 
 export default SuperAdmin;
-

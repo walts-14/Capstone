@@ -1,20 +1,16 @@
 import mongoose from "mongoose";
-import { Schema } from "mongoose";
 import bcrypt from "bcrypt"; // Import bcrypt for hashing
 
-const userSchema = new Schema(
+const userSchema = new mongoose.Schema(
   {
-    age: {
-      type: Number,
-      required: true,
-    },
-    year: {
-      type: String,
-      required: true,
-    },
     name: {
       type: String,
       required: true,
+    },
+    username: {
+      type: String,
+      required: true,
+      unique: true,
     },
     email: {
       type: String,
@@ -26,16 +22,24 @@ const userSchema = new Schema(
       required: true,
     },
     points: {
-       type: Number, default: 0 }, 
+      type: Number, 
+      default: 0
+    }, 
     lives: { 
-       type: Number, default: 5 },
-    lastLifeTime: { type: Date, default: Date.now },
-    streak:{
-      count: {type: Number, default: 0},
-      lastActiveDate: {type: Date, default: new Date()}
+      type: Number, 
+      default: 5 
+    },
+    lastLifeTime: { 
+      type: Date, 
+      default: Date.now 
+    },
+    role: {
+      type: String,
+      required: true,
+      enum: ['user', 'admin', 'super_admin'], // Define allowed roles
     },
   },
-  { timestamps: true }
+  { timestamps: true } // Correctly placed timestamps option
 );
 
 // **Hash password before saving**
@@ -50,8 +54,6 @@ userSchema.pre("save", async function (next) {
     return next(error);
   }
 });
-
-
 
 const User = mongoose.model("User", userSchema);
 export default User;

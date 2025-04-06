@@ -21,8 +21,28 @@ export const LivesProvider = ({ children }) => {
       }
     };
 
+    const checkRegeneration = async () => {
+      const userEmail = localStorage.getItem("userEmail");
+      if (!userEmail) return;
+      
+      try {
+        console.log("Checking lives regeneration at", new Date().toISOString());
+        const response = await axios.post(`/api/lives/email/${userEmail}/regenerate`);
+        if (response.data.lives !== lives) {
+          console.log("Lives regenerated to:", response.data.lives);
+          setLives(response.data.lives);
+        }
+      } catch (error) {
+        console.error("❌ Error regenerating lives:", error);
+      }
+    };
+
     fetchLives();
-  }, []);
+    
+    // Check regeneration every minute
+    const interval = setInterval(checkRegeneration, 60000);
+    return () => clearInterval(interval);
+  }, [lives]);
 
   const loseLife = async () => {
     const userEmail = localStorage.getItem("userEmail");

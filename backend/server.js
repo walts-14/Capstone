@@ -2,14 +2,14 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import userRoutes from './routes/user.route.js';
-import LessonOneQuiz from './routes/LessonRoutes/LessonOne/quizOne.route.js';
 import authRoutes from './routes/authRoutes.js';
 import { connectDB}  from './config/db.js';
-import streakRoutes from "./routes/streakRoutes.js";
 import leaderboardRoutes from "./routes/leaderboardRoutes.js";
 import livesRoutes from "./routes/livesRoutes.js";
 import pointsRoutes from "./routes/pointsRoutes.js";
 import videoRoutes from "./routes/videoRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
+import superadminRoutes from "./routes/superadminRoutes.js";
 
 //initializing express
 const app = express();
@@ -26,13 +26,13 @@ app.use(
 )
 
 app.use("/api", userRoutes);
-app.use("/api", LessonOneQuiz);
 app.use("/api", authRoutes);
-app.use("/api", streakRoutes);
 app.use("/api", leaderboardRoutes);
 app.use("/api", livesRoutes);
 app.use("/api", pointsRoutes);
 app.use("/api", videoRoutes);
+app.use("/api/admin", adminRoutes);
+app.use("/api/superadmin", superadminRoutes);
 
 app.listen(5000, () => {
     connectDB();
