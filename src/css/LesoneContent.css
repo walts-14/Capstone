@@ -35,19 +35,23 @@
   body {
     overflow-y: hidden;
   }
-  
+  .container-lecture {
+    margin: 0 auto;
+    
+  }
   .tryone-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: -50px;
     position: relative;
   }
   
   .tryone-container video {
-    border: 10px solid #271D3E;  /* Adds a white border */
-    border-radius: 10px;  /* Rounds the corners */
-   bottom: 600px;
+    width: 55%;
+    height: auto;
+    border: 15px solid #271D3E;  /* Adds a white border */
+    border-radius: 50px;  /* Rounds the corners */
+    
   }
   
   .back-button {
@@ -55,8 +59,12 @@
     position: absolute;
     top: 20px;
     left: 20px;
+   
   }
+   button {
+    background: none;
   
+  }
   .text-container {
     display: flex;
     justify-content: center;
@@ -68,7 +76,7 @@
     align-items: center;
     justify-content: center;
     gap: 20px; /* Space between arrows and the letter */
-    margin-top: 20px;
+   
   }
   
   .text-container {
@@ -79,8 +87,7 @@
   
   .textOne {
     font-family: "Baloo", sans-serif;
-    font-size: 2.0rem;
-    margin-bottom: 50px;
+    font-size: 3rem;
     background: #4da6ff;
     border-radius: 22px;
     padding: 10px 65px;
@@ -92,9 +99,9 @@
   }
   
   .arrow {
-    width: 40px; 
+    width: 70px; 
     height: auto;
     cursor: pointer;
-    margin-top: -40px;
+   
   }
   

@@ -96,19 +96,20 @@ const LesoneContent = () => {
 
   return (
     <>
-      <div className="tryone-container">
-        <video ref={videoRef} key={video} width="650" height="400" controls autoPlay loop>
-          <source src={video} type="video/mp4" />
-        </video>
-      </div>
-
-      <div className="back-button">
+     <div className="back-button">
         <button onClick={handleBack}>
           <img src={Back} alt="Back" />
         </button>
       </div>
 
-      <div className="text-container">
+    <div className="container-lecture d-flex flex-column align-items-center justify-content-center">
+    <div className="tryone-container">
+        <video ref={videoRef} key={video} width="650" height="400" controls autoPlay loop>
+          <source src={video} type="video/mp4" />
+        </video>
+      </div>
+
+      <div className="text-container d-flex flex-column align-items-center justify-content-center gap-5 mt-4">
         <div className="letter-container">
           <button onClick={() => handleNavigation("prev")} disabled={currentIndex === 0}>
             <img src={leftArrow} alt="Left Arrow" className="arrow" />
@@ -138,6 +139,8 @@ const LesoneContent = () => {
           </button>
         </div>
       )}
+    </div>
+      
     </>
   );
 };
