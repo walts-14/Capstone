@@ -18,105 +18,105 @@ export const questions = {
                 { video:"/video/Basic/Lesson1/M.mp4", isCorrect: false },  
             ],
         },
-        // { 
-        //     question: "What is the handshape for the letter C?",
-        //     answerOptions: [
-        //         { video:"/video/Basic/Lesson1/G.mp4", isCorrect: false },
-        //         { video:"/video/Basic/Lesson1/A.mp4", isCorrect: false },
-        //         { video:"/video/Basic/Lesson1/C.mp4", isCorrect: true },
-        //         { video:"/video/Basic/Lesson1/P.mp4", isCorrect: false },  
-        //     ],
-        // },
-        // { 
-        //     question: "How do you form the letter D in sign language?",
-        //     answerOptions: [
-        //         { video:"/video/Basic/Lesson1/T.mp4", isCorrect: false },
-        //         { video:"/video/Basic/Lesson1/D.mp4", isCorrect: true },
-        //         { video:"/video/Basic/Lesson1/Y.mp4", isCorrect: false },
-        //         { video:"/video/Basic/Lesson1/O.mp4", isCorrect: false },  
-        //     ],
-        // },
-        // { 
-        //     question: "What is the sign of the letter E?",
-        //     answerOptions: [
-        //         { video:"/video/Basic/Lesson1/C.mp4", isCorrect: false },
-        //         { video:"/video/Basic/Lesson1/W.mp4", isCorrect: false },
-        //         { video:"/video/Basic/Lesson1/E.mp4", isCorrect: true },
-        //         { video:"/video/Basic/Lesson1/K.mp4", isCorrect: false },  
-        //     ],
-        // },
-        // { 
-        //     question: "What is the sign of the letter F?",
-        //     answerOptions: [
-        //         { video:"/video/Basic/Lesson1/F.mp4", isCorrect: true },
-        //         { video:"/video/Basic/Lesson1/V.mp4", isCorrect: false },
-        //         { video:"/video/Basic/Lesson1/D.mp4", isCorrect: false },
-        //         { video:"/video/Basic/Lesson1/C.mp4", isCorrect: false },  
-        //     ],
-        // },
-        // { 
-        //     question: "How do you sign the letter G?",
-        //     answerOptions: [
-        //         { video:"/video/Basic/Lesson1/R.mp4", isCorrect: false },
-        //         { video:"/video/Basic/Lesson1/X.mp4", isCorrect: false },
-        //         { video:"/video/Basic/Lesson1/B.mp4", isCorrect: false },
-        //         { video:"/video/Basic/Lesson1/G.mp4", isCorrect: true },  
-        //     ],
-        // },
-        // { 
-        //     question: "How do you sign the letter H?",
-        //     answerOptions: [
-        //         { video:"/video/Basic/Lesson1/H.mp4", isCorrect: true },
-        //         { video:"/video/Basic/Lesson1/N.mp4", isCorrect: false },
-        //         { video:"/video/Basic/Lesson1/J.mp4", isCorrect: false },
-        //         { video:"/video/Basic/Lesson1/U.mp4", isCorrect: false },  
-        //     ],
-        // },
-        // { 
-        //     question: "How do you sign the letter I?",
-        //     answerOptions: [
-        //         { video:"/video/Basic/Lesson1/Q.mp4", isCorrect: false },
-        //         { video:"/video/Basic/Lesson1/I.mp4", isCorrect: true },
-        //         { video:"/video/Basic/Lesson1/M.mp4", isCorrect: false },
-        //         { video:"/video/Basic/Lesson1/S.mp4", isCorrect: false },  
-        //     ],
-        // },
-        // { 
-        //     question: "How do you sign the letter J?",
-        //     answerOptions: [
-        //         { video:"/video/Basic/Lesson1/J.mp4", isCorrect: true },
-        //         { video:"/video/Basic/Lesson1/L.mp4", isCorrect: false },
-        //         { video:"/video/Basic/Lesson1/E.mp4", isCorrect: false },
-        //         { video:"/video/Basic/Lesson1/D.mp4", isCorrect: false },  
-        //     ],
-        // },
-        // { 
-        //     question: "What is the sign for the letter K?",
-        //     answerOptions: [
-        //         { video:"/video/Basic/Lesson1/W.mp4", isCorrect: false },
-        //         { video:"/video/Basic/Lesson1/K.mp4", isCorrect: true },
-        //         { video:"/video/Basic/Lesson1/Y.mp4", isCorrect: false },
-        //         { video:"/video/Basic/Lesson1/F.mp4", isCorrect: false },  
-        //     ],
-        // },
-        // { 
-        //     question: "How do you sign the letter L?",
-        //     answerOptions: [
-        //         { video:"/video/Basic/Lesson1/P.mp4", isCorrect: false },
-        //         { video:"/video/Basic/Lesson1/L.mp4", isCorrect: true },
-        //         { video:"/video/Basic/Lesson1/R.mp4", isCorrect: false },
-        //         { video:"/video/Basic/Lesson1/Z.mp4", isCorrect: false },  
-        //     ],
-        // },
-        // { 
-        //     question: "How do you sign the letter M?",
-        //     answerOptions: [
-        //         { video:"/video/Basic/Lesson1/M.mp4", isCorrect: true },
-        //         { video:"/video/Basic/Lesson1/X.mp4", isCorrect: false },
-        //         { video:"/video/Basic/Lesson1/A.mp4", isCorrect: false },
-        //         { video:"/video/Basic/Lesson1/U.mp4", isCorrect: false },  
-        //     ],
-        // }
+        { 
+            question: "What is the handshape for the letter C?",
+            answerOptions: [
+                { video:"/video/Basic/Lesson1/G.mp4", isCorrect: false },
+                { video:"/video/Basic/Lesson1/A.mp4", isCorrect: false },
+                { video:"/video/Basic/Lesson1/C.mp4", isCorrect: true },
+                { video:"/video/Basic/Lesson1/P.mp4", isCorrect: false },  
+            ],
+        },
+        { 
+            question: "How do you form the letter D in sign language?",
+            answerOptions: [
+                { video:"/video/Basic/Lesson1/T.mp4", isCorrect: false },
+                { video:"/video/Basic/Lesson1/D.mp4", isCorrect: true },
+                { video:"/video/Basic/Lesson1/Y.mp4", isCorrect: false },
+                { video:"/video/Basic/Lesson1/O.mp4", isCorrect: false },  
+            ],
+        },
+        { 
+            question: "What is the sign of the letter E?",
+            answerOptions: [
+                { video:"/video/Basic/Lesson1/C.mp4", isCorrect: false },
+                { video:"/video/Basic/Lesson1/W.mp4", isCorrect: false },
+                { video:"/video/Basic/Lesson1/E.mp4", isCorrect: true },
+                { video:"/video/Basic/Lesson1/K.mp4", isCorrect: false },  
+            ],
+        },
+        { 
+            question: "What is the sign of the letter F?",
+            answerOptions: [
+                { video:"/video/Basic/Lesson1/F.mp4", isCorrect: true },
+                { video:"/video/Basic/Lesson1/V.mp4", isCorrect: false },
+                { video:"/video/Basic/Lesson1/D.mp4", isCorrect: false },
+                { video:"/video/Basic/Lesson1/C.mp4", isCorrect: false },  
+            ],
+        },
+        { 
+            question: "How do you sign the letter G?",
+            answerOptions: [
+                { video:"/video/Basic/Lesson1/R.mp4", isCorrect: false },
+                { video:"/video/Basic/Lesson1/X.mp4", isCorrect: false },
+                { video:"/video/Basic/Lesson1/B.mp4", isCorrect: false },
+                { video:"/video/Basic/Lesson1/G.mp4", isCorrect: true },  
+            ],
+        },
+        { 
+            question: "How do you sign the letter H?",
+            answerOptions: [
+                { video:"/video/Basic/Lesson1/H.mp4", isCorrect: true },
+                { video:"/video/Basic/Lesson1/N.mp4", isCorrect: false },
+                { video:"/video/Basic/Lesson1/J.mp4", isCorrect: false },
+                { video:"/video/Basic/Lesson1/U.mp4", isCorrect: false },  
+            ],
+        },
+        { 
+            question: "How do you sign the letter I?",
+            answerOptions: [
+                { video:"/video/Basic/Lesson1/Q.mp4", isCorrect: false },
+                { video:"/video/Basic/Lesson1/I.mp4", isCorrect: true },
+                { video:"/video/Basic/Lesson1/M.mp4", isCorrect: false },
+                { video:"/video/Basic/Lesson1/S.mp4", isCorrect: false },  
+            ],
+        },
+        { 
+            question: "How do you sign the letter J?",
+            answerOptions: [
+                { video:"/video/Basic/Lesson1/J.mp4", isCorrect: true },
+                { video:"/video/Basic/Lesson1/L.mp4", isCorrect: false },
+                { video:"/video/Basic/Lesson1/E.mp4", isCorrect: false },
+                { video:"/video/Basic/Lesson1/D.mp4", isCorrect: false },  
+            ],
+        },
+        { 
+            question: "What is the sign for the letter K?",
+            answerOptions: [
+                { video:"/video/Basic/Lesson1/W.mp4", isCorrect: false },
+                { video:"/video/Basic/Lesson1/K.mp4", isCorrect: true },
+                { video:"/video/Basic/Lesson1/Y.mp4", isCorrect: false },
+                { video:"/video/Basic/Lesson1/F.mp4", isCorrect: false },  
+            ],
+        },
+        { 
+            question: "How do you sign the letter L?",
+            answerOptions: [
+                { video:"/video/Basic/Lesson1/P.mp4", isCorrect: false },
+                { video:"/video/Basic/Lesson1/L.mp4", isCorrect: true },
+                { video:"/video/Basic/Lesson1/R.mp4", isCorrect: false },
+                { video:"/video/Basic/Lesson1/Z.mp4", isCorrect: false },  
+            ],
+        },
+        { 
+            question: "How do you sign the letter M?",
+            answerOptions: [
+                { video:"/video/Basic/Lesson1/M.mp4", isCorrect: true },
+                { video:"/video/Basic/Lesson1/X.mp4", isCorrect: false },
+                { video:"/video/Basic/Lesson1/A.mp4", isCorrect: false },
+                { video:"/video/Basic/Lesson1/U.mp4", isCorrect: false },  
+            ],
+        }
     ],
 
     lesson1_Part2: [

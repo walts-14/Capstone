@@ -66,61 +66,67 @@ function LectureorQuiz({ LessonTerms: propLessonTerms }) {
         <p>Back</p>
       </div>
 
-      <div className="status-bar">
-        <div
-          className="difficulty text-center"
-          style={{ backgroundColor: difficultyColors[difficulty] }}
-        >
-          {difficulty}
-        </div>
-        <div className="lives">
-          <img src={heart} className="img-fluid" alt="Lives" />
-          <span>5</span>
-        </div>
-        <div className="diamonds">
-          <img src={diamond} className="img-fluid" alt="Diamonds" />
-          <span>100</span>
-        </div>
-      </div>
-
-      {/* Progress Bar */}
-      <div className="progress-bar-container mb-5">
-        <button
-          className={`progress-step1 ${currentStep === 1 ? "active" : ""}`}
-          onClick={() => setCurrentStep(1)}
-        >
-          1
-        </button>
-        <div className="progress-line"></div>
-        <button
-          className={`progress-step2 ${currentStep === 2 ? "active" : ""}`}
-          onClick={() => setCurrentStep(2)}
-        >
-          2
-        </button>
-      </div>
-
-      <div className="lecture-quiz-container d-flex justify-content-center fw-bold col-md-6">
-        <div
-          className="lecture-outer justify-content-center rounded-5"
-          onClick={handleLectureClick}
-        >
-          <p className="fs-md-5">Lecture</p>
-          <div className="lecture-inner justify-content-center align-items-center">
-            <img src={Video} className="img-fluid" alt="Lecture Video" />
+      <div className="container d-flex flex-column justify-content-center align-items-center ">
+        <div className="status-bar">
+          <div
+            className="difficulty text-center"
+            style={{ backgroundColor: difficultyColors[difficulty] }}
+          >
+            {difficulty}
+          </div>
+          <div className="lives">
+            <img src={heart} className="img-fluid" alt="Lives" />
+            <span>5</span>
+          </div>
+          <div className="diamonds">
+            <img src={diamond} className="img-fluid" alt="Diamonds" />
+            <span>100</span>
           </div>
         </div>
-        <div
-          className="quiz-outer justify-content-center rounded-5"
-          onClick={() =>
-            navigate(`/quiz/${lessonKey}`, { state: { currentStep } })
-          }
-        >
-          <p>Quiz</p>
-          <div className="quiz-inner justify-content-center">
-            <img src={Ideas} className="img-fluid" alt="Quiz Icon" />
+
+        {/* Progress Bar */}
+        <div className={`progress-bar-container step-${currentStep} `}>
+            <button
+              className={`progress-step  ${currentStep === 1 ? "active" : ""}`}
+              onClick={() => setCurrentStep(1)}
+            >
+              1
+            </button>
+
+            <div className="progress-line" />
+
+            <button
+              className={`progress-step  ${currentStep === 2 ? "active" : ""}`}
+              onClick={() => setCurrentStep(2)}
+            >
+              2
+            </button>
+          </div>
+
+
+        <div className="lecture-quiz-container ">
+          <div
+            className="lecture-outer justify-content-center rounded-5"
+            onClick={handleLectureClick}
+          >
+            <p className="fs-md-5">Lecture</p>
+            <div className="lecture-inner justify-content-center align-items-center">
+              <img src={Video} className="img-fluid" alt="Lecture Video" />
+            </div>
+          </div>
+          <div
+            className="quiz-outer justify-content-center rounded-5"
+            onClick={() =>
+              navigate(`/quiz/${lessonKey}`, { state: { currentStep } })
+            }
+          >
+            <p>Quiz</p>
+            <div className="quiz-inner justify-content-center">
+              <img src={Ideas} className="img-fluid" alt="Quiz Icon" />
+            </div>
           </div>
         </div>
+
       </div>
     </>
   );
