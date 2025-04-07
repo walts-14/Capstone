@@ -212,7 +212,8 @@ body {
 .intermediateTracker,
 .advancedTracker {
   background-color: var(--input-gray);
-  border: 3px solid var(--input-gray);
+  border: 0px solid var(--input-gray);
+  margin: 0; /* Set margin to 0 */
 }
 .basicTitle {
   background-color: var(--basic-blue);
@@ -220,30 +221,19 @@ body {
   width: 12vw;
   border-radius: 20px 10px 70px 0;
 }
-.basic1tracker,
-.basic2tracker,
-.basic3tracker,
-.basic4tracker {
-  background-color: var(--semidark-blue);
-  height: auto;
-  width: 20vw;
+.lessonTracker span {
+  font-family: "Baloo", sans-serif;
+  color: var(--white);
   font-size: 2rem;
+  padding: 8px; 
+  
 }
-.interTitle {
+.intermediateTitle {
   background-color: var(--intermediate-yellow);
   height: auto;
   width: 15vw;
   font-size: 2vw;
   border-radius: 20px 10px 70px 0;
-}
-.inter1tracker,
-.inter2tracker,
-.inter3tracker,
-.inter4tracker {
-  background-color: var(--semidark-yellow);
-  height: auto;
-  width: 20vw;
-  font-size: 2rem;
 }
 .advancedTitle {
   background-color: #c0392b;
@@ -251,15 +241,6 @@ body {
   width: 12vw;
   border-radius: 20px 10px 70px 0;
   font-size: 2vw;
-}
-.advanced1tracker,
-.advanced2tracker,
-.advanced3tracker,
-.advanced4tracker {
-  background-color: #cc6055;
-  height: auto;
-  width: 20vw;
-  font-size: 2rem;
 }
 .btns {
   display: flex;

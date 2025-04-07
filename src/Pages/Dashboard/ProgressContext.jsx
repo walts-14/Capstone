@@ -5,40 +5,55 @@ export const ProgressContext = createContext();
 
 const initialProgress = {
   basic: {
-    termsone: { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
-    termstwo: { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
+    termsone:   { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
+    termstwo:   { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
     termsthree: { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
-    termsfour: { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
+    termsfour:  { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
   },
   intermediate: {
-    lesson1: { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
-    lesson2: { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
-    lesson3: { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
-    lesson4: { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
+    termsfive:  { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
+    termssix:   { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
+    termsseven: { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
+    termseight: { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
   },
   advanced: {
-    lesson1: { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
-    lesson2: { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
-    lesson3: { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
-    lesson4: { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
+    termsnine:   { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
+    termsten:    { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
+    termseleven: { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
+    termstwelve: { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
   }
 };
 
 const PROGRESS_STORAGE_KEY = 'progressData';
 
 export const ProgressProvider = ({ children }) => {
-  // Try to initialize from localStorage, else use initialProgress
   const [progressData, setProgressData] = useState(() => {
-    const storedData = localStorage.getItem(PROGRESS_STORAGE_KEY);
-    return storedData ? JSON.parse(storedData) : initialProgress;
+    const stored = localStorage.getItem(PROGRESS_STORAGE_KEY);
+    if (!stored) return initialProgress;
+
+    const parsed = JSON.parse(stored);
+
+    // Merge stored with initial so new keys get defaults
+    return {
+      basic: {
+        ...initialProgress.basic,
+        ...parsed.basic
+      },
+      intermediate: {
+        ...initialProgress.intermediate,
+        ...parsed.intermediate
+      },
+      advanced: {
+        ...initialProgress.advanced,
+        ...parsed.advanced
+      }
+    };
   });
 
-  // Save progressData to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(progressData));
   }, [progressData]);
 
-  // Update progress for a given level, lessonKey, and part (e.g., "step1Lecture")
   const updateProgress = (level, lessonKey, part) => {
     setProgressData(prev => ({
       ...prev,
