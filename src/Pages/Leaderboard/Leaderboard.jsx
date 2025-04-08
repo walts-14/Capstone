@@ -29,9 +29,9 @@ function Leaderboard() {
   console.log("Leaderboard state:", leaderboard);
 
   return (
-    <>
+    <div className="leaderboard-container d-flex flex-column align-items-center justify-content-center ">
       <Sidenav />
-      <div className="lb-top d-flex justify-content-center align-items-end gap-5">
+      <div className="leaderboard-header d-flex flex-row align-items-center justify-content-center">
         {/* Second Place (Static Example) */}
         <div className="second-place d-flex align-items-center gap-2">
           <img src={medal2} className="img-fluid" alt="medal img" />
@@ -85,15 +85,17 @@ function Leaderboard() {
 
       <div className="lb-users">
         {leaderboard && leaderboard.length > 0 ? (
-          <ul className="list-unstyled text-center mt-1 fs-5 text-white fw-bold">
+          <ul className="list-unstyled text- mt-3 text-white fw-bold">
             {leaderboard.map((user, index) => {
               // Debug each user object
               console.log("User object:", user);
               return (
-                <li key={user._id || index}>
+                <div className="user-rank" key={user._id || index}>
                   {/* Fallback for name and points */}
-                  {user.name || user.username || "No Name"} - {user.points || 0} points
-                </li>
+                  <span> {user.name || user.username || "No Name"}</span>
+                  <span>  <img src={diamond} alt="" />{user.points || 0}  </span>
+                  
+                </div>
               );
             })}
           </ul>
@@ -101,7 +103,7 @@ function Leaderboard() {
           <p className="text-white text-center mt-3">No leaderboard data available.</p>
         )}
       </div>
-    </>
+    </div>
   );
 }
 
