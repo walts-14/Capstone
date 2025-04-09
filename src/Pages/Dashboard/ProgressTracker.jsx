@@ -1,42 +1,43 @@
 // ProgressTracker.js
-import React, { useContext } from 'react';
-import { ProgressContext } from './ProgressContext';
+import React, { useContext } from "react";
+import { ProgressContext } from "./ProgressContext";
 
 const calculateProgress = (progressObj = {}) => {
   let score = 0;
   if (progressObj.step1Lecture) score += 25;
-  if (progressObj.step1Quiz)    score += 25;
+  if (progressObj.step1Quiz) score += 25;
   if (progressObj.step2Lecture) score += 25;
-  if (progressObj.step2Quiz)    score += 25;
+  if (progressObj.step2Quiz) score += 25;
   return score;
 };
 
 const lessonsByLevel = {
-  basic:        ["termsone", "termstwo", "termsthree", "termsfour"],
+  basic: ["termsone", "termstwo", "termsthree", "termsfour"],
   intermediate: ["termsfive", "termssix", "termsseven", "termseight"],
-  advanced:     ["termsnine", "termsten", "termseleven", "termstwelve"],
+  advanced: ["termsnine", "termsten", "termseleven", "termstwelve"],
 };
 
 // Offsets so we can number lessons 1–12
 const lessonOffsets = {
-  basic:        0,  // lessons 1–4
-  intermediate: 4,  // lessons 5–8
-  advanced:     8,  // lessons 9–12
+  basic: 0, // lessons 1–4
+  intermediate: 4, // lessons 5–8
+  advanced: 8, // lessons 9–12
 };
 
 function ProgressTracker() {
   const { progressData } = useContext(ProgressContext);
 
   const styles = {
-    basic:        { backgroundColor: '#205D87' },
-    intermediate: { backgroundColor: '#947809' },
-    advanced:     { backgroundColor: '#86271E' },
-    font:         { color: '#160A2E' },
+    basic: { backgroundColor: "#205D87" },
+    intermediate: { backgroundColor: "#947809" },
+    advanced: { backgroundColor: "#86271E" },
+    font: { color: "#160A2E" },
+    white: { color: "#ffffff" },
   };
-  
+
   return (
     <div className="lessonTracker d-flex flex-column text-white rounded-4 p-3">
-      {Object.keys(lessonsByLevel).map(level => (
+      {Object.keys(lessonsByLevel).map((level) => (
         <div key={level} className={`${level}Tracker rounded-4 mt-4`}>
           <div className={`${level}Title fs-1 text-center mb-3`}>
             {level.charAt(0).toUpperCase() + level.slice(1)}
@@ -53,13 +54,11 @@ function ProgressTracker() {
             return (
               <div
                 key={lessonKey}
-                className={`${level}tracker d-flex m-3 rounded-2 p-2 justify-content-between`}
+                className={`${level}tracker d-flex m-3 rounded-4 p-2 justify-content-between`}
                 style={styles[level]}
               >
                 <span>{displayName}</span>
-                <span style={styles.font}>
-                  {progressPercent}%
-                </span>
+                <span style={styles.white}>{progressPercent}%</span>
               </div>
             );
           })}

@@ -2,8 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../../css/Lesson.css";
-import heart from "../../assets/heart.png";
-import diamond from "../../assets/diamond.png";
+import LivesandDiamonds from "../../Components/LiveandDiamonds";
 
 const lessonRoutes = [
   { id: 1, termId: "termsone", unlocked: true },
@@ -23,8 +22,6 @@ const lessonRoutes = [
 function LessonButtons() {
   const navigate = useNavigate();
   const [difficulty, setDifficulty] = useState("BASIC");
-  const [lives, setLives] = useState(5);
-  const [points, setPoints] = useState(0);
   const buttonContainerRef = useRef(null);
 
   const difficultyColors = {
@@ -131,18 +128,7 @@ function LessonButtons() {
         >
           {difficulty}
         </div>
-        <div className="d-flex align-items-center gap-1">
-          <img src={heart} className="heart-logo img-fluid" alt="lives logo" />
-          <p className="heart-num m-0 text-danger fw-bold">{lives}</p>
-        </div>
-        <div className="d-flex align-items-center gap-1">
-          <img
-            src={diamond}
-            className="dia-logo img-fluid"
-            alt="diamond logo"
-          />
-          <p className="dia-num m-0 fw-bold">{points}</p>
-        </div>
+        <LivesandDiamonds />
       </div>
       {lessonGroups.map((group, index) => (
         <div
