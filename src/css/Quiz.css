@@ -35,7 +35,9 @@
   position: absolute;
   top: 1.5rem;
   cursor: pointer;
+  font-family: "Baloo", sans-serif;
 }
+
 .quiz-container {
   font-size: clamp(2.5rem, 2vw, 1.5rem);
   max-width: 80%;

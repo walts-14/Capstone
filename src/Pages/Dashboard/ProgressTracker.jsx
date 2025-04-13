@@ -3,28 +3,6 @@ import React, { useState, useContext } from "react";
 import { ProgressContext } from "./ProgressContext";
 import trophy from "../../assets/trophy.png";
 
-const calculateProgress = (progressObj = {}) => {
-  let score = 0;
-  if (progressObj.step1Lecture) score += 25;
-  if (progressObj.step1Quiz) score += 25;
-  if (progressObj.step2Lecture) score += 25;
-  if (progressObj.step2Quiz) score += 25;
-  return score;
-};
-
-const lessonsByLevel = {
-  basic: ["termsone", "termstwo", "termsthree", "termsfour"],
-  intermediate: ["termsfive", "termssix", "termsseven", "termseight"],
-  advanced: ["termsnine", "termsten", "termseleven", "termstwelve"],
-};
-
-// Offsets so we can number lessons 1–12
-const lessonOffsets = {
-  basic: 0, // lessons 1–4
-  intermediate: 4, // lessons 5–8
-  advanced: 8, // lessons 9–12
-};
-
 function ProgressTracker() {
   const { progressData } = useContext(ProgressContext);
   const [userName, setUserName] = React.useState("");
@@ -35,6 +13,28 @@ function ProgressTracker() {
     advanced: { backgroundColor: "#86271E" },
     font: { color: "#160A2E" },
     white: { color: "#ffffff" },
+  };
+
+  const calculateProgress = (progressObj = {}) => {
+    let score = 0;
+    if (progressObj.step1Lecture) score += 25;
+    if (progressObj.step1Quiz) score += 25;
+    if (progressObj.step2Lecture) score += 25;
+    if (progressObj.step2Quiz) score += 25;
+    return score;
+  };
+
+  const lessonsByLevel = {
+    basic: ["termsone", "termstwo", "termsthree", "termsfour"],
+    intermediate: ["termsfive", "termssix", "termsseven", "termseight"],
+    advanced: ["termsnine", "termsten", "termseleven", "termstwelve"],
+  };
+
+  // Offsets so we can number lessons 1–12
+  const lessonOffsets = {
+    basic: 0, // lessons 1–4
+    intermediate: 4, // lessons 5–8
+    advanced: 8, // lessons 9–12
   };
 
   return (

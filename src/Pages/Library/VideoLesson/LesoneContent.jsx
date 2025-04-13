@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
-import Back from '../../../assets/BackButton.png';
-import leftArrow from '../../../assets/leftArrow.png';
-import rightArrow from '../../../assets/rightArrow.png';
+import Back from "../../../assets/BackButton.png";
+import leftArrow from "../../../assets/leftArrow.png";
+import rightArrow from "../../../assets/rightArrow.png";
 import "../../../css/lesoneContent.css";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import LessonTerms from "../Terms/LessonTerms";
 import { ProgressContext } from "../../../Pages/Dashboard/ProgressContext";
+import backkpoint from "../../../assets/backkpoint.png";
 
 const LesoneContent = () => {
   const { lessonKey, termId } = useParams();
@@ -16,9 +17,9 @@ const LesoneContent = () => {
 
   const showButton = location.state?.showButton || false;
   const fromLecture = location.state?.fromLecture || false;
-  
+
   const termsArray = LessonTerms[lessonKey] || [];
-  
+
   // Determine level based on lessonKey (e.g., "termsone" are basic)
   const level = lessonKey.startsWith("terms") ? "basic" : "intermediate";
 
@@ -28,34 +29,62 @@ const LesoneContent = () => {
   const [hasUpdated, setHasUpdated] = useState(false);
 
   // Define term ranges for each step
-  const firstPageTerms = termsArray.slice(0, 15);  // Terms 1-15
+  const firstPageTerms = termsArray.slice(0, 15); // Terms 1-15
   const secondPageTerms = termsArray.slice(15, 30); // Terms 16-30
 
   const currentStepTerms = step === 1 ? firstPageTerms : secondPageTerms;
-  const currentIndex = currentStepTerms.findIndex(term => term.id === parseInt(termId, 10));
+  const currentIndex = currentStepTerms.findIndex(
+    (term) => term.id === parseInt(termId, 10)
+  );
 
   useEffect(() => {
     if (currentIndex === -1 && currentStepTerms.length > 0) {
       const firstTermId = currentStepTerms[0].id;
       if (firstTermId) {
-        navigate(`/lesonecontent/${lessonKey}/${firstTermId}`, { state: { showButton, fromLecture } });
+        navigate(`/lesonecontent/${lessonKey}/${firstTermId}`, {
+          state: { showButton, fromLecture },
+        });
       }
     }
-  }, [step, currentIndex, currentStepTerms, lessonKey, navigate, showButton, fromLecture]);
+  }, [
+    step,
+    currentIndex,
+    currentStepTerms,
+    lessonKey,
+    navigate,
+    showButton,
+    fromLecture,
+  ]);
 
   // NEW: Automatically update progress once per step when the last term is reached
   useEffect(() => {
-    if (!hasUpdated && currentIndex === currentStepTerms.length - 1 && currentStepTerms.length > 0) {
+    if (
+      !hasUpdated &&
+      currentIndex === currentStepTerms.length - 1 &&
+      currentStepTerms.length > 0
+    ) {
       if (step === 1) {
         updateProgress(level, lessonKey, "step1Lecture");
-        console.log(`Automatically updated progress for ${lessonKey} step1Lecture`);
+        console.log(
+          `Automatically updated progress for ${lessonKey} step1Lecture`
+        );
       } else if (step === 2) {
         updateProgress(level, lessonKey, "step2Lecture");
-        console.log(`Automatically updated progress for ${lessonKey} step2Lecture`);
+        console.log(
+          `Automatically updated progress for ${lessonKey} step2Lecture`
+        );
       }
       setHasUpdated(true); // Prevent further updates in the same step
     }
-  }, [hasUpdated, currentIndex, currentStepTerms, step, updateProgress, lessonKey, level]);
+  }, [
+    hasUpdated,
+    currentIndex,
+    currentStepTerms,
+    step,
+    updateProgress,
+    lessonKey,
+    level,
+  ]);
 
   // Reset hasUpdated when step changes
   useEffect(() => {
@@ -67,14 +96,20 @@ const LesoneContent = () => {
   const { terms, definition, video } = currentStepTerms[currentIndex];
 
   const prevTerm = currentStepTerms[currentIndex - 1] || currentStepTerms[0];
-  const nextTerm = currentStepTerms[currentIndex + 1] || currentStepTerms[currentStepTerms.length - 1];
+  const nextTerm =
+    currentStepTerms[currentIndex + 1] ||
+    currentStepTerms[currentStepTerms.length - 1];
 
   const handleNavigation = (direction) => {
     if (direction === "prev" && currentIndex > 0) {
-      navigate(`/lesonecontent/${lessonKey}/${prevTerm.id}`, { state: { showButton, fromLecture } });
+      navigate(`/lesonecontent/${lessonKey}/${prevTerm.id}`, {
+        state: { showButton, fromLecture },
+      });
     }
     if (direction === "next" && currentIndex < currentStepTerms.length - 1) {
-      navigate(`/lesonecontent/${lessonKey}/${nextTerm.id}`, { state: { showButton, fromLecture } });
+      navigate(`/lesonecontent/${lessonKey}/${nextTerm.id}`, {
+        state: { showButton, fromLecture },
+      });
     }
   };
 
@@ -90,57 +125,73 @@ const LesoneContent = () => {
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.load();
-      videoRef.current.play().catch(error => console.error("Video play error:", error));
+      videoRef.current
+        .play()
+        .catch((error) => console.error("Video play error:", error));
     }
   }, [termId, videoRef]);
 
   return (
     <>
-     <div className="back-button">
-        <button onClick={handleBack}>
-          <img src={Back} alt="Back" />
-        </button>
+      <div className="back fs-1 fw-bold d-flex" onClick={handleBack}>
+        <img src={backkpoint} className="img-fluid p-1 mt-1" alt="Back" />
+        <p>Back</p>
       </div>
 
-    <div className="container-lecture d-flex flex-column align-items-center justify-content-center">
-    <div className="tryone-container">
-        <video ref={videoRef} key={video} width="650" height="400" controls autoPlay loop>
-          <source src={video} type="video/mp4" />
-        </video>
-      </div>
+      <div className="container-lecture d-flex flex-column align-items-center justify-content-center">
+        <div className="tryone-container">
+          <video
+            ref={videoRef}
+            key={video}
+            width="650"
+            height="400"
+            muted
+            autoPlay
+            loop
+          >
+            <source src={video} type="video/mp4" />
+          </video>
+        </div>
 
-      <div className="text-container d-flex flex-column align-items-center justify-content-center gap-5 mt-4">
-        <div className="letter-container">
-          <button onClick={() => handleNavigation("prev")} disabled={currentIndex === 0}>
-            <img src={leftArrow} alt="Left Arrow" className="arrow" />
-          </button>
+        <div className="text-container d-flex flex-column align-items-center justify-content-center gap-5 mt-4">
+          <div className="letter-container">
+            <button
+              onClick={() => handleNavigation("prev")}
+              disabled={currentIndex === 0}
+            >
+              <img src={leftArrow} alt="Left Arrow" className="arrow" />
+            </button>
 
-          <div className="textOne">
-            <p className="m-0">{terms}</p>
+            <div className="textOne">
+              <p className="m-0">{terms}</p>
+            </div>
+
+            <button
+              onClick={() => handleNavigation("next")}
+              disabled={currentIndex === currentStepTerms.length - 1}
+            >
+              <img src={rightArrow} alt="Right Arrow" className="arrow" />
+            </button>
           </div>
 
-          <button onClick={() => handleNavigation("next")} disabled={currentIndex === currentStepTerms.length - 1}>
-            <img src={rightArrow} alt="Right Arrow" className="arrow" />
-          </button>
+          <div className="textOne">
+            <p>{definition}</p>
+          </div>
         </div>
 
-        <div className="textOne">
-          <p>{definition}</p>
-        </div>
+        {showButton && currentIndex === currentStepTerms.length - 1 && (
+          <div
+            className="special-button-container"
+            onClick={() =>
+              navigate(`/quiz/${lessonKey}`, { state: { currentStep: step } })
+            }
+          >
+            <button className="special-button">
+              {step === 1 ? "Go to Step 1 Quiz" : "Go to Step 2 Quiz"}
+            </button>
+          </div>
+        )}
       </div>
-
-      {showButton && currentIndex === currentStepTerms.length - 1 && (
-        <div
-          className="special-button-container"
-          onClick={() => navigate(`/quiz/${lessonKey}`, { state: { currentStep: step } })}
-        >
-          <button className="special-button">
-            {step === 1 ? "Go to Step 1 Quiz" : "Go to Step 2 Quiz"}
-          </button>
-        </div>
-      )}
-    </div>
-      
     </>
   );
 };

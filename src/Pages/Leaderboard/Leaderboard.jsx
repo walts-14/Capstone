@@ -16,11 +16,16 @@ function Leaderboard() {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/leaderboard");
+        const response = await axios.get(
+          "http://localhost:5000/api/leaderboard"
+        );
         console.log("✅ Leaderboard Data:", response.data);
         setLeaderboard(response.data);
       } catch (error) {
-        console.error("❌ Error fetching leaderboard:", error.response?.data || error.message);
+        console.error(
+          "❌ Error fetching leaderboard:",
+          error.response?.data || error.message
+        );
       }
     };
     fetchLeaderboard();
@@ -48,7 +53,10 @@ function Leaderboard() {
         </div>
 
         {/* First Place (Static Example) */}
-        <div className="first-place d-flex align-items-center gap-2" style={{ marginBottom: "5rem" }}>
+        <div
+          className="first-place d-flex align-items-center gap-2"
+          style={{ marginBottom: "5rem" }}
+        >
           <img src={medal1} className="img-fluid ms-5" alt="medal img" />
           <div className="d-flex flex-column align-items-start">
             <div className="profile-first d-flex align-items-center gap-2">
@@ -79,8 +87,8 @@ function Leaderboard() {
       </div>
 
       <div className="user-points rounded-5 d-flex text-center justify-content-center pt-3">
-        <span className="text-white fs-3 me-auto ms-5">Users</span>
-        <span className="text-white fs-3 me-5">Points</span>
+        <span className="text-white fs-4 me-auto ms-5">Users</span>
+        <span className="text-white fs-4 me-5">Points</span>
       </div>
 
       <div className="lb-users">
@@ -93,14 +101,19 @@ function Leaderboard() {
                 <div className="user-rank" key={user._id || index}>
                   {/* Fallback for name and points */}
                   <span> {user.name || user.username || "No Name"}</span>
-                  <span>  <img src={diamond} alt="" />{user.points || 0}  </span>
-                  
+                  <span className="ms-auto">
+                    {" "}
+                    <img src={diamond} alt="" />
+                    {user.points || 0}{" "}
+                  </span>
                 </div>
               );
             })}
           </ul>
         ) : (
-          <p className="text-white text-center mt-3">No leaderboard data available.</p>
+          <p className="text-white text-center mt-3">
+            No leaderboard data available.
+          </p>
         )}
       </div>
     </div>

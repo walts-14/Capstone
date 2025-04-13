@@ -78,3 +78,6 @@
   height: auto;
   width: 3vw;
 }
+.percentage-lesson {
+  background-color: var(--semidark-blue);
+}

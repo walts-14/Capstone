@@ -51,29 +51,26 @@ body {
   border: 15px solid #271d3e; /* Adds a white border */
   border-radius: 50px; /* Rounds the corners */
 }
-
-.back-button {
-  font-weight: bold;
+.back {
+  color: var(--purple);
+  font-size: 2rem;
+  height: 5vh;
   position: absolute;
-  top: 20px;
-  left: 20px;
-}
-button {
-  background: none;
+  top: 1.5rem;
+  cursor: pointer;
+  font-family: "Baloo", sans-serif;
 }
 .text-container {
   display: flex;
   justify-content: center;
   width: 100%;
 }
-
 .letter-container {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 20px; /* Space between arrows and the letter */
 }
-
 .text-container {
   display: flex;
   flex-direction: column;
