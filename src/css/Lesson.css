@@ -39,16 +39,28 @@
   padding: 5em;
   margin: 0 7.5rem 0 auto;
 }
+.heart-logo {
+  height: auto;
+  width: 2vw;
+}
+.heart-num {
+  font-family: "Baloo", sans-serif;
+}
 .diff-life-gem {
   display: flex;
   align-items: center;
   gap: 20px; /* Adjust spacing between elements */
+}
+.dia-logo {
+  height: auto;
+  width: 2vw;
 }
 .dia-num {
   font-size: 1rem;
   font-weight: bold;
   margin: 0;
   color: #04aae0;
+  font-family: "Baloo", sans-serif;
 }
 .diff {
   background-color: #d4ac0d; /* Yellow background */

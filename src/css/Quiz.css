@@ -28,7 +28,14 @@
   --midlight-red: #d7443e;
   --midblue: #04aae0;
 }
-
+.back {
+  color: var(--purple);
+  font-size: 2rem;
+  height: 5vh;
+  position: absolute;
+  top: 1.5rem;
+  cursor: pointer;
+}
 .quiz-container {
   font-size: clamp(2.5rem, 2vw, 1.5rem);
   max-width: 80%;
@@ -193,4 +200,8 @@ selected {
   right: 1em;
   top: 50%;
   transform: translateY(-50%);
+}
+.lives-quizz {
+  right: 15rem;
+  top: 13rem;
 }

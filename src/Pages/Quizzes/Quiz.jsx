@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import { questions } from "./QuizQuestions/Questions";
 import axios from "axios";
 import { ProgressContext } from "../../../src/Pages/Dashboard/ProgressContext"; // NEW: Import progress context
+import LivesandDiamonds from "../../Components/LiveandDiamonds";
 
 function Quiz() {
   const navigate = useNavigate();
@@ -218,12 +219,14 @@ function Quiz() {
         className="back fs-1 fw-bold d-flex"
         onClick={() => navigate(`/page/${lessonKey}`)}
       >
-        <img src={backkpoint} className="img-fluid p-1 mt-2" alt="Back" />
+        <img src={backkpoint} className="img-fluid p-1 mt-1" alt="Back" />
         <p>Back</p>
       </div>
-
-      <h3>❤️ Lives: {lives}</h3>
-      <h4>🔥 Streak: {streak}</h4>
+      <div className="lives-quizz d-flex position-absolute gap-4">
+        <LivesandDiamonds />
+      </div>
+      {/*<h3>❤️ Lives: {lives}</h3>
+      <h4>🔥 Streak: {streak}</h4>*/}
 
       <div
         className="progress"

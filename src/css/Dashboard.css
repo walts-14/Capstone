@@ -175,24 +175,6 @@ body {
   font-weight: bold;
   color: var(--white); /* Adjust color */
 }
-.streak {
-  font-family: "Baloo", sans-serif;
-  background-color: var(--dark-purple);
-  height: 10vh;
-  width: 5.8vw;
-  position: absolute;
-  right: 26.5em;
-  top: 5em;
-  line-height: 0.9;
-}
-.streak-num .day-streak {
-  color: #878194;
-}
-.streak img {
-  height: 7vh;
-  width: 3vw;
-  margin-top: 1rem;
-}
 
 .position-lb {
   display: flex;
@@ -202,7 +184,7 @@ body {
   border-radius: 1.4rem;
   background-color: var(--dark-purple);
   height: 10vh;
-  width: 19vw;
+  width: 25vw;
   position: fixed;
   right: 3em;
   top: 5em;

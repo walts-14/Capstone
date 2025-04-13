@@ -37,10 +37,12 @@
   left: 5rem;
   cursor: pointer;
 }
+.back img {
+  height: 5vh;
+}
 .container {
   gap: 20px;
   margin-top: 100px;
-
 }
 .lecture-quiz-container {
   color: var(--white);
@@ -136,28 +138,29 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 350px;       /* adjust as needed */
+  width: 350px; /* adjust as needed */
   margin-top: 100px;
-} 
+}
 .progress-line {
   position: absolute;
   top: 35%;
-  left: 40px;         /* same as half .progress-step width */
+  left: 40px; /* same as half .progress-step width */
   right: 40px;
-  height: 25px;       /* thickness of the pill */
-  background: #3f3653;/* unfilled color */
+  height: 25px; /* thickness of the pill */
+  background: #3f3653; /* unfilled color */
   border-radius: 5px; /* half of height for a pill */
-  overflow: hidden;   /* clip the fill */
+  overflow: hidden; /* clip the fill */
 }
 
 /* The fill — via a pseudo */
 .progress-line::before {
   content: "";
   position: absolute;
-  top: 0; left: 0;
+  top: 0;
+  left: 0;
   height: 100%;
-  width: 50%;           /* 50% when step‑1 is active */
-  background: #924dbf;  /* filled color */
+  width: 50%; /* 50% when step‑1 is active */
+  background: #924dbf; /* filled color */
   transition: width 0.3s ease;
 }
 
@@ -169,11 +172,11 @@
 /* The circles */
 .progress-step {
   position: relative;
-  z-index: 2;          /* above the line */
+  z-index: 2; /* above the line */
   width: 90px;
   height: 90px;
   border: none;
-  border-radius: 50%;  /* perfect circle */
+  border-radius: 50%; /* perfect circle */
   background: #3f3653; /* default (inactive) */
   color: #fff;
   font-size: 3.5rem;
@@ -186,7 +189,6 @@
   justify-content: center;
   cursor: pointer;
   transition: background 0.2s;
-  
 }
 
 /* Active step color */

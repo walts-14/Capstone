@@ -56,11 +56,11 @@ function LivesandDiamonds() {
     <>
       <div className="d-flex align-items-center gap-1">
         <img src={heart} className="heart-logo img-fluid" alt="lives logo" />
-        <p className="heart-num m-0 text-danger fw-bold">{lives}</p>
+        <p className="heart-num m-0 text-danger fw-bold fs-4 ms-1">{lives}</p>
       </div>
       <div className="d-flex align-items-center gap-1">
         <img src={diamond} className="dia-logo img-fluid" alt="diamond logo" />
-        <p className="dia-num m-0 fw-bold">{points}</p>
+        <p className="dia-num m-0 fw-bold fs-4 ms-1">{points}</p>
       </div>
     </>
   );
