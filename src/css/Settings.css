@@ -1,0 +1,144 @@
+@font-face {
+  font-family: "Baloo";
+  src: url("/src/font/Baloo-Regular.ttf") format("truetype");
+  font-style: normal;
+}
+
+:root {
+  --background: #100429;
+  --semidark-purple: #271d3e;
+  --dark-purple: #271d3e;
+  --mid-purple: #7338a0;
+  --grey-purple: #6f687e;
+  --purple: #4a2574;
+  --light-purple: #cf96ff;
+  --stroke-gray: #6f687e;
+  --input-gray: #3f3653;
+  --placeholder: #9f9aa9;
+  --white: #ffff;
+  --basic-blue: #2e86c1;
+  --intermediate-yellow: #d4ac0d;
+  --advance-red: #c0392b;
+  --dark-blue: #174360;
+  --semidark-blue: #205d87;
+  --dark-yellow: #6a5606;
+  --semidark-yellow: #947809;
+  --dark-red: #601c15;
+  --semidark-red: #86271e;
+  --midlight-red: #d7443e;
+  --midblue: #04aae0;
+}
+body {
+  overflow-y: scroll;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.settings-container {
+  background-color: #271d3e;
+  width: clamp(320px, 72vw, 1500px);
+  min-height: 80.5vh;
+  position: relative;
+  top: 7rem;
+  left: 50%;
+  transform: translateX(-50%) translateX(14rem); /* center + offset */
+  padding: 1rem;
+  border-radius: 1rem;
+}
+.change-pic {
+  background-color: var(--input-gray);
+  height: auto;
+  width: clamp(200px, 17vw, 300px);
+  padding: 1rem;
+  margin: 1rem auto;
+  font-size: clamp(0.875rem, 2.5vw, 1.2rem);
+  font-family: "Baloo", sans-serif;
+  position: relative;
+  left: -1.7em;
+  top: 4.5em;
+}
+.settings-container img {
+  position: relative;
+  left: 1.5em;
+  top: 0;
+}
+.student-details {
+  height: auto;
+  width: 37vw;
+  background-color: var(--background);
+  font-size: 3rem;
+  font-family: "Baloo", sans-serif;
+  left: 12.5em;
+  bottom: 4.5em;
+}
+.name-stud {
+  font-family: "Baloo", sans-serif;
+  left: 16em;
+  top: 1em;
+  font-size: 2.5rem;
+}
+.username-stud {
+  font-family: "Baloo", sans-serif;
+  left: 16em;
+  top: 5.5em;
+  font-size: 2.5rem;
+}
+.username-stud-view {
+  height: auto;
+  width: 37vw;
+  background-color: var(--background);
+  font-size: 3rem;
+  font-family: "Baloo", sans-serif;
+  left: 12.5em;
+  bottom: 3em;
+}
+.email-stud {
+  font-family: "Baloo", sans-serif;
+  left: 16em;
+  top: 10em;
+  font-size: 2.5rem;
+}
+.email-stud-view {
+  height: auto;
+  width: 37vw;
+  background-color: var(--background);
+  font-size: 3rem;
+  font-family: "Baloo", sans-serif;
+  left: 12.5em;
+  bottom: 1.5em;
+}
+.profile-picture-wrapper {
+  position: relative;
+  width: 200px; /* adjust based on your original image size */
+  height: 200px;
+  left: 3em;
+  top: 0.5em;
+}
+
+.profile-picture-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* Hidden overlay by default */
+.camera-overlay {
+  position: absolute;
+  top: 0;
+  left: 1.5rem;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  pointer-events: none;
+}
+
+/* Show overlay only when hovering on "Change Profile" */
+.change-pic:hover ~ .camera-overlay {
+  opacity: 1;
+}
