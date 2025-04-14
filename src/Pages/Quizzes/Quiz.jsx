@@ -192,10 +192,8 @@ function Quiz() {
         `Automatically updated progress for ${lessonKey} ${progressKey}`
       );
       setHasUpdatedQuiz(true);
-      // Automatically navigate to finish after a short delay
-      setTimeout(() => {
-        navigate("/finish", { state: { correctAnswers, wrongAnswers } });
-      }, 1000);
+      // Navigate immediately without delay and pass lesson info
+      navigate("/finish", { state: { correctAnswers, wrongAnswers, lessonKey, level } });
     }
   }, [
     quizFinished,
@@ -225,28 +223,23 @@ function Quiz() {
       <div className="lives-quizz d-flex position-absolute gap-4">
         <LivesandDiamonds />
       </div>
-      {/*<h3>❤️ Lives: {lives}</h3>
-      <h4>🔥 Streak: {streak}</h4>*/}
-
-      <div
-        className="progress"
-        role="progressbar"
-        aria-valuenow={(attempts / totalQuestions) * 100}
-        aria-valuemin="0"
-        aria-valuemax="100"
-      >
+      {/* Only render the progress bar when quiz is in progress */}
+      {!quizFinished && (
         <div
-          className="progress-bar"
-          style={{ width: `${(attempts / totalQuestions) * 100}%` }}
-        ></div>
-      </div>
-
-      {quizFinished ? (
-        <div style={{ textAlign: "center", marginTop: "20px" }}>
-          {/* This button is now removed; automatic navigation occurs */}
-          <p>Quiz Completed!</p>
+          className="progress"
+          role="progressbar"
+          aria-valuenow={(attempts / totalQuestions) * 100}
+          aria-valuemin="0"
+          aria-valuemax="100"
+        >
+          <div
+            className="progress-bar"
+            style={{ width: `${(attempts / totalQuestions) * 100}%` }}
+          ></div>
         </div>
-      ) : (
+      )}
+
+      {quizFinished ? null : (
         <>
           <div className="quiz-container fw-bold">
             <p className="quiz-question">{quiz.question}</p>
@@ -263,9 +256,7 @@ function Quiz() {
                 style={{ pointerEvents: showResult ? "none" : "auto" }}
               >
                 <div
-                  className={`choice-${["A", "B", "C", "D"][
-                    index
-                  ].toLowerCase()} rounded-4 m-4 ${
+                  className={`choice-${["A", "B", "C", "D"][index].toLowerCase()} rounded-4 m-4 ${
                     selectedAnswer === index ? "selected" : ""
                   }`}
                 >

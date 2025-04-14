@@ -259,123 +259,123 @@ export const questions = {
           { video: "/video/Basic/Lesson2/buy.mp4", isCorrect: false },
         ],
       },
-      {
-        question: "How do you sign 'BUY'?",
-        answerOptions: [
-          { video: "/video/Basic/Lesson2/buy.mp4", isCorrect: true },
-          { video: "/video/Basic/Lesson2/break.mp4", isCorrect: false },
-          { video: "/video/Basic/Lesson2/call.mp4", isCorrect: false },
-          { video: "/video/Basic/Lesson2/drink.mp4", isCorrect: false },
-        ],
-      },
-      {
-        question: "How do you sign 'BYE'?",
-        answerOptions: [
-          { video: "/video/Basic/Lesson2/bye.mp4", isCorrect: true },
-          { video: "/video/Basic/Lesson2/bath.mp4", isCorrect: false },
-          { video: "/video/Basic/Lesson2/call.mp4", isCorrect: false },
-          { video: "/video/Basic/Lesson2/thankyou.mp4", isCorrect: false },
-        ],
-      },
-      {
-        question: "How do you sign 'CALL'?",
-        answerOptions: [
-          { video: "/video/Basic/Lesson2/call.mp4", isCorrect: true },
-          { video: "/video/Basic/Lesson2/buy.mp4", isCorrect: false },
-          { video: "/video/Basic/Lesson2/cook.mp4", isCorrect: false },
-          { video: "/video/Basic/Lesson2/eat.mp4", isCorrect: false },
-        ],
-      },
-      {
-        question: "How do you sign 'COOK'?",
-        answerOptions: [
-          { video: "/video/Basic/Lesson2/cook.mp4", isCorrect: true },
-          { video: "/video/Basic/Lesson2/call.mp4", isCorrect: false },
-          { video: "/video/Basic/Lesson2/drink.mp4", isCorrect: false },
-          { video: "/video/Basic/Lesson2/help.mp4", isCorrect: false },
-        ],
-      },
-      {
-        question: "How do you sign 'DRINK'?",
-        answerOptions: [
-          { video: "/video/Basic/Lesson2/drink.mp4", isCorrect: true },
-          { video: "/video/Basic/Lesson2/cook.mp4", isCorrect: false },
-          { video: "/video/Basic/Lesson2/eat.mp4", isCorrect: false },
-          { video: "/video/Basic/Lesson2/buy.mp4", isCorrect: false },
-        ],
-      },
-      {
-        question: "How do you sign 'EAT'?",
-        answerOptions: [
-          { video: "/video/Basic/Lesson2/eat.mp4", isCorrect: true },
-          { video: "/video/Basic/Lesson2/drink.mp4", isCorrect: false },
-          { video: "/video/Basic/Lesson2/help.mp4", isCorrect: false },
-          { video: "/video/Basic/Lesson2/stand.mp4", isCorrect: false },
-        ],
-      },
-      {
-        question: "How do you sign 'HELP'?",
-        answerOptions: [
-          { video: "/video/Basic/Lesson2/help.mp4", isCorrect: true },
-          { video: "/video/Basic/Lesson2/hold.mp4", isCorrect: false },
-          { video: "/video/Basic/Lesson2/call.mp4", isCorrect: false },
-          { video: "/video/Basic/Lesson2/put.mp4", isCorrect: false },
-        ],
-      },
-      {
-        question: "How do you sign 'HOLD'?",
-        answerOptions: [
-          { video: "/video/Basic/Lesson2/hold.mp4", isCorrect: true },
-          { video: "/video/Basic/Lesson2/help.mp4", isCorrect: false },
-          { video: "/video/Basic/Lesson2/wait.mp4", isCorrect: false },
-          { video: "/video/Basic/Lesson2/use.mp4", isCorrect: false },
-        ],
-      },
-      {
-        question: "How do you sign 'HOW ARE YOU'?",
-        answerOptions: [
-          { video: "/video/Basic/Lesson2/howareyou.mp4", isCorrect: true },
-          { video: "/video/Basic/Lesson2/yes.mp4", isCorrect: false },
-          { video: "/video/Basic/Lesson2/youarewelcome.mp4", isCorrect: false },
-          { video: "/video/Basic/Lesson2/maybe.mp4", isCorrect: false },
-        ],
-      },
-      {
-        question: "How do you sign 'MAYBE'?",
-        answerOptions: [
-          { video: "/video/Basic/Lesson2/maybe.mp4", isCorrect: true },
-          { video: "/video/Basic/Lesson2/no.mp4", isCorrect: false },
-          { video: "/video/Basic/Lesson2/pay.mp4", isCorrect: false },
-          { video: "/video/Basic/Lesson2/wait.mp4", isCorrect: false },
-        ],
-      },
-      {
-        question: "How do you sign 'MONEY'?",
-        answerOptions: [
-          { video: "/video/Basic/Lesson2/money.mp4", isCorrect: true },
-          { video: "/video/Basic/Lesson2/buy.mp4", isCorrect: false },
-          { video: "/video/Basic/Lesson2/pay.mp4", isCorrect: false },
-          { video: "/video/Basic/Lesson2/please.mp4", isCorrect: false },
-        ],
-      },
-      {
-        question: "How do you sign 'NO'?",
-        answerOptions: [
-          { video: "/video/Basic/Lesson2/no.mp4", isCorrect: true },
-          { video: "/video/Basic/Lesson2/maybe.mp4", isCorrect: false },
-          { video: "/video/Basic/Lesson2/yes.mp4", isCorrect: false },
-          { video: "/video/Basic/Lesson2/youarewelcome.mp4", isCorrect: false },
-        ],
-      },
-      {
-        question: "How do you sign 'PAY'?",
-        answerOptions: [
-          { video: "/video/Basic/Lesson2/pay.mp4", isCorrect: true },
-          { video: "/video/Basic/Lesson2/money.mp4", isCorrect: false },
-          { video: "/video/Basic/Lesson2/call.mp4", isCorrect: false },
-          { video: "/video/Basic/Lesson2/use.mp4", isCorrect: false },
-        ],
-      },
+      // {
+      //   question: "How do you sign 'BUY'?",
+      //   answerOptions: [
+      //     { video: "/video/Basic/Lesson2/buy.mp4", isCorrect: true },
+      //     { video: "/video/Basic/Lesson2/break.mp4", isCorrect: false },
+      //     { video: "/video/Basic/Lesson2/call.mp4", isCorrect: false },
+      //     { video: "/video/Basic/Lesson2/drink.mp4", isCorrect: false },
+      //   ],
+      // },
+      // {
+      //   question: "How do you sign 'BYE'?",
+      //   answerOptions: [
+      //     { video: "/video/Basic/Lesson2/bye.mp4", isCorrect: true },
+      //     { video: "/video/Basic/Lesson2/bath.mp4", isCorrect: false },
+      //     { video: "/video/Basic/Lesson2/call.mp4", isCorrect: false },
+      //     { video: "/video/Basic/Lesson2/thankyou.mp4", isCorrect: false },
+      //   ],
+      // },
+      // {
+      //   question: "How do you sign 'CALL'?",
+      //   answerOptions: [
+      //     { video: "/video/Basic/Lesson2/call.mp4", isCorrect: true },
+      //     { video: "/video/Basic/Lesson2/buy.mp4", isCorrect: false },
+      //     { video: "/video/Basic/Lesson2/cook.mp4", isCorrect: false },
+      //     { video: "/video/Basic/Lesson2/eat.mp4", isCorrect: false },
+      //   ],
+      // },
+      // {
+      //   question: "How do you sign 'COOK'?",
+      //   answerOptions: [
+      //     { video: "/video/Basic/Lesson2/cook.mp4", isCorrect: true },
+      //     { video: "/video/Basic/Lesson2/call.mp4", isCorrect: false },
+      //     { video: "/video/Basic/Lesson2/drink.mp4", isCorrect: false },
+      //     { video: "/video/Basic/Lesson2/help.mp4", isCorrect: false },
+      //   ],
+      // },
+      // {
+      //   question: "How do you sign 'DRINK'?",
+      //   answerOptions: [
+      //     { video: "/video/Basic/Lesson2/drink.mp4", isCorrect: true },
+      //     { video: "/video/Basic/Lesson2/cook.mp4", isCorrect: false },
+      //     { video: "/video/Basic/Lesson2/eat.mp4", isCorrect: false },
+      //     { video: "/video/Basic/Lesson2/buy.mp4", isCorrect: false },
+      //   ],
+      // },
+      // {
+      //   question: "How do you sign 'EAT'?",
+      //   answerOptions: [
+      //     { video: "/video/Basic/Lesson2/eat.mp4", isCorrect: true },
+      //     { video: "/video/Basic/Lesson2/drink.mp4", isCorrect: false },
+      //     { video: "/video/Basic/Lesson2/help.mp4", isCorrect: false },
+      //     { video: "/video/Basic/Lesson2/stand.mp4", isCorrect: false },
+      //   ],
+      // },
+      // {
+      //   question: "How do you sign 'HELP'?",
+      //   answerOptions: [
+      //     { video: "/video/Basic/Lesson2/help.mp4", isCorrect: true },
+      //     { video: "/video/Basic/Lesson2/hold.mp4", isCorrect: false },
+      //     { video: "/video/Basic/Lesson2/call.mp4", isCorrect: false },
+      //     { video: "/video/Basic/Lesson2/put.mp4", isCorrect: false },
+      //   ],
+      // },
+      // {
+      //   question: "How do you sign 'HOLD'?",
+      //   answerOptions: [
+      //     { video: "/video/Basic/Lesson2/hold.mp4", isCorrect: true },
+      //     { video: "/video/Basic/Lesson2/help.mp4", isCorrect: false },
+      //     { video: "/video/Basic/Lesson2/wait.mp4", isCorrect: false },
+      //     { video: "/video/Basic/Lesson2/use.mp4", isCorrect: false },
+      //   ],
+      // },
+      // {
+      //   question: "How do you sign 'HOW ARE YOU'?",
+      //   answerOptions: [
+      //     { video: "/video/Basic/Lesson2/howareyou.mp4", isCorrect: true },
+      //     { video: "/video/Basic/Lesson2/yes.mp4", isCorrect: false },
+      //     { video: "/video/Basic/Lesson2/youarewelcome.mp4", isCorrect: false },
+      //     { video: "/video/Basic/Lesson2/maybe.mp4", isCorrect: false },
+      //   ],
+      // },
+      // {
+      //   question: "How do you sign 'MAYBE'?",
+      //   answerOptions: [
+      //     { video: "/video/Basic/Lesson2/maybe.mp4", isCorrect: true },
+      //     { video: "/video/Basic/Lesson2/no.mp4", isCorrect: false },
+      //     { video: "/video/Basic/Lesson2/pay.mp4", isCorrect: false },
+      //     { video: "/video/Basic/Lesson2/wait.mp4", isCorrect: false },
+      //   ],
+      // },
+      // {
+      //   question: "How do you sign 'MONEY'?",
+      //   answerOptions: [
+      //     { video: "/video/Basic/Lesson2/money.mp4", isCorrect: true },
+      //     { video: "/video/Basic/Lesson2/buy.mp4", isCorrect: false },
+      //     { video: "/video/Basic/Lesson2/pay.mp4", isCorrect: false },
+      //     { video: "/video/Basic/Lesson2/please.mp4", isCorrect: false },
+      //   ],
+      // },
+      // {
+      //   question: "How do you sign 'NO'?",
+      //   answerOptions: [
+      //     { video: "/video/Basic/Lesson2/no.mp4", isCorrect: true },
+      //     { video: "/video/Basic/Lesson2/maybe.mp4", isCorrect: false },
+      //     { video: "/video/Basic/Lesson2/yes.mp4", isCorrect: false },
+      //     { video: "/video/Basic/Lesson2/youarewelcome.mp4", isCorrect: false },
+      //   ],
+      // },
+      // {
+      //   question: "How do you sign 'PAY'?",
+      //   answerOptions: [
+      //     { video: "/video/Basic/Lesson2/pay.mp4", isCorrect: true },
+      //     { video: "/video/Basic/Lesson2/money.mp4", isCorrect: false },
+      //     { video: "/video/Basic/Lesson2/call.mp4", isCorrect: false },
+      //     { video: "/video/Basic/Lesson2/use.mp4", isCorrect: false },
+      //   ],
+      // },
     ],
      lesson2_Part2: [
       {

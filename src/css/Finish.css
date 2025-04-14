@@ -31,7 +31,7 @@
 .finishtext {
   justify-content: space-between;
   width: 100%;
-  top: -2em;
+  top: -.7em;
 }
 .finishtext p {
   font-family: "Baloo", sans-serif;
@@ -56,8 +56,10 @@
 }
 .finishbuttons {
   background-color: var(--semidark-purple);
-  height: 14vh;
-  width: 33vw;
+  height: 15vh;
+  width: 37vw;
+  margin: 0%;
+  gap: 10px;
 }
 .finishbuttons .dashboard-button {
   background-color: var(--mid-purple);
@@ -65,19 +67,35 @@
   width: 12vw;
   font-family: "Baloo", sans-serif;
   color: var(--white);
+  padding: 0% 0% 0% 0%; 
 }
 .finishbuttons .dashboard-button:hover {
   background-color: #100429;
 }
 .finishbuttons .continue {
   background-color: var(--mid-purple);
-  height: 7vh;
-  width: 13vw;
+  width: 15vw;
+  height: 10vh;
+  display: flex; /* Enable Flexbox */
+  align-items: center; /* Center vertically */
+  justify-content: center;
+}
+.finishbuttons button:nth-child(1){
+  width: 15vw;
+  height: 10vh;
+  border: 5px solid var(--mid-purple);
+  background-color: var(--background);
+  padding: 10px;
+  gap: 3px;
 }
 .dashboard-button img {
   height: auto;
-  width: 3vw;
+  width: 4vw;
 }
 .percentage-lesson {
   background-color: var(--semidark-blue);
+}
+
+.custom-gap {
+  gap: 20rem;
 }
