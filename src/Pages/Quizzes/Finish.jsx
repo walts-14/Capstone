@@ -14,6 +14,7 @@ import { ProgressContext } from "../../../src/Pages/Dashboard/ProgressContext";
 function Finish() {
   const navigate = useNavigate();
   const location = useLocation();
+  
   // Expecting lessonKey and level to be passed along with answers info
   const { correctAnswers = 0, wrongAnswers = 0, lessonKey, level } = location.state || {};
 
@@ -106,7 +107,7 @@ function Finish() {
         <button
           type="button"
           className="continue d-flex justify-content-center align-items-center rounded-4 pt-4 mb-4 ms-auto me-5 fs-1"
-          onClick={() => navigate("/correct")}
+          onClick={() => navigate(`/page/${lessonKey}`, { state: { lessonKey } })}
         >
           Continue
           <img

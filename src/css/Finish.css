@@ -81,16 +81,16 @@
   justify-content: center;
 }
 .finishbuttons button:nth-child(1){
-  width: 15vw;
+  width: 16vw;
   height: 10vh;
   border: 5px solid var(--mid-purple);
   background-color: var(--background);
   padding: 10px;
-  gap: 3px;
+  gap: 15px;
 }
 .dashboard-button img {
   height: auto;
-  width: 4vw;
+  width: 25%;
 }
 .percentage-lesson {
   background-color: var(--semidark-blue);
@@ -105,13 +105,14 @@
   font-family: "Baloo", sans-serif;
   background-color: var(--mid-purple);
   padding: 10px;
-  gap: 50px;
-  color: var(--semidark-purple);
+  gap: 40px;
+  color: var(--background);
+
   
 }
 
 .Quiz img {
   height: auto;
-  width: 3.9vw;
-  margin-left: -60px;
+  width: 33%;
+  margin-left: -55px;
 }

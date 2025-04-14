@@ -4,20 +4,26 @@ import "../../../css/Finish.css";
 import Applause from "../../../assets/Applause.png";
 import diamond from "../../../assets/diamond.png";
 import dashboardlogo from "../../../assets/dashboardlogo.png";
+import quiz from "../../../assets/quiz.png";
 import { ProgressContext } from "../../../../src/Pages/Dashboard/ProgressContext";
 
 function FinishLecture() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { lessonKey, level, step } = location.state || {};
+
   // Extract state passed to this component
   const {
     correctAnswers = 0,
     wrongAnswers = 0,
+    lessonKey = "termsone",
+    level = "basic",
+    step = 1,
   } = location.state || {};
 
-  const numericStep = parseInt(step, 10); // Ensure the step is parsed as a number
+  // Parse the step value as a number
+  const numericStep = parseInt(step, 10);
 
+  // Define styles for different levels
   const styles = {
     basic: { backgroundColor: "#205D87" },
     intermediate: { backgroundColor: "#947809" },
@@ -25,12 +31,14 @@ function FinishLecture() {
     white: { color: "#ffffff" },
   };
 
+  // Lessons ordering per level
   const lessonsByLevel = {
     basic: ["termsone", "termstwo", "termsthree", "termsfour"],
-    intermediate: ["termsfive", "termssix", "termsseven", "termseight"],
+    intermediate: ["termsfive", "termssix", "termseven", "termseight"],
     advanced: ["termsnine", "termsten", "termseleven", "termstwelve"],
   };
 
+  // Offsets for lesson numbering
   const lessonOffsets = {
     basic: 0,
     intermediate: 4,
@@ -54,11 +62,15 @@ function FinishLecture() {
   const lessonIndex = lessons.indexOf(lessonKey);
   const displayName = `Lesson ${lessonOffsets[level] + lessonIndex + 1}`;
 
-  // Handle quiz navigation based on the current step
+  // Calculate diamond reward: base reward (correctAnswers*10) plus bonus 50 for finishing the lesson.
+  const diamondReward = correctAnswers * 10 + 50;
+
+  // Handle quiz navigation based on the current step.
+  // This special button will use current step to decide which quiz to load.
   const handleQuizClick = () => {
     console.log(`Navigating to quiz for: ${lessonKey}, step: ${numericStep}`);
     navigate(`/quiz/${lessonKey}`, {
-      state: { currentStep: numericStep }, // Pass currentStep as part of the state
+      state: { currentStep: numericStep }, // Pass the current step so Quiz component can load the appropriate questions.
     });
   };
 
@@ -70,7 +82,8 @@ function FinishLecture() {
 
         <div className="dia-reward d-flex pt-1">
           <img src={diamond} className="img-fluid p-1 ms-5" alt="diamond" />
-          <p className="dia-number ms-3 me-5">{correctAnswers * 10}</p>
+          {/* Display diamond reward including the bonus */}
+          <p className="dia-number ms-3 me-5">{diamondReward}</p>
         </div>
 
         <div
@@ -89,16 +102,25 @@ function FinishLecture() {
           className="dashboard-button d-flex justify-content-center align-items-center mt-2 ms-5 rounded-4 fs-1"
           onClick={() => navigate("/dashboard")}
         >
-          <img src={dashboardlogo} className="img-fluid p-1 mt-1" alt="dashboard" />
+          <img
+            src={dashboardlogo}
+            className="img-fluid d-flex"
+            alt="dashboard"
+          />
           Dashboard
         </button>
 
-        {/* Special button to navigate to the quiz */}
-        <div className="special-button-container" onClick={handleQuizClick}>
-          <button className="special-button">
-            {numericStep === 1 ? "Go to Step 1 Quiz" : "Go to Step 2 Quiz"}
+        {/* Special dynamic quiz button */}
+          <button 
+           className="Quiz d-flex justify-content-center align-items-center rounded-4 pt-3 mt-1 ms-auto me-5 fs-1"
+           onClick={handleQuizClick} >
+             <img
+              src={quiz}
+              className="img-fluid d-flex p-1 mb-1"
+              alt="dashboard"
+             />
+            {numericStep === 1 ? "1 Quiz" : "2 Quiz"}
           </button>
-        </div>
       </div>
     </>
   );
