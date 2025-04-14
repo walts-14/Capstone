@@ -99,3 +99,19 @@
 .custom-gap {
   gap: 20rem;
 }
+.Quiz {
+  width: 15vw;
+  height: 10vh;
+  font-family: "Baloo", sans-serif;
+  background-color: var(--mid-purple);
+  padding: 10px;
+  gap: 50px;
+  color: var(--semidark-purple);
+  
+}
+
+.Quiz img {
+  height: auto;
+  width: 3.9vw;
+  margin-left: -60px;
+}

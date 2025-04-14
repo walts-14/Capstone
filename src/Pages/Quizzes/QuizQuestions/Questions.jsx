@@ -870,7 +870,9 @@ export const questions = {
           ],
         },
       ],
-      
+      lesson3_Part2: [
+
+      ],
       lesson4_Part1: [
         {
           question: "How do you sign 'Ayusin'?",
@@ -1151,6 +1153,9 @@ export const questions = {
             { video: "/video/Basic/Lesson4/ballpen.mp4", isCorrect: false },
           ],
         },
-      ]
+      ],
+      lesson4_Part2: [
+        
+      ],
       
 }

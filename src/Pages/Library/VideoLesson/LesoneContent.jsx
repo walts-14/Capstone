@@ -11,28 +11,26 @@ import backkpoint from "../../../assets/backkpoint.png";
 const LesoneContent = () => {
   const { lessonKey, termId } = useParams();
   const navigate = useNavigate();
-  const videoRef = useRef(null);
   const location = useLocation();
   const { updateProgress } = useContext(ProgressContext);
 
+  const videoRef = useRef(null);
   const showButton = location.state?.showButton || false;
   const fromLecture = location.state?.fromLecture || false;
 
   const termsArray = LessonTerms[lessonKey] || [];
+  console.log("LessonTerms for lessonKey:", lessonKey, termsArray);
 
-  // Determine level based on lessonKey (e.g., "termsone" are basic)
   const level = lessonKey.startsWith("terms") ? "basic" : "intermediate";
 
-  // Track current step: step 1 if termId <= 15, else step 2.
+  // Determine step based on termId (if id > 15 then step 2)
   const [step, setStep] = useState(parseInt(termId, 10) > 15 ? 2 : 1);
-  // NEW: local flag to prevent repeated update calls
   const [hasUpdated, setHasUpdated] = useState(false);
 
-  // Define term ranges for each step
-  const firstPageTerms = termsArray.slice(0, 15); // Terms 1-15
-  const secondPageTerms = termsArray.slice(15, 30); // Terms 16-30
-
+  const firstPageTerms = termsArray.slice(0, 15);
+  const secondPageTerms = termsArray.slice(15, 30);
   const currentStepTerms = step === 1 ? firstPageTerms : secondPageTerms;
+
   const currentIndex = currentStepTerms.findIndex(
     (term) => term.id === parseInt(termId, 10)
   );
@@ -46,17 +44,8 @@ const LesoneContent = () => {
         });
       }
     }
-  }, [
-    step,
-    currentIndex,
-    currentStepTerms,
-    lessonKey,
-    navigate,
-    showButton,
-    fromLecture,
-  ]);
+  }, [step, currentIndex, currentStepTerms, lessonKey, navigate, showButton, fromLecture]);
 
-  // NEW: Automatically update progress once per step when the last term is reached
   useEffect(() => {
     if (
       !hasUpdated &&
@@ -65,28 +54,15 @@ const LesoneContent = () => {
     ) {
       if (step === 1) {
         updateProgress(level, lessonKey, "step1Lecture");
-        console.log(
-          `Automatically updated progress for ${lessonKey} step1Lecture`
-        );
+        console.log(`Automatically updated progress for ${lessonKey} step1Lecture`);
       } else if (step === 2) {
         updateProgress(level, lessonKey, "step2Lecture");
-        console.log(
-          `Automatically updated progress for ${lessonKey} step2Lecture`
-        );
+        console.log(`Automatically updated progress for ${lessonKey} step2Lecture`);
       }
-      setHasUpdated(true); // Prevent further updates in the same step
+      setHasUpdated(true);
     }
-  }, [
-    hasUpdated,
-    currentIndex,
-    currentStepTerms,
-    step,
-    updateProgress,
-    lessonKey,
-    level,
-  ]);
+  }, [hasUpdated, currentIndex, currentStepTerms, step, updateProgress, lessonKey, level]);
 
-  // Reset hasUpdated when step changes
   useEffect(() => {
     setHasUpdated(false);
   }, [step]);
@@ -94,11 +70,11 @@ const LesoneContent = () => {
   if (currentIndex === -1) return <p>Loading...</p>;
 
   const { terms, definition, video } = currentStepTerms[currentIndex];
-
   const prevTerm = currentStepTerms[currentIndex - 1] || currentStepTerms[0];
   const nextTerm =
-    currentStepTerms[currentIndex + 1] ||
-    currentStepTerms[currentStepTerms.length - 1];
+    currentIndex < currentStepTerms.length - 1
+      ? currentStepTerms[currentIndex + 1]
+      : null;
 
   const handleNavigation = (direction) => {
     if (direction === "prev" && currentIndex > 0) {
@@ -106,10 +82,22 @@ const LesoneContent = () => {
         state: { showButton, fromLecture },
       });
     }
-    if (direction === "next" && currentIndex < currentStepTerms.length - 1) {
-      navigate(`/lesonecontent/${lessonKey}/${nextTerm.id}`, {
-        state: { showButton, fromLecture },
-      });
+    if (direction === "next") {
+      if (currentIndex === currentStepTerms.length - 1) {
+        // At the end of this step, navigate to the FinishLecture component.
+        navigate("/finishlecture", {
+          state: {
+            lessonKey,
+            level,
+            step,
+            // Optionally, pass along additional state (e.g., currentStep, correctAnswers, wrongAnswers)
+          },
+        });
+      } else {
+        navigate(`/lesonecontent/${lessonKey}/${nextTerm.id}`, {
+          state: { showButton, fromLecture },
+        });
+      }
     }
   };
 
@@ -155,10 +143,7 @@ const LesoneContent = () => {
 
         <div className="text-container d-flex flex-column align-items-center justify-content-center gap-5 mt-4">
           <div className="letter-container">
-            <button
-              onClick={() => handleNavigation("prev")}
-              disabled={currentIndex === 0}
-            >
+            <button onClick={() => handleNavigation("prev")}>
               <img src={leftArrow} alt="Left Arrow" className="arrow" />
             </button>
 
@@ -166,10 +151,8 @@ const LesoneContent = () => {
               <p className="m-0">{terms}</p>
             </div>
 
-            <button
-              onClick={() => handleNavigation("next")}
-              disabled={currentIndex === currentStepTerms.length - 1}
-            >
+            {/* Remove the disabled attribute from the next button so it remains clickable even at the end */}
+            <button onClick={() => handleNavigation("next")}>
               <img src={rightArrow} alt="Right Arrow" className="arrow" />
             </button>
           </div>
@@ -178,19 +161,6 @@ const LesoneContent = () => {
             <p>{definition}</p>
           </div>
         </div>
-
-        {showButton && currentIndex === currentStepTerms.length - 1 && (
-          <div
-            className="special-button-container"
-            onClick={() =>
-              navigate(`/quiz/${lessonKey}`, { state: { currentStep: step } })
-            }
-          >
-            <button className="special-button">
-              {step === 1 ? "Go to Step 1 Quiz" : "Go to Step 2 Quiz"}
-            </button>
-          </div>
-        )}
       </div>
     </>
   );

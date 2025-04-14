@@ -32,13 +32,12 @@ function Quiz() {
     },
     termsthree: {
       1: questions.lesson3_Part1,
+      2: questions.lesson3_Part2,
     },
     termsfour: {
       1: questions.lesson4_Part1,
-    },
-    termsfive: {
-      1: questions.lesson5_Part1,
-    },
+      2: questions.lesson4_Part2,
+    }
     // Add additional mappings as needed...
   };
 

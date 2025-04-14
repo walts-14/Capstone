@@ -25,6 +25,7 @@ import Correct from "./Pages/Quizzes/Correct.jsx";
 import Wrong from "./Pages/Quizzes/Wrong.jsx";
 import Repeat from "./Pages/Quizzes/Repeat.jsx";
 import Finish from "./Pages/Quizzes/Finish.jsx";
+import FinishLecture from "./Pages/Library/Terms/Finishlecture.jsx";
 import VideoLecture from "./Pages/Library/Lectures/LectureVids.jsx";
 import LessonButtons from "./Pages/Dashboard/LessonButtons.jsx";
 import LesoneContent from "./Pages/Library/VideoLesson/LesoneContent.jsx";
@@ -65,7 +66,8 @@ const router = createBrowserRouter([
       { path: "videoupload", element: <VideoUpload/> },
       { path: "admin", element: <Admin/> },
       { path: "superadmin", element: <SuperAdmin/> },
-      { path: "progresstracker", element: <ProgressTracker/> }
+      { path: "progresstracker", element: <ProgressTracker/> },
+      { path: "finishlecture", element: <FinishLecture/> }
 ,
     ],
   },

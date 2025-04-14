@@ -69,7 +69,7 @@ function Finish() {
     <>
       <div className="finishtext d-flex flex-column align-items-center position-relative fw-bold fs-1">
         <img src={Applause} className="img-fluid p-1 mb-3" alt="applause img" />
-        <p> You've Finished the Lesson </p>
+        <p> You've Finished the Quiz </p>
         <div className="dia-reward d-flex pt-1">
           <img src={diamond} className="img-fluid p-1 ms-5" alt="diamond img" />
           <p className="dia-number ms-3 me-5">{correctAnswers * 10}</p>
