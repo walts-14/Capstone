@@ -21,7 +21,22 @@ const LesoneContent = () => {
   const termsArray = LessonTerms[lessonKey] || [];
   console.log("LessonTerms for lessonKey:", lessonKey, termsArray);
 
-  const level = lessonKey.startsWith("terms") ? "basic" : "intermediate";
+  const levelMapping = {
+    termsone: "basic",
+    termstwo: "basic",
+    termsthree: "basic",
+    termsfour: "basic",
+    termsfive: "intermediate",
+    termssix: "intermediate",
+    termsseven: "intermediate",
+    termseight: "intermediate",
+    termsnine: "advanced",
+    termsten: "advanced",
+    termseleven: "advanced",
+    termstwelve: "advanced",
+  };
+
+  const level = levelMapping[lessonKey] || "basic";
 
   // Determine step based on termId (if id > 15 then step 2)
   const [step, setStep] = useState(parseInt(termId, 10) > 15 ? 2 : 1);
@@ -78,25 +93,57 @@ const LesoneContent = () => {
 
   const handleNavigation = (direction) => {
     if (direction === "prev" && currentIndex > 0) {
+      // Navigate to the previous term
       navigate(`/lesonecontent/${lessonKey}/${prevTerm.id}`, {
         state: { showButton, fromLecture },
       });
     }
     if (direction === "next") {
-      if (currentIndex === currentStepTerms.length - 1) {
-        // At the end of this step, navigate to the FinishLecture component.
-        navigate("/finishlecture", {
-          state: {
-            lessonKey,
-            level,
-            step,
-            // Optionally, pass along additional state (e.g., currentStep, correctAnswers, wrongAnswers)
-          },
-        });
+      // If coming from lecture or page, use finish component at the end of current step
+      if (location.state?.fromLecture) {
+        if (currentIndex === currentStepTerms.length - 1) {
+          navigate("/finishlecture", {
+            state: {
+              lessonKey,
+              level,
+              step,
+              // additional state if needed
+            },
+          });
+        } else {
+          navigate(`/lesonecontent/${lessonKey}/${nextTerm.id}`, {
+            state: { showButton, fromLecture },
+          });
+        }
       } else {
-        navigate(`/lesonecontent/${lessonKey}/${nextTerm.id}`, {
-          state: { showButton, fromLecture },
-        });
+        // User came from the terms page
+        if (step === 1) {
+          // In step 1 (first 15 terms)
+          if (currentIndex === currentStepTerms.length - 1) {
+            // At end of step 1, update step to 2 and navigate to first term of step 2
+            setStep(2);
+            const firstTermIdStep2 = secondPageTerms[0].id; // secondPageTerms contains terms 16-30
+            navigate(`/lesonecontent/${lessonKey}/${firstTermIdStep2}`, {
+              state: { showButton, fromLecture },
+            });
+          } else {
+            // Continue in step 1 normally
+            navigate(`/lesonecontent/${lessonKey}/${nextTerm.id}`, {
+              state: { showButton, fromLecture },
+            });
+          }
+        } else if (step === 2) {
+          // In step 2 (terms 16-30)
+          if (currentIndex === currentStepTerms.length - 1) {
+            // At the very end of step 2: do nothing or show a message
+            console.log("End of lesson reached.");
+          } else {
+            // Normal navigation in step 2
+            navigate(`/lesonecontent/${lessonKey}/${nextTerm.id}`, {
+              state: { showButton, fromLecture },
+            });
+          }
+        }
       }
     }
   };

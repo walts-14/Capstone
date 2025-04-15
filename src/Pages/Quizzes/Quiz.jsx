@@ -18,7 +18,22 @@ function Quiz() {
   const currentStep = location.state?.currentStep || 1; // Default to step 1 if not passed
 
   // NEW: Determine level based on lessonKey
-  const level = lessonKey.startsWith("terms") ? "basic" : "intermediate";
+  const levelMapping = {
+    termsone: "basic",
+    termstwo: "basic",
+    termsthree: "basic",
+    termsfour: "basic",
+    termsfive: "intermediate",
+    termssix: "intermediate",
+    termsseven: "intermediate",
+    termseight: "intermediate",
+    termsnine: "advanced",
+    termsten: "advanced",
+    termseleven: "advanced",
+    termstwelve: "advanced",
+  };
+
+  const level = levelMapping[lessonKey] || "basic";
 
   // Mapping of lessonKey to question set (nested by step)
   const quizMapping = {
@@ -37,6 +52,10 @@ function Quiz() {
     termsfour: {
       1: questions.lesson4_Part1,
       2: questions.lesson4_Part2,
+    },
+    termsfive: {
+      1: questions.lesson5_Part1,
+ 
     }
     // Add additional mappings as needed...
   };

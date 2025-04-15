@@ -9,14 +9,14 @@ const lessonRoutes = [
   { id: 2, termId: "termstwo", unlocked: true },
   { id: 3, termId: "termsthree", unlocked: true },
   { id: 4, termId: "termsfour", unlocked: true },
-  { id: 5, termId: "termssix", unlocked: true },
-  { id: 6, termId: "termsseven", unlocked: true },
-  { id: 7, termId: "termseight", unlocked: true },
-  { id: 8, termId: "termsnine", unlocked: true },
-  { id: 9, termId: "termsten", unlocked: true },
-  { id: 10, termId: "termseleven", unlocked: true },
-  { id: 11, termId: "termstwelve", unlocked: true },
-  { id: 12, termId: "termsthirteen", unlocked: true },
+  { id: 5, termId: "termsfive", unlocked: true },
+  { id: 6, termId: "termssix", unlocked: true },
+  { id: 7, termId: "termsseven", unlocked: true },
+  { id: 8, termId: "termseight", unlocked: true },
+  { id: 9, termId: "termsnine", unlocked: true },
+  { id: 10, termId: "termsten", unlocked: true },
+  { id: 11, termId: "termseleven", unlocked: true },
+  { id: 12, termId: "termstwelve", unlocked: true },
 ];
 
 function LessonButtons() {

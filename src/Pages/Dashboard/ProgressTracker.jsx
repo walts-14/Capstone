@@ -73,7 +73,7 @@ function ProgressTracker() {
                   style={styles[level]}
                 >
                   <span>{displayName}</span>
-                  <span style={styles.white}>{progressPercent}%</span>
+                  <span style={{ color: "#160A2E" }}>{progressPercent}%</span>
                 </div>
               );
             })}
