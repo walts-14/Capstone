@@ -49,14 +49,25 @@
 }
 .user-rank {
   display: flex;
-  justify-content: left;
+  justify-content: space-between;
   align-items: center;
-  gap: 60rem;
   background-color: var(--semidark-purple);
   margin-bottom: 10px;
   font-size: 3rem;
+  gap: 51rem;
   border-radius: 20px;
-  padding: 0px 20px 0px 20px;
+  padding: 0.5rem 1rem;
+}
+.user-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.user-name {
+  font-family: "Baloo", sans-serif;
+  color: var(--white);
+  font-size: 2.5rem;
 }
 .user-rank span:nth-child(2) {
   font-family: "Baloo", sans-serif;
@@ -72,10 +83,12 @@
   display: flex;
   justify-content: left;
   align-items: left;
-  gap: 2rem;
   font-family: "Baloo", sans-serif;
 }
-
 .leaderboard-container {
   margin-left: 27rem;
+}
+.number-label {
+  width: 30px;
+  text-align: right;
 }
