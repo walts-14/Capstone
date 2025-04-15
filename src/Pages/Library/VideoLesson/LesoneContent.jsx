@@ -21,7 +21,22 @@ const LesoneContent = () => {
   const termsArray = LessonTerms[lessonKey] || [];
   console.log("LessonTerms for lessonKey:", lessonKey, termsArray);
 
-  const level = lessonKey.startsWith("terms") ? "basic" : "intermediate";
+  const levelMapping = {
+    termsone: "basic",
+    termstwo: "basic",
+    termsthree: "basic",
+    termsfour: "basic",
+    termsfive: "intermediate",
+    termssix: "intermediate",
+    termsseven: "intermediate",
+    termseight: "intermediate",
+    termsnine: "advanced",
+    termsten: "advanced",
+    termseleven: "advanced",
+    termstwelve: "advanced",
+  };
+
+  const level = levelMapping[lessonKey] || "basic";
 
   // Determine step based on termId (if id > 15 then step 2)
   const [step, setStep] = useState(parseInt(termId, 10) > 15 ? 2 : 1);

@@ -14,7 +14,7 @@ function ProgressTracker() {
     font: { color: "#160A2E" },
     white: { color: "#ffffff" },
   };
-  
+
   const calculateProgress = (progressObj = {}) => {
     let score = 0;
     if (progressObj.step1Lecture) score += 25;

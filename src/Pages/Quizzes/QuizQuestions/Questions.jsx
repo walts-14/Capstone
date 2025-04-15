@@ -1155,7 +1155,9 @@ export const questions = {
         },
       ],
       lesson4_Part2: [
-        
+       
       ],
-      
+      lesson5_Part1: [  
+        
+      ]
 }
