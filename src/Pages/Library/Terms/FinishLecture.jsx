@@ -91,8 +91,8 @@ function FinishLecture() {
           className={`${level}tracker text.white d-flex m-0 rounded-4 p-3 justify-content-between custom-gap`}
           style={styles[level]}
         >
-          <span>{displayName}</span>
-          <span style={styles.white}>{progressPercent}%</span>
+          <span style={styles.white}>{displayName}</span>
+          <span style={{ color: "#160A2E" }}>{progressPercent}%</span>
         </div>
       </div>
 

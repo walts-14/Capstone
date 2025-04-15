@@ -144,6 +144,41 @@ const LessonTerms = {
     
     ],
     // Add more lessons here
+    termsfive: [
+
+        { id: 1, terms: "Ayusin", definition: "Isaayos o pagandahin ang pagkakaayos ng isang bagay", video: "/video/Basic/Lesson4/arrange.mp4" },
+        { id: 2, terms: "Bag", definition: "Isang lalagyan para sa mga gamit", video: "/video/Basic/Lesson4/bag.mp4" },
+        { id: 3, terms: "Bolpen", definition: "Isang gamit sa pagsusulat na may tinta", video: "/video/Basic/Lesson4/ballpen.mp4" },
+        { id: 4, terms: "Dalhin", definition: "Pagdadala ng isang bagay sa ibang lugar", video: "/video/Basic/Lesson4/bring.mp4" },
+        { id: 5, terms: "Upuan", definition: "Isang gamit na inuupuan", video: "/video/Basic/Lesson4/chair.mp4" },
+        { id: 6, terms: "Klase", definition: "Isang pagtitipon ng mga mag-aaral upang matuto", video: "/video/Basic/Lesson4/class.mp4" },
+        { id: 7, terms: "Kaklase", definition: "Kasamang mag-aaral sa isang klase", video: "/video/Basic/Lesson4/classmate.mp4" },
+        { id: 8, terms: "Silid-aralan", definition: "Isang silid na ginagamit para sa pagtuturo at pag-aaral", video: "/video/Basic/Lesson4/classroom.mp4" },
+        { id: 9, terms: "Linisin", definition: "Tanggalin ang dumi o kalat sa isang lugar o bagay", video: "/video/Basic/Lesson4/clean.mp4" },
+        { id: 10, terms: "Kompyuter", definition: "Isang elektronikong aparato para sa pagpoproseso ng impormasyon", video: "/video/Basic/Lesson4/computer.mp4" },
+        { id: 11, terms: "Kopya", definition: "Pagkuha ng kaparehong bersyon ng isang bagay", video: "/video/Basic/Lesson4/copy.mp4" },
+        { id: 12, terms: "Krayola", definition: "Isang makulay na panulat na ginagamit sa pagguhit", video: "/video/Basic/Lesson4/crayons.mp4" },
+        { id: 13, terms: "Gumuhit", definition: "Lumikha ng larawan gamit ang lapis o iba pang panulat", video: "/video/Basic/Lesson4/draw.mp4" },
+        { id: 14, terms: "Bentilador", definition: "Isang kagamitang nagbibigay ng hangin", video: "/video/Basic/Lesson4/electricfan.mp4" },
+        { id: 15, terms: "Magpatala", definition: "Magparehistro o magpalista sa isang aktibidad o paaralan", video: "/video/Basic/Lesson4/enroll.mp4" },
+        { id: 16, terms: "Pantasa", definition: "Gamit na ginagamit upang patalasin ang lapis", video: "/video/Basic/Lesson4/sharpener.mp4" },
+        { id: 17, terms: "Takdang-aralin", definition: "Gawaing ibinibigay ng guro para sa bahay", video: "/video/Basic/Lesson4/homework.mp4" },
+        { id: 18, terms: "Aklatan", definition: "Lugar kung saan maraming libro ang maaaring hiramin o basahin", video: "/video/Basic/Lesson4/library.mp4" },
+        { id: 19, terms: "Mop", definition: "Isang gamit sa paglilinis ng sahig", video: "/video/Basic/Lesson4/mop.mp4" },
+        { id: 20, terms: "Klase sa Online", definition: "Isang klase na isinasagawa gamit ang internet", video: "/video/Basic/Lesson4/onlineclass.mp4" },
+        { id: 21, terms: "Papel", definition: "Manipis na materyal na ginagamit sa pagsusulat o pag-print", video: "/video/Basic/Lesson4/paper.mp4" },
+        { id: 22, terms: "Lapis", definition: "Isang panulat na may grapitong dulo", video: "/video/Basic/Lesson4/pencil.mp4" },
+        { id: 23, terms: "Punong-guro", definition: "Namumuno sa isang paaralan", video: "/video/Basic/Lesson4/principal.mp4" },
+        { id: 24, terms: "Paaralan", definition: "Lugar kung saan nag-aaral ang mga mag-aaral", video: "/video/Basic/Lesson4/school.mp4" },
+        { id: 25, terms: "Gunting", definition: "Gamit sa pagputol ng papel o tela", video: "/video/Basic/Lesson4/scissor.mp4" },
+        { id: 26, terms: "Sapatos", definition: "Gamit na isinusuot sa paa", video: "/video/Basic/Lesson4/shoe.mp4" },
+        { id: 27, terms: "Mag-aral", definition: "Matuto o magbasa upang magkaroon ng kaalaman", video: "/video/Basic/Lesson4/study.mp4" },
+        { id: 28, terms: "Lamesa", definition: "Isang gamit na may patag na ibabaw para sa pagkain o trabaho", video: "/video/Basic/Lesson4/table.mp4" },
+        { id: 29, terms: "Telebisyon", definition: "Isang aparato na nagpapakita ng larawan at tunog", video: "/video/Basic/Lesson4/tv.mp4" },
+        { id: 30, terms: "Uniporme", definition: "Kasootan na isinusuot sa paaralan o trabaho", video: "/video/Basic/Lesson4/uniform.mp4" },
+        { id: 31, terms: "Pisara", definition: "Isang patag na ibabaw kung saan nagsusulat ang guro", video: "/video/Basic/Lesson4/whiteboard.mp4" }
+    
+    ],
 };
 
 export default LessonTerms;

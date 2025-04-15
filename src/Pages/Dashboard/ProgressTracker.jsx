@@ -14,7 +14,23 @@ function ProgressTracker() {
     font: { color: "#160A2E" },
     white: { color: "#ffffff" },
   };
-
+  const levelMapping = {
+    termsone: "basic",
+    termstwo: "basic",
+    termsthree: "basic",
+    termsfour: "basic",
+    termsfive: "intermediate",
+    termssix: "intermediate",
+    termsseven: "intermediate",
+    termseight: "intermediate",
+    termsnine: "advanced",
+    termsten: "advanced",
+    termseleven: "advanced",
+    termstwelve: "advanced"
+  };
+  
+  const level = levelMapping[lessonKey] || "basic";
+  
   const calculateProgress = (progressObj = {}) => {
     let score = 0;
     if (progressObj.step1Lecture) score += 25;
@@ -73,7 +89,7 @@ function ProgressTracker() {
                   style={styles[level]}
                 >
                   <span>{displayName}</span>
-                  <span style={styles.white}>{progressPercent}%</span>
+                  <span style={{ color: "#160A2E" }}>{progressPercent}%</span>
                 </div>
               );
             })}
