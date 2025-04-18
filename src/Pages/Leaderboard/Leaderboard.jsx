@@ -38,7 +38,7 @@ function Leaderboard() {
 
   return (
     <>
-      <div className="leaderboard-container d-flex flex-column align-items-center justify-content-center ">
+      <div className="leaderboard-container d-flex flex-column align-items-center justify-content-center my-4">
         <Sidenav />
         <div className="leaderboard-header d-flex flex-row align-items-center justify-content-center">
           {/* Second Place */}
@@ -115,7 +115,7 @@ function Leaderboard() {
         </div>
 
         <div className="user-points rounded-5 d-flex text-center justify-content-center pt-3">
-          <span className="text-white fs-2 me-auto ms-4">Users</span>
+          <span className="text-white fs-2 me-auto ms-4 ">Users</span>
           <span className="text-white fs-2 me-4">Points</span>
         </div>
 
@@ -127,7 +127,7 @@ function Leaderboard() {
                   className="user-rank fs-1 rounded-4 d-flex align-items-center justify-content-between"
                   key={user._id || index}
                 >
-                  <div className="d-flex align-items-center gap-3">
+                  <div className="d-flex align-items-center gap-4">
                     <span className="number-label text-white">
                       {index + 1}.
                     </span>
@@ -136,14 +136,10 @@ function Leaderboard() {
                   </div>
 
                   <div className="points-wrapper">
-                    {user.points > 0 ? (
-                      <div className="points-display d-flex align-items-center justify-content-end">
-                        <img src={diamond} alt="diamonds" className="me-2" />
-                        <span>{user.points}</span>
-                      </div>
-                    ) : (
-                      <div className="points-placeholder" />
-                    )}
+                    <div className="points-display d-flex align-items-center justify-content-end">
+                      <img src={diamond} alt="diamonds" className="me-3" />
+                      <span>{user.points > 0 ? user.points : 0}</span>
+                    </div>
                   </div>
                 </div>
               ))}
