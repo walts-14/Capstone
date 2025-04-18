@@ -25,7 +25,7 @@
   /* Dashboard Heading */
   .DashboardAdmin h2 {
     width: 20%;
-    margin-left: -40px;
+    margin-left: -20px;
     text-align: center;
     font-family: "Baloo";
     font-weight: bold;
@@ -39,8 +39,8 @@
     /* Create Button */
     .Create {
       position: absolute;
-      top: 80px; /* Adjust position relative to the top */
-      right: 210px; /* Align to the right */
+      top: 60px; /* Adjust position relative to the top */
+      right: 290px; /* Align to the right */
       background-color: #4A2574;
       color: #FFFFFF;
       border-radius: 10px;
@@ -56,81 +56,7 @@
     .Create:hover {
       background-color: #5b2d8a; /* Slightly lighter on hover */
     }
-  
-    /* Table Container */
-    .contentdiv {
-      max-height: calc(100vh - 200px); /* Adjust height dynamically */
-      margin-top: 20px; /* Add spacing above the table */
-    }
 
-    /* For Webkit Browsers (Chrome, Edge, Safari) */
-    .contentdiv::-webkit-scrollbar {
-      width: 8px; /* Set the width of the scrollbar */
-    }
-
-    .contentdiv::-webkit-scrollbar-thumb {
-      background-color: #7338a0; /* Set the color of the scrollbar thumb */
-      border-radius: 10px; /* Make the scrollbar thumb rounded */
-    }
-
-    .contentdiv::-webkit-scrollbar-track {
-      background-color: #100429; /* Set the color of the scrollbar track */
-    }
-    
-    /* Table */
-    .dashboard-table {
-      font-size: 1.5rem;
-      width: 80%; /* Expand to fit the container */
-      margin: 20px auto; /* Center the table horizontally and add spacing */
-      color: #FFFFFF;
-      border-collapse: separate; /* Use 'separate' to allow border radius */
-      border-spacing: 0; /* Remove spacing between cells */
-      table-layout: fixed;
-      border-radius: 10px; /* Add border radius */
-      overflow: hidden; /* Ensure content respects the border radius */
-      background-color: #2E2E4D; /* Background color for the table */
-      position: relative; /* Ensure it behaves as part of the normal flow */
-    }
-    
-    .dashboard-table th,
-    .dashboard-table td {
-      padding: 10px;
-      text-align: center;
-      white-space: nowrap; /* Prevents text wrapping inside cells */
-      overflow: hidden;
-      text-overflow: ellipsis; /* Ensures content stays within the cell */
-    }
-    
-    .dashboard-table th {
-      background-color: #7338a0;
-      color: #FFFFFF;
-    }
-    
-    .dashboard-table tr:nth-child(even) {
-      background-color: #271d3e;
-    }
-    
-    .dashboard-table tr:nth-child(odd) {
-      background-color: #3f3653;
-    }
-    
-    /* Add border radius to the first and last rows */
-    .dashboard-table tr:first-child th:first-child {
-      border-top-left-radius: 10px; /* Top-left corner */
-    }
-    
-    .dashboard-table tr:first-child th:last-child {
-      border-top-right-radius: 10px; /* Top-right corner */
-    }
-    
-    .dashboard-table tr:last-child td:first-child {
-      border-bottom-left-radius: 10px; /* Bottom-left corner */
-    }
-    
-    .dashboard-table tr:last-child td:last-child {
-      border-bottom-right-radius: 10px; /* Bottom-right corner */
-    }
-  
     .button-icon-container {
       display: flex;
       flex-direction: column; 
@@ -152,9 +78,8 @@
   
   
   .popup-form {
-    font-family: "Baloo";
     position: fixed;
-    top: 50%;
+    top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: #271d3e;
@@ -167,11 +92,15 @@
   }
   
   .popup-form h3 {
-    font-family: "Baloo";
     text-align: center;
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     font-weight: bold;
     color: #ffffff;
+    margin-bottom: 20px;
+  }
+  
+  .popup-form .form-group {
+    margin-bottom: 15px;
   }
   
   .popup-form .form-control {
@@ -180,21 +109,31 @@
     color: #ffffff;
     font-size: 1rem;
     padding: 10px;
-    border: 1px solid #6f687e; /* Add stroke with the specified color */
+    border: none;
     border-radius: 5px;
-    margin-bottom: 10px;
   }
   
-  .popup-form .btn {
-    
-    background-color: #7338a0;
+  .popup-form .form-control::placeholder {
+    color: #a1a1a1;
+  }
+  
+  .popup-form .btn-create {
+    background-color: #4a2574;
+    border: none;
     border-radius: 5px;
     font-weight: bold;
     padding: 10px;
     font-size: 1rem;
     color: #ffffff;
     width: 100%;
+    cursor: pointer;
   }
+  
+  .popup-form .btn-create:hover {
+    background-color: #5b2d8a;
+  }
+  
+
   
   .popup-form .btn-create {
     font-family: "Baloo";
@@ -202,12 +141,12 @@
     border-radius: 5px;
     font-weight: bold;
     padding: 10px;
-    font-size: 1rem;
+    font-size: 1.4rem;
     color: #ffffff;
-    width: 50%;
+    width: 80%;
     margin-bottom: 10px;
     margin-top: 15px;
-    margin-left: 100px;
+    margin-left: 50px;
   }
   
   .popup-form .btn-cancel {
@@ -216,19 +155,209 @@
     border-radius: 5px;
     font-weight: bold;
     padding: 10px;
-    font-size: 1rem;
+    font-size: 1.4rem;
     color: #ffffff;
-    width: 50%;
+    width: 80%;
     margin-bottom: 10px;
     margin-top: 10px;
-    margin-left: 100px;
+    margin-left:50px;
   }  
   
-  /* Log Out Button */
-  .Logout{
-    margin-left: 1370px;
-    display: flex;
-    justify-content: center; /* Center the button horizontally */
-    align-items: center;
+
+  .popup-form .btn-cancel:hover {
+    background-color: #e05a4f;
   }
+  
+  /* Main Content */
+  .main-content {
+    margin-left: 270px; /* Adjust based on sidebar width */
+    padding: 20px;
+    background-color: #100429;
+    min-height: 100vh;
+    color: #ffffff;
+  }
+
+  /* Left Sidebar */
+  .left-sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: #4a2574;
+    padding: 20px 50px ;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    margin-left: -20px;
+    width: 300px;
+    height: 300px;
+  }
+
+  .sidebar-box {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 1.7rem;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 10px;
+    transition: background-color 0.3s ease, border 0.3s ease;
+  }
+  
+  .sidebar-item:hover {
+    background-color: #924dbf;
+  }
+  
+  .sidebar-item.active {
+    background-color: #100429; /* Active background color */
+    border: 2px solid #7338a0; /* Active border color */
+  }
+  
+  .sidebar-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  /* Levels Section */
+  .levels {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 20px;
+    margin-left: -20px;
+  }
+
+  .level-item {
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 1.7rem;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+    width: 300px; 
+    color: var(--white);
+    font-family: "Baloo", sans-serif;
+    font-size: 2.0rem;
+    cursor: pointer;
+  }
+
+  /* Specific Colors for Each Grade */
+  .level-item.grade7 {
+    background-color: #9E72C3;
+  }
+
+  .level-item.grade8 {
+    background-color: #924DBF;
+  }
+
+  .level-item.grade9 {
+    background-color: #7338A0;
+  }
+
+  .level-item.grade10 {
+    background-color: #4A2574;
+  }
+
+  .level-item:hover {
+    opacity: 0.9; /* Slight hover effect */
+  }
+
+  /* Table Container */
+  .table-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .contentdiv {
+    margin-top: -650px;
+    margin-left: 100px;
+  }
+
+  .dashboard-table {
+    font-size: 1.5rem;
+    width: 70%;
+    margin: 20px auto;
+    color: #ffffff;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #2e2e4d;
+  }
+
+  .dashboard-table th,
+  .dashboard-table td {
+    padding: 10px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .dashboard-table th {
+    background-color: #7338a0;
+    color: #ffffff;
+  }
+
+  .dashboard-table tr:nth-child(even) {
+    background-color: #271d3e;
+  }
+
+  .dashboard-table tr:nth-child(odd) {
+    background-color: #3f3653;
+  }
+
+  .dashboard-title {
+    color: var(--white);
+    font-family: "Baloo", sans-serif;
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+
+
+  .btn-create {
+    background-color: var(--purple);
+    color: var(--white);
+    font-family: "Baloo", sans-serif;
+    font-size: 1.2rem;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  .btn-create:hover {
+    background-color: var(--semidark-purple);
+  }
+
+
+  .btn-logout {
+    width: 8%;
+    background-color: var(--midlight-red);
+    color: var(--white);
+    font-family: "Baloo", sans-serif;
+    font-size: 1.5rem;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    margin-left: 1480px;
+    margin-top: 100px;
+  }
+
+  .btn-logout:hover {
+    background-color: var(--semidark-red);
+  }
+
  
