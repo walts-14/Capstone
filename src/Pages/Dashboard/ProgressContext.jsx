@@ -1,5 +1,6 @@
-// ProgressContext.js
-import React, { createContext, useState, useEffect } from 'react';
+// src/contexts/ProgressContext.jsx
+import React, { createContext, useState, useEffect } from "react";
+import API from "../api";
 
 export const ProgressContext = createContext();
 
@@ -24,36 +25,74 @@ const initialProgress = {
   }
 };
 
-const PROGRESS_STORAGE_KEY = 'progressData';
+const PROGRESS_STORAGE_KEY = "progressData";
 
-export const ProgressProvider = ({ children }) => {
+export const ProgressProvider = ({ children, userId }) => {
   const [progressData, setProgressData] = useState(() => {
     const stored = localStorage.getItem(PROGRESS_STORAGE_KEY);
     if (!stored) return initialProgress;
-
     const parsed = JSON.parse(stored);
-
-    // Merge stored with initial so new keys get defaults
     return {
-      basic: {
-        ...initialProgress.basic,
-        ...parsed.basic
-      },
-      intermediate: {
-        ...initialProgress.intermediate,
-        ...parsed.intermediate
-      },
-      advanced: {
-        ...initialProgress.advanced,
-        ...parsed.advanced
-      }
+      basic: { ...initialProgress.basic, ...parsed.basic },
+      intermediate: { ...initialProgress.intermediate, ...parsed.intermediate },
+      advanced: { ...initialProgress.advanced, ...parsed.advanced },
     };
   });
 
+  const [streakData, setStreakData] = useState({
+    currentStreak: 0,
+    lastUpdated: null,
+    streakFreeze: false,
+  });
+
+  // Fetch progress and streak from the backend on mount.
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const progressRes = await API.get(`/progress/${userId}`);
+        if (progressRes.data && progressRes.data.progress) {
+          setProgressData(progressRes.data.progress);
+          localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(progressRes.data.progress));
+        }
+        const streakRes = await API.get(`/streak/${userId}`);
+        if (streakRes.data && streakRes.data.streak) {
+          setStreakData(streakRes.data.streak);
+        }
+      } catch (error) {
+        console.error("Error fetching progress/streak:", error);
+      }
+    }
+    if (userId) fetchData();
+  }, [userId]);
+
+  // Sync progress to backend and localStorage when progressData changes.
   useEffect(() => {
     localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(progressData));
-  }, [progressData]);
+    async function syncProgress() {
+      try {
+        await API.put(`/progress/${userId}`, { progress: progressData });
+        console.log("Progress synced with backend");
+      } catch (error) {
+        console.error("Error syncing progress:", error);
+      }
+    }
+    if (userId) syncProgress();
+  }, [progressData, userId]);
 
+  // Sync streak to backend when streakData changes.
+  useEffect(() => {
+    async function syncStreak() {
+      try {
+        await API.put(`/streak/${userId}`, { streak: streakData });
+        console.log("Streak synced with backend");
+      } catch (error) {
+        console.error("Error syncing streak:", error);
+      }
+    }
+    if (userId) syncStreak();
+  }, [streakData, userId]);
+
+  // Function to update progress in a given lesson and part.
   const updateProgress = (level, lessonKey, part) => {
     setProgressData(prev => ({
       ...prev,
@@ -67,8 +106,17 @@ export const ProgressProvider = ({ children }) => {
     }));
   };
 
+  // Example function to increment the streak.
+  const incrementStreak = () => {
+    setStreakData(prev => ({
+      ...prev,
+      currentStreak: prev.currentStreak + 1,
+      lastUpdated: new Date(),
+    }));
+  };
+
   return (
-    <ProgressContext.Provider value={{ progressData, updateProgress }}>
+    <ProgressContext.Provider value={{ progressData, updateProgress, streakData, incrementStreak }}>
       {children}
     </ProgressContext.Provider>
   );

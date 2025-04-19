@@ -1,6 +1,8 @@
 import User from '../models/user.js';
 import jwt from 'jsonwebtoken';
 import { hashedPassword, comparePassword } from '../middlewares/auth.js';
+import cloudinary from '../config/cloudinary.js';
+import fs from 'fs';
 
 /**
  * Creates a new user (account) in the database.
@@ -163,3 +165,55 @@ export const loginUser = async (req, res) => {
   }
 };
 
+/// Profile Picture Upload Function
+export const uploadProfilePicture = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    // Delete previous pic from cloudinary
+    if (user.profilePic?.public_id) {
+      await cloudinary.uploader.destroy(user.profilePic.public_id);
+    }
+
+    // Upload new image
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: 'profile_pictures',
+    });
+
+    // Save new profile pic
+    user.profilePic = {
+      url: result.secure_url,
+      public_id: result.public_id,
+    };
+
+    await user.save();
+    fs.unlinkSync(req.file.path); // Remove local file
+    res.json({ message: 'Profile picture uploaded', profilePic: user.profilePic });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+/// Delete Profile Picture Function
+export const deleteProfilePicture = async (req, res) => {
+    try {
+      const user = await User.findById(req.user.id);
+      if (!user) return res.status(404).json({ message: 'User not found' });
+  
+      if (user.profilePic.public_id) {
+        await cloudinary.uploader.destroy(user.profilePic.public_id);
+      }
+  
+      user.profilePic = {
+        url: 'https://res.cloudinary.com/your_cloud_name/image/upload/v1234567890/default-profile.png',
+        public_id: null,
+      };
+  
+      await user.save();
+      res.json({ message: 'Profile picture deleted', profilePic: user.profilePic });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  };
+  

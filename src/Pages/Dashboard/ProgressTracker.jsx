@@ -1,11 +1,30 @@
-// ProgressTracker.js
-import React, { useState, useContext } from "react";
-import { ProgressContext } from "./ProgressContext";
+import React, { useContext } from "react";
+import { ProgressContext } from "./ProgressContext.jsx";
 import trophy from "../../assets/trophy.png";
 
+const calculateProgress = (progressObj = {}) => {
+  let score = 0;
+  if (progressObj.step1Lecture) score += 25;
+  if (progressObj.step1Quiz) score += 25;
+  if (progressObj.step2Lecture) score += 25;
+  if (progressObj.step2Quiz) score += 25;
+  return score;
+};
+
+const lessonsByLevel = {
+  basic: ["termsone", "termstwo", "termsthree", "termsfour"],
+  intermediate: ["termsfive", "termssix", "termsseven", "termseight"],
+  advanced: ["termsnine", "termsten", "termseleven", "termstwelve"],
+};
+
+const lessonOffsets = {
+  basic: 0,
+  intermediate: 4,
+  advanced: 8,
+};
+
 function ProgressTracker() {
-  const { progressData } = useContext(ProgressContext);
-  const [userName, setUserName] = React.useState("");
+  const { progressData, streakData, userName } = useContext(ProgressContext);
 
   const styles = {
     basic: { backgroundColor: "#205D87" },
@@ -13,28 +32,6 @@ function ProgressTracker() {
     advanced: { backgroundColor: "#86271E" },
     font: { color: "#160A2E" },
     white: { color: "#ffffff" },
-  };
-
-  const calculateProgress = (progressObj = {}) => {
-    let score = 0;
-    if (progressObj.step1Lecture) score += 25;
-    if (progressObj.step1Quiz) score += 25;
-    if (progressObj.step2Lecture) score += 25;
-    if (progressObj.step2Quiz) score += 25;
-    return score;
-  };
-
-  const lessonsByLevel = {
-    basic: ["termsone", "termstwo", "termsthree", "termsfour"],
-    intermediate: ["termsfive", "termssix", "termsseven", "termseight"],
-    advanced: ["termsnine", "termsten", "termseleven", "termstwelve"],
-  };
-
-  // Offsets so we can number lessons 1–12
-  const lessonOffsets = {
-    basic: 0, // lessons 1–4
-    intermediate: 4, // lessons 5–8
-    advanced: 8, // lessons 9–12
   };
 
   return (
@@ -46,12 +43,14 @@ function ProgressTracker() {
             className="h-auto mt-4 ms-3 mb-3 pl-5 img-fluid"
             alt="trophy image"
           />
-          <p className="fs-1 text-center ms-4 ">#1</p>
+          <p className="fs-1 text-center ms-4">#1</p>
           <p className="text-nowrap fs-2">{userName}</p>
-        </div>{" "}
+        </div>
       </div>
 
       <div className="lessonTracker d-flex flex-column text-white rounded-4 p-3">
+        <h2>Your Current Streak: {streakData.currentStreak}</h2>
+
         {Object.keys(lessonsByLevel).map((level) => (
           <div key={level} className={`${level}Tracker rounded-4 mt-4`}>
             <div className={`${level}Title fs-1 text-center mb-3`}>
@@ -59,11 +58,8 @@ function ProgressTracker() {
             </div>
 
             {lessonsByLevel[level].map((lessonKey, idx) => {
-              // safe access
-              const lessonProgress = progressData[level]?.[lessonKey] ?? {};
+              const lessonProgress = progressData[level]?.[lessonKey] || {};
               const progressPercent = calculateProgress(lessonProgress);
-
-              // compute display name Lesson 1–12
               const displayName = `Lesson ${lessonOffsets[level] + idx + 1}`;
 
               return (

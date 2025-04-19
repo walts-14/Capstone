@@ -360,4 +360,155 @@
     background-color: var(--semidark-red);
   }
 
- 
+ /* ──────────────── Responsive: Tablets & Below ──────────────── */
+@media (max-width: 992px) {
+  /* Stack main layout vertically */
+  .admin-body {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  /* Dashboard title full width, smaller text */
+  .DashboardAdmin h2 {
+    width: 100%;
+    font-size: 3rem;
+    margin-left: 0;
+    text-align: center;
+  }
+
+  /* Sidebar becomes horizontal bar */
+  .left-sidebar {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 10px;
+    margin-left: 0;
+    border-radius: 0;
+    justify-content: center;
+    gap: 10px;
+  }
+  .sidebar-item {
+    font-size: 1.2rem;
+    padding: 8px;
+  }
+  .sidebar-icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  /* Grade filter switches to row, wraps */
+  .levels {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 10px;
+    margin-left: 0;
+    gap: 8px;
+  }
+  .level-item {
+    width: auto;
+    font-size: 1.4rem;
+    padding: 8px 12px;
+  }
+
+  /* Create button becomes block, centered */
+  .Create {
+    position: static;
+    margin: 15px auto;
+    justify-content: center;
+  }
+
+  /* Table container full width */
+  .contentdiv {
+    margin: 0;
+    padding: 0 5px;
+    overflow-x: auto;
+  }
+  .dashboard-table {
+    width: 100%;
+    font-size: 1rem;
+    margin: 10px 0;
+  }
+
+  /* Logout button reposition */
+  .btn-logout {
+    width: auto;
+    margin: 20px auto;
+    display: block;
+    font-size: 1.2rem;
+  }
+
+  /* Popup form adjustments */
+  .popup-form {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 95%;
+    max-width: 350px;
+    padding: 20px;
+  }
+}
+
+/* ──────────────── Responsive: Mobiles & Small Devices ──────────────── */
+@media (max-width: 576px) {
+  /* Table → stacked cards */
+  .dashboard-table,
+  .dashboard-table thead,
+  .dashboard-table tbody,
+  .dashboard-table th,
+  .dashboard-table td,
+  .dashboard-table tr {
+    display: block;
+    width: 100%;
+  }
+  .dashboard-table thead {
+    display: none;
+  }
+  .dashboard-table tr {
+    margin-bottom: 12px;
+    background-color: #271d3e;
+    border-radius: 8px;
+    padding: 10px;
+  }
+  .dashboard-table td {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 10px;
+    font-size: 0.9rem;
+    color: #fff;
+  }
+
+  /* Sidebar icons only row of icons (hide text) */
+  .sidebar-item span {
+    display: none;
+  }
+  .sidebar-item {
+    padding: 6px;
+  }
+
+  /* Grade filter: wrap two per row */
+  .level-item {
+    width: 45%;
+    font-size: 1.2rem;
+    padding: 6px;
+  }
+
+  /* Popup form finer tuning */
+  .popup-form {
+    max-width: 300px;
+    padding: 15px;
+  }
+  .popup-form .form-control {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+  .popup-form .btn-create,
+  .popup-form .btn-cancel {
+    font-size: 1.2rem;
+    padding: 8px;
+    width: 100%;
+    margin-left: 0;
+  }
+}
+

@@ -493,21 +493,23 @@ const SuperAdmin = () => {
           </div>
         )}
 
-        <div className="SuperAdminLogout">
-          <button
-            onClick={logout}
-            className="btn-logout px-4 py-3"
-            style={{
-              backgroundColor: "#D7443E",
-              color: "#FFFFFF",
-              borderRadius: "40px",
-              fontWeight: "bold",
-              fontSize: "1.5rem",
-            }}
-          >
-            Log out
-          </button>
-        </div>
+<div className="logout-container" style={{ textAlign: "right", marginBottom: "10px" }}>
+  <button
+    onClick={logout}
+    className="btn btn-danger"
+    style={{
+      backgroundColor: "#D9534F",
+      color: "#FFFFFF",
+      borderRadius: "8px",
+      padding: "10px 20px",
+      fontWeight: "bold",
+      border: "none",
+      cursor: "pointer"
+    }}
+  >
+    Logout
+  </button>
+</div>
       </div>
     </div>
   );

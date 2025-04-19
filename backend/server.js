@@ -10,6 +10,9 @@ import pointsRoutes from "./routes/pointsRoutes.js";
 import videoRoutes from "./routes/videoRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import superadminRoutes from "./routes/superadminRoutes.js";
+import quizRoutes from "./routes/quizRoutes.js";
+import progressRoutes from "./routes/progressRoutes.js";
+import streakRoutes from "./routes/streakRoutes.js";
 
 //initializing express
 const app = express();
@@ -33,6 +36,11 @@ app.use("/api", pointsRoutes);
 app.use("/api", videoRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/superadmin", superadminRoutes);
+
+app.use("/api/videos", videoRoutes);
+app.use("/api/quizzes", quizRoutes);
+app.use("/api/progress", progressRoutes);
+app.use("/api/streak", streakRoutes);
 
 app.listen(5000, () => {
     connectDB();

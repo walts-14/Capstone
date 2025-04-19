@@ -34,6 +34,8 @@ import SuperAdmin from "./Pages/Login/Admin/SuperAdmin.jsx";
 import Admin from "./Pages/Login/Admin/AdminDashboard.jsx";
 import ProgressTracker from "./Pages/Dashboard/ProgressTracker.jsx";
 import { ProgressProvider } from "../src/Pages/Dashboard/ProgressContext.jsx"; // adjust the path accordingly
+import VideoList from "./Components/VideoList.jsx"; // adjust the path accordingly
+import QuizUpload from "./Pages/QuizUpload.jsx"; // adjust the path accordingly
 
 const router = createBrowserRouter([
   { path: "/", element: <Navigate to="/login" replace /> }, // Redirect "/" to "/login"
@@ -66,8 +68,7 @@ const router = createBrowserRouter([
       { path: "videoupload", element: <VideoUpload/> },
       { path: "admin", element: <Admin/> },
       { path: "superadmin", element: <SuperAdmin/> },
-      { path: "progresstracker", element: <ProgressTracker/> },
-      { path: "finishlecture", element: <FinishLecture/> }
+      { path: "progresstracker", element: <ProgressTracker/> }
 ,
     ],
   },
