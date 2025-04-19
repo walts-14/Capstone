@@ -115,7 +115,7 @@ function Leaderboard() {
         </div>
 
         <div className="user-points rounded-5 d-flex text-center justify-content-center pt-3">
-          <span className="text-white fs-2 me-auto ms-5 ">Users</span>
+          <span className="text-white fs-2 mr-auto ms-5 ">Users</span>
           <span className="text-white fs-2 me-5">Points</span>
         </div>
 
@@ -127,11 +127,15 @@ function Leaderboard() {
                   className="user-rank fs-1 rounded-4 d-flex align-items-center justify-content-between"
                   key={user._id || index}
                 >
-                  <div className="d-flex align-items-center gap-4">
+                  <div className="d-flex align-items-center gap-5">
                     <span className="number-label text-white">
                       {index + 1}.
                     </span>
-                    <img src={profile3} alt="profile" className="user-avatar" />
+                    <img
+                      src={user.profilePic || profile3}
+                      alt="profile"
+                      className="user-avatar"
+                    />
                     <span className="user-name">{user.name || "No Name"}</span>
                   </div>
 
