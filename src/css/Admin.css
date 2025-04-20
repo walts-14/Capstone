@@ -54,7 +54,7 @@
     .Create {
       position: absolute;
       top: 50px; /* Adjust position relative to the top */
-      right: 10px; /* Align to the right */
+      right: 40px; /* Align to the right */
       background-color: #4A2574;
       color: #FFFFFF;
       border-radius: 10px;
@@ -173,6 +173,30 @@
     background-color: #e05a4f;
   }
   
+  /* Close Button */
+  .btn-close {
+    position: absolute;
+    top: -20px; /* Position above the modal */
+    left: 59%; /* Center horizontally */
+    transform: translateX(-50%); /* Adjust for centering */
+    background-color: #e9170f; /* Red background for the close button */
+    border-radius: 10%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1100; /* Ensure it stays above the modal */
+  }
+  
+
+  .btn-close:hover {
+    background-color: #e05a4f; /* Slightly lighter red on hover */
+  }
+  
   /* Main Content */
   .main-content {
     margin-left: 270px; /* Adjust based on sidebar width */
@@ -184,6 +208,7 @@
 
   /* Left Sidebar */
   .left-sidebar {
+    position:relative ;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -206,6 +231,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    z-index: 11;
     color: #ffffff;
     font-weight: bold;
     font-size: 1.7rem;
@@ -236,6 +262,7 @@
     align-items: flex-start;
     gap: 10px;
     margin-top: 20px;
+    cursor: pointer;
     margin-left: -20px;
   }
 
@@ -245,16 +272,13 @@
     font-size: 1.7rem;
     padding: 10px 20px;
     border-radius: 10px;
-    cursor: pointer;
     text-align: center;
     width: 300px; 
     color: var(--white);
     font-family: "Baloo", sans-serif;
     font-size: 2.0rem;
-    cursor: pointer;
   }
 
-  /* Specific Colors for Each Grade */
   .level-item.grade7 {
     background-color: #9E72C3;
   }
@@ -337,6 +361,7 @@
 
 
   .btn-logout {
+    margin-top: 850px;
     width: 10%;
     background-color: var(--midlight-red);
     color: var(--white);
@@ -345,12 +370,144 @@
     border: none;
     border-radius: 50px;
     cursor: pointer;
-    margin-left: 1500px;
-    margin-top: -80px;
+    margin-left: 1680px;
+    position: absolute;
     
   }
 
   .btn-logout:hover {
     background-color: var(--semidark-red);
+  }
+
+  .progress-modal {
+    font-family: "Baloo";
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .progress-modal-content {
+    overflow-x: hidden;
+    background-color: #1e1e2f;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+  
+  }
+
+  .progress-section {
+    margin-bottom: 20px;
+  }
+
+
+  /* Progress Section Container */
+  .progress-section-container {
+    background-color: #271D3E; /* Dark purple background for each section */
+    padding: 15px;
+
+
+  }
+
+  /* Progress Item */
+  .progress-item {
+    display: flex;
+    justify-content: space-between;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-size: 1.6rem;
+    font-weight: bold;
+  }
+ 
+  .progress-item.basic {
+    background-color: #2E86C1; /* Blue for Basic lessons */
+  }
+
+  .progress-item.intermediate {
+    background-color: #D4AC0D; /* Yellow for Intermediate lessons */
+  }
+
+  .progress-item.advanced {
+    background-color: #C0392B; /* Red for Advanced lessons */
+  }
+
+  /* Basic Section Header */
+  .progress-section h4.basic-header {
+    background-color: #2E86C1; /* Blue for Basic */
+    color: white;
+    padding: 10px;
+    border-radius: 13px;
+    width: 50%;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.6rem;
+    font-weight: bold;
+  }
+
+  /* Intermediate Section Header */
+  .progress-section h4.intermediate-header {
+    background-color: #D4AC0D; /* Yellow for Intermediate */
+    color: white;
+    padding: 10px;
+    border-radius: 13px;
+    width: 60%;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.6rem;
+    font-weight: bold;
+  }
+
+  /* Advanced Section Header */
+  .progress-section h4.advanced-header {
+    background-color: #C0392B; /* Red for Advanced */
+    color: white;
+    padding: 10px;
+    width: 50%;
+    border-radius: 13px;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.6rem;
+    font-weight: bold;
+  }
+
+
+
+  /* Progress Leaderboard Section */
+  .progress-leaderboard {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #271D3E;
+    padding: 10px 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    color: white;
+    font-family: "Baloo", sans-serif;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  /* Trophy Icon */
+  .progress-leaderboard .trophy-icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+  }
+
+  /* Rank */
+  .progress-leaderboard .leaderboard-rank {
+    color: #f1c40f; /* Gold color for the rank */
+    margin-right: 10px;
+  }
+
+  /* Name */
+  .progress-leaderboard .leaderboard-name {
+    color: white;
   }
 

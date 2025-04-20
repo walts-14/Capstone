@@ -31,7 +31,7 @@ import LessonButtons from "./Pages/Dashboard/LessonButtons.jsx";
 import LesoneContent from "./Pages/Library/VideoLesson/LesoneContent.jsx";
 import VideoUpload from "./Pages/VideoUpload.jsx";
 import SuperAdmin from "./Pages/Login/Admin/SuperAdmin.jsx";
-import Admin from "./Pages/Login/Admin/AdminDashboard.jsx";
+import Admin from "./Pages/Login/Admin/adminDashboard.jsx";
 import ProgressTracker from "./Pages/Dashboard/ProgressTracker.jsx";
 import { ProgressProvider } from "../src/Pages/Dashboard/ProgressContext.jsx"; // adjust the path accordingly
 

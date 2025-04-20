@@ -10,7 +10,6 @@ import "../../../css/ProgressModal.css"; // Add a new CSS file for the modal
 import axios from "axios";
 import toast from "react-hot-toast";
 
-
 const DashboardAdmin = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -29,6 +28,10 @@ const DashboardAdmin = () => {
     yearLevel: "",
   });
 
+  const [selectedGrade, setSelectedGrade] = useState("grade7"); // Default to Grade 7
+  const [students, setStudents] = useState([]); // Students for the selected grade
+  const [leaderboard, setLeaderboard] = useState([]); // Leaderboard data
+
   const token = localStorage.getItem("token");
 
   const fetchStudents = async () => {
@@ -42,9 +45,38 @@ const DashboardAdmin = () => {
     }
   };
 
+  const fetchStudentsByGrade = async (grade) => {
+    try {
+      const res = await axios.get(`http://localhost:5000/api/admin/students`, {
+        headers: { Authorization: `Bearer ${token}` },
+        params: { grade }, // Pass grade as a query parameter
+      });
+      setStudents(res.data.data); // Update students for the selected grade
+    } catch (err) {
+      console.error("Error fetching students by grade:", err.response?.data || err);
+    }
+  };
+
   useEffect(() => {
-    fetchStudents();
-  }, []);
+    fetchStudentsByGrade(selectedGrade);
+  }, [selectedGrade]);
+
+  useEffect(() => {
+    const fetchLeaderboard = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/leaderboard", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setLeaderboard(res.data.data); // Update leaderboard state
+      } catch (err) {
+        console.error("Error fetching leaderboard data:", err.response?.data || err);
+      }
+    };
+
+    if (location.pathname === "/leaderboard") {
+      fetchLeaderboard();
+    }
+  }, [location.pathname]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -86,7 +118,7 @@ const DashboardAdmin = () => {
         );
         toast.success(response.data.message);
       }
-      fetchStudents();
+      fetchStudentsByGrade(selectedGrade);
       setShowForm(false);
     } catch (error) {
       console.error("Error submitting form:", error.response?.data || error);
@@ -115,7 +147,7 @@ const DashboardAdmin = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("User deleted successfully!");
-      fetchStudents();
+      fetchStudentsByGrade(selectedGrade);
     } catch (error) {
       console.error("Error deleting user:", error.response?.data || error);
       toast.error("Failed to delete user.");
@@ -123,13 +155,47 @@ const DashboardAdmin = () => {
   };
 
   const handleShowProgress = (user) => {
-    setSelectedUser(user);
+    // Ensure default progress structure if no progress data exists
+    const defaultProgress = {
+      basic: [
+        { name: "Lesson 1", percentage: 0 },
+        { name: "Lesson 2", percentage: 0 },
+        { name: "Lesson 3", percentage: 0 },
+        { name: "Lesson 4", percentage: 0 },
+      ],
+      intermediate: [
+        { name: "Lesson 1", percentage: 0 },
+        { name: "Lesson 2", percentage: 0 },
+        { name: "Lesson 3", percentage: 0 },
+        { name: "Lesson 4", percentage: 0 },
+      ],
+      advanced: [
+        { name: "Lesson 1", percentage: 0 },
+        { name: "Lesson 2", percentage: 0 },
+        { name: "Lesson 3", percentage: 0 },
+        { name: "Lesson 4", percentage: 0 },
+      ],
+    };
+
+    // Find the rank of the user in the leaderboard
+    const rank = leaderboard.findIndex((entry) => entry.email === user.email) + 1;
+
+    setSelectedUser({
+      ...user,
+      rank: rank || "N/A", // Add rank to the selected user
+      progress: user.progress || defaultProgress, // Use default progress if none exists
+    });
     setShowProgressModal(true);
   };
 
   const handleCloseProgressModal = () => {
     setShowProgressModal(false);
     setSelectedUser(null);
+  };
+
+  const handleGradeSelection = (grade) => {
+    setSelectedGrade(grade); // Update the selected grade
+    fetchStudentsByGrade(grade); // Fetch students for the selected grade
   };
 
   const logout = () => {
@@ -178,19 +244,30 @@ const DashboardAdmin = () => {
       {/* Conditional Rendering for Dashboard and Leaderboard */}
       {location.pathname === "/admin" && (
         <>
-          {/* Existing Dashboard Content */}
           {/* Grade Levels */}
           <div className="levels">
-            <div className="level-item grade7" onClick={() => navigate("/grade7")}>
+            <div
+              className={`level-item grade7 ${selectedGrade === "grade7" ? "active" : ""}`}
+              onClick={() => handleGradeSelection("grade7")}
+            >
               GRADE 7
             </div>
-            <div className="level-item grade8" onClick={() => navigate("/grade8")}>
+            <div
+              className={`level-item grade8 ${selectedGrade === "grade8" ? "active" : ""}`}
+              onClick={() => handleGradeSelection("grade8")}
+            >
               GRADE 8
             </div>
-            <div className="level-item grade9" onClick={() => navigate("/grade9")}>
+            <div
+              className={`level-item grade9 ${selectedGrade === "grade9" ? "active" : ""}`}
+              onClick={() => handleGradeSelection("grade9")}
+            >
               GRADE 9
             </div>
-            <div className="level-item grade10" onClick={() => navigate("/grade10")}>
+            <div
+              className={`level-item grade10 ${selectedGrade === "grade10" ? "active" : ""}`}
+              onClick={() => handleGradeSelection("grade10")}
+            >
               GRADE 10
             </div>
           </div>
@@ -235,19 +312,18 @@ const DashboardAdmin = () => {
                     <th>Name</th>
                     <th>Username</th>
                     <th>Email</th>
-                    <th>Password</th>
                     <th>Year Level</th>
-                    <th>Action</th>
+                    <th> </th>
+                    <th> </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {users.map((user, index) => (
-                    <tr key={user.email}>
-                      <td>{user.name || "N/A"}</td>
-                      <td>{user.username}</td>
-                      <td>{user.email}</td>
-                      <td>{user.password}</td>
-                      <td>{user.yearLevel || "N/A"}</td>
+                  {students.map((student) => (
+                    <tr key={student.email}>
+                      <td>{student.name || "N/A"}</td>
+                      <td>{student.username}</td>
+                      <td>{student.email}</td>
+                      <td>{student.yearLevel || "N/A"}</td>
                       <td>
                         <button
                           className="btn btn-progress"
@@ -255,24 +331,24 @@ const DashboardAdmin = () => {
                             backgroundColor: "#2E86C1",
                             color: "#FFFFFF",
                             borderRadius: "5px",
-
-                            marginLeft: "-15px",
                           }}
-                          onClick={() => handleShowProgress(user)}
+                          onClick={() => handleShowProgress(student)}
                         >
-                          Progress
+                          View Progress
                         </button>
+                      </td>
+                      <td>
                         <img
                           src={EditIcon}
                           alt="Edit"
                           className="img-action"
-                          onClick={() => handleEditUser(user)}
+                          onClick={() => handleEditUser(student)}
                         />
                         <img
                           src={RemoveIcon}
                           alt="Delete"
                           className="img-action"
-                          onClick={() => handleDeleteUser(user.email)}
+                          onClick={() => handleDeleteUser(student.email)}
                         />
                       </td>
                     </tr>
@@ -285,39 +361,72 @@ const DashboardAdmin = () => {
       )}
 
       {/* Render Leaderboard Component */}
-      {location.pathname === "/leaderboard" && <Leaderboard />}
+      {location.pathname === "/leaderboard" && (
+        <div className="leaderboard-container">
+          {leaderboard.map((entry, index) => (
+            <div key={index} className="leaderboard-entry">
+              <img src="/src/assets/trophy.png" alt="Trophy" className="trophy-icon" />
+              <span className="leaderboard-rank">{index + 1}#</span>
+              <span className="leaderboard-name">{entry.name}</span>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Progress Modal */}
       {showProgressModal && selectedUser && (
         <div className="progress-modal">
+          {/* Close Button */}
+          <button className="btn btn-close" onClick={handleCloseProgressModal}>
+          </button>
+
           <div className="progress-modal-content">
-            <button className="btn btn-close" onClick={handleCloseProgressModal}>
-            </button>
-            <h3>{selectedUser.name}'s Progress</h3>
-            {selectedUser.progress ? (
-              <>
-                <div className="progress-section">
-                  <h4>Basic</h4>
-                  {selectedUser.progress.basic.map((lesson, index) => (
-                    <div key={index} className="progress-item">
-                      <span>{lesson.name}</span>
-                      <span>{lesson.percentage}%</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="progress-section">
-                  <h4>Intermediate</h4>
-                  {selectedUser.progress.intermediate.map((lesson, index) => (
-                    <div key={index} className="progress-item">
-                      <span>{lesson.name}</span>
-                      <span>{lesson.percentage}%</span>
-                    </div>
-                  ))}
-                </div>
-              </>
-            ) : (
-              <p>No progress data available for this student.</p>
-            )}
+            {/* Leaderboard Section */}
+            <div className="progress-leaderboard">
+              <img src="/src/assets/trophy.png" alt="Trophy" className="trophy-icon" />
+              <span className="leaderboard-rank">{selectedUser.rank || "N/A"}#</span>
+              <span className="leaderboard-name">{selectedUser.name}</span>
+            </div>
+
+
+            {/* Basic Section */}
+            <div className="progress-section-container">
+              <div className="progress-section">
+                <h4 className="basic-header">BASIC</h4>
+                {selectedUser.progress.basic.map((lesson, index) => (
+                  <div key={index} className="progress-item basic">
+                    <span>{lesson.name}</span>
+                    <span>{lesson.percentage}%</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Intermediate Section */}
+            <div className="progress-section-container">
+              <div className="progress-section">
+                <h4 className="intermediate-header">INTERMEDIATE</h4>
+                {selectedUser.progress.intermediate.map((lesson, index) => (
+                  <div key={index} className="progress-item intermediate">
+                    <span>{lesson.name}</span>
+                    <span>{lesson.percentage}%</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Advanced Section */}
+            <div className="progress-section-container">
+              <div className="progress-section">
+                <h4 className="advanced-header">ADVANCED</h4>
+                {selectedUser.progress.advanced.map((lesson, index) => (
+                  <div key={index} className="progress-item advanced">
+                    <span>{lesson.name}</span>
+                    <span>{lesson.percentage}%</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       )}
