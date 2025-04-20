@@ -40,6 +40,7 @@ function Leaderboard() {
     <>
       <div className="leaderboard-container d-flex flex-column align-items-center justify-content-center my-4">
         <Sidenav />
+        
         <div className="leaderboard-header d-flex flex-row align-items-center justify-content-center">
           {/* Second Place */}
           <div className="second-place d-flex align-items-center gap-2">

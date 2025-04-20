@@ -1,20 +1,24 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom"; // Import useLocation to get the current route
+import { useNavigate, useLocation } from "react-router-dom";
 import { FaUserPlus } from "react-icons/fa";
-import DashboardIcon from "../../../assets/dashboardlogo.png"; // Replace with your actual path
-import LeaderboardIcon from "../../../assets/leaderboardicon.png"; // Replace with your actual path
-import EditIcon from "../../../assets/Edit.png"; // Replace with your actual path
-import RemoveIcon from "../../../assets/Remove.png"; // Replace with your actual path
+import DashboardIcon from "../../../assets/dashboardlogo.png";
+import LeaderboardIcon from "../../../assets/leaderboardicon.png";
+import EditIcon from "../../../assets/Edit.png";
+import RemoveIcon from "../../../assets/Remove.png";
 import "../../../css/Admin.css";
+import "../../../css/ProgressModal.css"; // Add a new CSS file for the modal
 import axios from "axios";
 import toast from "react-hot-toast";
 
+
 const DashboardAdmin = () => {
   const navigate = useNavigate();
-  const location = useLocation(); // Get the current route
+  const location = useLocation();
 
   const [users, setUsers] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const [showProgressModal, setShowProgressModal] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
   const [formData, setFormData] = useState({
     id: "",
     name: "",
@@ -118,6 +122,16 @@ const DashboardAdmin = () => {
     }
   };
 
+  const handleShowProgress = (user) => {
+    setSelectedUser(user);
+    setShowProgressModal(true);
+  };
+
+  const handleCloseProgressModal = () => {
+    setShowProgressModal(false);
+    setSelectedUser(null);
+  };
+
   const logout = () => {
     localStorage.removeItem("token");
     navigate("/login");
@@ -133,116 +147,180 @@ const DashboardAdmin = () => {
       {/* Sidebar with Dashboard and Leaderboard */}
       <div className="left-sidebar">
         <div className="sidebar-box">
+          {/* Dashboard Button */}
           <div
             className={`sidebar-item ${
-              location.pathname === "/dashboard" ? "active" : ""
+              location.pathname === "/admin" ? "active" : ""
             }`}
             onClick={() => navigate("/admin")}
           >
             <img src={DashboardIcon} alt="Dashboard" className="sidebar-icon" />
             <span>Dashboard</span>
           </div>
+
+          {/* Leaderboard Button */}
           <div
             className={`sidebar-item ${
               location.pathname === "/leaderboard" ? "active" : ""
             }`}
             onClick={() => navigate("/leaderboard")}
           >
-            <img src={LeaderboardIcon} alt="Leaderboard" className="sidebar-icon" />
+            <img
+              src={LeaderboardIcon}
+              alt="Leaderboard"
+              className="sidebar-icon"
+            />
             <span>Leaderboard</span>
           </div>
         </div>
       </div>
 
-      {/* Grade Levels */}
-      <div className="levels">
-        <div className="level-item grade7" onClick={() => navigate("/grade7")}>
-          GRADE 7
-        </div>
-        <div className="level-item grade8" onClick={() => navigate("/grade8")}>
-          GRADE 8
-        </div>
-        <div className="level-item grade9" onClick={() => navigate("/grade9")}>
-          GRADE 9
-        </div>
-        <div className="level-item grade10" onClick={() => navigate("/grade10")}>
-          GRADE 10
-        </div>
-      </div>
+      {/* Conditional Rendering for Dashboard and Leaderboard */}
+      {location.pathname === "/admin" && (
+        <>
+          {/* Existing Dashboard Content */}
+          {/* Grade Levels */}
+          <div className="levels">
+            <div className="level-item grade7" onClick={() => navigate("/grade7")}>
+              GRADE 7
+            </div>
+            <div className="level-item grade8" onClick={() => navigate("/grade8")}>
+              GRADE 8
+            </div>
+            <div className="level-item grade9" onClick={() => navigate("/grade9")}>
+              GRADE 9
+            </div>
+            <div className="level-item grade10" onClick={() => navigate("/grade10")}>
+              GRADE 10
+            </div>
+          </div>
 
-      {/* Table */}
-      <div className="table-container">
-        <div className="Create">
-          <button
-            className="btn text-light px-1 py-1"
-            style={{
-              backgroundColor: "#4A2574",
-              color: "#FFFFFF",
-              borderRadius: "10px",
-              fontWeight: "bold",
-              fontSize: "1.5rem",
-              padding: "30px",
-              display: "flex",
-              alignItems: "center",
-              textAlign: "center",
-            }}
-            onClick={() => {
-              setFormData({
-                id: "",
-                name: "",
-                username: "",
-                email: "",
-                password: "",
-                confirmPassword: "",
-                yearLevel: "",
-              });
-              setShowForm(true);
-            }}
-          >
-            <FaUserPlus /> Create
-          </button>
-        </div>
+          {/* Table */}
+          <div className="table-container">
+            <div className="Create">
+              <button
+                className="btn text-light px-1 py-1"
+                style={{
+                  backgroundColor: "#4A2574",
+                  color: "#FFFFFF",
+                  borderRadius: "10px",
+                  fontWeight: "bold",
+                  fontSize: "1.5rem",
+                  padding: "30px",
+                  display: "flex",
+                  alignItems: "center",
+                  textAlign: "center",
+                }}
+                onClick={() => {
+                  setFormData({
+                    id: "",
+                    name: "",
+                    username: "",
+                    email: "",
+                    password: "",
+                    confirmPassword: "",
+                    yearLevel: "",
+                  });
+                  setShowForm(true);
+                }}
+              >
+                <FaUserPlus /> Create
+              </button>
+            </div>
 
-        <div className="contentdiv">
-          <table className="dashboard-table text-light mt-4">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Password</th>
-                <th>Year Level</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((user, index) => (
-                <tr key={user.email}>
-                  <td>{user.name || "N/A"}</td>
-                  <td>{user.username}</td>
-                  <td>{user.email}</td>
-                  <td>{user.password}</td>
-                  <td>{user.yearLevel || "N/A"}</td>
-                  <td>
-                    <img
-                      src={EditIcon}
-                      alt="Edit"
-                      className="img-action"
-                      onClick={() => handleEditUser(user)}
-                    />
-                    <img
-                      src={RemoveIcon}
-                      alt="Delete"
-                      className="img-action"
-                      onClick={() => handleDeleteUser(user.email)}
-                    />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+            <div className="contentdiv">
+              <table className="dashboard-table text-light mt-4">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Password</th>
+                    <th>Year Level</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users.map((user, index) => (
+                    <tr key={user.email}>
+                      <td>{user.name || "N/A"}</td>
+                      <td>{user.username}</td>
+                      <td>{user.email}</td>
+                      <td>{user.password}</td>
+                      <td>{user.yearLevel || "N/A"}</td>
+                      <td>
+                        <button
+                          className="btn btn-progress"
+                          style={{
+                            backgroundColor: "#2E86C1",
+                            color: "#FFFFFF",
+                            borderRadius: "5px",
+
+                            marginLeft: "-15px",
+                          }}
+                          onClick={() => handleShowProgress(user)}
+                        >
+                          Progress
+                        </button>
+                        <img
+                          src={EditIcon}
+                          alt="Edit"
+                          className="img-action"
+                          onClick={() => handleEditUser(user)}
+                        />
+                        <img
+                          src={RemoveIcon}
+                          alt="Delete"
+                          className="img-action"
+                          onClick={() => handleDeleteUser(user.email)}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Render Leaderboard Component */}
+      {location.pathname === "/leaderboard" && <Leaderboard />}
+
+      {/* Progress Modal */}
+      {showProgressModal && selectedUser && (
+        <div className="progress-modal">
+          <div className="progress-modal-content">
+            <button className="btn btn-close" onClick={handleCloseProgressModal}>
+            </button>
+            <h3>{selectedUser.name}'s Progress</h3>
+            {selectedUser.progress ? (
+              <>
+                <div className="progress-section">
+                  <h4>Basic</h4>
+                  {selectedUser.progress.basic.map((lesson, index) => (
+                    <div key={index} className="progress-item">
+                      <span>{lesson.name}</span>
+                      <span>{lesson.percentage}%</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="progress-section">
+                  <h4>Intermediate</h4>
+                  {selectedUser.progress.intermediate.map((lesson, index) => (
+                    <div key={index} className="progress-item">
+                      <span>{lesson.name}</span>
+                      <span>{lesson.percentage}%</span>
+                    </div>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <p>No progress data available for this student.</p>
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Log Out Button */}
       <button className="btn-logout" onClick={logout}>

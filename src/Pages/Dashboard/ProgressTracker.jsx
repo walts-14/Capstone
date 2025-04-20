@@ -1,9 +1,15 @@
 // ProgressTracker.js
 import React, { useState, useContext } from "react";
 import { ProgressContext } from "./ProgressContext";
+import { useLocation } from "react-router-dom";
 import trophy from "../../assets/trophy.png";
 
-function ProgressTracker() {
+const ProgressTracker = () => {
+  const location = useLocation();
+  const { user } = location.state;
+
+  console.log("User Data:", user);
+
   const { progressData } = useContext(ProgressContext);
   const [userName, setUserName] = React.useState("");
 
@@ -82,6 +88,6 @@ function ProgressTracker() {
       </div>
     </>
   );
-}
+};
 
 export default ProgressTracker;
