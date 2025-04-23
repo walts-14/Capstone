@@ -7,19 +7,18 @@ import LeaderboardIcon from "../../../assets/leaderboardicon.png";
 import EditIcon from "../../../assets/Edit.png";
 import RemoveIcon from "../../../assets/Remove.png";
 import "../../../css/Admin.css";
+import "../../../css/ProgressModal.css"; // Add a new CSS file for the modal
 import axios from "axios";
 import toast from "react-hot-toast";
 
 const DashboardAdmin = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-
-  // ─── NEW STATE ───────────────────────────────────
-  // track which year filter is active; "" = all users
-  const [yearFilter, setYearFilter] = useState("");
+  const location = useLocation(); // Get the current route
 
   const [users, setUsers]     = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const [showProgressModal, setShowProgressModal] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
   const [formData, setFormData] = useState({
     id: "",
     name: "",
@@ -29,6 +28,10 @@ const DashboardAdmin = () => {
     confirmPassword: "",
     yearLevel: "",
   });
+
+  const [selectedGrade, setSelectedGrade] = useState("grade7"); // Default to Grade 7
+  const [students, setStudents] = useState([]); // Students for the selected grade
+  const [leaderboard, setLeaderboard] = useState([]); // Leaderboard data
 
   const token = localStorage.getItem("token");
 
@@ -50,10 +53,39 @@ const DashboardAdmin = () => {
     }
   };
 
+  const fetchStudentsByGrade = async (grade) => {
+    try {
+      const res = await axios.get(`http://localhost:5000/api/admin/students`, {
+        headers: { Authorization: `Bearer ${token}` },
+        params: { grade }, // Pass grade as a query parameter
+      });
+      setStudents(res.data.data); // Update students for the selected grade
+    } catch (err) {
+      console.error("Error fetching students by grade:", err.response?.data || err);
+    }
+  };
+
+  useEffect(() => {
+    fetchStudentsByGrade(selectedGrade);
+  }, [selectedGrade]);
+
   // ─── On mount, load all students ────────────────────────────────
   useEffect(() => {
-    fetchStudents();
-  }, []);
+    const fetchLeaderboard = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/leaderboard", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setLeaderboard(res.data.data); // Update leaderboard state
+      } catch (err) {
+        console.error("Error fetching leaderboard data:", err.response?.data || err);
+      }
+    };
+
+    if (location.pathname === "/leaderboard") {
+      fetchLeaderboard();
+    }
+  }, [location.pathname]);
 
   // ─── handlers ──────────────────────────────────────────────────
   const handleInputChange = (e) => {
@@ -88,7 +120,7 @@ const DashboardAdmin = () => {
         );
         toast.success(response.data.message);
       }
-      fetchStudents(yearFilter);   // reload with current filter
+      fetchStudents();
       setShowForm(false);
     } catch (error) {
       console.error("Error submitting form:", error.response?.data || error);
@@ -117,11 +149,55 @@ const DashboardAdmin = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       toast.success("User deleted successfully!");
-      fetchStudents(yearFilter);
+      fetchStudents();
     } catch (error) {
       console.error("Error deleting user:", error.response?.data || error);
       toast.error("Failed to delete user.");
     }
+  };
+
+  const handleShowProgress = (user) => {
+    // Ensure default progress structure if no progress data exists
+    const defaultProgress = {
+      basic: [
+        { name: "Lesson 1", percentage: 0 },
+        { name: "Lesson 2", percentage: 0 },
+        { name: "Lesson 3", percentage: 0 },
+        { name: "Lesson 4", percentage: 0 },
+      ],
+      intermediate: [
+        { name: "Lesson 1", percentage: 0 },
+        { name: "Lesson 2", percentage: 0 },
+        { name: "Lesson 3", percentage: 0 },
+        { name: "Lesson 4", percentage: 0 },
+      ],
+      advanced: [
+        { name: "Lesson 1", percentage: 0 },
+        { name: "Lesson 2", percentage: 0 },
+        { name: "Lesson 3", percentage: 0 },
+        { name: "Lesson 4", percentage: 0 },
+      ],
+    };
+
+    // Find the rank of the user in the leaderboard
+    const rank = leaderboard.findIndex((entry) => entry.email === user.email) + 1;
+
+    setSelectedUser({
+      ...user,
+      rank: rank || "N/A", // Add rank to the selected user
+      progress: user.progress || defaultProgress, // Use default progress if none exists
+    });
+    setShowProgressModal(true);
+  };
+
+  const handleCloseProgressModal = () => {
+    setShowProgressModal(false);
+    setSelectedUser(null);
+  };
+
+  const handleGradeSelection = (grade) => {
+    setSelectedGrade(grade); // Update the selected grade
+    fetchStudentsByGrade(grade); // Fetch students for the selected grade
   };
 
   const logout = () => {
@@ -144,6 +220,7 @@ const DashboardAdmin = () => {
 
       <div className="left-sidebar">
         <div className="sidebar-box">
+          {/* Dashboard Button */}
           <div
             className={`sidebar-item ${
               location.pathname === "/admin" ? "active" : ""
@@ -157,6 +234,8 @@ const DashboardAdmin = () => {
             <img src={DashboardIcon} alt="Dashboard" className="sidebar-icon" />
             <span>Dashboard</span>
           </div>
+
+          {/* Leaderboard Button */}
           <div
             className={`sidebar-item ${
               location.pathname === "/leaderboard" ? "active" : ""
@@ -173,42 +252,23 @@ const DashboardAdmin = () => {
         </div>
       </div>
 
-      {/* ─── Grade‐level Filters (NO DESIGN CHANGE) ─────────────────── */}
+      {/* Grade Levels */}
       <div className="levels">
-        <div
-          className={`level-item grade7 ${
-            yearFilter === "Grade 7" ? "active" : ""
-          }`}
-          onClick={() => onGradeClick("Grade 7")}
-        >
+        <div className="level-item grade7" onClick={() => navigate("/grade7")}>
           GRADE 7
         </div>
-        <div
-          className={`level-item grade8 ${
-            yearFilter === "Grade 8" ? "active" : ""
-          }`}
-          onClick={() => onGradeClick("Grade 8")}
-        >
+        <div className="level-item grade8" onClick={() => navigate("/grade8")}>
           GRADE 8
         </div>
-        <div
-          className={`level-item grade9 ${
-            yearFilter === "Grade 9" ? "active" : ""
-          }`}
-          onClick={() => onGradeClick("Grade 9")}
-        >
+        <div className="level-item grade9" onClick={() => navigate("/grade9")}>
           GRADE 9
         </div>
-        <div
-          className={`level-item grade10 ${
-            yearFilter === "Grade 10" ? "active" : ""
-          }`}
-          onClick={() => onGradeClick("Grade 10")}
-        >
+        <div className="level-item grade10" onClick={() => navigate("/grade10")}>
           GRADE 10
         </div>
       </div>
 
+      {/* Table */}
       <div className="table-container">
         <div className="Create">
           <button
@@ -254,7 +314,7 @@ const DashboardAdmin = () => {
               </tr>
             </thead>
             <tbody>
-              {users.map((user) => (
+              {users.map((user, index) => (
                 <tr key={user.email}>
                   <td>{user.name || "N/A"}</td>
                   <td>{user.username}</td>

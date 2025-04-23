@@ -1,6 +1,19 @@
-import React, { useContext } from "react";
-import { ProgressContext } from "./ProgressContext.jsx";
+// ProgressTracker.js
+import React, { useState, useContext } from "react";
+import { ProgressContext } from "./ProgressContext";
 import trophy from "../../assets/trophy.png";
+
+function ProgressTracker() {
+  const { progressData } = useContext(ProgressContext);
+  const [userName, setUserName] = React.useState("");
+
+  const styles = {
+    basic: { backgroundColor: "#205D87" },
+    intermediate: { backgroundColor: "#947809" },
+    advanced: { backgroundColor: "#86271E" },
+    font: { color: "#160A2E" },
+    white: { color: "#ffffff" },
+  };
 
 const calculateProgress = (progressObj = {}) => {
   let score = 0;
@@ -78,6 +91,6 @@ function ProgressTracker() {
       </div>
     </>
   );
-}
+};
 
 export default ProgressTracker;
