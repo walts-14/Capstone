@@ -1,3 +1,4 @@
+// models/user.js
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
@@ -26,32 +27,32 @@ const progressStructure = {
 // Streak schema to track bonus streaks
 const streakSchema = {
   currentStreak: { type: Number, default: 0 },
-  lastUpdated: { type: Date, default: null },
-  streakFreeze: { type: Boolean, default: false }
+  lastUpdated:   { type: Date,   default: null },
+  streakFreeze:  { type: Boolean, default: false }
 };
 
 const userSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
-    username: { type: String, required: true, unique: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    yearLevel: { 
-      type: String, 
+    name:       { type: String, required: true },
+    username:   { type: String, required: true, unique: true },
+    email:      { type: String, required: true, unique: true },
+    password:   { type: String, required: true },
+    yearLevel:  {
+      type: String,
       required: true,
-      enum: ['Grade 7', 'Grade 8', 'Grade 9', 'Grade 10'] 
+      enum: ["Grade 7", "Grade 8", "Grade 9", "Grade 10"]
     },
-    role: { 
-      type: String, 
-      required: true, 
-      enum: ['user', 'admin', 'super_admin'] 
+    role:       {
+      type: String,
+      required: true,
+      enum: ["user", "admin", "super_admin"]
     },
-    points: { type: Number, default: 0 },
-    lives: { type: Number, default: 5 },
-    lastLifeTime: { type: Date, default: Date.now },
+    points:    { type: Number, default: 0 },    // for your leaderboard
+    lives:     { type: Number, default: 5 },    // how many quiz lives a user has
+    lastLifeTime: { type: Date, default: Date.now }, // optional: when lives were last refilled
+
     progress: { type: Object, default: progressStructure },
-    streak: { type: Object, default: streakSchema },
-    
+    streak:   { type: Object, default: streakSchema },
     profilePic: {
       url: { type: String, default: 'https://res.cloudinary.com/your_cloud_name/image/upload/v1234567890/default-profile.png' },
       public_id: { type: String, default: null },
@@ -67,8 +68,8 @@ userSchema.pre("save", async function (next) {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
     next();
-  } catch (error) {
-    return next(error);
+  } catch (err) {
+    next(err);
   }
 });
 

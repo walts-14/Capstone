@@ -14,6 +14,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 export default upload;
 
+// ---------- Image Upload Middleware for Profile Pictures ----------
 export const uploadImage = multer({
   storage: multer.diskStorage({
     destination: (req, file, cb) => {

@@ -68,8 +68,9 @@ const router = createBrowserRouter([
       { path: "videoupload", element: <VideoUpload/> },
       { path: "admin", element: <Admin/> },
       { path: "superadmin", element: <SuperAdmin/> },
-      { path: "progresstracker", element: <ProgressTracker/> }
-,
+      { path: "progresstracker", element: <ProgressTracker/> },
+      { path: "VideoList", element: <VideoList /> },
+      { path: "QuizUpload", element: <QuizUpload /> },
     ],
   },
 

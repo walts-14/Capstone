@@ -1,4 +1,3 @@
-// src/contexts/ProgressContext.jsx
 import React, { createContext, useState, useEffect } from "react";
 import API from "../api";
 
@@ -27,72 +26,73 @@ const initialProgress = {
 
 const PROGRESS_STORAGE_KEY = "progressData";
 
-export const ProgressProvider = ({ children, userId }) => {
-  const [progressData, setProgressData] = useState(() => {
-    const stored = localStorage.getItem(PROGRESS_STORAGE_KEY);
-    if (!stored) return initialProgress;
-    const parsed = JSON.parse(stored);
-    return {
-      basic: { ...initialProgress.basic, ...parsed.basic },
-      intermediate: { ...initialProgress.intermediate, ...parsed.intermediate },
-      advanced: { ...initialProgress.advanced, ...parsed.advanced },
-    };
-  });
+export const ProgressProvider = ({
+  children,
+  initialUserId = null,
+  initialUserName = ""
+}) => {
+  const [currentUserId, setCurrentUserId]     = useState(initialUserId);
+  const [currentUserName, setCurrentUserName] = useState(initialUserName);
+
+  const [progressData, setProgressData] = useState(initialProgress);
 
   const [streakData, setStreakData] = useState({
     currentStreak: 0,
-    lastUpdated: null,
-    streakFreeze: false,
+    lastUpdated:   null,
+    streakFreeze:  false,
   });
 
-  // Fetch progress and streak from the backend on mount.
+  // Fetch progress + streak whenever the “currentUserId” changes
   useEffect(() => {
-    async function fetchData() {
+    if (!currentUserId) return;
+    (async () => {
       try {
-        const progressRes = await API.get(`/progress/${userId}`);
-        if (progressRes.data && progressRes.data.progress) {
-          setProgressData(progressRes.data.progress);
-          localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(progressRes.data.progress));
+        const [{ data: prg }, { data: str }] = await Promise.all([
+          API.get(`/progress/${currentUserId}`),
+          API.get(`/streak/${currentUserId}`)
+        ]);
+        if (prg.progress) {
+          setProgressData(prg.progress);
+          localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(prg.progress));
+        } else {
+          // Clear localStorage progress if backend has no progress data
+          localStorage.removeItem(PROGRESS_STORAGE_KEY);
+          setProgressData(initialProgress);
         }
-        const streakRes = await API.get(`/streak/${userId}`);
-        if (streakRes.data && streakRes.data.streak) {
-          setStreakData(streakRes.data.streak);
+        if (str.streak) {
+          setStreakData(str.streak);
         }
-      } catch (error) {
-        console.error("Error fetching progress/streak:", error);
+      } catch (err) {
+        console.error("Error fetching progress/streak:", err);
       }
-    }
-    if (userId) fetchData();
-  }, [userId]);
+    })();
+  }, [currentUserId]);
 
-  // Sync progress to backend and localStorage when progressData changes.
+  // Sync progressData to backend + localStorage
   useEffect(() => {
+    if (!currentUserId) return;
     localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(progressData));
-    async function syncProgress() {
+    (async () => {
       try {
-        await API.put(`/progress/${userId}`, { progress: progressData });
-        console.log("Progress synced with backend");
-      } catch (error) {
-        console.error("Error syncing progress:", error);
+        await API.put(`/progress/${currentUserId}`, { progress: progressData });
+      } catch (err) {
+        console.error("Error syncing progress:", err);
       }
-    }
-    if (userId) syncProgress();
-  }, [progressData, userId]);
+    })();
+  }, [progressData, currentUserId]);
 
-  // Sync streak to backend when streakData changes.
+  // Sync streakData to backend
   useEffect(() => {
-    async function syncStreak() {
+    if (!currentUserId) return;
+    (async () => {
       try {
-        await API.put(`/streak/${userId}`, { streak: streakData });
-        console.log("Streak synced with backend");
-      } catch (error) {
-        console.error("Error syncing streak:", error);
+        await API.put(`/streak/${currentUserId}`, { streak: streakData });
+      } catch (err) {
+        console.error("Error syncing streak:", err);
       }
-    }
-    if (userId) syncStreak();
-  }, [streakData, userId]);
+    })();
+  }, [streakData, currentUserId]);
 
-  // Function to update progress in a given lesson and part.
   const updateProgress = (level, lessonKey, part) => {
     setProgressData(prev => ({
       ...prev,
@@ -106,17 +106,27 @@ export const ProgressProvider = ({ children, userId }) => {
     }));
   };
 
-  // Example function to increment the streak.
   const incrementStreak = () => {
     setStreakData(prev => ({
       ...prev,
       currentStreak: prev.currentStreak + 1,
-      lastUpdated: new Date(),
+      lastUpdated:   new Date(),
     }));
   };
 
   return (
-    <ProgressContext.Provider value={{ progressData, updateProgress, streakData, incrementStreak }}>
+    <ProgressContext.Provider
+      value={{
+        currentUserId,
+        setCurrentUserId,
+        currentUserName,
+        setCurrentUserName,
+        progressData,
+        updateProgress,
+        streakData,
+        incrementStreak,
+      }}
+    >
       {children}
     </ProgressContext.Provider>
   );
