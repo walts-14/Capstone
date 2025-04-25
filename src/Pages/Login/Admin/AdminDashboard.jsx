@@ -10,6 +10,7 @@ import "../../../css/ProgressModal.css"; // your modal CSS
 import axios from "axios";
 import toast from "react-hot-toast";
 import Leaderboard from "../../Leaderboard/Leaderboard";
+import ProgressTracker from "../../Dashboard/ProgressTracker";
 
 const DashboardAdmin = () => {
   const navigate = useNavigate();
@@ -19,6 +20,13 @@ const DashboardAdmin = () => {
   // ─── state ─────────────────────────────────────────────────────
   const [users, setUsers] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const [showProgressTracker, setShowProgressTracker] = useState(false);
+  const handleClick = () => {
+    setShowProgressTracker(true);
+  };
+  const handleClose = () => {
+    setShowProgressTracker(false);
+  };
   const [formData, setFormData] = useState({
     id: "",
     name: "",
@@ -62,10 +70,7 @@ const DashboardAdmin = () => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    if (
-      formData.password &&
-      formData.password !== formData.confirmPassword
-    ) {
+    if (formData.password && formData.password !== formData.confirmPassword) {
       return toast.error("Passwords do not match!");
     }
     if (
@@ -89,14 +94,10 @@ const DashboardAdmin = () => {
           }
         );
       } else {
-        response = await axios.post(
-          `/api/admin/students`,
-          formData,
-          {
-            baseURL: "http://localhost:5000",
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        response = await axios.post(`/api/admin/students`, formData, {
+          baseURL: "http://localhost:5000",
+          headers: { Authorization: `Bearer ${token}` },
+        });
       }
       toast.success(response.data.message);
       fetchStudents(selectedGrade);
@@ -123,13 +124,10 @@ const DashboardAdmin = () => {
   const handleDeleteUser = async (email) => {
     if (!window.confirm("Delete this user?")) return;
     try {
-      await axios.delete(
-        `/api/admin/students/${encodeURIComponent(email)}`,
-        {
-          baseURL: "http://localhost:5000",
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      await axios.delete(`/api/admin/students/${encodeURIComponent(email)}`, {
+        baseURL: "http://localhost:5000",
+        headers: { Authorization: `Bearer ${token}` },
+      });
       toast.success("User deleted!");
       fetchStudents(selectedGrade);
     } catch (err) {
@@ -169,17 +167,11 @@ const DashboardAdmin = () => {
               navigate("/admin");
             }}
           >
-            <img
-              src={DashboardIcon}
-              alt="Dashboard"
-              className="sidebar-icon"
-            />
+            <img src={DashboardIcon} alt="Dashboard" className="sidebar-icon" />
             <span>Dashboard</span>
           </div>
           <div
-            className={`sidebar-item ${
-              showLeaderboard ? "active" : ""
-            }`}
+            className={`sidebar-item ${showLeaderboard ? "active" : ""}`}
             onClick={() => setShowLeaderboard(true)}
           >
             <img
@@ -197,17 +189,19 @@ const DashboardAdmin = () => {
       ) : (
         <>
           <div className="levels">
-            {["All Students", "Grade 7", "Grade 8", "Grade 9", "Grade 10"].map((grade) => (
-              <div
-                key={grade}
-                className={`level-item ${
-                  grade.replace(" ", "").toLowerCase()
-                } ${selectedGrade === grade ? "active" : ""}`}
-                onClick={() => handleGradeSelection(grade)}
-              >
-                {grade.toUpperCase()}
-              </div>
-            ))}
+            {["All Students", "Grade 7", "Grade 8", "Grade 9", "Grade 10"].map(
+              (grade) => (
+                <div
+                  key={grade}
+                  className={`level-item ${grade
+                    .replace(" ", "")
+                    .toLowerCase()} ${selectedGrade === grade ? "active" : ""}`}
+                  onClick={() => handleGradeSelection(grade)}
+                >
+                  {grade.toUpperCase()}
+                </div>
+              )
+            )}
           </div>
 
           <div className="table-container">
@@ -262,18 +256,65 @@ const DashboardAdmin = () => {
                       <td>{u.password}</td>
                       <td>{u.yearLevel || "N/A"}</td>
                       <td>
-                        <img
-                          src={EditIcon}
-                          alt="Edit"
-                          className="img-action"
-                          onClick={() => handleEditUser(u)}
-                        />
-                        <img
-                          src={RemoveIcon}
-                          alt="Delete"
-                          className="img-action"
-                          onClick={() => handleDeleteUser(u.email)}
-                        />
+                        <div className="action-admin">
+                          {!showProgressTracker ? (
+                            <button
+                              onClick={handleClick}
+                              className="btn text-white fs-5 px-3 py-2 rounded-4"
+                              style={{
+                                backgroundColor: "#2e86c1",
+                                border: "none",
+                              }}
+                            >
+                              Progress
+                            </button>
+                          ) : (
+                            <div
+                              className="d-flex flex-column align-items-end p-3"
+                              style={{
+                                position: "absolute",
+                                top: "0",
+                                left: "65%",
+                                transform: "translateX(-50%)",
+                                borderRadius: "10px",
+                                boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+                                maxWidth: "90%",
+                                width: "fit-content", // smaller width
+                                maxHeight: "500px", // smaller height
+                              }}
+                            >
+                              <button
+                                type="button"
+                                className="btn-close mb-2"
+                                aria-label="Close"
+                                onClick={handleClose}
+                              ></button>
+
+                              <div className="d-flex align-items-center gap-3 px-3 pb-3">
+                                <ProgressTracker />
+                              </div>
+                            </div>
+                          )}
+
+                          <img
+                            src={EditIcon}
+                            alt="Edit"
+                            className="img-action"
+                            style={{ cursor: "pointer" }}
+                            onClick={() =>
+                              handleEditUser(entry.email, entry.role)
+                            }
+                          />
+                          <img
+                            src={RemoveIcon}
+                            alt="Remove"
+                            className="img-action"
+                            style={{ marginRight: "30px", cursor: "pointer" }}
+                            onClick={() =>
+                              handleDeleteUser(entry.email, entry.role)
+                            }
+                          />
+                        </div>
                       </td>
                     </tr>
                   ))}

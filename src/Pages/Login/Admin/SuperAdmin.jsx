@@ -5,6 +5,7 @@ import RemoveIcon from "../../../assets/Remove.png";
 import "../../../css/SuperAdmin.css";
 import axios from "axios";
 import toast from "react-hot-toast";
+import ProgressTracker from "../../Dashboard/ProgressTracker";
 
 const SuperAdmin = () => {
   const [formData, setFormData] = useState({
@@ -21,6 +22,13 @@ const SuperAdmin = () => {
   const [showSelectionModal, setShowSelectionModal] = useState(false);
   const [formMode, setFormMode] = useState("create");
   const [formType, setFormType] = useState(""); // "Student" or "Teacher"
+  const [showProgressTracker, setShowProgressTracker] = useState(false);
+  const handleClick = () => {
+    setShowProgressTracker(true);
+  };
+  const handleClose = () => {
+    setShowProgressTracker(false);
+  };
 
   // Set token on axios default headers
   useEffect(() => {
@@ -28,7 +36,7 @@ const SuperAdmin = () => {
     if (token) {
       console.log("Token from localStorage:", token);
       try {
-        const decoded = JSON.parse(atob(token.split('.')[1]));
+        const decoded = JSON.parse(atob(token.split(".")[1]));
         console.log("Decoded token payload:", decoded);
       } catch (err) {
         console.error("Error decoding token:", err);
@@ -41,7 +49,9 @@ const SuperAdmin = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/superadmin/users");
+        const response = await axios.get(
+          "http://localhost:5000/api/superadmin/users"
+        );
         setUsers(response.data.data);
       } catch (error) {
         console.error("Error fetching users:", error);
@@ -50,7 +60,9 @@ const SuperAdmin = () => {
 
     const fetchTeachers = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/superadmin/admins");
+        const response = await axios.get(
+          "http://localhost:5000/api/superadmin/admins"
+        );
         setTeachers(response.data.data);
       } catch (error) {
         console.error("Error fetching teachers:", error);
@@ -74,14 +86,20 @@ const SuperAdmin = () => {
       return;
     }
 
-    if (!formData.name || !formData.username || !formData.email || !formData.password) {
+    if (
+      !formData.name ||
+      !formData.username ||
+      !formData.email ||
+      !formData.password
+    ) {
       toast.error("All fields are required!");
       return;
     }
 
     // Map formType to role: "Teacher" becomes "admin", "Student" becomes "user"
     const role = formType === "Teacher" ? "admin" : "user";
-    const createEndpoint = "http://localhost:5000/api/superadmin/create-account";
+    const createEndpoint =
+      "http://localhost:5000/api/superadmin/create-account";
 
     const newUser = {
       name: formData.name,
@@ -107,13 +125,19 @@ const SuperAdmin = () => {
       }
 
       // Refresh lists
-      const userResponse = await axios.get("http://localhost:5000/api/superadmin/users");
+      const userResponse = await axios.get(
+        "http://localhost:5000/api/superadmin/users"
+      );
       setUsers(userResponse.data.data);
-      const teacherResponse = await axios.get("http://localhost:5000/api/superadmin/admins");
+      const teacherResponse = await axios.get(
+        "http://localhost:5000/api/superadmin/admins"
+      );
       setTeachers(teacherResponse.data.data);
     } catch (error) {
       console.error("Error details:", error.response?.data);
-      toast.error("Error: " + (error.response?.data?.message || "An error occurred"));
+      toast.error(
+        "Error: " + (error.response?.data?.message || "An error occurred")
+      );
     }
 
     // Reset form and close modal
@@ -128,7 +152,9 @@ const SuperAdmin = () => {
   };
 
   const handleDeleteUser = async (email, role) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this account?");
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this account?"
+    );
     if (confirmDelete) {
       try {
         const deleteUrl =
@@ -136,16 +162,27 @@ const SuperAdmin = () => {
             ? `http://localhost:5000/api/superadmin/admins/${email}`
             : `http://localhost:5000/api/superadmin/users/${email}`;
         await axios.delete(deleteUrl);
-        toast.success(`${role === "admin" ? "Teacher" : "Student"} account deleted successfully!`);
+        toast.success(
+          `${
+            role === "admin" ? "Teacher" : "Student"
+          } account deleted successfully!`
+        );
 
         // Refresh lists
-        const userResponse = await axios.get("http://localhost:5000/api/superadmin/users");
+        const userResponse = await axios.get(
+          "http://localhost:5000/api/superadmin/users"
+        );
         setUsers(userResponse.data.data);
-        const teacherResponse = await axios.get("http://localhost:5000/api/superadmin/admins");
+        const teacherResponse = await axios.get(
+          "http://localhost:5000/api/superadmin/admins"
+        );
         setTeachers(teacherResponse.data.data);
       } catch (error) {
         console.error("Error deleting user:", error);
-        toast.error("Error deleting user: " + (error.response?.data?.message || "An error occurred"));
+        toast.error(
+          "Error deleting user: " +
+            (error.response?.data?.message || "An error occurred")
+        );
       }
     }
   };
@@ -248,20 +285,61 @@ const SuperAdmin = () => {
                   <td>{entry.username}</td>
                   <td>{entry.password}</td>
                   <td>
-                    <img
-                      src={EditIcon}
-                      alt="Edit"
-                      className="img-action"
-                      style={{ marginRight: "30px", cursor: "pointer" }}
-                      onClick={() => handleEditUser(entry.email, entry.role)}
-                    />
-                    <img
-                      src={RemoveIcon}
-                      alt="Remove"
-                      className="img-action"
-                      style={{ cursor: "pointer" }}
-                      onClick={() => handleDeleteUser(entry.email, entry.role)}
-                    />
+                    <div className="action-superadmin">
+                      {!showProgressTracker ? (
+                        <button
+                          onClick={handleClick}
+                          className="btn text-white fs-5 px-3 py-2 rounded-4"
+                          style={{
+                            backgroundColor: "#2e86c1",
+                            border: "none",
+                          }}
+                        >
+                          Progress
+                        </button>
+                      ) : (
+                        <div
+                          className="d-flex flex-column align-items-end p-3"
+                          style={{
+                            position: "absolute",
+                            top: "0",
+                            left: "65%",
+                            transform: "translateX(-50%)",
+                            borderRadius: "10px",
+                            maxWidth: "90%",
+                            width: "fit-content", // smaller width
+                          }}
+                        >
+                          <button
+                            type="button"
+                            className="btn-close mb-2"
+                            aria-label="Close"
+                            onClick={handleClose}
+                          ></button>
+
+                          <div className="d-flex align-items-center gap-3 px-3 pb-3">
+                            <ProgressTracker />
+                          </div>
+                        </div>
+                      )}
+
+                      <img
+                        src={EditIcon}
+                        alt="Edit"
+                        className="img-action"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => handleEditUser(entry.email, entry.role)}
+                      />
+                      <img
+                        src={RemoveIcon}
+                        alt="Remove"
+                        className="img-action"
+                        style={{ marginRight: "30px", cursor: "pointer" }}
+                        onClick={() =>
+                          handleDeleteUser(entry.email, entry.role)
+                        }
+                      />
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -295,7 +373,9 @@ const SuperAdmin = () => {
                 color: "#FFFFFF",
               }}
             >
-              {formMode === "edit" ? `Edit ${formType} Account` : `Add ${formType} Account`}
+              {formMode === "edit"
+                ? `Edit ${formType} Account`
+                : `Add ${formType} Account`}
             </h3>
             <form onSubmit={handleFormSubmit}>
               <div className="mb-3">
@@ -493,23 +573,26 @@ const SuperAdmin = () => {
           </div>
         )}
 
-<div className="logout-container" style={{ textAlign: "right", marginBottom: "10px" }}>
-  <button
-    onClick={logout}
-    className="btn btn-danger"
-    style={{
-      backgroundColor: "#D9534F",
-      color: "#FFFFFF",
-      borderRadius: "8px",
-      padding: "10px 20px",
-      fontWeight: "bold",
-      border: "none",
-      cursor: "pointer"
-    }}
-  >
-    Logout
-  </button>
-</div>
+        <div
+          className="logout-container"
+          style={{ textAlign: "right", marginBottom: "10px" }}
+        >
+          <button
+            onClick={logout}
+            className="btn btn-danger"
+            style={{
+              backgroundColor: "#D9534F",
+              color: "#FFFFFF",
+              borderRadius: "8px",
+              padding: "10px 20px",
+              fontWeight: "bold",
+              border: "none",
+              cursor: "pointer",
+            }}
+          >
+            Logout
+          </button>
+        </div>
       </div>
     </div>
   );

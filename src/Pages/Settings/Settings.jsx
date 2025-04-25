@@ -4,13 +4,19 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Sidenav from "../../Components/Sidenav";
 import "../../css/Settings.css";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import changepic from "../../assets/changepic.png";
 
 function Settings() {
   const navigate = useNavigate();
   const [userName, setUserName] = React.useState("");
   const [profilePic, setProfilePic] = React.useState(changepic);
+  const [userData, setUserData] = useState({
+    name: "",
+    username: "",
+    email: "",
+    profilePic: "",
+  });
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -37,6 +43,21 @@ function Settings() {
       reader.readAsDataURL(file);
     }
   };
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const email = localStorage.getItem("email"); // or from wherever you store the user's email
+        const response = await axios.get(
+          `http://localhost:5000/api/user?email=${email}`
+        );
+        setUserData(response.data.data);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   return (
     <>
@@ -68,19 +89,19 @@ function Settings() {
             Name
           </span>
           <div className="student-details rounded-4 position-relative p-1 pt-3 ps-4 text-left">
-            <p className="text-white text-left">Albert Einstein</p>
+            <p className="text-white text-left">{userData.name}</p>
           </div>
           <span className="username-stud text-white fw-bold position-absolute">
             Username
           </span>
           <div className="username-stud-view rounded-4 position-relative p-1 pt-3 ps-4 text-left">
-            <p className="text-white text-left">Albert</p>
+            <p className="text-white text-left">{userData.username}</p>
           </div>
           <span className="email-stud text-white fw-bold position-absolute">
             Email
           </span>
           <div className="email-stud-view rounded-4 position-relative p-1 pt-3 ps-4 text-left">
-            <p className="text-white text-left">albert@example.com</p>
+            <p className="text-white text-left">{userData.email}</p>
           </div>
         </div>
 
