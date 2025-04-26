@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom"; // Add navigation hooks
+import { useNavigate, useLocation } from "react-router-dom";
 import { FaUserPlus } from "react-icons/fa";
 import EditIcon from "../../../assets/Edit.png";
 import RemoveIcon from "../../../assets/Remove.png";
@@ -21,15 +21,15 @@ const SuperAdmin = () => {
     password: "",
     confirmPassword: "",
   });
-  const [users, setUsers] = useState([]); // Students (role: "user")
-  const [teachers, setTeachers] = useState([]); // Teachers (role: "admin")
+  const [users, setUsers] = useState([]);
+  const [teachers, setTeachers] = useState([]);
   const [activeTab, setActiveTab] = useState("Users");
   const [showForm, setShowForm] = useState(false);
   const [showSelectionModal, setShowSelectionModal] = useState(false);
   const [formMode, setFormMode] = useState("create");
-  const [formType, setFormType] = useState(""); // "Student" or "Teacher"
-  const [selectedGrade, setSelectedGrade] = useState("grade7"); // Default to Grade 7
-  const [students, setStudents] = useState([]); // Students for the selected grade
+  const [formType, setFormType] = useState("");
+  const [selectedGrade, setSelectedGrade] = useState("grade7");
+  const [students, setStudents] = useState([]);
   const [showProgressModal, setShowProgressModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
@@ -37,9 +37,7 @@ const SuperAdmin = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      console.log("Token from localStorage:", token);
       try {
-        const decoded = JSON.parse(atob(token.split(".")[1]));
         const decoded = JSON.parse(atob(token.split(".")[1]));
         console.log("Decoded token payload:", decoded);
       } catch (err) {
@@ -56,9 +54,6 @@ const SuperAdmin = () => {
         const response = await axios.get(
           "http://localhost:5000/api/superadmin/users"
         );
-        const response = await axios.get(
-          "http://localhost:5000/api/superadmin/users"
-        );
         setUsers(response.data.data);
       } catch (error) {
         console.error("Error fetching users:", error);
@@ -67,9 +62,6 @@ const SuperAdmin = () => {
 
     const fetchTeachers = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:5000/api/superadmin/admins"
-        );
         const response = await axios.get(
           "http://localhost:5000/api/superadmin/admins"
         );
@@ -98,8 +90,8 @@ const SuperAdmin = () => {
   };
 
   const handleGradeSelection = (grade) => {
-    setSelectedGrade(grade); // Update the selected grade
-    fetchStudentsByGrade(grade); // Fetch students for the selected grade
+    setSelectedGrade(grade);
+    fetchStudentsByGrade(grade);
   };
 
   const handleInputChange = (e) => {
@@ -115,28 +107,13 @@ const SuperAdmin = () => {
       return;
     }
 
-    if (
-      !formData.name ||
-      !formData.username ||
-      !formData.email ||
-      !formData.password
-    ) {
-    if (
-      !formData.name ||
-      !formData.username ||
-      !formData.email ||
-      !formData.password
-    ) {
+    if (!formData.name || !formData.username || !formData.email || !formData.password) {
       toast.error("All fields are required!");
       return;
     }
 
-    // Map formType to role: "Teacher" becomes "admin", "Student" becomes "user"
     const role = formType === "Teacher" ? "admin" : "user";
-    const createEndpoint =
-      "http://localhost:5000/api/superadmin/create-account";
-    const createEndpoint =
-      "http://localhost:5000/api/superadmin/create-account";
+    const createEndpoint = "http://localhost:5000/api/superadmin/create-account";
 
     const newUser = {
       name: formData.name,
@@ -152,7 +129,6 @@ const SuperAdmin = () => {
           role === "admin"
             ? `http://localhost:5000/api/superadmin/admins/${formData.email}`
             : `http://localhost:5000/api/superadmin/users/${formData.email}`;
-        // Remove email from the request body since it's in the URL
         const { email, ...updateData } = newUser;
         await axios.put(updateUrl, updateData);
         toast.success("User updated successfully!");
@@ -165,22 +141,13 @@ const SuperAdmin = () => {
       const userResponse = await axios.get(
         "http://localhost:5000/api/superadmin/users"
       );
-      const userResponse = await axios.get(
-        "http://localhost:5000/api/superadmin/users"
-      );
       setUsers(userResponse.data.data);
-      const teacherResponse = await axios.get(
-        "http://localhost:5000/api/superadmin/admins"
-      );
       const teacherResponse = await axios.get(
         "http://localhost:5000/api/superadmin/admins"
       );
       setTeachers(teacherResponse.data.data);
     } catch (error) {
       console.error("Error details:", error.response?.data);
-      toast.error(
-        "Error: " + (error.response?.data?.message || "An error occurred")
-      );
       toast.error(
         "Error: " + (error.response?.data?.message || "An error occurred")
       );
@@ -201,9 +168,6 @@ const SuperAdmin = () => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this account?"
     );
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this account?"
-    );
     if (confirmDelete) {
       try {
         const deleteUrl =
@@ -219,23 +183,13 @@ const SuperAdmin = () => {
         const userResponse = await axios.get(
           "http://localhost:5000/api/superadmin/users"
         );
-        const userResponse = await axios.get(
-          "http://localhost:5000/api/superadmin/users"
-        );
         setUsers(userResponse.data.data);
-        const teacherResponse = await axios.get(
-          "http://localhost:5000/api/superadmin/admins"
-        );
         const teacherResponse = await axios.get(
           "http://localhost:5000/api/superadmin/admins"
         );
         setTeachers(teacherResponse.data.data);
       } catch (error) {
         console.error("Error deleting user:", error);
-        toast.error(
-          "Error deleting user: " +
-            (error.response?.data?.message || "An error occurred")
-        );
         toast.error(
           "Error deleting user: " +
             (error.response?.data?.message || "An error occurred")
@@ -270,10 +224,10 @@ const SuperAdmin = () => {
       email: "",
       password: "",
       confirmPassword: "",
-    }); // Reset form data
-    setFormMode("create"); // Ensure the form mode is set to "create"
-    setFormType(""); // Clear the form type
-    setShowSelectionModal(true); // Show the selection modal
+    });
+    setFormMode("create");
+    setFormType("");
+    setShowSelectionModal(true);
   };
 
   const handleShowProgress = (student) => {
@@ -380,7 +334,7 @@ const SuperAdmin = () => {
       {showProgressModal && selectedUser && (
         <div className="progress-modal">
           <button className="btn btn-close" onClick={handleCloseProgressModal}>
-            
+            Close
           </button>
           <div className="progress-modal-content">
             <h3>{selectedUser.name}'s Progress</h3>
@@ -434,7 +388,7 @@ const SuperAdmin = () => {
               <th>Name</th>
               <th>Username</th>
               <th>Password</th>
-              <th>Year Level</th> {/* Add Year Level column */}
+              <th>Year Level</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -445,7 +399,7 @@ const SuperAdmin = () => {
                 <td>{entry.name}</td>
                 <td>{entry.username}</td>
                 <td>{entry.password}</td>
-                <td>{entry.yearLevel || "N/A"}</td> {/* Add Year Level data */}
+                <td>{entry.yearLevel || "N/A"}</td>
                 <td>
                   <button
                     className="btn btn-progress"
@@ -455,7 +409,7 @@ const SuperAdmin = () => {
                       borderRadius: "5px",
                       marginRight: "1px",
                     }}
-                    onClick={() => handleShowProgress(entry)} // Add View Progress button
+                    onClick={() => handleShowProgress(entry)}
                   >
                     View Progress
                   </button>
@@ -479,181 +433,182 @@ const SuperAdmin = () => {
           </tbody>
         </table>
       </div>
-        {showForm && (
-          <div
-            className="popup-form"
+
+      {showForm && (
+        <div
+          className="popup-form"
+          style={{
+            position: "fixed",
+            top: "40%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            backgroundColor: "#271D3E",
+            padding: "30px",
+            borderRadius: "10px",
+            zIndex: 1000,
+            width: "90%",
+            maxWidth: "400px",
+            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.25)",
+          }}
+        >
+          <h3
+            className="text-light mb-3"
             style={{
-              position: "fixed",
-              top: "40%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              backgroundColor: "#271D3E",
-              padding: "30px",
-              borderRadius: "10px",
-              zIndex: 1000,
-              width: "90%",
-              maxWidth: "400px",
-              boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.25)",
+              textAlign: "center",
+              fontSize: "2.3rem",
+              fontWeight: "bold",
+              color: "#FFFFFF",
             }}
           >
-            <h3
-              className="text-light mb-3"
-              style={{
-                textAlign: "center",
-                fontSize: "2.3rem",
-                fontWeight: "bold",
-                color: "#FFFFFF",
-              }}
-            >
-              {formMode === "edit"
-                ? `Edit ${formType} Account`
-                : `Add ${formType} Account`}
-            </h3>
-            <form onSubmit={handleFormSubmit}>
-              <div className="mb-3">
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="Name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  className="form-control"
-                  style={{
-                    width: "95%",
-                    backgroundColor: "#3F3653",
-                    color: "#FFFFFF",
-                    fontSize: "1rem",
-                    padding: "10px",
-                    border: "1px solid #6F687E",
-                    borderRadius: "10px",
-                    marginBottom: "10px",
-                  }}
-                  required
-                />
-              </div>
-              <div className="mb-3">
-                <input
-                  type="text"
-                  name="username"
-                  placeholder="Username"
-                  value={formData.username || ""}
-                  onChange={handleInputChange}
-                  className="form-control"
-                  style={{
-                    width: "95%",
-                    backgroundColor: "#3F3653",
-                    color: "#FFFFFF",
-                    fontSize: "1rem",
-                    padding: "10px",
-                    border: "1px solid #6F687E",
-                    borderRadius: "10px",
-                    marginBottom: "10px",
-                  }}
-                  required
-                />
-              </div>
-              <div className="mb-3">
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className="form-control"
-                  style={{
-                    width: "95%",
-                    backgroundColor: "#3F3653",
-                    color: "#FFFFFF",
-                    fontSize: "1rem",
-                    padding: "10px",
-                    border: "1px solid #6F687E",
-                    borderRadius: "10px",
-                    marginBottom: "10px",
-                  }}
-                  required
-                />
-              </div>
-              <div className="mb-3">
-                <input
-                  type="password"
-                  name="password"
-                  placeholder="Password"
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  className="form-control"
-                  style={{
-                    width: "95%",
-                    backgroundColor: "#3F3653",
-                    color: "#FFFFFF",
-                    fontSize: "1rem",
-                    padding: "10px",
-                    border: "1px solid #6F687E",
-                    borderRadius: "10px",
-                    marginBottom: "10px",
-                  }}
-                  required
-                />
-              </div>
-              <div className="mb-3">
-                <input
-                  type="password"
-                  name="confirmPassword"
-                  placeholder="Confirm Password"
-                  value={formData.confirmPassword}
-                  onChange={handleInputChange}
-                  className="form-control"
-                  style={{
-                    width: "95%",
-                    backgroundColor: "#3F3653",
-                    color: "#FFFFFF",
-                    fontSize: "1rem",
-                    padding: "10px",
-                    border: "1px solid #6F687E",
-                    borderRadius: "10px",
-                    marginBottom: "10px",
-                  }}
-                  required
-                />
-              </div>
-              <div className="d-flex justify-content-center">
-                <button
-                  type="submit"
-                  className="btn btn-primary"
-                  style={{
-                    backgroundColor: "#4A2574",
-                    color: "#FFFFFF",
-                    borderRadius: "10px",
-                    fontWeight: "bold",
-                    fontSize: "1.5rem",
-                    padding: "15px",
-                        width: "90%",
-                    marginBottom: "10px",
-                  }}
-                >
-                  Submit
-                </button>
-              </div>
-              <div className="d-flex justify-content-center">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  style={{
-                    backgroundColor: "#D7443E",
-                    color: "#FFFFFF",
-                    borderRadius: "10px",
-                    fontWeight: "bold",
-                    fontSize: "1.5rem",
-                    padding: "15px",
-                    width: "90%",
-                  }}
-                  onClick={() => setShowForm(false)} // Close the form
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
-        )}
+            {formMode === "edit"
+              ? `Edit ${formType} Account`
+              : `Add ${formType} Account`}
+          </h3>
+          <form onSubmit={handleFormSubmit}>
+            <div className="mb-3">
+              <input
+                type="text"
+                name="name"
+                placeholder="Name"
+                value={formData.name}
+                onChange={handleInputChange}
+                className="form-control"
+                style={{
+                  width: "95%",
+                  backgroundColor: "#3F3653",
+                  color: "#FFFFFF",
+                  fontSize: "1rem",
+                  padding: "10px",
+                  border: "1px solidrgb(255, 255, 255)",
+                  borderRadius: "10px",
+                  marginBottom: "10px",
+                }}
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <input
+                type="text"
+                name="username"
+                placeholder="Username"
+                value={formData.username || ""}
+                onChange={handleInputChange}
+                className="form-control"
+                style={{
+                  width: "95%",
+                  backgroundColor: "#3F3653",
+                  color: "#FFFFFF",
+                  fontSize: "1rem",
+                  padding: "10px",
+                  border: "1px solidrgb(255, 255, 255)",
+                  borderRadius: "10px",
+                  marginBottom: "10px",
+                }}
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={formData.email}
+                onChange={handleInputChange}
+                className="form-control"
+                style={{
+                  width: "95%",
+                  backgroundColor: "#3F3653",
+                  color: "#FFFFFF",
+                  fontSize: "1rem",
+                  padding: "10px",
+                  border: "1px solidrgb(255, 255, 255)",
+                  borderRadius: "10px",
+                  marginBottom: "10px",
+                }}
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleInputChange}
+                className="form-control"
+                style={{
+                  width: "95%",
+                  backgroundColor: "#3F3653",
+                  color: "#FFFFFF",
+                  fontSize: "1rem",
+                  padding: "10px",
+                  border: "1px solidrgb(255, 255, 255)",
+                  borderRadius: "10px",
+                  marginBottom: "10px",
+                }}
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <input
+                type="password"
+                name="confirmPassword"
+                placeholder="Confirm Password"
+                value={formData.confirmPassword}
+                onChange={handleInputChange}
+                className="form-control"
+                style={{
+                  width: "95%",
+                  backgroundColor: "#3F3653",
+                  color: "#FFFFFF",
+                  fontSize: "1rem",
+                  padding: "10px",
+                  border: "1px solidrgb(255, 255, 255)",
+                  borderRadius: "10px",
+                  marginBottom: "10px",
+                }}
+                required
+              />
+            </div>
+            <div className="d-flex justify-content-center">
+              <button
+                type="submit"
+                className="btn btn-primary"
+                style={{
+                  backgroundColor: "#4A2574",
+                  color: "#FFFFFF",
+                  borderRadius: "10px",
+                  fontWeight: "bold",
+                  fontSize: "1.5rem",
+                  padding: "15px",
+                  width: "90%",
+                  marginBottom: "10px",
+                }}
+              >
+                Submit
+              </button>
+            </div>
+            <div className="d-flex justify-content-center">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                style={{
+                  backgroundColor: "#D7443E",
+                  color: "#FFFFFF",
+                  borderRadius: "10px",
+                  fontWeight: "bold",
+                  fontSize: "1.5rem",
+                  padding: "15px",
+                  width: "90%",
+                }}
+                onClick={() => setShowForm(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
 
         {showSelectionModal && (
           <div
@@ -724,26 +679,30 @@ const SuperAdmin = () => {
           </div>
         )}
 
-        <div
-          className="logout-container"
-          style={{ textAlign: "right", marginBottom: "10px" }}
-        >
-          <button
-            onClick={logout}
-            className="btn btn-danger"
-            style={{
-              backgroundColor: "#D9534F",
-              color: "#FFFFFF",
-              borderRadius: "8px",
-              padding: "10px 20px",
-              fontWeight: "bold",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
-            Logout
-          </button>
-              </div>
+<div
+  className="logout-container"
+>
+  <button
+    onClick={() => {
+      localStorage.removeItem("token"); // Clear the token
+      navigate("/login"); // Redirect to the login page
+    }}
+    className="btn btn-danger"
+    style={{
+      color: "#FFFFFF",
+      borderRadius: "20px",
+      padding: "10px 20px",
+      fontWeight: "bold",
+      border: "none",
+      cursor: "pointer",
+      marginRight: "50px",
+      height: "50px",
+      fontSize: "1.4rem",
+    }}
+  >
+    Logout
+  </button>
+</div>
     </div>
   );
 };

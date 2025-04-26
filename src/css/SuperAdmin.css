@@ -173,13 +173,22 @@
 }
 
 
-.SuperAdminLogout {
-  margin-left: -50px;
+.logout-container {
   display: flex;
+  justify-content: flex-end; /* Align the button to the right */
+  align-items: center;
+  margin-top: 20px; /* Adjust spacing above the button */
+  padding-right: 20px; /* Add padding to the right for spacing */
+  width: 100%; /* Ensure it spans the full width of the container */
+}
+
+.logout-container .btn{
+  display: flex;
+  border-radius: 30%;
   justify-content: center; /* Center the button horizontally */
   align-items: center;
-  margin-top: -550px; /* Add spacing above the button */
-  width: 100%; /* Ensure it spans the full width of the container */
+  margin-top: -300px; /* Add spacing above the button */
+  width: 10%; /* Ensure it spans the full width of the container */
 }
 
 
