@@ -8,6 +8,7 @@ import LeaderboardIcon from "../../../assets/leaderboardicon.png";
 import "../../../css/SuperAdmin.css";
 import axios from "axios";
 import toast from "react-hot-toast";
+import ProgressTracker from "../../Dashboard/ProgressTracker";
 
 const SuperAdmin = () => {
   const navigate = useNavigate();
@@ -39,6 +40,7 @@ const SuperAdmin = () => {
       console.log("Token from localStorage:", token);
       try {
         const decoded = JSON.parse(atob(token.split(".")[1]));
+        const decoded = JSON.parse(atob(token.split(".")[1]));
         console.log("Decoded token payload:", decoded);
       } catch (err) {
         console.error("Error decoding token:", err);
@@ -54,6 +56,9 @@ const SuperAdmin = () => {
         const response = await axios.get(
           "http://localhost:5000/api/superadmin/users"
         );
+        const response = await axios.get(
+          "http://localhost:5000/api/superadmin/users"
+        );
         setUsers(response.data.data);
       } catch (error) {
         console.error("Error fetching users:", error);
@@ -62,6 +67,9 @@ const SuperAdmin = () => {
 
     const fetchTeachers = async () => {
       try {
+        const response = await axios.get(
+          "http://localhost:5000/api/superadmin/admins"
+        );
         const response = await axios.get(
           "http://localhost:5000/api/superadmin/admins"
         );
@@ -113,12 +121,20 @@ const SuperAdmin = () => {
       !formData.email ||
       !formData.password
     ) {
+    if (
+      !formData.name ||
+      !formData.username ||
+      !formData.email ||
+      !formData.password
+    ) {
       toast.error("All fields are required!");
       return;
     }
 
     // Map formType to role: "Teacher" becomes "admin", "Student" becomes "user"
     const role = formType === "Teacher" ? "admin" : "user";
+    const createEndpoint =
+      "http://localhost:5000/api/superadmin/create-account";
     const createEndpoint =
       "http://localhost:5000/api/superadmin/create-account";
 
@@ -149,13 +165,22 @@ const SuperAdmin = () => {
       const userResponse = await axios.get(
         "http://localhost:5000/api/superadmin/users"
       );
+      const userResponse = await axios.get(
+        "http://localhost:5000/api/superadmin/users"
+      );
       setUsers(userResponse.data.data);
+      const teacherResponse = await axios.get(
+        "http://localhost:5000/api/superadmin/admins"
+      );
       const teacherResponse = await axios.get(
         "http://localhost:5000/api/superadmin/admins"
       );
       setTeachers(teacherResponse.data.data);
     } catch (error) {
       console.error("Error details:", error.response?.data);
+      toast.error(
+        "Error: " + (error.response?.data?.message || "An error occurred")
+      );
       toast.error(
         "Error: " + (error.response?.data?.message || "An error occurred")
       );
@@ -176,6 +201,9 @@ const SuperAdmin = () => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this account?"
     );
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this account?"
+    );
     if (confirmDelete) {
       try {
         const deleteUrl =
@@ -191,13 +219,23 @@ const SuperAdmin = () => {
         const userResponse = await axios.get(
           "http://localhost:5000/api/superadmin/users"
         );
+        const userResponse = await axios.get(
+          "http://localhost:5000/api/superadmin/users"
+        );
         setUsers(userResponse.data.data);
+        const teacherResponse = await axios.get(
+          "http://localhost:5000/api/superadmin/admins"
+        );
         const teacherResponse = await axios.get(
           "http://localhost:5000/api/superadmin/admins"
         );
         setTeachers(teacherResponse.data.data);
       } catch (error) {
         console.error("Error deleting user:", error);
+        toast.error(
+          "Error deleting user: " +
+            (error.response?.data?.message || "An error occurred")
+        );
         toast.error(
           "Error deleting user: " +
             (error.response?.data?.message || "An error occurred")
@@ -467,7 +505,9 @@ const SuperAdmin = () => {
                 color: "#FFFFFF",
               }}
             >
-              {formMode === "edit" ? `Edit ${formType} Account` : `Add ${formType} Account`}
+              {formMode === "edit"
+                ? `Edit ${formType} Account`
+                : `Add ${formType} Account`}
             </h3>
             <form onSubmit={handleFormSubmit}>
               <div className="mb-3">
@@ -684,19 +724,24 @@ const SuperAdmin = () => {
           </div>
         )}
 
-        <div className="SuperAdminLogout">
+        <div
+          className="logout-container"
+          style={{ textAlign: "right", marginBottom: "10px" }}
+        >
           <button
             onClick={logout}
-            className="btn-logout px-4 py-3"
+            className="btn btn-danger"
             style={{
-              backgroundColor: "#D7443E",
+              backgroundColor: "#D9534F",
               color: "#FFFFFF",
-              borderRadius: "40px",
+              borderRadius: "8px",
+              padding: "10px 20px",
               fontWeight: "bold",
-              fontSize: "1.5rem",
+              border: "none",
+              cursor: "pointer",
             }}
           >
-            Log out
+            Logout
           </button>
               </div>
     </div>

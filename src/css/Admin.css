@@ -502,7 +502,7 @@
 
   /* Rank */
   .progress-leaderboard .leaderboard-rank {
-    color: #ffffff; /* Gold color for the rank */
+    color: #f1c40f; /* Gold color for the rank */
     margin-right: 10px;
   }
 

@@ -1,95 +1,37 @@
-import express from 'express';
-import bcrypt from 'bcrypt';
-import User from '../models/user.js';
+// routes/superAdminRoutes.js
+import express from "express";
+import {
+  createAccount,
+  getAllStudentsSuper,
+  getAllAdmins,
+  getAdminByEmail,
+  updateAdminByEmail,
+  updateStudentByEmailSuper,
+  deleteAccountByEmail,
+  createSuperAdmin,
+  getStudentsByYearLevel,
+} from "../controllers/superadmin.controller.js";
+import { verifyToken, checkRole } from "../middlewares/auth.js";
 
-const Router = express.Router();
+const superAdminRoutes = express.Router();
 
-import { verifyToken, checkRole } from '../middlewares/auth.js';
+// Create an Account (Admin/Student) by Super Admin
+superAdminRoutes.post("/create-account", verifyToken, checkRole(["super_admin"]), createAccount);
 
-// --- Create an Account (Admin/Teacher or Student) ---
-Router.post('/create-account', verifyToken, checkRole(['super_admin']), async (req, res) => {
-  try {
-    const { name, username, email, password, role } = req.body;
+// Get All Student Accounts (role: "user")
+superAdminRoutes.get("/users", verifyToken, checkRole(["super_admin"]), getAllStudentsSuper);
 
-    if (!['admin', 'user'].includes(role)) {
-      return res.status(400).json({ message: "Invalid role specified. Allowed roles are 'admin' and 'user'." });
-    }
+// Get All Admin Accounts (role: "admin")
+superAdminRoutes.get("/admins", verifyToken, checkRole(["super_admin"]), getAllAdmins);
 
-    const user = new User({ name, username, email, password, role });
-    const validationError = user.validateSync();
-    if (validationError) {
-      return res.status(400).json({ message: 'Validation error', error: validationError });
-    }
+// Get a Specific Admin Account by Email
+superAdminRoutes.get("/admins/:email", verifyToken, checkRole(["super_admin"]), getAdminByEmail);
 
-    await user.save();
-    res.status(201).json({ message: `${role === 'admin' ? 'Admin' : 'Student'} account created successfully.`, data: user });
-  } catch (err) {
-    console.error("Error creating account:", err);
-    res.status(500).json({ message: 'Error creating account', error: err.message });
-  }
-});
-
-// --- Get All Student Accounts (role: "user") ---
-Router.get('/users', verifyToken, checkRole(['super_admin']), async (req, res) => {
-  try {
-    const students = await User.find({ role: 'user' });
-    res.status(200).json({ message: 'Students retrieved successfully.', data: students });
-  } catch (err) {
-    res.status(500).json({ message: 'Error retrieving students', error: err.message });
-  }
-});
-
-// --- Get All Admins (Teachers, role: "admin") ---
-Router.get('/admins', verifyToken, checkRole(['super_admin']), async (req, res) => {
-  try {
-    const admins = await User.find({ role: 'admin' });
-    res.status(200).json({ message: 'Admins retrieved successfully.', data: admins });
-  } catch (err) {
-    res.status(500).json({ message: 'Error retrieving admins', error: err.message });
-  }
-});
-
-// --- Get a Specific Admin Account by Email ---
-Router.get('/admins/:email', verifyToken, checkRole(['super_admin']), async (req, res) => {
-  try {
-    const { email } = req.params;
-    const admin = await User.findOne({ email, role: 'admin' });
-    if (!admin) {
-      return res.status(404).json({ message: 'Admin not found' });
-    }
-    res.status(200).json({ message: 'Admin retrieved successfully.', data: admin });
-  } catch (err) {
-    res.status(500).json({ message: 'Error retrieving admin', error: err.message });
-  }
-});
-
-// --- Update an Admin or Student Account by Email ---
-Router.put('/admins/:email', verifyToken, checkRole(['super_admin']), async (req, res) => {
-  try {
-    const { email } = req.params;
-    const { name, username, email: newEmail, password } = req.body;
-    
-    const user = await User.findOne({ email, role: 'admin' });
-    if (!user) {
-      return res.status(404).json({ message: 'Admin not found' });
-    }
-    
-    if (name) user.name = name;
-    if (username) user.username = username;
-    if (newEmail) user.email = newEmail;
-    if (password) {
-      user.password = await bcrypt.hash(password, 10);
-    }
-    
-    await user.save();
-    res.json({ message: 'Admin account updated successfully.', data: user });
-  } catch (err) {
-    res.status(500).json({ message: 'Error updating admin account', error: err.message });
-  }
-});
+// Update an Admin Account by Email
+superAdminRoutes.put("/admins/:email", verifyToken, checkRole(["super_admin"]), updateAdminByEmail);
 
 // --- Update a Student Account by Email ---
-Router.put('/users/:email', verifyToken, checkRole(['super_admin']), async (req, res) => {
+superAdminRoutes.put('/users/:email', verifyToken, checkRole(['super_admin']), async (req, res) => {
   try {
     const { email } = req.params;
     const { name, username, email: newEmail, password } = req.body;
@@ -114,7 +56,7 @@ Router.put('/users/:email', verifyToken, checkRole(['super_admin']), async (req,
 });
 
 // --- Delete an Admin or Student Account by Email ---
-Router.delete('/:role/:email', verifyToken, checkRole(['super_admin']), async (req, res) => {
+superAdminRoutes.delete('/:role/:email', verifyToken, checkRole(['super_admin']), async (req, res) => {
   try {
     let { role, email } = req.params;
     
@@ -136,7 +78,7 @@ Router.delete('/:role/:email', verifyToken, checkRole(['super_admin']), async (r
 });
 
 // --- Create Super Admin ---
-Router.post('/create-superadmin', verifyToken, checkRole(['super_admin']), async (req, res) => {
+superAdminRoutes.post('/create-superadmin', verifyToken, checkRole(['super_admin']), async (req, res) => {
   try {
     const { name, username, email, password } = req.body;
     const role = 'super_admin';
@@ -159,8 +101,4 @@ Router.post('/create-superadmin', verifyToken, checkRole(['super_admin']), async
   }
 });
 
-Router.get('/test', (req, res) => {
-  res.send('Superadmin route is working!');
-});
-
-export default Router;
+export default superAdminRoutes;

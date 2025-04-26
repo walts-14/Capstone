@@ -31,9 +31,11 @@ import LessonButtons from "./Pages/Dashboard/LessonButtons.jsx";
 import LesoneContent from "./Pages/Library/VideoLesson/LesoneContent.jsx";
 import VideoUpload from "./Pages/VideoUpload.jsx";
 import SuperAdmin from "./Pages/Login/Admin/SuperAdmin.jsx";
-import Admin from "./Pages/Login/Admin/adminDashboard.jsx";
+import Admin from "./Pages/Login/Admin/AdminDashboard.jsx";
 import ProgressTracker from "./Pages/Dashboard/ProgressTracker.jsx";
 import { ProgressProvider } from "../src/Pages/Dashboard/ProgressContext.jsx"; // adjust the path accordingly
+import VideoList from "./Components/VideoList.jsx"; // adjust the path accordingly
+import QuizUpload from "./Pages/QuizUpload.jsx"; // adjust the path accordingly
 
 const router = createBrowserRouter([
   { path: "/", element: <Navigate to="/login" replace /> }, // Redirect "/" to "/login"
@@ -63,12 +65,12 @@ const router = createBrowserRouter([
       { path: "finish", element: <Finish /> },
       { path: "VideoLecture/:title", element: <VideoLecture /> },
       { path: "lesonecontent/:lessonKey/:termId", element: <LesoneContent /> },
-      { path: "videoupload", element: <VideoUpload/> },
-      { path: "admin", element: <Admin/> },
-      { path: "superadmin", element: <SuperAdmin/> },
-      { path: "progresstracker", element: <ProgressTracker/> },
-      { path: "finishlecture", element: <FinishLecture/> }
-,
+      { path: "videoupload", element: <VideoUpload /> },
+      { path: "admin", element: <Admin /> },
+      { path: "superadmin", element: <SuperAdmin /> },
+      { path: "progresstracker", element: <ProgressTracker /> },
+      { path: "VideoList", element: <VideoList /> },
+      { path: "QuizUpload", element: <QuizUpload /> },
     ],
   },
 
@@ -87,7 +89,7 @@ createRoot(document.getElementById("root")).render(
         style: { background: "#363636", color: "#fff" },
       }}
     />
-     <ProgressProvider>
+    <ProgressProvider>
       <RouterProvider router={router} />
     </ProgressProvider>
   </StrictMode>
