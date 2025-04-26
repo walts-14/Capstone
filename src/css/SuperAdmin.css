@@ -17,40 +17,52 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: 20px;
+  padding: 10px;
   box-sizing: border-box;
-  overflow-y: auto; /* Enables scrolling */
-  overflow-x: hidden; /* Prevents unwanted horizontal scrolling */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
+.superadmin-body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #100429;
+  z-index: -1; /* Ensure it stays behind all content */
+
+
+}
 
 .Dashboard h2 {
-  text-align: center;
-  font-family: "Baloo";
-  font-weight: bold;
-  color: #FFFFFF;
-  font-size: 60px;
-  background-color: #7338a0;
-  padding: 10px 20px; /* Add padding for spacing */
-  border-radius: 10px;
-  margin: 0 auto; /* Center horizontally */
-  margin-left: -23px;
+  width: 25%;
+    margin-left: -20px;
+    text-align: center;
+    font-family: "Baloo";
+    font-weight: bold;
+    color: #FFFFFF;
+    font-size: 60px;
+    background-color: #7338a0;
+    padding: 10px 20px; /* Add padding for spacing */
+    border-radius: 10px;
 }
 
 .CreateAccount {
-  position: absolute;
-  top: 170px;
-  right: 210px;
-  background-color: #4A2574;
-  color: #FFFFFF;
-  border-radius: 10px;
-  font-weight: bold;
-  font-size: 1.2rem;
-  padding: 10px 20px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+      position: absolute;
+      top: 120px; /* Adjust position relative to the top */
+      right: 85px; /* Align to the right */
+      background-color: #4A2574;
+      color: #FFFFFF;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 1.2rem;
+      padding: 10px 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 20; /* Ensure the button is above other elements */
 }
 
 
@@ -58,19 +70,22 @@
 .divtabs {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: -700px;
+  margin-left: 200px; /* Adjust margin for proper alignment */
+  cursor: pointer;
+  z-index: 10; /* Ensure the tabs are above other elements */
 }
 
 /* Tabs Container */
 .tabs {
+  z-index: 10; /* Ensure the tabs are above other elements */
   width: 20%; /* Adjust width for proper alignment */
   font-family: "Baloo";
   justify-content: space-between; /* Space between tabs */
   display: flex;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
   justify-content: center; /* Center the tabs */
-  border-radius: 5px; /* Rounded corners for the container */
-  overflow: hidden; /* Ensure tabs fit within the container */
+  border-radius: 10px; /* Rounded corners for the container */
 }
 
 /* Individual Tab */
@@ -98,32 +113,30 @@
 }
 
 .content {
-  width: 100%;
+  margin-left: 200px;
+  width: 90%;
   overflow-x: auto; /* Enables horizontal scrolling if needed */
-  margin-top: 10px;
+  margin-top: -200px;
 }
 /* Table */
 .data-table {
-  font-size: 1.5rem;
-      width: 80%; /* Expand to fit the container */
-      margin: 20px auto; /* Center the table horizontally and add spacing */
-      color: #FFFFFF;
-      border-collapse: separate; /* Use 'separate' to allow border radius */
-      border-spacing: 0; /* Remove spacing between cells */
-      table-layout: fixed;
-      border-radius: 10px; /* Add border radius */
-      overflow: hidden; /* Ensure content respects the border radius */
-      background-color: #2E2E4D; /* Background color for the table */
-      position: relative;
+  font-size: 1.3rem;
+  width: 90%;
+  margin: 200px auto;
+  color: #ffffff;
+  table-layout: fixed;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #2e2e4d;
 }
 
 .data-table th, 
 .data-table td {
-  padding: 10px;
+  padding: 15px;
   text-align: center;
-  white-space: nowrap; /* Prevents text wrapping inside cells */
+  white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis; /* Ensures content stays within the cell */
+  text-overflow:inherit;
 }
 
 .data-table th {
@@ -159,16 +172,13 @@
   cursor: pointer;
 }
 
-.img-action {
-  margin-left: 20px; /* Add spacing between images */
-}
 
 .SuperAdminLogout {
-  margin-left: 690px;
+  margin-left: -50px;
   display: flex;
   justify-content: center; /* Center the button horizontally */
   align-items: center;
-  margin-top: 10px; /* Add spacing above the button */
+  margin-top: -550px; /* Add spacing above the button */
   width: 100%; /* Ensure it spans the full width of the container */
 }
 

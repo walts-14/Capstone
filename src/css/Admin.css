@@ -319,11 +319,11 @@
 
   .dashboard-table th,
   .dashboard-table td {
-    padding: 15px;
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow:inherit;
+      padding: 15px;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow:inherit;
   }
 .dashboard-table td {
     color: #ffffff;
@@ -502,7 +502,7 @@
 
   /* Rank */
   .progress-leaderboard .leaderboard-rank {
-    color: #f1c40f; /* Gold color for the rank */
+    color: #ffffff; /* Gold color for the rank */
     margin-right: 10px;
   }
 
