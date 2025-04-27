@@ -9,8 +9,9 @@ import "../../../css/Admin.css";
 import "../../../css/ProgressModal.css"; // your modal CSS
 import axios from "axios";
 import toast from "react-hot-toast";
-import Leaderboard from "../../Leaderboard/Leaderboard";
+import LbComponent from "../../Leaderboard/LbComponent";
 import ProgressTracker from "../../Dashboard/ProgressTracker";
+import SidenavAdmins from "../../../Components/SidenavAdmins.jsx";
 
 const DashboardAdmin = () => {
   const navigate = useNavigate();
@@ -150,42 +151,17 @@ const DashboardAdmin = () => {
   // ─── JSX ───────────────────────────────────────────────────────
   return (
     <div className="admin-body">
-      <div className="DashboardAdmin">
-        <h2>Dashboard</h2>
+      <div className="sidebarr">
+        <SidenavAdmins
+          setSelectedGrade={setSelectedGrade}
+          fetchStudents={fetchStudents}
+          setShowLeaderboard={setShowLeaderboard}
+        />
       </div>
-
-      <div className="left-sidebar">
-        <div className="sidebar-box">
-          <div
-            className={`sidebar-item ${
-              location.pathname === "/admin" ? "active" : ""
-            }`}
-            onClick={() => {
-              setSelectedGrade("");
-              fetchStudents();
-              setShowLeaderboard(false);
-              navigate("/admin");
-            }}
-          >
-            <img src={DashboardIcon} alt="Dashboard" className="sidebar-icon" />
-            <span>Dashboard</span>
-          </div>
-          <div
-            className={`sidebar-item ${showLeaderboard ? "active" : ""}`}
-            onClick={() => setShowLeaderboard(true)}
-          >
-            <img
-              src={LeaderboardIcon}
-              alt="Leaderboard"
-              className="sidebar-icon"
-            />
-            <span>Leaderboard</span>
-          </div>
-        </div>
-      </div>
-
       {showLeaderboard ? (
-        <Leaderboard />
+        <div className="wrapper-lb">
+          <LbComponent />
+        </div>
       ) : (
         <>
           <div className="levels">

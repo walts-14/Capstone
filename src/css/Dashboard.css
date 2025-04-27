@@ -261,31 +261,3 @@ body {
   height: 7vh;
   background-color: var(--midlight-red);
 }
-.settings-container {
-  background-color: #271d3e;
-  width: clamp(320px, 72vw, 1500px);
-  min-height: 80.5vh;
-  position: relative;
-  top: 7rem;
-  left: 50%;
-  transform: translateX(-50%) translateX(14rem); /* center + offset */
-  padding: 1rem;
-  border-radius: 1rem;
-}
-.change-pic {
-  background-color: var(--input-gray);
-  height: auto;
-  width: clamp(200px, 17vw, 300px);
-  padding: 1rem;
-  margin: 1rem auto;
-  font-size: clamp(0.875rem, 2.5vw, 1.2rem);
-  font-family: "Baloo", sans-serif;
-  position: relative;
-  left: 1em;
-  top: 7em;
-}
-.settings-container img {
-  position: relative;
-  left: 3em;
-  top: 0.5em;
-}

@@ -10,7 +10,6 @@
   align-items: center;
   z-index: 1000;
 }
-
 .progress-modal-content {
   background-color: #1a1a2e;
   color: #fff;
@@ -21,18 +20,15 @@
   overflow-y: auto;
   position: relative; /* Make it a positioned element for the close button */
 }
-
 .progress-section {
   margin-bottom: 20px;
 }
-
 .progress-item {
   display: flex;
   justify-content: space-between;
   padding: 5px 0;
   border-bottom: 1px solid #ccc;
 }
-
 .btn-close {
   position: absolute;
   top: 10px;

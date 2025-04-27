@@ -9,6 +9,7 @@ import "../../../css/SuperAdmin.css";
 import axios from "axios";
 import toast from "react-hot-toast";
 import ProgressTracker from "../../Dashboard/ProgressTracker";
+import LbComponent from "../../Leaderboard/LbComponent";
 
 const SuperAdmin = () => {
   const navigate = useNavigate();
@@ -31,6 +32,7 @@ const SuperAdmin = () => {
   const [selectedGrade, setSelectedGrade] = useState("grade7");
   const [students, setStudents] = useState([]);
   const [showProgressModal, setShowProgressModal] = useState(false);
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
   // Set token on axios default headers
@@ -107,13 +109,19 @@ const SuperAdmin = () => {
       return;
     }
 
-    if (!formData.name || !formData.username || !formData.email || !formData.password) {
+    if (
+      !formData.name ||
+      !formData.username ||
+      !formData.email ||
+      !formData.password
+    ) {
       toast.error("All fields are required!");
       return;
     }
 
     const role = formType === "Teacher" ? "admin" : "user";
-    const createEndpoint = "http://localhost:5000/api/superadmin/create-account";
+    const createEndpoint =
+      "http://localhost:5000/api/superadmin/create-account";
 
     const newUser = {
       name: formData.name,
@@ -176,7 +184,9 @@ const SuperAdmin = () => {
             : `http://localhost:5000/api/superadmin/users/${email}`;
         await axios.delete(deleteUrl);
         toast.success(
-          `${role === "admin" ? "Teacher" : "Student"} account deleted successfully!`
+          `${
+            role === "admin" ? "Teacher" : "Student"
+          } account deleted successfully!`
         );
 
         // Refresh lists
@@ -274,10 +284,8 @@ const SuperAdmin = () => {
 
           {/* Leaderboard Button */}
           <div
-            className={`sidebar-item ${
-              location.pathname === "/leaderboard" ? "active" : ""
-            }`}
-            onClick={() => navigate("/leaderboard")}
+            className={`sidebar-item ${showLeaderboard ? "active" : ""}`}
+            onClick={() => setShowLeaderboard(true)}
           >
             <img
               src={LeaderboardIcon}
@@ -402,7 +410,7 @@ const SuperAdmin = () => {
                 <td>{entry.yearLevel || "N/A"}</td>
                 <td>
                   <button
-                    className="btn btn-progress"
+                    className="btn btn-progress fs-4"
                     style={{
                       backgroundColor: "#2E86C1",
                       color: "#FFFFFF",
@@ -411,7 +419,7 @@ const SuperAdmin = () => {
                     }}
                     onClick={() => handleShowProgress(entry)}
                   >
-                    View Progress
+                    Progress
                   </button>
                   <img
                     src={EditIcon}
@@ -610,99 +618,97 @@ const SuperAdmin = () => {
         </div>
       )}
 
-        {showSelectionModal && (
-          <div
-            className="popup-modal"
+      {showSelectionModal && (
+        <div
+          className="popup-modal"
+          style={{
+            position: "fixed",
+            top: "30%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            backgroundColor: "#271D3E",
+            padding: "30px",
+            borderRadius: "10px",
+            zIndex: 1000,
+            width: "90%",
+            maxWidth: "400px",
+            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.25)",
+          }}
+        >
+          <h3
+            className="text-light mb-3"
             style={{
-              position: "fixed",
-              top: "30%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              backgroundColor: "#271D3E",
-              padding: "30px",
-              borderRadius: "10px",
-              zIndex: 1000,
-              width: "90%",
-              maxWidth: "400px",
-              boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.25)",
+              textAlign: "center",
+              fontSize: "2rem",
+              fontWeight: "bold",
+              color: "#FFFFFF",
             }}
           >
-            <h3
-              className="text-light mb-3"
+            Create Account
+          </h3>
+          <div style={{ display: "flex", justifyContent: "space-around" }}>
+            <button
+              className="btn btn-student"
               style={{
-                textAlign: "center",
-                fontSize: "2rem",
-                fontWeight: "bold",
+                backgroundColor: "#4A2574",
                 color: "#FFFFFF",
+                borderRadius: "10px",
+                fontWeight: "bold",
+                fontSize: "1.2rem",
+                padding: "10px 20px",
+              }}
+              onClick={() => {
+                setFormType("Student"); // This will create a student (role: "user")
+                setShowSelectionModal(false);
+                setShowForm(true);
               }}
             >
-              Create Account
-            </h3>
-            <div style={{ display: "flex", justifyContent: "space-around" }}>
-              <button
-                className="btn btn-student"
-                style={{
-                  backgroundColor: "#4A2574",
-                  color: "#FFFFFF",
-                  borderRadius: "10px",
-                  fontWeight: "bold",
-                  fontSize: "1.2rem",
-                  padding: "10px 20px",
-                }}
-                onClick={() => {
-                  setFormType("Student"); // This will create a student (role: "user")
-                  setShowSelectionModal(false);
-                  setShowForm(true);
-                }}
-              >
-                Student
-              </button>
-              <button
-                className="btn btn-teacher"
-                style={{
-                  backgroundColor: "#4A2574",
-                  color: "#FFFFFF",
-                  borderRadius: "10px",
-                  fontWeight: "bold",
-                  fontSize: "1.2rem",
-                  padding: "10px 20px",
-                }}
-                onClick={() => {
-                  setFormType("Teacher"); // This will create a teacher (role: "admin")
-                  setShowSelectionModal(false);
-                  setShowForm(true);
-                }}
-              >
-                Teacher
-              </button>
-            </div>
+              Student
+            </button>
+            <button
+              className="btn btn-teacher"
+              style={{
+                backgroundColor: "#4A2574",
+                color: "#FFFFFF",
+                borderRadius: "10px",
+                fontWeight: "bold",
+                fontSize: "1.2rem",
+                padding: "10px 20px",
+              }}
+              onClick={() => {
+                setFormType("Teacher"); // This will create a teacher (role: "admin")
+                setShowSelectionModal(false);
+                setShowForm(true);
+              }}
+            >
+              Teacher
+            </button>
           </div>
-        )}
+        </div>
+      )}
 
-<div
-  className="logout-container"
->
-  <button
-    onClick={() => {
-      localStorage.removeItem("token"); // Clear the token
-      navigate("/login"); // Redirect to the login page
-    }}
-    className="btn btn-danger"
-    style={{
-      color: "#FFFFFF",
-      borderRadius: "20px",
-      padding: "10px 20px",
-      fontWeight: "bold",
-      border: "none",
-      cursor: "pointer",
-      marginRight: "50px",
-      height: "50px",
-      fontSize: "1.4rem",
-    }}
-  >
-    Logout
-  </button>
-</div>
+      <div className="logout-container">
+        <button
+          onClick={() => {
+            localStorage.removeItem("token"); // Clear the token
+            navigate("/login"); // Redirect to the login page
+          }}
+          className="btn btn-danger"
+          style={{
+            color: "#FFFFFF",
+            borderRadius: "20px",
+            padding: "10px 20px",
+            fontWeight: "bold",
+            border: "none",
+            cursor: "pointer",
+            marginRight: "55px",
+            height: "50px",
+            fontSize: "1.4rem",
+          }}
+        >
+          Logout
+        </button>
+      </div>
     </div>
   );
 };

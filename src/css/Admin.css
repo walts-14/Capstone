@@ -1,17 +1,16 @@
 @font-face {
-    font-family: "Baloo";
-    src: url("/src/font/Baloo-Regular.ttf") format("truetype");
-    font-style: normal;
-  }
-  
-  /* Ensure the body allows vertical scrolling */
+  font-family: "Baloo";
+  src: url("/src/font/Baloo-Regular.ttf") format("truetype");
+  font-style: normal;
+}
+
+/* Ensure the body allows vertical scrolling */
 .body {
-    overflow-y: hidden; /* Allow vertical scrolling */
-  }
-  
- 
-  /* Dashboard Container */
-  .admin-body {
+  overflow-y: hidden; /* Allow vertical scrolling */
+}
+
+/* Dashboard Container */
+.admin-body {
   position: relative;
   width: 100%;
   min-height: 100vh;
@@ -22,492 +21,429 @@
   padding: 10px;
   box-sizing: border-box;
   overflow-x: hidden; /* Prevent horizontal scrolling */
-  }
+}
 
-  /* Prevent gray background when scrolling horizontally */
-  .admin-body::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: #100429;
-    z-index: -1; /* Ensure it stays behind all content */
-  }
+/* Prevent gray background when scrolling horizontally */
+.admin-body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #100429;
+  z-index: -1; /* Ensure it stays behind all content */
+}
 
-  /* Dashboard Heading */
-  .DashboardAdmin h2 {
-    width: 25%;
-    margin-left: -20px;
-    text-align: center;
-    font-family: "Baloo";
-    font-weight: bold;
-    color: #FFFFFF;
-    font-size: 60px;
-    background-color: #7338a0;
-    padding: 10px 20px; /* Add padding for spacing */
-    border-radius: 10px;
-  }
-    
-    /* Create Button */
-    .Create {
-      position: absolute;
-      top: 50px; /* Adjust position relative to the top */
-      right: 40px; /* Align to the right */
-      background-color: #4A2574;
-      color: #FFFFFF;
-      border-radius: 10px;
-      font-weight: bold;
-      font-size: 1.2rem;
-      padding: 10px 20px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+/* Dashboard Heading */
+.DashboardAdmin h2 {
+  width: 25%;
+  margin-left: -20px;
+  text-align: center;
+  font-family: "Baloo";
+  font-weight: bold;
+  color: #ffffff;
+  font-size: 60px;
+  background-color: #7338a0;
+  padding: 10px 20px; /* Add padding for spacing */
+  border-radius: 10px;
+}
 
-    .Create:hover {
-      background-color: #5b2d8a; /* Slightly lighter on hover */
-    }
+/* Create Button */
+.Create {
+  position: absolute;
+  top: 50px; /* Adjust position relative to the top */
+  right: 40px; /* Align to the right */
+  background-color: #4a2574;
+  color: #ffffff;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding: 10px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-    .button-icon-container {
-      display: flex;
-      flex-direction: column; 
-      align-items: center; 
-      gap: 20px; 
-    }
-  
-  .img-action {
-    width: 35px;
-    height: 35px;
-    cursor: pointer;
-   
-  }
-  
-   .img-action {
-    margin-left: 20px; /* Add spacing between images */
-  }
-  
-  
-  
-  .popup-form {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #271d3e;
-    padding: 30px;
-    border-radius: 10px;
-    z-index: 1000;
-    width: 90%;
-    max-width: 400px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
-  }
-  
-  .popup-form h3 {
-    text-align: center;
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: #ffffff;
-    margin-bottom: 20px;
-  }
-  
-  .popup-form .form-group {
-    margin-bottom: 15px;
-  }
-  
-  .popup-form .form-control {
-    width: 100%;
-    background-color: #3f3653;
-    color: #ffffff;
-    font-size: 1rem;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-  }
-  
-  .popup-form .form-control::placeholder {
-    color: #ffffff;
-    opacity: 0.7;
-  }
-  
+.Create:hover {
+  background-color: #5b2d8a; /* Slightly lighter on hover */
+}
 
-  
-  .popup-form .btn-create:hover {
-    background-color: #5b2d8a;
-  }
-  
+.button-icon-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
 
-  
-  .popup-form .btn-create {
-    font-family: "Baloo";
-    background-color: #4A2574;
-    border-radius: 5px;
-    font-weight: bold;
-    padding: 10px;
-    font-size: 1.4rem;
-    color: #ffffff;
-    width: 80%;
-    margin-bottom: 10px;
-    margin-top: 15px;
-    margin-left: 40px;
-  }
-  
-  .popup-form .btn-cancel {
-    font-family: "Baloo";
-    background-color: #d7443e;
-    border-radius: 5px;
-    font-weight: bold;
-    padding: 10px;
-    font-size: 1.4rem;
-    color: #ffffff;
-    width: 80%;
-    margin-bottom: 10px;
-    margin-top: 10px;
-    margin-left:40px;
-  }  
-  
-
-  .popup-form .btn-cancel:hover {
-    background-color: #e05a4f;
-  }
-  
-  /* Close Button */
-  .btn-close {
-    position: absolute;
-    top: -20px; /* Position above the modal */
-    left: 59%; /* Center horizontally */
-    transform: translateX(-50%); /* Adjust for centering */
-    background-color: #e9170f; /* Red background for the close button */
-    border-radius: 10%;
-    width: 40px;
-    height: 40px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1100; /* Ensure it stays above the modal */
-  }
-  
-
-  .btn-close:hover {
-    background-color: #e05a4f; /* Slightly lighter red on hover */
-  }
-  
-  /* Main Content */
-  .main-content {
-    margin-left: 270px; /* Adjust based on sidebar width */
-    padding: 20px;
-    background-color: #100429;
-    min-height: 100vh;
-    color: #ffffff;
-  }
-
-  /* Left Sidebar */
-  .left-sidebar {
-    position:relative ;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    background-color: #4a2574;
-    padding: 20px 20px ;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    margin-left: -20px;
-    width: 300px;
-    height: 300px;
-  }
-
-  .sidebar-box {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-
-  .sidebar-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    z-index: 11;
-    color: #ffffff;
-    font-weight: bold;
-    font-size: 1.7rem;
-    cursor: pointer;
-    padding: 10px;
-    border-radius: 10px;
-    transition: background-color 0.3s ease, border 0.3s ease;
-  }
-  
-  .sidebar-item:hover {
-    background-color: #924dbf;
-  }
-  
-  .sidebar-item.active {
-    background-color: #100429; /* Active background color */
-    border: 2px solid #7338a0; /* Active border color */
-  }
-  
-  .sidebar-icon {
-    width: 50px;
-    height: 50px;
-  }
-
-  /* Levels Section */
-  .levels {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-    margin-top: 20px;
-    cursor: pointer;
-    margin-left: -20px;
-  }
-
-  .level-item {
-    color: #ffffff;
-    font-weight: bold;
-    font-size: 1.7rem;
-    padding: 10px 20px;
-    border-radius: 10px;
-    text-align: center;
-    width: 300px; 
-    color: var(--white);
-    font-family: "Baloo", sans-serif;
-    font-size: 2.0rem;
-  }
-
-  .level-item.grade7 {
-    background-color: #9E72C3;
-  }
-
-  .level-item.grade8 {
-    background-color: #924DBF;
-  }
-
-  .level-item.grade9 {
-    background-color: #7338A0;
-  }
-
-  .level-item.grade10 {
-    background-color: #4A2574;
-  }
-
-  .level-item:hover {
-    opacity: 0.9; /* Slight hover effect */
-  }
-
-  /* Table Container */
-
-  .contentdiv {
-    margin-top: -650px;
-    margin-right: -300px;
-  }
-
-  .dashboard-table {
-    font-size: 1.4rem;
-    width: 70%;
-    margin: 300px auto;
-    color: #ffffff;
-    table-layout: fixed;
-    border-radius: 10px;
-    overflow: hidden;
-    background-color: #2e2e4d;
-  }
-
-  .dashboard-table th,
-  .dashboard-table td {
-      padding: 15px;
-      text-align: center;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow:inherit;
-  }
+.img-action {
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+}
+.img-action {
+  margin-left: 20px; /* Add spacing between images */
+}
+.popup-form {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #271d3e;
+  padding: 30px;
+  border-radius: 10px;
+  z-index: 1000;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+}
+.popup-form h3 {
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 20px;
+}
+.popup-form .form-group {
+  margin-bottom: 15px;
+}
+.popup-form .form-control {
+  width: 100%;
+  background-color: #3f3653;
+  color: #ffffff;
+  font-size: 1rem;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+}
+.popup-form .form-control::placeholder {
+  color: #ffffff;
+  opacity: 0.7;
+}
+.popup-form .btn-create:hover {
+  background-color: #5b2d8a;
+}
+.popup-form .btn-create {
+  font-family: "Baloo";
+  background-color: #4a2574;
+  border-radius: 5px;
+  font-weight: bold;
+  padding: 10px;
+  font-size: 1.4rem;
+  color: #ffffff;
+  width: 80%;
+  margin-bottom: 10px;
+  margin-top: 15px;
+  margin-left: 40px;
+}
+.popup-form .btn-cancel {
+  font-family: "Baloo";
+  background-color: #d7443e;
+  border-radius: 5px;
+  font-weight: bold;
+  padding: 10px;
+  font-size: 1.4rem;
+  color: #ffffff;
+  width: 80%;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  margin-left: 40px;
+}
+.popup-form .btn-cancel:hover {
+  background-color: #e05a4f;
+}
+/* Close Button */
+.btn-close {
+  position: absolute;
+  top: -20px; /* Position above the modal */
+  left: 59%; /* Center horizontally */
+  transform: translateX(-50%); /* Adjust for centering */
+  background-color: #e9170f; /* Red background for the close button */
+  border-radius: 10%;
+  width: 40px;
+  height: 40px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100; /* Ensure it stays above the modal */
+}
+.btn-close:hover {
+  background-color: #e05a4f; /* Slightly lighter red on hover */
+}
+/* Main Content */
+.main-content {
+  margin-left: 270px; /* Adjust based on sidebar width */
+  padding: 20px;
+  background-color: #100429;
+  min-height: 100vh;
+  color: #ffffff;
+}
+/* Left Sidebar */
+.left-sidebar {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background-color: #4a2574;
+  padding: 20px 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  margin-left: -20px;
+  width: 300px;
+  height: 300px;
+}
+.sidebar-box {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 11;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 1.7rem;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 10px;
+  transition: background-color 0.3s ease, border 0.3s ease;
+}
+.sidebar-item:hover {
+  background-color: #924dbf;
+}
+.sidebar-item.active {
+  background-color: #100429; /* Active background color */
+  border: 2px solid #7338a0; /* Active border color */
+}
+.sidebar-icon {
+  width: 50px;
+  height: 50px;
+}
+/* Levels Section */
+.levels {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 20px;
+  cursor: pointer;
+  margin-left: -20px;
+}
+.level-item {
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 1.7rem;
+  padding: 10px 20px;
+  border-radius: 10px;
+  text-align: center;
+  width: 300px;
+  color: var(--white);
+  font-family: "Baloo", sans-serif;
+  font-size: 2rem;
+}
+.level-item.grade7 {
+  background-color: #9e72c3;
+}
+.level-item.grade8 {
+  background-color: #924dbf;
+}
+.level-item.grade9 {
+  background-color: #7338a0;
+}
+.level-item.grade10 {
+  background-color: #4a2574;
+}
+.level-item:hover {
+  opacity: 0.9; /* Slight hover effect */
+}
+/* Table Container */
+.contentdiv {
+  margin-top: -650px;
+  margin-right: -300px;
+}
+.dashboard-table {
+  font-size: 1.4rem;
+  width: 70%;
+  margin: 300px auto;
+  color: #ffffff;
+  table-layout: fixed;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #2e2e4d;
+}
+.dashboard-table th,
 .dashboard-table td {
-    color: #ffffff;
-    font-size: 1.2rem;
-  }
-  .dashboard-table th {
-    background-color: #7338a0;
-    color: #ffffff;
-  }
+  padding: 15px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: inherit;
+}
+.dashboard-table td {
+  color: #ffffff;
+  font-size: 1.2rem;
+}
+.dashboard-table th {
+  background-color: #7338a0;
+  color: #ffffff;
+}
+.dashboard-table tr:nth-child(even) {
+  background-color: #271d3e;
+}
 
-  .dashboard-table tr:nth-child(even) {
-    background-color: #271d3e;
-  }
+.dashboard-table tr:nth-child(odd) {
+  background-color: #3f3653;
+}
+.btn-create {
+  background-color: var(--purple);
+  color: var(--white);
+  font-family: "Baloo", sans-serif;
+  font-size: 1.2rem;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.btn-create:hover {
+  background-color: var(--semidark-purple);
+}
+.btn-logout {
+  margin-top: 850px;
+  width: 10%;
+  background-color: var(--midlight-red);
+  color: var(--white);
+  font-family: "Baloo", sans-serif;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  margin-left: 1680px;
+  position: absolute;
+}
+.btn-logout:hover {
+  background-color: var(--semidark-red);
+}
+.progress-modal {
+  font-family: "Baloo";
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.progress-modal-content {
+  overflow-x: hidden;
+  background-color: #1e1e2f;
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px;
+}
 
-  .dashboard-table tr:nth-child(odd) {
-    background-color: #3f3653;
-  }
-
-
-
-  .btn-create {
-    background-color: var(--purple);
-    color: var(--white);
-    font-family: "Baloo", sans-serif;
-    font-size: 1.2rem;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-  }
-
-  .btn-create:hover {
-    background-color: var(--semidark-purple);
-  }
-
-
-  .btn-logout {
-    margin-top: 850px;
-    width: 10%;
-    background-color: var(--midlight-red);
-    color: var(--white);
-    font-family: "Baloo", sans-serif;
-    font-size: 1.5rem;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    margin-left: 1680px;
-    position: absolute;
-    
-  }
-
-  .btn-logout:hover {
-    background-color: var(--semidark-red);
-  }
-
-  .progress-modal {
-    font-family: "Baloo";
-    position: relative;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-
-  .progress-modal-content {
-    overflow-x: hidden;
-    background-color: #1e1e2f;
-    padding: 20px;
-    border-radius: 10px;
-    width: 400px;
-  
-  }
-
-  .progress-section {
-    margin-bottom: 20px;
-  }
-
-
-  /* Progress Section Container */
-  .progress-section-container {
-    background-color: #271D3E; /* Dark purple background for each section */
-    padding: 15px;
-
-
-  }
-
-  /* Progress Item */
-  .progress-item {
-    display: flex;
-    justify-content: space-between;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    font-size: 1.6rem;
-    font-weight: bold;
-  }
- 
-  .progress-item.basic {
-    background-color: #2E86C1; /* Blue for Basic lessons */
-  }
-
-  .progress-item.intermediate {
-    background-color: #D4AC0D; /* Yellow for Intermediate lessons */
-  }
-
-  .progress-item.advanced {
-    background-color: #C0392B; /* Red for Advanced lessons */
-  }
-
-  /* Basic Section Header */
-  .progress-section h4.basic-header {
-    background-color: #2E86C1; /* Blue for Basic */
-    color: white;
-    padding: 10px;
-    border-radius: 13px;
-    width: 50%;
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 1.6rem;
-    font-weight: bold;
-  }
-
-  /* Intermediate Section Header */
-  .progress-section h4.intermediate-header {
-    background-color: #D4AC0D; /* Yellow for Intermediate */
-    color: white;
-    padding: 10px;
-    border-radius: 13px;
-    width: 60%;
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 1.6rem;
-    font-weight: bold;
-  }
-
-  /* Advanced Section Header */
-  .progress-section h4.advanced-header {
-    background-color: #C0392B; /* Red for Advanced */
-    color: white;
-    padding: 10px;
-    width: 50%;
-    border-radius: 13px;
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 1.6rem;
-    font-weight: bold;
-  }
-
-
-
-  /* Progress Leaderboard Section */
-  .progress-leaderboard {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #271D3E;
-    padding: 10px 20px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    color: white;
-    font-family: "Baloo", sans-serif;
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
-
-  /* Trophy Icon */
-  .progress-leaderboard .trophy-icon {
-    width: 30px;
-    height: 30px;
-    margin-right: 10px;
-  }
-
-  /* Rank */
-  .progress-leaderboard .leaderboard-rank {
-    color: #f1c40f; /* Gold color for the rank */
-    margin-right: 10px;
-  }
-
-  /* Name */
-  .progress-leaderboard .leaderboard-name {
-    color: white;
-  }
-
+.progress-section {
+  margin-bottom: 20px;
+}
+/* Progress Section Container */
+.progress-section-container {
+  background-color: #271d3e; /* Dark purple background for each section */
+  padding: 15px;
+}
+/* Progress Item */
+.progress-item {
+  display: flex;
+  justify-content: space-between;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+.progress-item.basic {
+  background-color: #2e86c1; /* Blue for Basic lessons */
+}
+.progress-item.intermediate {
+  background-color: #d4ac0d; /* Yellow for Intermediate lessons */
+}
+.progress-item.advanced {
+  background-color: #c0392b; /* Red for Advanced lessons */
+}
+/* Basic Section Header */
+.progress-section h4.basic-header {
+  background-color: #2e86c1; /* Blue for Basic */
+  color: white;
+  padding: 10px;
+  border-radius: 13px;
+  width: 50%;
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+/* Intermediate Section Header */
+.progress-section h4.intermediate-header {
+  background-color: #d4ac0d; /* Yellow for Intermediate */
+  color: white;
+  padding: 10px;
+  border-radius: 13px;
+  width: 60%;
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+/* Advanced Section Header */
+.progress-section h4.advanced-header {
+  background-color: #c0392b; /* Red for Advanced */
+  color: white;
+  padding: 10px;
+  width: 50%;
+  border-radius: 13px;
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+/* Progress Leaderboard Section */
+.progress-leaderboard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #271d3e;
+  padding: 10px 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  color: white;
+  font-family: "Baloo", sans-serif;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+/* Trophy Icon */
+.progress-leaderboard .trophy-icon {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+/* Rank */
+.progress-leaderboard .leaderboard-rank {
+  color: #f1c40f; /* Gold color for the rank */
+  margin-right: 10px;
+}
+/* Name */
+.progress-leaderboard .leaderboard-name {
+  color: white;
+}
+.wrapper-lb {
+  overflow-y: auto;
+  margin: -25rem 1rem 0 20rem;
+  width: 81.5vw;
+  padding-left: 5rem;
+}
