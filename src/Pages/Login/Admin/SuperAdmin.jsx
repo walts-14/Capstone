@@ -259,6 +259,7 @@ const SuperAdmin = () => {
 
   return (
     <div className="superadmin-body">
+      {/*ito papalitan*/}
       {/* Dashboard Title */}
       <div className="Dashboard">
         <div className="AdminDashboard">
@@ -296,6 +297,7 @@ const SuperAdmin = () => {
           </div>
         </div>
       </div>
+      {/*hanggang dito*/}
 
       {/* Conditional Rendering for Dashboard and Leaderboard */}
       {location.pathname === "/superadmin" && (
@@ -389,7 +391,7 @@ const SuperAdmin = () => {
       </div>
 
       <div className="content">
-        <table className="data-table">
+        <table className="data-table me-5">
           <thead>
             <tr>
               <th>Email</th>
@@ -687,7 +689,7 @@ const SuperAdmin = () => {
         </div>
       )}
 
-      <div className="logout-container">
+      <div className="logout-container ms-5">
         <button
           onClick={() => {
             localStorage.removeItem("token"); // Clear the token
@@ -701,7 +703,7 @@ const SuperAdmin = () => {
             fontWeight: "bold",
             border: "none",
             cursor: "pointer",
-            marginRight: "55px",
+            marginRight: "62px",
             height: "50px",
             fontSize: "1.4rem",
           }}

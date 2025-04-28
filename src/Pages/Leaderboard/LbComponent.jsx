@@ -98,9 +98,10 @@ function LbComponent() {
         </div>
       </div>
 
-      <div className="user-points rounded-5 d-flex text-center justify-content-center pt-3">
+      <div className="user-points rounded-5 d-flex text-center justify-content-between align-items-center pt-2">
         <span className="text-white fs-2 me-auto ms-5">Users</span>
-        <span className="text-white fs-2 me-5">Points</span>
+        <span className="text-white fs-2">Grade Level</span>
+        <span className="text-white fs-2 ms-auto me-5">Points</span>
       </div>
 
       <div className="lb-users">
