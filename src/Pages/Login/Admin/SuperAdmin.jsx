@@ -703,7 +703,7 @@ const SuperAdmin = () => {
             fontWeight: "bold",
             border: "none",
             cursor: "pointer",
-            marginRight: "55px",
+            marginRight: "62px",
             height: "50px",
             fontSize: "1.4rem",
           }}
