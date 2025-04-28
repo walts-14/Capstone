@@ -29,6 +29,10 @@
   --midblue: #04aae0;
   --lightblue: #5dade2;
   --shadowblue: #2e86c1;
+  --intermediate-yellow: #DCBC3D;
+  --intermediate-shadow: #A9890A;
+  --advance-red: #CC6055;
+  --advance-shadow: #992D22;
 }
 
 .terms-card {
@@ -39,6 +43,8 @@
   background-color: var(--lightblue);
   box-shadow: 0 5px 1px 8px var(--shadowblue);
   height: 100px;
+  background-color: var(--lightblue);
+  box-shadow: 0 5px 1px 8px var(--shadowblue);
 }
 
 .term-name {
@@ -47,3 +53,4 @@
   color: white;
   font-family: "Baloo";
 }
+
