@@ -71,6 +71,7 @@ const router = createBrowserRouter([
       { path: "progresstracker", element: <ProgressTracker /> },
       { path: "VideoList", element: <VideoList /> },
       { path: "QuizUpload", element: <QuizUpload /> },
+      { path: "finishLecture", element: <FinishLecture /> },
     ],
   },
 
