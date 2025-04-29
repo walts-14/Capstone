@@ -1,8 +1,10 @@
-import React, { createContext, useState, useEffect } from "react";
-import API from "../api";
+import React, { createContext, useContext, useState, useEffect } from "react";
+import axios from "axios";
 
 export const ProgressContext = createContext();
+export const useProgress = () => useContext(ProgressContext);
 
+// Must exactly match your backend’s shape:
 const initialProgress = {
   basic: {
     termsone:   { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
@@ -24,17 +26,19 @@ const initialProgress = {
   }
 };
 
-const PROGRESS_STORAGE_KEY = "progressData";
+export const ProgressProvider = ({ children }) => {
+  const storedEmail = localStorage.getItem("userEmail") || "";
+  const storedName  = localStorage.getItem("userName")  || "";
 
-export const ProgressProvider = ({
-  children,
-  initialUserId = null,
-  initialUserName = ""
-}) => {
-  const [currentUserId, setCurrentUserId]     = useState(initialUserId);
-  const [currentUserName, setCurrentUserName] = useState(initialUserName);
+  const [currentUserEmail, setCurrentUserEmail] = useState(storedEmail);
+  const [currentUserName, setCurrentUserName]   = useState(storedName);
 
-  const [progressData, setProgressData] = useState(initialProgress);
+  const [progressData, setProgressData] = useState(() => {
+    const saved = storedEmail
+      ? localStorage.getItem(`progress_${storedEmail}`)
+      : null;
+    return saved ? JSON.parse(saved) : initialProgress;
+  });
 
   const [streakData, setStreakData] = useState({
     currentStreak: 0,
@@ -42,56 +46,68 @@ export const ProgressProvider = ({
     streakFreeze:  false,
   });
 
-  // Fetch progress + streak whenever the “currentUserId” changes
+  const STORAGE_KEY = (email) => `progress_${email}`;
+
+  // 1) Fetch progress & streak when email changes
   useEffect(() => {
-    if (!currentUserId) return;
+    if (!currentUserEmail) return;
     (async () => {
       try {
-        const [{ data: prg }, { data: str }] = await Promise.all([
-          API.get(`/progress/${currentUserId}`),
-          API.get(`/streak/${currentUserId}`)
+        const [prgRes, strRes] = await Promise.all([
+          axios.get(`/api/progress/email/${currentUserEmail}`),
+          axios.get(`/api/streak/email/${currentUserEmail}`)
         ]);
-        if (prg.progress) {
-          setProgressData(prg.progress);
-          localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(prg.progress));
-        } else {
-          // Clear localStorage progress if backend has no progress data
-          localStorage.removeItem(PROGRESS_STORAGE_KEY);
-          setProgressData(initialProgress);
+
+        if (prgRes.data.progress) {
+          setProgressData(prgRes.data.progress);
+          localStorage.setItem(
+            STORAGE_KEY(currentUserEmail),
+            JSON.stringify(prgRes.data.progress)
+          );
         }
-        if (str.streak) {
-          setStreakData(str.streak);
+
+        if (strRes.data.streak) {
+          setStreakData(strRes.data.streak);
         }
       } catch (err) {
         console.error("Error fetching progress/streak:", err);
       }
     })();
-  }, [currentUserId]);
+  }, [currentUserEmail]);
 
-  // Sync progressData to backend + localStorage
+  // 2) Sync progress to backend & localStorage
   useEffect(() => {
-    if (!currentUserId) return;
-    localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(progressData));
+    if (!currentUserEmail) return;
+    localStorage.setItem(
+      STORAGE_KEY(currentUserEmail),
+      JSON.stringify(progressData)
+    );
     (async () => {
       try {
-        await API.put(`/progress/${currentUserId}`, { progress: progressData });
+        await axios.put(
+          `/api/progress/email/${currentUserEmail}`,
+          { progress: progressData }
+        );
       } catch (err) {
         console.error("Error syncing progress:", err);
       }
     })();
-  }, [progressData, currentUserId]);
+  }, [progressData, currentUserEmail]);
 
-  // Sync streakData to backend
+  // 3) Sync streak to backend
   useEffect(() => {
-    if (!currentUserId) return;
+    if (!currentUserEmail) return;
     (async () => {
       try {
-        await API.put(`/streak/${currentUserId}`, { streak: streakData });
+        await axios.put(
+          `/api/streak/email/${currentUserEmail}`,
+          { streak: streakData }
+        );
       } catch (err) {
         console.error("Error syncing streak:", err);
       }
     })();
-  }, [streakData, currentUserId]);
+  }, [streakData, currentUserEmail]);
 
   const updateProgress = (level, lessonKey, part) => {
     setProgressData(prev => ({
@@ -117,8 +133,8 @@ export const ProgressProvider = ({
   return (
     <ProgressContext.Provider
       value={{
-        currentUserId,
-        setCurrentUserId,
+        currentUserEmail,
+        setCurrentUserEmail,
         currentUserName,
         setCurrentUserName,
         progressData,
@@ -130,4 +146,4 @@ export const ProgressProvider = ({
       {children}
     </ProgressContext.Provider>
   );
-};
+}; 

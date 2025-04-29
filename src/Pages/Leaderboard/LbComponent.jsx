@@ -42,7 +42,7 @@ function LbComponent() {
           <img src={medal2} className="img-fluid" alt="medal img" />
           <div className="d-flex flex-column align-items-start">
             <div className="profile-second d-flex align-items-center gap-2">
-              <img src={profile2} className="img-fluid" alt="profile img" />
+            <img src={sortedLeaderboard[1]?.profilePic || profile2} className="img-fluid" alt="profile img" />
               <p className="text-white fs-1">
                 {sortedLeaderboard[1]?.name || "TBD"}
               </p>
@@ -114,11 +114,11 @@ function LbComponent() {
               >
                 <div className="d-flex align-items-center gap-5">
                   <span className="number-label text-white">{index + 1}.</span>
-                  <img
-                    src={user.profilePic || profile3}
-                    alt="profile"
-                    className="user-avatar"
-                  />
+                        <img
+        src={user.profilePic || profile3}
+        alt="profile"
+        className="user-avatar"
+      />
                   <span className="user-name">{user.name || "No Name"}</span>
                 </div>
 

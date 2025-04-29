@@ -165,7 +165,7 @@ const DashboardAdmin = () => {
       ) : (
         <>
           <div className="levels">
-            {["All Students", "Grade 7", "Grade 8", "Grade 9", "Grade 10"].map(
+            {["Grade 7", "Grade 8", "Grade 9", "Grade 10"].map(
               (grade) => (
                 <div
                   key={grade}
@@ -277,14 +277,18 @@ const DashboardAdmin = () => {
                             alt="Edit"
                             className="img-action"
                             style={{ cursor: "pointer" }}
-                            onClick={() => handleEditUser(u)} // Pass the user object to handleEditUser
+                            onClick={() =>
+                              handleEditUser(entry.email, entry.role)
+                            }
                           />
                           <img
                             src={RemoveIcon}
                             alt="Remove"
                             className="img-action"
                             style={{ marginRight: "30px", cursor: "pointer" }}
-                            onClick={() => handleDeleteUser(u.email)} // Pass the user's email to handleDeleteUser
+                            onClick={() =>
+                              handleDeleteUser(entry.email, entry.role)
+                            }
                           />
                         </div>
                       </td>

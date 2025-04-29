@@ -2,13 +2,17 @@ import User from "../models/user.js";
 
 export const getLeaderboard = async (req, res) => {
     try {
-        // Use .lean() to get plain objects instead of Mongoose documents.
-        const users = await User.find().sort({ points: -1 }).lean();
+        const users = await User.find({
+            role: { $nin: ["admin", "superadmin"] }
+        })
+            .sort({ points: -1 })
+            .select("name points profilePic") // only fetch needed fields
+            .lean();
 
-        // Map over the plain objects and add default points if missing
         const updatedUsers = users.map(user => ({
             ...user,
-            points: user.points ?? 0
+            points: user.points ?? 0,
+            profilePic: user.profilePic || "" // fallback if needed
         }));
 
         res.status(200).json(updatedUsers);

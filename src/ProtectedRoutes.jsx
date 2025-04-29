@@ -41,7 +41,13 @@ const ProtectedRoutes = () => {
   }, []);
 
   if (isAuthenticated === null) {
-    return <p>Loading...</p>;
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        <div className="spinner-border text-primary" role="status" aria-label="Loading">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
   }
 
   const path = location.pathname;

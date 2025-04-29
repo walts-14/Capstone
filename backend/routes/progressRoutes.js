@@ -1,13 +1,15 @@
-// routes/progressRoutes.js
 import express from "express";
-import { getProgress, updateProgress } from "../controllers/progress.controller.js";
+import {
+  getProgressByEmail,
+  updateProgressByEmail,
+} from "../controllers/progress.controller.js";
 
 const router = express.Router();
 
-// GET /api/progress/:userId - Get user progress.
-router.get("/:userId", getProgress);
+// GET  /api/progress/email/:email  — fetch a user’s progress by email
+router.get("/email/:email", getProgressByEmail);
 
-// PUT /api/progress/:userId - Update user progress.
-router.put("/:userId", updateProgress);
+// PUT  /api/progress/email/:email  — update a user’s progress by email
+router.put("/email/:email", updateProgressByEmail);
 
 export default router;
