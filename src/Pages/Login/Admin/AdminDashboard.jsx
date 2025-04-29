@@ -220,7 +220,7 @@ const DashboardAdmin = () => {
                     <th>Email</th>
                     <th>Password</th>
                     <th>Year Level</th>
-                    <th>Action</th>
+                    <th> </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -277,18 +277,14 @@ const DashboardAdmin = () => {
                             alt="Edit"
                             className="img-action"
                             style={{ cursor: "pointer" }}
-                            onClick={() =>
-                              handleEditUser(entry.email, entry.role)
-                            }
+                            onClick={() => handleEditUser(u)} // Pass the user object to handleEditUser
                           />
                           <img
                             src={RemoveIcon}
                             alt="Remove"
                             className="img-action"
                             style={{ marginRight: "30px", cursor: "pointer" }}
-                            onClick={() =>
-                              handleDeleteUser(entry.email, entry.role)
-                            }
+                            onClick={() => handleDeleteUser(u.email)} // Pass the user's email to handleDeleteUser
                           />
                         </div>
                       </td>
@@ -300,7 +296,7 @@ const DashboardAdmin = () => {
           </div>
 
           <button className="btn-logout" onClick={logout}>
-            Log out
+            Logout
           </button>
 
           {showForm && (

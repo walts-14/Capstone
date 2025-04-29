@@ -213,6 +213,7 @@ const SuperAdmin = () => {
       role === "admin"
         ? teachers.find((user) => user.email === email)
         : users.find((user) => user.email === email);
+
     if (dataToEdit) {
       setFormData({
         name: dataToEdit.name,
@@ -223,7 +224,7 @@ const SuperAdmin = () => {
       });
       setFormType(role === "admin" ? "Teacher" : "Student");
       setFormMode("edit");
-      setShowForm(true);
+      setShowForm(true); // Open the form modal
     }
   };
 
@@ -240,9 +241,9 @@ const SuperAdmin = () => {
     setShowSelectionModal(true);
   };
 
-  const handleShowProgress = (student) => {
-    setSelectedUser(student);
-    setShowProgressModal(true);
+  const handleShowProgress = (user) => {
+    setSelectedUser(user); // Set the selected user
+    setShowProgressModal(true); // Show the progress modal
   };
 
   const handleCloseProgressModal = () => {
@@ -255,7 +256,7 @@ const SuperAdmin = () => {
     navigate("/login");
   };
 
-  const dataToDisplay = activeTab === "Users" ? users : teachers;
+  const dataToDisplay = activeTab === "Users" ? users : activeTab === "Teachers" ? teachers : [];
 
   return (
     <div className="superadmin-body">
@@ -275,9 +276,9 @@ const SuperAdmin = () => {
           {/* Dashboard Button */}
           <div
             className={`sidebar-item ${
-              location.pathname === "/superadmin" ? "active" : ""
+              !showLeaderboard ? "active" : ""
             }`}
-            onClick={() => navigate("/superadmin")}
+            onClick={() => setShowLeaderboard(false)} // Show the dashboard
           >
             <img src={DashboardIcon} alt="Dashboard" className="sidebar-icon" />
             <span>Dashboard</span>
@@ -286,7 +287,7 @@ const SuperAdmin = () => {
           {/* Leaderboard Button */}
           <div
             className={`sidebar-item ${showLeaderboard ? "active" : ""}`}
-            onClick={() => setShowLeaderboard(true)}
+            onClick={() => setShowLeaderboard(true)} // Show the leaderboard
           >
             <img
               src={LeaderboardIcon}
@@ -297,12 +298,15 @@ const SuperAdmin = () => {
           </div>
         </div>
       </div>
-      {/*hanggang dito*/}
 
       {/* Conditional Rendering for Dashboard and Leaderboard */}
-      {location.pathname === "/superadmin" && (
+      {showLeaderboard ? (
+        <div className="wrapper-lb">
+          <LbComponent />
+        </div>
+      ) : (
         <>
-          {/* Grade Levels */}
+          {/* Dashboard Content */}
           <div className="levels">
             <div
               className={`level-item grade7 ${
@@ -337,6 +341,102 @@ const SuperAdmin = () => {
               GRADE 10
             </div>
           </div>
+
+          <div className="content">
+            <table className="data-table me-5">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>Password</th>
+                  <th>Year Level</th>
+                  <th> </th>
+                </tr>
+              </thead>
+              <tbody>
+                {dataToDisplay.map((entry) => (
+                  <tr key={entry.email}>
+                    <td>{entry.name}</td>
+                    <td>{entry.username}</td>
+                    <td>{entry.email}</td>
+                    <td>{entry.password}</td>
+                    <td>{entry.yearLevel || "N/A"}</td>
+                    <td>
+                      {/* Progress, Edit, and Delete Buttons */}
+                      <button
+                        className="btn btn-progress text-white fs-5 px-3 py-2 rounded-4"
+                        style={{
+                          backgroundColor: "#2E86C1",
+                          color: "#FFFFFF",
+                          borderRadius: "20px",
+                          
+                        }}
+                        onClick={() => handleShowProgress(entry)} // Pass the selected user
+                      >
+                        Progress
+                      </button>
+                      <img
+                        src={EditIcon}
+                        alt="Edit"
+                        className="img-action"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => handleEditUser(entry.email, entry.role || "user")} // Fallback to "user"
+                      />
+                      <img
+                        src={RemoveIcon}
+                        alt="Remove"
+                        className="img-action"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => handleDeleteUser(entry.email, entry.role || "user")} // Fallback to "user"
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Create Account Button */}
+          <div className="CreateAccount">
+            <button
+              className="btn text-light px-1 py-1"
+              style={{
+                backgroundColor: "#4A2574",
+                color: "#FFFFFF",
+                borderRadius: "10px",
+                fontWeight: "bold",
+                fontSize: "1.5rem",
+                padding: "30px",
+                display: "flex",
+                alignItems: "center",
+                textAlign: "center",
+              }}
+              onClick={handleCreateUser}
+            >
+              <FaUserPlus /> Create
+            </button>
+          </div>
+
+          {/* Tabs */}
+          <div className="divtabs">
+            <div className="tabs">
+              <button
+                className={`tabss ${activeTab === "Users" ? "active" : ""}`}
+                onClick={() => setActiveTab("Users")} // Set active tab to "Users"
+              >
+                Users
+              </button>
+              <button
+                className={`tabss ${activeTab === "Teachers" ? "active" : ""}`} // Match "Teachers"
+                onClick={() => setActiveTab("Teachers")} // Set active tab to "Teachers"
+              >
+                Teacher
+              </button>
+            </div>
+          </div>
+
+
         </>
       )}
 
@@ -344,7 +444,7 @@ const SuperAdmin = () => {
       {showProgressModal && selectedUser && (
         <div className="progress-modal">
           <button className="btn btn-close" onClick={handleCloseProgressModal}>
-            Close
+            
           </button>
           <div className="progress-modal-content">
             <h3>{selectedUser.name}'s Progress</h3>
@@ -353,104 +453,13 @@ const SuperAdmin = () => {
         </div>
       )}
 
-      <div className="CreateAccount">
-        <button
-          className="btn text-light px-1 py-1"
-          style={{
-            backgroundColor: "#4A2574",
-            color: "#FFFFFF",
-            borderRadius: "10px",
-            fontWeight: "bold",
-            fontSize: "1.5rem",
-            padding: "30px",
-            display: "flex",
-            alignItems: "center",
-            textAlign: "center",
-          }}
-          onClick={handleCreateUser}
-        >
-          <FaUserPlus /> Create
-        </button>
-      </div>
-
-      <div className="divtabs">
-        <div className="tabs">
-          <button
-            className={`tabss ${activeTab === "Users" ? "active" : ""}`}
-            onClick={() => setActiveTab("Users")}
-          >
-            Users
-          </button>
-          <button
-            className={`tabss ${activeTab === "Teacher" ? "active" : ""}`}
-            onClick={() => setActiveTab("Teacher")}
-          >
-            Teacher
-          </button>
-        </div>
-      </div>
-
-      <div className="content">
-        <table className="data-table me-5">
-          <thead>
-            <tr>
-              <th>Email</th>
-              <th>Name</th>
-              <th>Username</th>
-              <th>Password</th>
-              <th>Year Level</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {dataToDisplay.map((entry) => (
-              <tr key={entry.email}>
-                <td>{entry.email}</td>
-                <td>{entry.name}</td>
-                <td>{entry.username}</td>
-                <td>{entry.password}</td>
-                <td>{entry.yearLevel || "N/A"}</td>
-                <td>
-                  <button
-                    className="btn btn-progress fs-4"
-                    style={{
-                      backgroundColor: "#2E86C1",
-                      color: "#FFFFFF",
-                      borderRadius: "5px",
-                      marginRight: "1px",
-                    }}
-                    onClick={() => handleShowProgress(entry)}
-                  >
-                    Progress
-                  </button>
-                  <img
-                    src={EditIcon}
-                    alt="Edit"
-                    className="img-action"
-                    style={{ cursor: "pointer" }}
-                    onClick={() => handleEditUser(entry.email, entry.role)}
-                  />
-                  <img
-                    src={RemoveIcon}
-                    alt="Remove"
-                    className="img-action"
-                    style={{ cursor: "pointer" }}
-                    onClick={() => handleDeleteUser(entry.email, entry.role)}
-                  />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
       {showForm && (
         <div
           className="popup-form"
           style={{
             position: "fixed",
             top: "40%",
-            left: "50%",
+            left: "53%",
             transform: "translate(-50%, -50%)",
             backgroundColor: "#271D3E",
             padding: "30px",
@@ -471,8 +480,8 @@ const SuperAdmin = () => {
             }}
           >
             {formMode === "edit"
-              ? `Edit ${formType} Account`
-              : `Add ${formType} Account`}
+              ? `Edit ${formType} `
+              : `Add ${formType} `}
           </h3>
           <form onSubmit={handleFormSubmit}>
             <div className="mb-3">
@@ -580,36 +589,43 @@ const SuperAdmin = () => {
                 required
               />
             </div>
-            <div className="d-flex justify-content-center">
               <button
                 type="submit"
-                className="btn btn-primary"
+                className="btn"
                 style={{
+                  alignItems: "center",
+                  justifyContent: "center",
+                  display: "flex",
                   backgroundColor: "#4A2574",
                   color: "#FFFFFF",
                   borderRadius: "10px",
                   fontWeight: "bold",
-                  fontSize: "1.5rem",
-                  padding: "15px",
-                  width: "90%",
+                  fontSize: "1.4rem",
+                  padding: "10px",
+                  height: "56px",
+                  width: "97%",
                   marginBottom: "10px",
                 }}
               >
-                Submit
+                Create
               </button>
-            </div>
+           
             <div className="d-flex justify-content-center">
               <button
                 type="button"
                 className="btn btn-secondary"
                 style={{
+                  alignItems: "center",
+                  justifyContent: "center",
+                  display: "flex",
                   backgroundColor: "#D7443E",
                   color: "#FFFFFF",
                   borderRadius: "10px",
                   fontWeight: "bold",
                   fontSize: "1.5rem",
                   padding: "15px",
-                  width: "90%",
+                  height: "56px",
+                  width: "97%",
                 }}
                 onClick={() => setShowForm(false)}
               >
@@ -695,17 +711,17 @@ const SuperAdmin = () => {
             localStorage.removeItem("token"); // Clear the token
             navigate("/login"); // Redirect to the login page
           }}
-          className="btn btn-danger"
+          className="btn "
           style={{
             color: "#FFFFFF",
-            borderRadius: "20px",
+            borderRadius: "50px",
             padding: "10px 20px",
             fontWeight: "bold",
             border: "none",
             cursor: "pointer",
-            marginRight: "62px",
-            height: "50px",
-            fontSize: "1.4rem",
+            marginRight: "30px",
+            height: "60px",
+            fontSize: "1.5rem",
           }}
         >
           Logout
