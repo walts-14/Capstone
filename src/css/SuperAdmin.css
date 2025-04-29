@@ -50,8 +50,8 @@
 
 .CreateAccount {
       position: absolute;
-      top: 120px; /* Adjust position relative to the top */
-      right: 85px; /* Align to the right */
+      top: 70px; /* Adjust position relative to the top */
+      right: 50px; /* Align to the right */
       background-color: #4A2574;
       color: #FFFFFF;
       border-radius: 10px;
@@ -70,10 +70,10 @@
 .divtabs {
   display: flex;
   justify-content: center;
-  margin-top: -700px;
-  margin-left: 200px; /* Adjust margin for proper alignment */
+  margin-top: -750px;
+  margin-left: 300px; /* Adjust margin for proper alignment */
   cursor: pointer;
-  z-index: 10; /* Ensure the tabs are above other elements */
+  z-index: 10; 
 }
 
 /* Tabs Container */
@@ -83,7 +83,6 @@
   font-family: "Baloo";
   justify-content: space-between; /* Space between tabs */
   display: flex;
-  margin-bottom: 50px;
   justify-content: center; /* Center the tabs */
   border-radius: 10px; /* Rounded corners for the container */
 }
@@ -116,11 +115,12 @@
   margin-left: 200px;
   width: 90%;
   overflow-x: auto; /* Enables horizontal scrolling if needed */
-  margin-top: -200px;
+  margin-top: -800px;
+  overflow: hidden;
 }
 /* Table */
 .data-table {
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   width: 90%;
   margin: 200px auto;
   color: #ffffff;
@@ -128,7 +128,9 @@
   border-radius: 10px;
   overflow: hidden;
   background-color: #2e2e4d;
+  
 }
+
 
 .data-table th, 
 .data-table td {
@@ -174,21 +176,35 @@
 
 
 .logout-container {
+  width: 90%;
+  position: fixed;
   display: flex;
   justify-content: flex-end; /* Align the button to the right */
   align-items: center;
-  margin-top: 20px; /* Adjust spacing above the button */
-  padding-right: 20px; /* Add padding to the right for spacing */
-  width: 100%; /* Ensure it spans the full width of the container */
+  margin-top: 200px; /* Adjust spacing above the button */
 }
 
 .logout-container .btn{
+  background-color: var(--midlight-red);
   display: flex;
-  border-radius: 30%;
   justify-content: center; /* Center the button horizontally */
   align-items: center;
-  margin-top: -300px; /* Add spacing above the button */
+  margin-top: 650px; /* Add spacing above the button */
   width: 10%; /* Ensure it spans the full width of the container */
 }
+
+/* Ensure buttons are on top */
+.btn-progress, .img-action {
+  position: relative;
+  z-index: 10;
+}
+
+/* Ensure Leaderboard wrapper doesn't overlap */
+.wrapper-lb {
+  position: relative;
+  z-index: 1;
+}
+
+
 
 

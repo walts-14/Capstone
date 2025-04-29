@@ -47,21 +47,29 @@ const userSchema = new mongoose.Schema(
       required: true,
       enum: ["user", "admin", "super_admin"]
     },
-    points:    { type: Number, default: 0 },    // for your leaderboard
-    lives:     { type: Number, default: 5 },    // how many quiz lives a user has
-    lastLifeTime: { type: Date, default: Date.now }, // optional: when lives were last refilled
+    points:       { type: Number, default: 0 },
+    lives:        { type: Number, default: 5 },
+    lastLifeTime: { type: Date,   default: Date.now },
 
-    progress: { type: Object, default: progressStructure },
-    streak:   { type: Object, default: streakSchema },
+    // Use a function for default so each user gets a fresh copy
+    progress: {
+      type: Object,
+      default: () => JSON.parse(JSON.stringify(progressStructure)),
+    },
+    streak: {
+      type: Object,
+      default: () => ({ ...streakSchema }),
+    },
+
     profilePic: {
-      url: { type: String, default: 'https://res.cloudinary.com/your_cloud_name/image/upload/v1234567890/default-profile.png' },
+      url:       { type: String, default: 'https://res.cloudinary.com/deohrrkw9/image/upload/v1745911019/changepic_qrpmur.png' },
       public_id: { type: String, default: null },
     },
   },
   { timestamps: true }
 );
 
-// Pre-save hook to hash password if modified
+// Pre-save hook to hash password
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   try {
@@ -73,5 +81,4 @@ userSchema.pre("save", async function (next) {
   }
 });
 
-const User = mongoose.model("User", userSchema);
-export default User;
+export default mongoose.model("User", userSchema);

@@ -52,7 +52,7 @@
 /* Create Button */
 .Create {
   position: absolute;
-  top: 50px; /* Adjust position relative to the top */
+  top: 70px; /* Adjust position relative to the top */
   right: 40px; /* Align to the right */
   background-color: #4a2574;
   color: #ffffff;
@@ -87,8 +87,8 @@
 }
 .popup-form {
   position: fixed;
-  top: 50%;
-  left: 50%;
+  top: 40%;
+  left: 53%;
   transform: translate(-50%, -50%);
   background-color: #271d3e;
   padding: 30px;
@@ -100,7 +100,7 @@
 }
 .popup-form h3 {
   text-align: center;
-  font-size: 1.8rem;
+  font-size: 2.3rem;
   font-weight: bold;
   color: #ffffff;
   margin-bottom: 20px;
@@ -114,8 +114,8 @@
   color: #ffffff;
   font-size: 1rem;
   padding: 10px;
-  border: none;
-  border-radius: 5px;
+  border: 3px solid #6F687E; /* Updated stroke color */
+  border-radius: 10px;
 }
 .popup-form .form-control::placeholder {
   color: #ffffff;
@@ -125,30 +125,31 @@
   background-color: #5b2d8a;
 }
 .popup-form .btn-create {
+  align-items: center;
+  justify-content: center;
+  display: flex;
   font-family: "Baloo";
   background-color: #4a2574;
-  border-radius: 5px;
+  border-radius: 10px;
   font-weight: bold;
   padding: 10px;
   font-size: 1.4rem;
   color: #ffffff;
-  width: 80%;
-  margin-bottom: 10px;
-  margin-top: 15px;
-  margin-left: 40px;
+  width: 100%;
 }
 .popup-form .btn-cancel {
+  align-items: center;
+  justify-content: center;
+  display: flex;
   font-family: "Baloo";
   background-color: #d7443e;
-  border-radius: 5px;
+  border-radius: 10px;
   font-weight: bold;
   padding: 10px;
   font-size: 1.4rem;
   color: #ffffff;
-  width: 80%;
-  margin-bottom: 10px;
+  width: 100%;
   margin-top: 10px;
-  margin-left: 40px;
 }
 .popup-form .btn-cancel:hover {
   background-color: #e05a4f;
@@ -264,7 +265,7 @@
 }
 /* Table Container */
 .contentdiv {
-  margin-top: -650px;
+  margin-top: -700px;
   margin-right: -300px;
 }
 .dashboard-table {
@@ -287,7 +288,7 @@
 }
 .dashboard-table td {
   color: #ffffff;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
 }
 .dashboard-table th {
   background-color: #7338a0;

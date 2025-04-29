@@ -30,6 +30,7 @@ function LoginForm() {
         // Store token and user data
         localStorage.setItem("token", response.data.data);
         localStorage.setItem("userName", response.data.user.name);
+        localStorage.setItem("userUsername", response.data.user.username);
         localStorage.setItem("userEmail", response.data.user.email);
         localStorage.setItem("loggedIn", "true");
   

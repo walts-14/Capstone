@@ -156,7 +156,7 @@ export const loginUser = async (req, res) => {
       success: true,
       message: "Login Successful",
       data: token,
-      user: { name: user.name, email: user.email, role: user.role },
+      user: { _id: user._id, name: user.name, email: user.email, role: user.role },
     });
   } catch (err) {
     console.error("🔥 Server error during login:", err.message);
@@ -203,24 +203,26 @@ export const deleteProfilePicture = async (req, res) => {
     const user = await User.findById(req.user.id);
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    if (user.profilePic.public_id) {
+    // Remove from Cloudinary
+    if (user.profilePic?.public_id) {
       await cloudinary.uploader.destroy(user.profilePic.public_id);
     }
 
+    // Set to default image
     user.profilePic = {
-      url: "https://res.cloudinary.com/your_cloud_name/image/upload/v1234567890/default-profile.png",
+      url: "https://res.cloudinary.com/deohrrkw9/image/upload/v1745911019/changepic_qrpmur.png",
       public_id: null,
     };
 
     await user.save();
-    res.json({
-      message: "Profile picture deleted",
-      profilePic: user.profilePic,
-    });
+
+    res.status(200).json({ message: "Profile picture deleted and reset to default" });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Error deleting profile picture:", err.message);
+    res.status(500).json({ message: "Server error" });
   }
 };
+
 /**
  * Fetches a user by email.
  * This will be used to get the user details for profile information (name, username, etc.).

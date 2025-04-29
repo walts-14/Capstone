@@ -165,7 +165,7 @@ const DashboardAdmin = () => {
       ) : (
         <>
           <div className="levels">
-            {["All Students", "Grade 7", "Grade 8", "Grade 9", "Grade 10"].map(
+            {["Grade 7", "Grade 8", "Grade 9", "Grade 10"].map(
               (grade) => (
                 <div
                   key={grade}
@@ -220,7 +220,7 @@ const DashboardAdmin = () => {
                     <th>Email</th>
                     <th>Password</th>
                     <th>Year Level</th>
-                    <th>Action</th>
+                    <th> </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -300,7 +300,7 @@ const DashboardAdmin = () => {
           </div>
 
           <button className="btn-logout" onClick={logout}>
-            Log out
+            Logout
           </button>
 
           {showForm && (
