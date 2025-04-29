@@ -6,7 +6,7 @@ import rightArrow from "../../../assets/rightArrow.png";
 import "../../../css/lesoneContent.css";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import LessonTerms from "../Terms/LessonTerms";
-import { ProgressContext } from "../../../Pages/Dashboard/ProgressContext";
+import { ProgressContext } from "../../Dashboard/ProgressContext";
 import backkpoint from "../../../assets/backkpoint.png";
 
 const LesoneContent = () => {
@@ -14,7 +14,6 @@ const LesoneContent = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { updateProgress } = useContext(ProgressContext);
-
   const videoRef = useRef(null);
   const showButton = location.state?.showButton || false;
   const fromLecture = location.state?.fromLecture || false;

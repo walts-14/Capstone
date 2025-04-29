@@ -1,4 +1,3 @@
-// Termspage.jsx
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Termslist from "./Termslist";
@@ -12,17 +11,49 @@ function Termspage() {
   const [terms, setTerms] = useState([]);
   const [loading, setLoading] = useState(true);
   const lesson = Lessons[termId]; // Get lesson details (dataLessons)
+
+  // Map your termId strings to the corresponding level and lessonNumber
+  const termMap = {
+    termsone:   { level: "basic", lessonNumber: 1 },
+    termstwo:   { level: "basic", lessonNumber: 2 },
+    termsthree: { level: "basic", lessonNumber: 3 },
+    termsfour:  { level: "basic", lessonNumber: 4 },
+    termsfive:   { level: "intermediate", lessonNumber: 1 },
+    termssix:   { level: "intermediate", lessonNumber: 2 },
+    termsseven: { level: "intermediate", lessonNumber: 3 },
+    termseight:  { level: "intermediate", lessonNumber: 4 },
+    termsnine:   { level: "advance", lessonNumber: 1 },
+    termsten:   { level: "advance", lessonNumber: 2 },
+    termseleven: { level: "advance", lessonNumber: 3 },
+    termstwelve:  { level: "advance", lessonNumber: 4 },
+    // add more mappings if you have intermediate/advanced...
+  };
+
+  // Destructure the mapping (or undefined if not found)
+  const mapping = termMap[termId];
+  const level = mapping?.level;
+  const lessonNumber = mapping?.lessonNumber;
+
   useEffect(() => {
-    fetch(`http://localhost:5000/api/videos${termId ? `?lessonKey=${termId}` : ""}`)
+    // If there's no valid mapping, skip fetching
+    if (!level || !lessonNumber) {
+      setTerms([]);
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    // Build the query string with level & lessonNumber
+    fetch(
+      `http://localhost:5000/api/videos?level=${level}&lessonNumber=${lessonNumber}`
+    )
       .then((response) => response.json())
       .then((data) => {
-        // Transform data using the new schema fields.
         const transformedData = data.map((video) => ({
-          // Set id as string (video._id is already a string)
           id: video._id,
-          word: video.word, // Using "word" instead of "title"
+          word: video.word,
           definition: video.description || "Definition not provided",
-          video: video.videoUrl, // Using "videoUrl" instead of "url"
+          video: video.videoUrl,
         }));
         setTerms(transformedData);
         setLoading(false);
@@ -31,20 +62,23 @@ function Termspage() {
         console.error("Error fetching videos:", error);
         setLoading(false);
       });
-  }, [termId]);
+  }, [level, lessonNumber]);
 
   if (loading) return <p>Loading...</p>;
 
   return (
     <div className="termspage-content">
-      {lesson ? <Lessonlist Lessons={lesson} /> : <h1>No Data Found</h1>}
+      {lesson ? <Lessonlist Lessons={lesson} /> : <h1>No Lesson Data Found</h1>}
       <Sidenav />
       <LibraryButtons />
-      <Termslist LessonTerms={terms} lessonKey={termId} />
+
+      {terms.length > 0 ? (
+        <Termslist LessonTerms={terms} lessonKey={termId} />
+      ) : (
+        <h2>No videos found for this lesson.</h2>
+      )}
     </div>
   );
 }
 
 export default Termspage;
-
-

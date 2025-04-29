@@ -1,3 +1,4 @@
+// src/Pages/Library/LectureorQuiz.jsx
 import React, { useState } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import "../../css/LessonorQuiz.css";
@@ -5,56 +6,51 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Video from "../../assets/Video.png";
 import Ideas from "../../assets/Ideas.png";
 import backkpoint from "../../assets/backkpoint.png";
-import heart from "../../assets/heart.png";
-import diamond from "../../assets/diamond.png";
 import LivesandDiamonds from "../../Components/LiveandDiamonds";
 import LessonTermsData from "../Library/Terms/LessonTerms";
 
 function LectureorQuiz({ LessonTerms: propLessonTerms }) {
   const navigate = useNavigate();
-  const params = useParams();
+  const { termId: routeTermId } = useParams();
   const location = useLocation();
-  const difficulty = location.state?.difficulty || "BASIC"; // Default to BASIC
-  const [currentStep, setCurrentStep] = useState(1); // Track progress bar step
 
+  // Use passed-in state.lessonKey or fallback to route param
+  const lessonKey = location.state?.lessonKey || routeTermId;
+
+  // Static or prop‐driven terms list
+  const LessonTerms =
+    propLessonTerms ||
+    (lessonKey ? LessonTermsData[lessonKey] || [] : []);
+
+  const [currentStep, setCurrentStep] = useState(1);
+
+  const difficulty =
+    location.state?.difficulty?.toUpperCase() || "BASIC";
   const difficultyColors = {
-    BASIC: "#3498db", // Blue
-    INTERMEDIATE: "#dcbc3d", // Yellow
-    ADVANCED: "#cc6055", // Red
+    BASIC: "#3498db",
+    INTERMEDIATE: "#dcbc3d",
+    ADVANCED: "#cc6055",
   };
 
-  // Our route gives us a parameter named termId, but we treat that as the lesson key.
-  const routeTermId = params.termId;
-  const { lessonKey: stateLessonKey } = location.state || {};
-  const lessonKey = stateLessonKey || routeTermId;
-
-  // Get terms based on the lesson key
-  const LessonTerms =
-    propLessonTerms || (lessonKey ? LessonTermsData[lessonKey] || [] : []);
-
-  // (The Lecture button already uses the filtered terms as needed.)
   const handleLectureClick = () => {
-    if (lessonKey && LessonTerms.length > 0) {
-      // Determine which set of terms to use based on the step
-      const filteredTerms =
-        currentStep === 1
-          ? LessonTerms.slice(0, 15) // Terms 1-15
-          : LessonTerms.slice(15, 30); // Terms 16-30
+    const sliceStart = currentStep === 1 ? 0 : 15;
+    const filteredTerms = LessonTerms.slice(sliceStart, sliceStart + 15);
 
-      if (filteredTerms.length > 0) {
-        navigate(`/lesonecontent/${lessonKey}/${filteredTerms[0].id}`, {
+    if (filteredTerms.length > 0) {
+      navigate(
+        `/lesonecontent/${lessonKey}/${filteredTerms[0].id}`,
+        {
           state: {
             showButton: true,
             fromLecture: true,
             lessonKey,
-            termId: filteredTerms[0].id,
+            // ← pass the step so LesoneContent locks its pagination
+            step: currentStep,
           },
-        });
-      } else {
-        console.log("No valid terms for the selected step!");
-      }
+        }
+      );
     } else {
-      console.log("No valid lesson data found!");
+      console.warn("No terms for step", currentStep);
     }
   };
 
@@ -64,11 +60,15 @@ function LectureorQuiz({ LessonTerms: propLessonTerms }) {
         className="back fs-1 fw-bold d-flex"
         onClick={() => navigate("/dashboard")}
       >
-        <img src={backkpoint} className="img-fluid p-1 mt-1" alt="Back" />
+        <img
+          src={backkpoint}
+          className="img-fluid p-1 mt-1"
+          alt="Back"
+        />
         <p>Back</p>
       </div>
 
-      <div className="container d-flex flex-column justify-content-center align-items-center ">
+      <div className="container d-flex flex-column justify-content-center align-items-center">
         <div className="status-bar">
           <div
             className="difficulty text-center"
@@ -79,26 +79,27 @@ function LectureorQuiz({ LessonTerms: propLessonTerms }) {
           <LivesandDiamonds />
         </div>
 
-        {/* Progress Bar */}
-        <div className={`progress-bar-container step-${currentStep} `}>
+        <div className={`progress-bar-container step-${currentStep}`}>
           <button
-            className={`progress-step  ${currentStep === 1 ? "active" : ""}`}
+            className={`progress-step ${
+              currentStep === 1 ? "active" : ""
+            }`}
             onClick={() => setCurrentStep(1)}
           >
             1
           </button>
-
           <div className="progress-line" />
-
           <button
-            className={`progress-step  ${currentStep === 2 ? "active" : ""}`}
+            className={`progress-step ${
+              currentStep === 2 ? "active" : ""
+            }`}
             onClick={() => setCurrentStep(2)}
           >
             2
           </button>
         </div>
 
-        <div className="lecture-quiz-container ">
+        <div className="lecture-quiz-container">
           <div
             className="lecture-outer justify-content-center rounded-5"
             onClick={handleLectureClick}
@@ -108,10 +109,13 @@ function LectureorQuiz({ LessonTerms: propLessonTerms }) {
               <img src={Video} className="img-fluid" alt="Lecture Video" />
             </div>
           </div>
+
           <div
             className="quiz-outer justify-content-center rounded-5"
             onClick={() =>
-              navigate(`/quiz/${lessonKey}`, { state: { currentStep } })
+              navigate(`/quiz/${lessonKey}`, {
+                state: { currentStep },
+              })
             }
           >
             <p>Quiz</p>
