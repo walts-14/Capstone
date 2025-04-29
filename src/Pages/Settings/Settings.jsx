@@ -14,12 +14,12 @@ function Settings() {
     "https://res.cloudinary.com/deohrrkw9/image/upload/v1745911019/changepic_qrpmur.png";
 
   // — state for the three fields matching LoginForm’s keys
-  const [userName,     setUserName]     = useState("");
+  const [userName, setUserName] = useState("");
   const [userUsername, setUserUsername] = useState("");
-  const [userEmail,    setUserEmail]    = useState("");
+  const [userEmail, setUserEmail] = useState("");
 
   // — state for profile pic as before
-  const [profilePic,   setProfilePic]   = useState(DEFAULT_PROFILE_PIC);
+  const [profilePic, setProfilePic] = useState(DEFAULT_PROFILE_PIC);
 
   // pull everything straight from localStorage once
 
@@ -47,17 +47,17 @@ function Settings() {
 
   useEffect(() => {
     fetchUserData();
-  }, []);  
+  }, []);
 
   // change pic preview + localStorage
   const handleImageChange = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
-  
+
     // build form-data
     const formData = new FormData();
     formData.append("image", file);
-  
+
     try {
       const token = localStorage.getItem("token");
       const res = await axios.post(
@@ -70,7 +70,7 @@ function Settings() {
           },
         }
       );
-  
+
       // res.data.profilePic = { url, public_id }
       const url = res.data.profilePic.url;
       setProfilePic(url);
@@ -80,17 +80,15 @@ function Settings() {
       console.error("Upload failed:", err);
     }
   };
-  
 
   // delete pic → reset to default (and localStorage)
   const handleDeleteProfilePicture = async () => {
     try {
       const token = localStorage.getItem("token");
       // 2) correct endpoint
-      await axios.delete(
-        "http://localhost:5000/api/delete-profile-pic",
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await axios.delete("http://localhost:5000/api/delete-profile-pic", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       // 3) re-fetch to pick up default from server
       await fetchUserData();
     } catch (error) {
@@ -108,7 +106,6 @@ function Settings() {
     <>
       <Sidenav />
       <div className="settings-container rounded-4 position-absolute">
-
         {/* ——— STUDENT INFO (no design changes) ——— */}
         <div className="students-information">
           <span className="name-stud text-white fw-bold position-absolute">
@@ -135,11 +132,7 @@ function Settings() {
 
         {/* ——— PROFILE PICTURE (unchanged layout) ——— */}
         <div className="profile-picture-wrapper position-relative m-5">
-          <img
-            src={profilePic}
-            className="img-fluid"
-            alt="profile picture"
-          />
+          <img src={profilePic} className="img-fluid" alt="profile picture" />
 
           <label
             htmlFor="file-upload"
@@ -150,10 +143,10 @@ function Settings() {
           </label>
 
           <button
-            className="btn btn-danger mt-3 fw-bold fs-5 rounded-4 position-absolute"
+            className="deletee btn-secondary fw-bold fs-5 rounded-4 position-absolute h-25 text-nowrap"
             onClick={handleDeleteProfilePicture}
           >
-            Delete Profile Picture
+            Delete Picture
           </button>
 
           <div className="camera-overlay d-flex justify-content-center align-items-center">

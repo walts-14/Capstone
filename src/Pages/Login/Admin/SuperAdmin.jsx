@@ -256,7 +256,8 @@ const SuperAdmin = () => {
     navigate("/login");
   };
 
-  const dataToDisplay = activeTab === "Users" ? users : activeTab === "Teachers" ? teachers : [];
+  const dataToDisplay =
+    activeTab === "Users" ? users : activeTab === "Teachers" ? teachers : [];
 
   return (
     <div className="superadmin-body">
@@ -275,9 +276,7 @@ const SuperAdmin = () => {
         <div className="sidebar-box">
           {/* Dashboard Button */}
           <div
-            className={`sidebar-item ${
-              !showLeaderboard ? "active" : ""
-            }`}
+            className={`sidebar-item ${!showLeaderboard ? "active" : ""}`}
             onClick={() => setShowLeaderboard(false)} // Show the dashboard
           >
             <img src={DashboardIcon} alt="Dashboard" className="sidebar-icon" />
@@ -370,7 +369,6 @@ const SuperAdmin = () => {
                           backgroundColor: "#2E86C1",
                           color: "#FFFFFF",
                           borderRadius: "20px",
-                          
                         }}
                         onClick={() => handleShowProgress(entry)} // Pass the selected user
                       >
@@ -381,14 +379,18 @@ const SuperAdmin = () => {
                         alt="Edit"
                         className="img-action"
                         style={{ cursor: "pointer" }}
-                        onClick={() => handleEditUser(entry.email, entry.role || "user")} // Fallback to "user"
+                        onClick={() =>
+                          handleEditUser(entry.email, entry.role || "user")
+                        } // Fallback to "user"
                       />
                       <img
                         src={RemoveIcon}
                         alt="Remove"
                         className="img-action"
                         style={{ cursor: "pointer" }}
-                        onClick={() => handleDeleteUser(entry.email, entry.role || "user")} // Fallback to "user"
+                        onClick={() =>
+                          handleDeleteUser(entry.email, entry.role || "user")
+                        } // Fallback to "user"
                       />
                     </td>
                   </tr>
@@ -435,17 +437,16 @@ const SuperAdmin = () => {
               </button>
             </div>
           </div>
-
-
         </>
       )}
 
       {/* Progress Modal */}
       {showProgressModal && selectedUser && (
         <div className="progress-modal">
-          <button className="btn btn-close" onClick={handleCloseProgressModal}>
-            
-          </button>
+          <button
+            className="btn btn-close"
+            onClick={handleCloseProgressModal}
+          ></button>
           <div className="progress-modal-content">
             <h3>{selectedUser.name}'s Progress</h3>
             {/* Add progress details here */}
@@ -479,9 +480,7 @@ const SuperAdmin = () => {
               color: "#FFFFFF",
             }}
           >
-            {formMode === "edit"
-              ? `Edit ${formType} `
-              : `Add ${formType} `}
+            {formMode === "edit" ? `Edit ${formType} ` : `Add ${formType} `}
           </h3>
           <form onSubmit={handleFormSubmit}>
             <div className="mb-3">
@@ -589,27 +588,27 @@ const SuperAdmin = () => {
                 required
               />
             </div>
-              <button
-                type="submit"
-                className="btn"
-                style={{
-                  alignItems: "center",
-                  justifyContent: "center",
-                  display: "flex",
-                  backgroundColor: "#4A2574",
-                  color: "#FFFFFF",
-                  borderRadius: "10px",
-                  fontWeight: "bold",
-                  fontSize: "1.4rem",
-                  padding: "10px",
-                  height: "56px",
-                  width: "97%",
-                  marginBottom: "10px",
-                }}
-              >
-                Create
-              </button>
-           
+            <button
+              type="submit"
+              className="btn"
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                display: "flex",
+                backgroundColor: "#4A2574",
+                color: "#FFFFFF",
+                borderRadius: "10px",
+                fontWeight: "bold",
+                fontSize: "1.4rem",
+                padding: "10px",
+                height: "56px",
+                width: "97%",
+                marginBottom: "10px",
+              }}
+            >
+              Create
+            </button>
+
             <div className="d-flex justify-content-center">
               <button
                 type="button"
@@ -705,28 +704,30 @@ const SuperAdmin = () => {
         </div>
       )}
 
-      <div className="logout-container ms-5">
-        <button
-          onClick={() => {
-            localStorage.removeItem("token"); // Clear the token
-            navigate("/login"); // Redirect to the login page
-          }}
-          className="btn "
-          style={{
-            color: "#FFFFFF",
-            borderRadius: "50px",
-            padding: "10px 20px",
-            fontWeight: "bold",
-            border: "none",
-            cursor: "pointer",
-            marginRight: "30px",
-            height: "60px",
-            fontSize: "1.5rem",
-          }}
-        >
-          Logout
-        </button>
-      </div>
+      {!showLeaderboard && (
+        <div className="logout-container">
+          <button
+            onClick={() => {
+              localStorage.removeItem("token"); // Clear the token
+              navigate("/login"); // Redirect to the login page
+            }}
+            className="btn"
+            style={{
+              color: "#FFFFFF",
+              borderRadius: "50px",
+              padding: "10px 20px",
+              fontWeight: "bold",
+              border: "none",
+              cursor: "pointer",
+              marginRight: "30px",
+              height: "60px",
+              fontSize: "1.5rem",
+            }}
+          >
+            Logout
+          </button>
+        </div>
+      )}
     </div>
   );
 };

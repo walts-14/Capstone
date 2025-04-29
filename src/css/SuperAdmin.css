@@ -5,7 +5,7 @@
 }
 
 /* Ensure the background color covers the entire page */
-.body{
+.body {
   overflow-y: auto;
 }
 
@@ -31,41 +31,37 @@
   height: 100vh;
   background-color: #100429;
   z-index: -1; /* Ensure it stays behind all content */
-
-
 }
 
 .Dashboard h2 {
   width: 25%;
-    margin-left: -20px;
-    text-align: center;
-    font-family: "Baloo";
-    font-weight: bold;
-    color: #FFFFFF;
-    font-size: 60px;
-    background-color: #7338a0;
-    padding: 10px 20px; /* Add padding for spacing */
-    border-radius: 10px;
+  margin-left: -20px;
+  text-align: center;
+  font-family: "Baloo";
+  font-weight: bold;
+  color: #ffffff;
+  font-size: 60px;
+  background-color: #7338a0;
+  padding: 10px 20px; /* Add padding for spacing */
+  border-radius: 10px;
 }
 
 .CreateAccount {
-      position: absolute;
-      top: 70px; /* Adjust position relative to the top */
-      right: 50px; /* Align to the right */
-      background-color: #4A2574;
-      color: #FFFFFF;
-      border-radius: 10px;
-      font-weight: bold;
-      font-size: 1.2rem;
-      padding: 10px 20px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 20; /* Ensure the button is above other elements */
+  position: absolute;
+  top: 70px; /* Adjust position relative to the top */
+  right: 50px; /* Align to the right */
+  background-color: #4a2574;
+  color: #ffffff;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding: 10px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20; /* Ensure the button is above other elements */
 }
-
-
 
 .divtabs {
   display: flex;
@@ -73,7 +69,7 @@
   margin-top: -750px;
   margin-left: 300px; /* Adjust margin for proper alignment */
   cursor: pointer;
-  z-index: 10; 
+  z-index: 10;
 }
 
 /* Tabs Container */
@@ -128,17 +124,15 @@
   border-radius: 10px;
   overflow: hidden;
   background-color: #2e2e4d;
-  
 }
 
-
-.data-table th, 
+.data-table th,
 .data-table td {
   padding: 15px;
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow:inherit;
+  text-overflow: inherit;
 }
 
 .data-table th {
@@ -173,8 +167,6 @@
   height: 35px;
   cursor: pointer;
 }
-
-
 .logout-container {
   width: 90%;
   position: fixed;
@@ -182,9 +174,10 @@
   justify-content: flex-end; /* Align the button to the right */
   align-items: center;
   margin-top: 200px; /* Adjust spacing above the button */
+  margin-left: 10rem;
 }
 
-.logout-container .btn{
+.logout-container .btn {
   background-color: var(--midlight-red);
   display: flex;
   justify-content: center; /* Center the button horizontally */
@@ -194,7 +187,8 @@
 }
 
 /* Ensure buttons are on top */
-.btn-progress, .img-action {
+.btn-progress,
+.img-action {
   position: relative;
   z-index: 10;
 }
@@ -204,7 +198,3 @@
   position: relative;
   z-index: 1;
 }
-
-
-
-

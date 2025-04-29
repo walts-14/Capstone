@@ -8,9 +8,7 @@ function Dashboard() {
   return (
     <>
       <Sidenav />
-
       <ProgressTracker />
-
       <LessonButtons />
     </>
   );

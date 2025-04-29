@@ -165,19 +165,17 @@ const DashboardAdmin = () => {
       ) : (
         <>
           <div className="levels">
-            {["Grade 7", "Grade 8", "Grade 9", "Grade 10"].map(
-              (grade) => (
-                <div
-                  key={grade}
-                  className={`level-item ${grade
-                    .replace(" ", "")
-                    .toLowerCase()} ${selectedGrade === grade ? "active" : ""}`}
-                  onClick={() => handleGradeSelection(grade)}
-                >
-                  {grade.toUpperCase()}
-                </div>
-              )
-            )}
+            {["Grade 7", "Grade 8", "Grade 9", "Grade 10"].map((grade) => (
+              <div
+                key={grade}
+                className={`level-item ${grade
+                  .replace(" ", "")
+                  .toLowerCase()} ${selectedGrade === grade ? "active" : ""}`}
+                onClick={() => handleGradeSelection(grade)}
+              >
+                {grade.toUpperCase()}
+              </div>
+            ))}
           </div>
 
           <div className="table-container">
@@ -212,7 +210,7 @@ const DashboardAdmin = () => {
             </div>
 
             <div className="contentdiv">
-              <table className="dashboard-table text-light mt-4">
+              <table className="dashboard-table text-light">
                 <thead>
                   <tr>
                     <th>Name</th>
@@ -233,40 +231,73 @@ const DashboardAdmin = () => {
                       <td>{u.yearLevel || "N/A"}</td>
                       <td>
                         <div className="action-admin">
-                          {!showProgressTracker ? (
-                            <button
-                              onClick={handleClick}
-                              className="btn text-white fs-5 px-3 py-2 rounded-4"
-                              style={{
-                                backgroundColor: "#2e86c1",
-                                border: "none",
-                              }}
-                            >
-                              Progress
-                            </button>
-                          ) : (
-                            <div
-                              className="d-flex flex-column align-items-end p-3"
-                              style={{
-                                position: "absolute",
-                                top: "0",
-                                left: "65%",
-                                transform: "translateX(-50%)",
-                                borderRadius: "10px",
-                                boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-                                maxWidth: "90%",
-                                width: "fit-content", // smaller width
-                                maxHeight: "500px", // smaller height
-                              }}
-                            >
-                              <button
-                                type="button"
-                                className="btn-close mb-2"
-                                aria-label="Close"
-                                onClick={handleClose}
-                              ></button>
+                          {/* Always show the Progress button */}
+                          <button
+                            onClick={handleClick}
+                            className="btn text-white fs-5 px-3 py-2 rounded-4"
+                            style={{
+                              backgroundColor: "#2e86c1",
+                              border: "none",
+                            }}
+                          >
+                            Progress
+                          </button>
 
-                              <div className="d-flex align-items-center gap-3 px-3 pb-3">
+                          {/* Conditionally render the modal only */}
+                          {showProgressTracker && (
+                            <div
+                              className="progress-modal-container position-absolute"
+                              style={{
+                                top: "50%",
+                                left: "50%",
+                                transform: "translate(-50%, -50%)",
+                                width: "30vw",
+                                maxHeight: "80vh", // limit modal height to viewport
+                                borderRadius: "20px",
+                                padding: "16px",
+                                display: "flex",
+                                flexDirection: "column",
+                                zIndex: 999,
+                                backgroundColor: "#1a1230",
+                                overflow: "hidden",
+                              }}
+                            >
+                              {/* Close button */}
+                              <div
+                                style={{
+                                  position: "absolute",
+                                  top: "12px",
+                                  right: "4rem",
+                                  zIndex: 2,
+                                }}
+                              >
+                                <button
+                                  type="button"
+                                  className="btn-close"
+                                  onClick={handleClose}
+                                  aria-label="Close"
+                                  style={{
+                                    backgroundColor: "red",
+                                    borderRadius: "20%",
+                                    padding: "4px",
+                                  }}
+                                ></button>
+                              </div>
+
+                              {/* Spacer div */}
+                              <div
+                                style={{ height: "40px", flexShrink: 0 }}
+                              ></div>
+
+                              {/* Scrollable content area */}
+                              <div
+                                style={{
+                                  flexGrow: 1,
+                                  minHeight: 0, // Important: ensures flex works correctly for scroll
+                                  overflowY: "auto",
+                                  paddingRight: "8px",
+                                }}
+                              >
                                 <ProgressTracker />
                               </div>
                             </div>

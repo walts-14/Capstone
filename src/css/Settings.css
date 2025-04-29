@@ -71,7 +71,7 @@ body {
   font-size: 3rem;
   font-family: "Baloo", sans-serif;
   left: 12.5em;
-  bottom: 4.5em;
+  top: 1.8em;
 }
 .name-stud {
   font-family: "Baloo", sans-serif;
@@ -92,7 +92,7 @@ body {
   font-size: 3rem;
   font-family: "Baloo", sans-serif;
   left: 12.5em;
-  bottom: 3em;
+  top: 3.3em;
 }
 .email-stud {
   font-family: "Baloo", sans-serif;
@@ -107,14 +107,14 @@ body {
   font-size: 3rem;
   font-family: "Baloo", sans-serif;
   left: 12.5em;
-  bottom: 1.5em;
+  top: 5em;
 }
 .profile-picture-wrapper {
   position: relative;
   width: 200px; /* adjust based on your original image size */
   height: 200px;
   left: 3em;
-  top: 0.5em;
+  bottom: 20em;
 }
 
 .profile-picture-wrapper img {
@@ -141,4 +141,9 @@ body {
 /* Show overlay only when hovering on "Change Profile" */
 .change-pic:hover ~ .camera-overlay {
   opacity: 1;
+}
+.deletee {
+  top: 16em;
+  left: 2em;
+  background-color: #d7443e;
 }
