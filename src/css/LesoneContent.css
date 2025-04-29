@@ -46,7 +46,7 @@ body {
 }
 
 .tryone-container video {
-  width: 55%;
+  width: 120%;
   height: auto;
   border: 15px solid #271d3e; /* Adds a white border */
   border-radius: 50px; /* Rounds the corners */

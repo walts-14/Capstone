@@ -46,9 +46,8 @@ const LesoneContent = () => {
 
   const showButton  = location.state?.showButton  || false;
   const fromLecture = location.state?.fromLecture || false;
+  const lectureStep = location.state?.step;
 
-  // **READ THE STEP IF YOU CAME FROM LECTURE**
-  const lectureStep = location.state?.step; // 1 or 2
   const level        = levelMapping[lessonKey]       || "basic";
   const lessonNumber = lessonNumberMapping[lessonKey] || 1;
 
@@ -57,43 +56,55 @@ const LesoneContent = () => {
   const [error, setError]           = useState(null);
   const [hasUpdated, setHasUpdated] = useState(false);
 
-  // 1. Fetch only this lesson’s videos, sorted by termNumber
+  // helper to match TermsCard coloring logic
+  const getOverrideStyle = () => {
+    // intermediate lessons
+    if (["termsfive","termssix","termsseven","termseight"].includes(lessonKey)) {
+      return {
+        backgroundColor: "var(--intermediate-yellow)",
+        boxShadow:       "0 5px 1px 8px var(--intermediate-shadow)",
+      };
+    }
+    // advanced lessons
+    if (["termsnine","termsten","termseleven","termstwelve"].includes(lessonKey)) {
+      return {
+        backgroundColor: "var(--advance-red)",
+        boxShadow:       "0 5px 1px 8px var(--advance-shadow)",
+      };
+    }
+    // default basic
+    return {};
+  };
+
+  // 1. Fetch and sort
   useEffect(() => {
-    const qs = new URLSearchParams({
-      level,
-      lessonNumber: lessonNumber.toString(),
-    });
+    const qs = new URLSearchParams({ level, lessonNumber: lessonNumber.toString() });
     setLoading(true);
     fetch(`http://localhost:5000/api/videos?${qs}`)
       .then(res => res.json())
       .then(data => {
         data.sort((a, b) => a.termNumber - b.termNumber);
-        setTermsArray(
-          data.map(v => ({
-            id:         v._id,
-            word:       v.word,
-            definition: v.description,
-            video:      v.videoUrl,
-            termNumber: v.termNumber,
-          }))
-        );
+        setTermsArray(data.map(v => ({
+          id:         v._id,
+          word:       v.word,
+          definition: v.description,
+          video:      v.videoUrl,
+          termNumber: v.termNumber,
+        })));
         setLoading(false);
       })
-      .catch(err => {
-        setError(err);
-        setLoading(false);
-      });
+      .catch(err => { setError(err); setLoading(false); });
   }, [lessonKey]);
 
-  // 2. Split into two pages of 15 terms each
+  // 2. Partition
   const firstPageTerms  = termsArray.slice(0, 15);
   const secondPageTerms = termsArray.slice(15, 30);
 
-  // 3. Find where our clicked term lives
+  // 3. Find index
   const idx1 = firstPageTerms.findIndex(t => t.id === termId);
   const idx2 = secondPageTerms.findIndex(t => t.id === termId);
 
-  // 4. Compute step: use lectureStep if fromLecture, otherwise infer
+  // 4. Determine step
   const step = fromLecture && lectureStep
     ? lectureStep
     : (idx1 !== -1 ? 1 : 2);
@@ -101,7 +112,7 @@ const LesoneContent = () => {
   const currentPageTerms = step === 1 ? firstPageTerms : secondPageTerms;
   const currentIndex     = step === 1 ? idx1 : idx2;
 
-  // 5. Redirect on invalid termId
+  // 5. Redirect invalid IDs
   useEffect(() => {
     if (currentIndex === -1 && currentPageTerms.length) {
       navigate(
@@ -111,7 +122,7 @@ const LesoneContent = () => {
     }
   }, [currentIndex, currentPageTerms]);
 
-  // 6. Progress updates
+  // 6. Progress
   useEffect(() => {
     if (!hasUpdated && currentIndex === currentPageTerms.length - 1) {
       updateProgress(
@@ -125,7 +136,7 @@ const LesoneContent = () => {
 
   useEffect(() => { setHasUpdated(false); }, [step]);
 
-  // 7. Replay on term change
+  // 7. Replay
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.load();
@@ -137,9 +148,12 @@ const LesoneContent = () => {
   if (error)   return <p>Error loading content.</p>;
   if (currentIndex === -1) return <p>No term found.</p>;
 
+  // Utilities
   const currentTerm = currentPageTerms[currentIndex];
   const prevTerm    = currentPageTerms[currentIndex - 1] || currentPageTerms[0];
   const nextTerm    = currentPageTerms[currentIndex + 1] || currentPageTerms.slice(-1)[0];
+
+  const navStyle = getOverrideStyle();
 
   const handleNavigation = direction => {
     if (direction === "prev" && currentIndex > 0) {
@@ -149,7 +163,6 @@ const LesoneContent = () => {
       );
     }
     if (direction === "next") {
-      // lecture flow?
       if (fromLecture) {
         if (currentIndex === currentPageTerms.length - 1) {
           return navigate("/finishlecture", { state: { lessonKey, level, step } });
@@ -159,7 +172,6 @@ const LesoneContent = () => {
           { state: { showButton, fromLecture, step } }
         );
       }
-      // normal terms flow
       if (step === 1 && currentIndex === firstPageTerms.length - 1) {
         return navigate(
           `/lesonecontent/${lessonKey}/${secondPageTerms[0].id}`,
@@ -208,17 +220,17 @@ const LesoneContent = () => {
 
         <div className="text-container d-flex flex-column align-items-center justify-content-center gap-5 mt-4">
           <div className="letter-container">
-            <button onClick={() => handleNavigation("prev")}>
+            <button onClick={() => handleNavigation("prev")} >
               <img src={leftArrow} alt="Left Arrow" className="arrow" />
             </button>
-            <div className="textOne">
+            <div className="textOne" style={navStyle}>
               <p className="m-0">{currentTerm.word}</p>
             </div>
-            <button onClick={() => handleNavigation("next")}>
+            <button onClick={() => handleNavigation("next")} >
               <img src={rightArrow} alt="Right Arrow" className="arrow" />
             </button>
           </div>
-          <div className="textOne">
+          <div className="textOne" style={navStyle}>
             <p>{currentTerm.definition}</p>
           </div>
         </div>
