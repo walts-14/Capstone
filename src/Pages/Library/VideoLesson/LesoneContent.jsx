@@ -135,7 +135,7 @@ const LesoneContent = () => {
   }, [hasUpdated, currentIndex, step]);
 
   useEffect(() => { setHasUpdated(false); }, [step]);
-
+  
   // 7. Replay
   useEffect(() => {
     if (videoRef.current) {
@@ -188,6 +188,12 @@ const LesoneContent = () => {
     }
   };
 
+   // **Split definition into English and Tagalog**
+   const rawDef = currentTerm.definition || "";
+   const [englishPart, tagalogPart] = rawDef.includes("Tagalog:")
+     ? rawDef.split(/Tagalog:/)
+     : [rawDef, ""];
+
   const handleBack = () => {
     if (location.state?.fromLecture) {
       navigate(`/lectureorquiz/${lessonKey}`, { state: { lessonKey } });
@@ -231,7 +237,10 @@ const LesoneContent = () => {
             </button>
           </div>
           <div className="textOne" style={navStyle}>
-            <p>{currentTerm.definition}</p>
+            <p className="m-0">{englishPart.trim()}</p>
+            {tagalogPart.trim() && (
+              <p className="m-0">Tagalog: {tagalogPart.trim()}</p>
+            )}
           </div>
         </div>
       </div>

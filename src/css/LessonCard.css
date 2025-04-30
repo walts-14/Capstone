@@ -36,20 +36,36 @@
   --advance-red: #CC6055;
   --advance-shadow: #992D22;
 }
-
+body {
+  width: 100%;
+}
 .terms-card {
   display: inline-block; /* Allow the card to adjust its width based on content */
   text-align: center;
-  padding: 20px 2px;
   border-radius: 10px;
   background-color: var(--lightblue);
   box-shadow: 0 5px 1px 8px var(--shadowblue);
-  height: 100px;
+  height: 100%;
+  width: 100%;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .term-name {
-  font-size: 2.8rem;
+  font-size: 2.5rem;
   font-weight: bold;
   color: white;
   font-family: "Baloo";
+}
+
+
+.terms-card:hover {
+  transform: translateY(-4px) scale(1.03);
+  /* brighten the shadow on hover */
+  box-shadow: 0 8px 2px 10px var(--shadowblue);
+}
+
+/* Active (mouse-down) state: press down */
+.terms-card:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 3px 1px 6px var(--shadowblue);
 }

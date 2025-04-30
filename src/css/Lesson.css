@@ -29,6 +29,10 @@
   --midblue: #04aae0;
   --lightblue: #579ecd;
   --shadowblue: #246b9a;
+  --intermediate-yellow: #DCBC3D;
+  --intermediate-shadow: #A9890A;
+  --advance-red: #CC6055;
+  --advance-shadow: #992D22;
 }
 /* Section 1: Lessons 1-5 */
 
@@ -203,4 +207,23 @@
   grid-column: 3 / 5;
   grid-row: 4;
   cursor: pointer;
+}
+
+/* Global transitions for all lesson buttons */
+.lessons {
+  transition: 
+    transform 0.2s ease, 
+    box-shadow 0.2s ease, 
+    background-color 0.2s ease;
+}
+
+.lessons:hover {
+  transform: translateY(-4px) scale(1.03);
+  /* We use the same inline box-shadow color, so you only need to change the spread */
+  box-shadow: 0 8px 2px 10px currentColor;
+}
+
+.lessons:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 3px 1px 6px currentColor;
 }
