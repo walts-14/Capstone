@@ -42,7 +42,11 @@ function LbComponent() {
           <img src={medal2} className="img-fluid" alt="medal img" />
           <div className="d-flex flex-column align-items-start">
             <div className="profile-second d-flex align-items-center gap-2">
-            <img src={sortedLeaderboard[1]?.profilePic || profile2} className="img-fluid" alt="profile img" />
+              <img
+                src={sortedLeaderboard[1]?.profilePic || profile2}
+                className="img-fluid"
+                alt="profile img"
+              />
               <p className="text-white fs-1">
                 {sortedLeaderboard[1]?.name || "TBD"}
               </p>
@@ -109,24 +113,36 @@ function LbComponent() {
           <ul className="list-unstyled mt-3 text-white fw-bold">
             {sortedLeaderboard.map((user, index) => (
               <div
-                className="user-rank fs-1 rounded-4 d-flex align-items-center justify-content-between"
+                className="user-rank fs-1 rounded-4 d-flex align-items-center text-nowrap px-4 py-2"
                 key={user._id || index}
               >
-                <div className="d-flex align-items-center gap-5">
+                {/* Column 1: Rank, Avatar, Name */}
+                <div
+                  className="d-flex align-items-center"
+                  style={{ minWidth: "300px", gap: "1rem" }}
+                >
                   <span className="number-label text-white">{index + 1}.</span>
-                        <img
-        src={user.profilePic || profile3}
-        alt="profile"
-        className="user-avatar"
-      />
-                  <span className="user-name">{user.name || "No Name"}</span>
+                  <img
+                    src={user.profilePic || profile3}
+                    alt="profile"
+                    className="user-avatar img-fluid"
+                  />
+                  <span className="user-name text-white fs-2">
+                    {user.name || "No Name"}
+                  </span>
                 </div>
 
-                <div className="points-wrapper">
-                  <div className="points-display d-flex align-items-center justify-content-end">
-                    <img src={diamond} alt="diamonds" className="me-3" />
-                    <span>{user.points > 0 ? user.points : 0}</span>
-                  </div>
+                {/* Column 2: Grade Level */}
+                <div className="gradelevels text-center text-white fs-2">
+                  Grade 7
+                </div>
+
+                {/* Column 3: Points */}
+                <div className="points-wrapper d-flex align-items-center justify-content-end">
+                  <img src={diamond} alt="diamonds" className="me-4" />
+                  <span className="fs-2 me-5">
+                    {user.points > 0 ? user.points : 0}
+                  </span>
                 </div>
               </div>
             ))}

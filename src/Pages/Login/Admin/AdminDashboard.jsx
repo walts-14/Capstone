@@ -251,15 +251,15 @@ const DashboardAdmin = () => {
                                 top: "50%",
                                 left: "50%",
                                 transform: "translate(-50%, -50%)",
-                                width: "30vw",
-                                maxHeight: "80vh", // limit modal height to viewport
+                                width: "60vh",
+                                height: "60vh",
                                 borderRadius: "20px",
-                                padding: "16px",
                                 display: "flex",
                                 flexDirection: "column",
                                 zIndex: 999,
                                 backgroundColor: "#1a1230",
-                                overflow: "hidden",
+                                overflowY: "auto",
+                                overflowX: "hidden",
                               }}
                             >
                               {/* Close button */}
@@ -267,7 +267,7 @@ const DashboardAdmin = () => {
                                 style={{
                                   position: "absolute",
                                   top: "12px",
-                                  right: "4rem",
+                                  right: "40px",
                                   zIndex: 2,
                                 }}
                               >
@@ -284,25 +284,19 @@ const DashboardAdmin = () => {
                                 ></button>
                               </div>
 
-                              {/* Spacer div */}
-                              <div
-                                style={{ height: "40px", flexShrink: 0 }}
-                              ></div>
-
-                              {/* Scrollable content area */}
+                              {/* Scrollable content area including all space */}
                               <div
                                 style={{
-                                  flexGrow: 1,
-                                  minHeight: 0, // Important: ensures flex works correctly for scroll
+                                  flex: 1,
                                   overflowY: "auto",
-                                  paddingRight: "8px",
+                                  padding: "2rem 1rem 1rem 1rem",
+                                  marginTop: "2.5rem", // creates space below close button
                                 }}
                               >
                                 <ProgressTracker />
                               </div>
                             </div>
                           )}
-
                           <img
                             src={EditIcon}
                             alt="Edit"
