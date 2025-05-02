@@ -9,20 +9,35 @@ export const uploadVideo = async (req, res) => {
     if (!req.file) {
       return res.status(400).json({ error: "No file uploaded" });
     }
-    const result = await cloudinary.uploader.upload(req.file.path, {
-      resource_type: "video",
-      folder: "videos",
-    });
 
     const { description, word, level, lessonNumber, termNumber } = req.body;
 
+    // Validate level
+    const validLevels = ["basic", "intermediate", "advanced"];
+    if (!validLevels.includes(level)) {
+      return res.status(400).json({ error: "Invalid level provided" });
+    }
+
+    // Ensure lessonNumber is a valid number
+    if (isNaN(lessonNumber)) {
+      return res.status(400).json({ error: "Invalid lesson number" });
+    }
+
+    // Folder path: videos/basic/lesson1
+    const folderPath = `videos/${level}/lesson${lessonNumber}`;
+
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      resource_type: "video",
+      folder: folderPath,
+    });
+
     const newVideo = new Video({
-      videoUrl: result.secure_url, // match field name in schema
+      videoUrl: result.secure_url,
       word,
       description,
       level,
-      lessonNumber,
-      termNumber,
+      lessonNumber: Number(lessonNumber),
+      termNumber: Number(termNumber),
     });
 
     await newVideo.save();

@@ -1,104 +1,109 @@
-// routes/superAdminRoutes.js
 import express from "express";
 import {
+  createSuperAdmin,
   createAccount,
   getAllStudentsSuper,
+  getStudentByEmailSuper,
+  updateStudentByEmailSuper,
+  getStudentsByYearLevel,
+  getLeaderboardSuper,
+  getUserProgressSuper,
   getAllAdmins,
   getAdminByEmail,
   updateAdminByEmail,
-  updateStudentByEmailSuper,
   deleteAccountByEmail,
-  createSuperAdmin,
-  getStudentsByYearLevel,
 } from "../controllers/superadmin.controller.js";
 import { verifyToken, checkRole } from "../middlewares/auth.js";
 
 const superAdminRoutes = express.Router();
 
-// Create an Account (Admin/Student) by Super Admin
-superAdminRoutes.post("/create-account", verifyToken, checkRole(["super_admin"]), createAccount);
+// Super Admin-only endpoints
 
-// Get All Student Accounts (role: "user")
-superAdminRoutes.get("/users", verifyToken, checkRole(["super_admin"]), getAllStudentsSuper);
+// 1. Create the first (and only) Super Admin
+superAdminRoutes.post(
+  "/create-superadmin",
+  verifyToken,
+  checkRole(["super_admin"]),
+  createSuperAdmin
+);
 
-// Get All Admin Accounts (role: "admin")
-superAdminRoutes.get("/admins", verifyToken, checkRole(["super_admin"]), getAllAdmins);
+// 2. Create Admin or Student
+superAdminRoutes.post(
+  "/create-account",
+  verifyToken,
+  checkRole(["super_admin"]),
+  createAccount
+);
 
-// Get a Specific Admin Account by Email
-superAdminRoutes.get("/admins/:email", verifyToken, checkRole(["super_admin"]), getAdminByEmail);
+// 3. Admin management
+superAdminRoutes.get(
+  "/admins",
+  verifyToken,
+  checkRole(["super_admin"]),
+  getAllAdmins
+);
+superAdminRoutes.get(
+  "/admins/:email",
+  verifyToken,
+  checkRole(["super_admin"]),
+  getAdminByEmail
+);
+superAdminRoutes.put(
+  "/admins/:email",
+  verifyToken,
+  checkRole(["super_admin"]),
+  updateAdminByEmail
+);
 
-// Update an Admin Account by Email
-superAdminRoutes.put("/admins/:email", verifyToken, checkRole(["super_admin"]), updateAdminByEmail);
+// 4. Student management
+superAdminRoutes.get(
+  "/users",
+  verifyToken,
+  checkRole(["super_admin"]),
+  getAllStudentsSuper
+);
+superAdminRoutes.get(
+  "/users/:email",
+  verifyToken,
+  checkRole(["super_admin"]),
+  getStudentByEmailSuper
+);
+superAdminRoutes.put(
+  "/users/:email",
+  verifyToken,
+  checkRole(["super_admin"]),
+  updateStudentByEmailSuper
+);
 
-// --- Update a Student Account by Email ---
-superAdminRoutes.put('/users/:email', verifyToken, checkRole(['super_admin']), async (req, res) => {
-  try {
-    const { email } = req.params;
-    const { name, username, email: newEmail, password } = req.body;
-    
-    const user = await User.findOne({ email, role: 'user' });
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    
-    if (name) user.name = name;
-    if (username) user.username = username;
-    if (newEmail) user.email = newEmail;
-    if (password) {
-      user.password = await bcrypt.hash(password, 10);
-    }
-    
-    await user.save();
-    res.json({ message: 'User account updated successfully.', data: user });
-  } catch (err) {
-    res.status(500).json({ message: 'Error updating user account', error: err.message });
-  }
-});
+// 5. Specialized student lookups
+superAdminRoutes.get(
+  "/users/year/:yearLevel",
+  verifyToken,
+  checkRole(["super_admin"]),
+  getStudentsByYearLevel
+);
 
-// --- Delete an Admin or Student Account by Email ---
-superAdminRoutes.delete('/:role/:email', verifyToken, checkRole(['super_admin']), async (req, res) => {
-  try {
-    let { role, email } = req.params;
-    
-    // Handle both singular and plural forms
-    if (role === 'admins') role = 'admin';
-    if (role === 'users') role = 'user';
-    
-    if (!['admin', 'user'].includes(role)) {
-      return res.status(400).json({ message: 'Invalid role specified' });
-    }
-    const user = await User.findOneAndDelete({ email, role });
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    res.json({ message: 'User account deleted successfully.' });
-  } catch (err) {
-    res.status(500).json({ message: 'Error deleting user account', error: err.message });
-  }
-});
+// 6. Leaderboard and progress endpoints
+superAdminRoutes.get(
+  "/leaderboard",
+  verifyToken,
+  checkRole(["super_admin"]),
+  getLeaderboardSuper
+);
+superAdminRoutes.get(
+  "/progress/:userId",
+  verifyToken,
+  checkRole(["super_admin"]),
+  getUserProgressSuper
+);
 
-// --- Create Super Admin ---
-superAdminRoutes.post('/create-superadmin', verifyToken, checkRole(['super_admin']), async (req, res) => {
-  try {
-    const { name, username, email, password } = req.body;
-    const role = 'super_admin';
-    const existingSuperAdmin = await User.findOne({ role: 'super_admin' });
-    if (existingSuperAdmin) {
-      return res.status(403).json({ message: 'Super Admin account already exists' });
-    }
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const superAdmin = new User({
-      name,
-      username,
-      email,
-      password: hashedPassword,
-      role: "super_admin"
-    });
-    await superAdmin.save();
-    res.status(201).json({ message: 'Super Admin created successfully.', data: superAdmin });
-  } catch (err) {
-    res.status(500).json({ message: 'Error creating Super Admin', error: err.message });
-  }
-});
+// 7. Delete any Admin or Student
+//    e.g. DELETE /super-admin/users/:email or /super-admin/admins/:email
+superAdminRoutes.delete(
+  "/:role/:email",
+  verifyToken,
+  checkRole(["super_admin"]),
+  deleteAccountByEmail
+);
 
 export default superAdminRoutes;

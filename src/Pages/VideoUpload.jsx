@@ -58,11 +58,15 @@ const VideoUpload = () => {
     formData.append("termNumber", termNumber);
 
     try {
-      const response = await axios.post("http://localhost:5000/api/videos/upload", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await axios.post(
+        "http://localhost:5000/api/videos/upload",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       if (response.data && response.data.videoUrl) {
         setUploadedVideoUrl(response.data.videoUrl);
@@ -96,15 +100,17 @@ const VideoUpload = () => {
   return (
     <div>
       <h2 style={{ color: "white" }}>Upload Your Video</h2>
+
       <div>
         <input
           type="file"
           accept="video/*"
           onChange={handleFileChange}
-          style={{ ...inputStyle, width: "auto", color: "white" }}
+          style={{ ...inputStyle, width: "auto" }}
           required
         />
       </div>
+
       <div>
         <input
           type="text"
@@ -115,6 +121,7 @@ const VideoUpload = () => {
           required
         />
       </div>
+
       <div>
         <input
           type="text"
@@ -125,14 +132,21 @@ const VideoUpload = () => {
           required
         />
       </div>
+
       <div>
         <label style={{ color: "white" }}>Level:&nbsp;</label>
-        <select value={level} onChange={handleLevelChange} style={inputStyle} required>
+        <select
+          value={level}
+          onChange={handleLevelChange}
+          style={inputStyle}
+          required
+        >
           <option value="basic">Basic</option>
           <option value="intermediate">Intermediate</option>
           <option value="advanced">Advanced</option>
         </select>
       </div>
+
       <div>
         <label style={{ color: "white" }}>Lesson Number:&nbsp;</label>
         <input
@@ -145,6 +159,7 @@ const VideoUpload = () => {
           required
         />
       </div>
+
       <div>
         <label style={{ color: "white" }}>Term Number:&nbsp;</label>
         <input
@@ -157,6 +172,12 @@ const VideoUpload = () => {
           required
         />
       </div>
+
+      {/* Visual feedback for the target Cloudinary folder */}
+      <div style={{ color: "lightgray", marginTop: "10px" }}>
+        Uploading to: <strong>videos/{level}/lesson{lessonNumber}</strong>
+      </div>
+
       <div>
         <button
           onClick={uploadVideo}
@@ -174,6 +195,7 @@ const VideoUpload = () => {
           Upload Video
         </button>
       </div>
+
       {uploadedVideoUrl && (
         <div>
           <p style={{ color: "white" }}>Uploaded Video:</p>
