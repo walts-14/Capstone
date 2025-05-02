@@ -29,11 +29,12 @@ const SuperAdmin = () => {
   const [showSelectionModal, setShowSelectionModal] = useState(false);
   const [formMode, setFormMode] = useState("create");
   const [formType, setFormType] = useState("");
-  const [selectedGrade, setSelectedGrade] = useState("grade7");
+  const [selectedGrade, setSelectedGrade] = useState("Grade 7");
   const [students, setStudents] = useState([]);
   const [showProgressModal, setShowProgressModal] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [progressData, setProgressData] = useState(null);
 
   // Set token on axios default headers
   useEffect(() => {
@@ -79,15 +80,13 @@ const SuperAdmin = () => {
 
   const fetchStudentsByGrade = async (grade) => {
     try {
-      const response = await axios.get(
-        `http://localhost:5000/api/superadmin/students`,
-        {
-          params: { grade },
-        }
+      // new: year-level endpoint
+      const { data } = await axios.get(
+        `/api/superadmin/users/year/${encodeURIComponent(grade)}`
       );
-      setStudents(response.data.data);
-    } catch (error) {
-      console.error("Error fetching students by grade:", error);
+      setUsers(data.data);
+    } catch (err) {
+      console.error("Error fetching students by grade:", err);
     }
   };
 
@@ -219,8 +218,8 @@ const SuperAdmin = () => {
         name: dataToEdit.name,
         username: dataToEdit.username,
         email: dataToEdit.email,
-        password: dataToEdit.password,
-        confirmPassword: dataToEdit.password,
+        password: "",
+        confirmPassword: "",
       });
       setFormType(role === "admin" ? "Teacher" : "Student");
       setFormMode("edit");
@@ -241,14 +240,22 @@ const SuperAdmin = () => {
     setShowSelectionModal(true);
   };
 
-  const handleShowProgress = (user) => {
-    setSelectedUser(user); // Set the selected user
-    setShowProgressModal(true); // Show the progress modal
+  const handleShowProgress = async (user) => {
+    try {
+      const { data } = await axios.get(`/api/superadmin/progress/${user._id}`);
+      setProgressData(data.data);
+      setSelectedUser(user);
+      setShowProgressModal(true);
+    } catch (err) {
+      console.error("Could not load progress:", err);
+      toast.error("Could not load progress");
+    }
   };
 
   const handleCloseProgressModal = () => {
     setShowProgressModal(false);
     setSelectedUser(null);
+    setProgressData(null);
   };
 
   const logout = () => {
@@ -261,7 +268,6 @@ const SuperAdmin = () => {
 
   return (
     <div className="superadmin-body">
-      {/*ito papalitan*/}
       {/* Dashboard Title */}
       <div className="Dashboard">
         <div className="AdminDashboard">
@@ -277,7 +283,18 @@ const SuperAdmin = () => {
           {/* Dashboard Button */}
           <div
             className={`sidebar-item ${!showLeaderboard ? "active" : ""}`}
-            onClick={() => setShowLeaderboard(false)} // Show the dashboard
+            onClick={async () => {
+              setShowLeaderboard(false); // Show the dashboard
+              setSelectedGrade(""); // Reset grade filter
+              try {
+                const response = await axios.get(
+                  "http://localhost:5000/api/superadmin/users"
+                );
+                setUsers(response.data.data);
+              } catch (error) {
+                console.error("Error fetching all users:", error);
+              }
+            }}
           >
             <img src={DashboardIcon} alt="Dashboard" className="sidebar-icon" />
             <span>Dashboard</span>
@@ -307,38 +324,38 @@ const SuperAdmin = () => {
         <>
           {/* Dashboard Content */}
           <div className="levels">
-            <div
-              className={`level-item grade7 ${
-                selectedGrade === "grade7" ? "active" : ""
-              }`}
-              onClick={() => handleGradeSelection("grade7")}
-            >
-              GRADE 7
-            </div>
-            <div
-              className={`level-item grade8 ${
-                selectedGrade === "grade8" ? "active" : ""
-              }`}
-              onClick={() => handleGradeSelection("grade8")}
-            >
-              GRADE 8
-            </div>
-            <div
-              className={`level-item grade9 ${
-                selectedGrade === "grade9" ? "active" : ""
-              }`}
-              onClick={() => handleGradeSelection("grade9")}
-            >
-              GRADE 9
-            </div>
-            <div
-              className={`level-item grade10 ${
-                selectedGrade === "grade10" ? "active" : ""
-              }`}
-              onClick={() => handleGradeSelection("grade10")}
-            >
-              GRADE 10
-            </div>
+          <div
+            className={`level-item grade7 ${
+              selectedGrade === "Grade 7" ? "active" : ""
+            }`}
+            onClick={() => handleGradeSelection("Grade 7")}
+          >
+            GRADE 7
+          </div>
+          <div
+            className={`level-item grade8 ${
+              selectedGrade === "Grade 8" ? "active" : ""
+            }`}
+            onClick={() => handleGradeSelection("Grade 8")}
+          >
+            GRADE 8
+          </div>
+          <div
+            className={`level-item grade9 ${
+              selectedGrade === "Grade 9" ? "active" : ""
+            }`}
+            onClick={() => handleGradeSelection("Grade 9")}
+          >
+            GRADE 9
+          </div>
+          <div
+            className={`level-item grade10 ${
+              selectedGrade === "Grade 10" ? "active" : ""
+            }`}
+            onClick={() => handleGradeSelection("Grade 10")}
+          >
+            GRADE 10
+          </div>
           </div>
 
           <div className="content">
@@ -441,7 +458,7 @@ const SuperAdmin = () => {
       )}
 
       {/* Progress Modal */}
-      {showProgressModal && selectedUser && (
+      {showProgressModal && selectedUser && progressData && (
         <div className="progress-modal">
           <button
             className="btn btn-close"
@@ -449,7 +466,7 @@ const SuperAdmin = () => {
           ></button>
           <div className="progress-modal-content">
             <h3>{selectedUser.name}'s Progress</h3>
-            {/* Add progress details here */}
+            <ProgressTracker progressData={progressData} />
           </div>
         </div>
       )}
@@ -526,6 +543,21 @@ const SuperAdmin = () => {
               />
             </div>
             <div className="mb-3">
+              <select
+                name="yearLevel"
+                value={formData.yearLevel}
+                onChange={handleInputChange}
+                className="form-control"
+                required
+              >
+                <option value="">-- Select Year Level --</option>
+                <option value="Grade 7">Grade 7</option>
+                <option value="Grade 8">Grade 8</option>
+                <option value="Grade 9">Grade 9</option>
+                <option value="Grade 10">Grade 10</option>
+              </select>
+            </div>
+            <div className="mb-3">
               <input
                 type="email"
                 name="email"
@@ -533,16 +565,6 @@ const SuperAdmin = () => {
                 value={formData.email}
                 onChange={handleInputChange}
                 className="form-control"
-                style={{
-                  width: "95%",
-                  backgroundColor: "#3F3653",
-                  color: "#FFFFFF",
-                  fontSize: "1rem",
-                  padding: "10px",
-                  border: "1px solidrgb(255, 255, 255)",
-                  borderRadius: "10px",
-                  marginBottom: "10px",
-                }}
                 required
               />
             </div>
@@ -554,17 +576,7 @@ const SuperAdmin = () => {
                 value={formData.password}
                 onChange={handleInputChange}
                 className="form-control"
-                style={{
-                  width: "95%",
-                  backgroundColor: "#3F3653",
-                  color: "#FFFFFF",
-                  fontSize: "1rem",
-                  padding: "10px",
-                  border: "1px solidrgb(255, 255, 255)",
-                  borderRadius: "10px",
-                  marginBottom: "10px",
-                }}
-                required
+                required={!formData.id}
               />
             </div>
             <div className="mb-3">
@@ -575,17 +587,7 @@ const SuperAdmin = () => {
                 value={formData.confirmPassword}
                 onChange={handleInputChange}
                 className="form-control"
-                style={{
-                  width: "95%",
-                  backgroundColor: "#3F3653",
-                  color: "#FFFFFF",
-                  fontSize: "1rem",
-                  padding: "10px",
-                  border: "1px solidrgb(255, 255, 255)",
-                  borderRadius: "10px",
-                  marginBottom: "10px",
-                }}
-                required
+                required={!formData.id}
               />
             </div>
             <button
@@ -606,7 +608,7 @@ const SuperAdmin = () => {
                 marginBottom: "10px",
               }}
             >
-              Create
+              {formMode === "edit" ? "Save Changes" : "Create"}
             </button>
 
             <div className="d-flex justify-content-center">
