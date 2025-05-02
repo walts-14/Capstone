@@ -157,7 +157,7 @@
 /* Close Button */
 .btn-close {
   position: absolute;
-  top: -20px; /* Position above the modal */
+  /* Position above the modal */
   left: 59%; /* Center horizontally */
   transform: translateX(-50%); /* Adjust for centering */
   background-color: #e9170f; /* Red background for the close button */

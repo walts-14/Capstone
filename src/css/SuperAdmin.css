@@ -64,10 +64,8 @@
 }
 
 .divtabs {
-  display: flex;
-  justify-content: center;
-  margin-top: -750px;
-  margin-left: 300px; /* Adjust margin for proper alignment */
+  margin: 1rem 0 0 18.75rem;
+  /* Adjust margin for proper alignment */
   cursor: pointer;
   z-index: 10;
 }
@@ -80,6 +78,7 @@
   justify-content: space-between; /* Space between tabs */
   display: flex;
   justify-content: center; /* Center the tabs */
+  top: 4.3rem;
   border-radius: 10px; /* Rounded corners for the container */
 }
 

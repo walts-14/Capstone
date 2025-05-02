@@ -30,7 +30,6 @@ const SuperAdmin = () => {
   const [formMode, setFormMode] = useState("create");
   const [formType, setFormType] = useState("");
   const [selectedGrade, setSelectedGrade] = useState("Grade 7");
-  const [students, setStudents] = useState([]);
   const [showProgressModal, setShowProgressModal] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -263,6 +262,7 @@ const SuperAdmin = () => {
     navigate("/login");
   };
 
+  // Get the correct data to display based on the active tab
   const dataToDisplay =
     activeTab === "Users" ? users : activeTab === "Teachers" ? teachers : [];
 
@@ -324,38 +324,56 @@ const SuperAdmin = () => {
         <>
           {/* Dashboard Content */}
           <div className="levels">
-          <div
-            className={`level-item grade7 ${
-              selectedGrade === "Grade 7" ? "active" : ""
-            }`}
-            onClick={() => handleGradeSelection("Grade 7")}
-          >
-            GRADE 7
+            <div
+              className={`level-item grade7 ${
+                selectedGrade === "Grade 7" ? "active" : ""
+              }`}
+              onClick={() => handleGradeSelection("Grade 7")}
+            >
+              GRADE 7
+            </div>
+            <div
+              className={`level-item grade8 ${
+                selectedGrade === "Grade 8" ? "active" : ""
+              }`}
+              onClick={() => handleGradeSelection("Grade 8")}
+            >
+              GRADE 8
+            </div>
+            <div
+              className={`level-item grade9 ${
+                selectedGrade === "Grade 9" ? "active" : ""
+              }`}
+              onClick={() => handleGradeSelection("Grade 9")}
+            >
+              GRADE 9
+            </div>
+            <div
+              className={`level-item grade10 ${
+                selectedGrade === "Grade 10" ? "active" : ""
+              }`}
+              onClick={() => handleGradeSelection("Grade 10")}
+            >
+              GRADE 10
+            </div>
           </div>
-          <div
-            className={`level-item grade8 ${
-              selectedGrade === "Grade 8" ? "active" : ""
-            }`}
-            onClick={() => handleGradeSelection("Grade 8")}
-          >
-            GRADE 8
-          </div>
-          <div
-            className={`level-item grade9 ${
-              selectedGrade === "Grade 9" ? "active" : ""
-            }`}
-            onClick={() => handleGradeSelection("Grade 9")}
-          >
-            GRADE 9
-          </div>
-          <div
-            className={`level-item grade10 ${
-              selectedGrade === "Grade 10" ? "active" : ""
-            }`}
-            onClick={() => handleGradeSelection("Grade 10")}
-          >
-            GRADE 10
-          </div>
+
+          {/* Tabs - Moved outside the conditional rendering */}
+          <div className="divtabs d-flex justify-content-center">
+            <div className="tabs position-absolute">
+              <button
+                className={`tabss ${activeTab === "Users" ? "active" : ""}`}
+                onClick={() => setActiveTab("Users")}
+              >
+                Users
+              </button>
+              <button
+                className={`tabss ${activeTab === "Teachers" ? "active" : ""}`}
+                onClick={() => setActiveTab("Teachers")}
+              >
+                Teacher
+              </button>
+            </div>
           </div>
 
           <div className="content">
@@ -436,24 +454,6 @@ const SuperAdmin = () => {
               <FaUserPlus /> Create
             </button>
           </div>
-
-          {/* Tabs */}
-          <div className="divtabs">
-            <div className="tabs">
-              <button
-                className={`tabss ${activeTab === "Users" ? "active" : ""}`}
-                onClick={() => setActiveTab("Users")} // Set active tab to "Users"
-              >
-                Users
-              </button>
-              <button
-                className={`tabss ${activeTab === "Teachers" ? "active" : ""}`} // Match "Teachers"
-                onClick={() => setActiveTab("Teachers")} // Set active tab to "Teachers"
-              >
-                Teacher
-              </button>
-            </div>
-          </div>
         </>
       )}
 
@@ -461,10 +461,31 @@ const SuperAdmin = () => {
       {showProgressModal && selectedUser && progressData && (
         <div className="progress-modal">
           <button
-            className="btn btn-close"
+            className="btn-close"
             onClick={handleCloseProgressModal}
+            style={{
+              marginTop: "11.5rem",
+              marginLeft: "7rem",
+              backgroundColor: "#e9170f",
+            }}
           ></button>
-          <div className="progress-modal-content">
+          <div
+            className="progress-modal-content"
+            style={{
+              top: "50%",
+              left: "50%",
+              transform: "translate(-155%, -85%)",
+              width: "60vh",
+              height: "60vh",
+              borderRadius: "20px",
+              display: "flex",
+              flexDirection: "column",
+              zIndex: 999,
+              backgroundColor: "#1a1230",
+              overflowY: "auto",
+              overflowX: "hidden",
+            }}
+          >
             <h3>{selectedUser.name}'s Progress</h3>
             <ProgressTracker progressData={progressData} />
           </div>
