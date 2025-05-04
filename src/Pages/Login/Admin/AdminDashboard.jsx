@@ -302,18 +302,14 @@ const DashboardAdmin = () => {
                             alt="Edit"
                             className="img-action"
                             style={{ cursor: "pointer" }}
-                            onClick={() =>
-                              handleEditUser(entry.email, entry.role)
-                            }
+                            onClick={() => handleEditUser(u)}
                           />
                           <img
                             src={RemoveIcon}
                             alt="Remove"
                             className="img-action"
                             style={{ marginRight: "30px", cursor: "pointer" }}
-                            onClick={() =>
-                              handleDeleteUser(entry.email, entry.role)
-                            }
+                            onClick={() => handleDeleteUser(u.email)}
                           />
                         </div>
                       </td>
