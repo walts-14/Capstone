@@ -186,7 +186,7 @@
 }
 
 /* Ensure buttons are on top */
-.btn-progress,
+.btn,
 .img-action {
   position: relative;
   z-index: 10;

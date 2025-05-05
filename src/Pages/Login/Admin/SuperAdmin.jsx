@@ -5,7 +5,9 @@ import EditIcon from "../../../assets/Edit.png";
 import RemoveIcon from "../../../assets/Remove.png";
 import DashboardIcon from "../../../assets/dashboardlogo.png";
 import LeaderboardIcon from "../../../assets/leaderboardicon.png";
+import "../../../css/Admin.css";
 import "../../../css/SuperAdmin.css";
+
 import axios from "axios";
 import toast from "react-hot-toast";
 import ProgressTracker from "../../Dashboard/ProgressTracker";
@@ -30,11 +32,16 @@ const SuperAdmin = () => {
   const [formMode, setFormMode] = useState("create");
   const [formType, setFormType] = useState("");
   const [selectedGrade, setSelectedGrade] = useState("Grade 7");
-  const [showProgressModal, setShowProgressModal] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [progressData, setProgressData] = useState(null);
-
+  const [showProgressTracker, setShowProgressTracker] = useState(false);
+  const handleClick = () => {
+    console.log("Progress button clicked");
+    setShowProgressTracker(true);
+  };
+  const handleClose = () => {
+    console.log("Close button clicked");
+    setShowProgressTracker(false);
+  };
   // Set token on axios default headers
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -376,121 +383,148 @@ const SuperAdmin = () => {
             </div>
           </div>
 
-          <div className="content">
-            <table className="data-table me-5">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Username</th>
-                  <th>Email</th>
-                  <th>Password</th>
-                  <th>Year Level</th>
-                  <th> </th>
-                </tr>
-              </thead>
-              <tbody>
-                {dataToDisplay.map((entry) => (
-                  <tr key={entry.email}>
-                    <td>{entry.name}</td>
-                    <td>{entry.username}</td>
-                    <td>{entry.email}</td>
-                    <td>{entry.password}</td>
-                    <td>{entry.yearLevel || "N/A"}</td>
-                    <td>
-                      {/* Progress, Edit, and Delete Buttons */}
-                      <button
-                        className="btn btn-progress text-white fs-5 px-3 py-2 rounded-4"
-                        style={{
-                          backgroundColor: "#2E86C1",
-                          color: "#FFFFFF",
-                          borderRadius: "20px",
-                        }}
-                        onClick={() => handleShowProgress(entry)} // Pass the selected user
-                      >
-                        Progress
-                      </button>
-                      <img
-                        src={EditIcon}
-                        alt="Edit"
-                        className="img-action"
-                        style={{ cursor: "pointer" }}
-                        onClick={() =>
-                          handleEditUser(entry.email, entry.role || "user")
-                        } // Fallback to "user"
-                      />
-                      <img
-                        src={RemoveIcon}
-                        alt="Remove"
-                        className="img-action"
-                        style={{ cursor: "pointer" }}
-                        onClick={() =>
-                          handleDeleteUser(entry.email, entry.role || "user")
-                        } // Fallback to "user"
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
 
-          {/* Create Account Button */}
-          <div className="CreateAccount">
-            <button
-              className="btn text-light px-1 py-1"
-              style={{
-                backgroundColor: "#4A2574",
-                color: "#FFFFFF",
-                borderRadius: "10px",
-                fontWeight: "bold",
-                fontSize: "1.5rem",
-                padding: "30px",
-                display: "flex",
-                alignItems: "center",
-                textAlign: "center",
-              }}
-              onClick={handleCreateUser}
-            >
-              <FaUserPlus /> Create
-            </button>
-          </div>
         </>
       )}
 
-      {/* Progress Modal */}
-      {showProgressModal && selectedUser && progressData && (
-        <div className="progress-modal">
-          <button
-            className="btn-close"
-            onClick={handleCloseProgressModal}
-            style={{
-              marginTop: "11.5rem",
-              marginLeft: "7rem",
-              backgroundColor: "#e9170f",
-            }}
-          ></button>
-          <div
-            className="progress-modal-content"
-            style={{
-              top: "50%",
-              left: "50%",
-              transform: "translate(-155%, -85%)",
-              width: "60vh",
-              height: "60vh",
-              borderRadius: "20px",
-              display: "flex",
-              flexDirection: "column",
-              zIndex: 999,
-              backgroundColor: "#1a1230",
-              overflowY: "auto",
-              overflowX: "hidden",
-            }}
-          >
-            <h3>{selectedUser.name}'s Progress</h3>
-            <ProgressTracker progressData={progressData} />
+         <div className="table-container">
+            <div className="Create">
+              <button
+                className="btn text-light px-1 py-1"
+                style={{
+                  backgroundColor: "#4A2574",
+                  color: "#FFF",
+                  borderRadius: 10,
+                  fontWeight: "bold",
+                  fontSize: "1.5rem",
+                  padding: "30px",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+                onClick={() => {
+                  setFormData({
+                    id: "",
+                    name: "",
+                    username: "",
+                    email: "",
+                    password: "",
+                    confirmPassword: "",
+                    yearLevel: "",
+                  });
+                  setShowForm(true);
+                }}
+              >
+                <FaUserPlus /> Create
+              </button>
+            </div>
+
+            <div className="contentdiv">
+              <table className="dashboard-table text-light">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Password</th>
+                    <th>Year Level</th>
+                    <th> </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users.map((u) => (
+                    <tr key={u.email}>
+                      <td>{u.name || "N/A"}</td>
+                      <td>{u.username}</td>
+                      <td>{u.email}</td>
+                      <td>{u.password}</td>
+                      <td>{u.yearLevel || "N/A"}</td>
+                      <td>
+                        <div className="action-admin">
+                          {/* Always show the Progress button */}
+                          <button
+                            onClick={handleClick}
+                            className="btn text-white fs-5 px-3 py-2 rounded-4"
+                            style={{
+                              backgroundColor: "#2e86c1",
+                              border: "none",
+                              
+                            }}
+                          >
+                            Progress
+                          </button>
+
+                          {/* Conditionally render the modal only */}
+                          {showProgressTracker && (
+                            <div
+                              className="progress-modal-container "
+                              style={{
+                                top: "50%",
+                                transform: "translate(-40%, -41%)",
+                                width: "63vh",
+                                height: "122vh",
+                                borderRadius: "30px",
+                                zIndex: 999,
+                                backgroundColor: "#1a1230",
+                                position: "fixed",
+                                display: "flex",
+                                flexDirection: "column",
+                                alignContent: "center",
+                                justifyContent: "center",
+                                
+                              }}
+                            >
+                              {/* Close button */}
+                              <div
+                                style={{
+                                  position: "fixed",
+                                  top: "15px",
+                                  right: "92%",
+                                  zIndex: 2,
+                                }}
+                              >
+                                <button
+                                  type="button"
+                                  className="btn-close"
+                                  onClick={handleClose}
+                                  aria-label="Close"
+                                  style={{
+                                    backgroundColor: "red",
+                                    borderRadius: "20%",
+                                    padding: "4px",
+                                  }}
+                                ></button>
+                              </div>
+
+                              {/* Scrollable content area including all space */}
+                             
+  
+                                <ProgressTracker />
+                         
+                              
+                            </div>
+                          )}
+                          <img
+                            src={EditIcon}
+                            alt="Edit"
+                            className="img-action"
+                            style={{ cursor: "pointer" }}
+                            onClick={() => handleEditUser(u)}
+                          />
+                          <img
+                            src={RemoveIcon}
+                            alt="Remove"
+                            className="img-action"
+                            style={{ marginRight: "30px", cursor: "pointer" }}
+                            onClick={() => handleDeleteUser(u.email)}
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
-      )}
 
       {showForm && (
         <div
