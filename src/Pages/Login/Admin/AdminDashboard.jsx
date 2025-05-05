@@ -6,7 +6,7 @@ import LeaderboardIcon from "../../../assets/leaderboardicon.png";
 import EditIcon from "../../../assets/Edit.png";
 import RemoveIcon from "../../../assets/Remove.png";
 import "../../../css/Admin.css";
-import "../../../css/ProgressModal.css"; // your modal CSS
+import "../../../css/ProgressModal.css";
 import axios from "axios";
 import toast from "react-hot-toast";
 import LbComponent from "../../Leaderboard/LbComponent";
@@ -246,28 +246,29 @@ const DashboardAdmin = () => {
                           {/* Conditionally render the modal only */}
                           {showProgressTracker && (
                             <div
-                              className="progress-modal-container position-absolute"
+                              className="progress-modal-container "
                               style={{
                                 top: "50%",
-                                left: "50%",
-                                transform: "translate(-50%, -50%)",
-                                width: "60vh",
-                                height: "60vh",
-                                borderRadius: "20px",
-                                display: "flex",
-                                flexDirection: "column",
+                                transform: "translate(-40%, -41%)",
+                                width: "63vh",
+                                height: "122vh",
+                                borderRadius: "30px",
                                 zIndex: 999,
                                 backgroundColor: "#1a1230",
-                                overflowY: "auto",
-                                overflowX: "hidden",
+                                position: "fixed",
+                                display: "flex",
+                                flexDirection: "column",
+                                alignContent: "center",
+                                justifyContent: "center",
+                                
                               }}
                             >
                               {/* Close button */}
                               <div
                                 style={{
-                                  position: "absolute",
-                                  top: "12px",
-                                  right: "40px",
+                                  position: "fixed",
+                                  top: "15px",
+                                  right: "92%",
                                   zIndex: 2,
                                 }}
                               >
@@ -285,16 +286,11 @@ const DashboardAdmin = () => {
                               </div>
 
                               {/* Scrollable content area including all space */}
-                              <div
-                                style={{
-                                  flex: 1,
-                                  overflowY: "auto",
-                                  padding: "2rem 1rem 1rem 1rem",
-                                  marginTop: "2.5rem", // creates space below close button
-                                }}
-                              >
+                             
+  
                                 <ProgressTracker />
-                              </div>
+                         
+                              
                             </div>
                           )}
                           <img

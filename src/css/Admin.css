@@ -449,3 +449,13 @@
   width: 81.5vw;
   padding-left: 5rem;
 }
+
+.progress-modal-container .lessonTracker {
+  width: 100%;              /* fill the wrapper’s width */
+  max-width: 55vh;          /* constrain so it doesn’t get too wide */
+  height: 60%;             /* fill the wrapper’s height */
+}
+
+
+
+
