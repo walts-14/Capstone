@@ -1,4 +1,3 @@
-// src/pages/SuperAdmin.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { FaUserPlus } from "react-icons/fa";
@@ -35,19 +34,20 @@ const SuperAdmin = () => {
   };
   const [showForm, setShowForm] = useState(false);
   const [formMode, setFormMode] = useState("create");
-  
+
   const [formData, setFormData] = useState({
     name: "",
     username: "",
     email: "",
     password: "",
     confirmPassword: "",
-    yearLevel: ""
+    yearLevel: "",
   });
 
   // Fetch on mount
   useEffect(() => {
-    if (token) axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    if (token)
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     fetchUsers();
     fetchTeachers();
   }, []);
@@ -97,20 +97,27 @@ const SuperAdmin = () => {
         email: user.email,
         password: "",
         confirmPassword: "",
-        yearLevel: user.yearLevel || ""
+        yearLevel: user.yearLevel || "",
       });
     } else {
-      setFormData({ name: "", username: "", email: "", password: "", confirmPassword: "", yearLevel: selectedGrade || "" });
+      setFormData({
+        name: "",
+        username: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        yearLevel: selectedGrade || "",
+      });
     }
     setShowForm(true);
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFormSubmit = async e => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
       return toast.error("Passwords do not match!");
@@ -119,23 +126,26 @@ const SuperAdmin = () => {
       return toast.error("All fields are required!");
     }
     try {
-      const urlBase = formMode === "edit"
-        ? (activeTab === "Users"
+      const urlBase =
+        formMode === "edit"
+          ? activeTab === "Users"
             ? `/api/superadmin/users/${encodeURIComponent(formData.email)}`
-            : `/api/superadmin/admins/${encodeURIComponent(formData.email)}`)
-        : ("/api/superadmin/create-account");
+            : `/api/superadmin/admins/${encodeURIComponent(formData.email)}`
+          : "/api/superadmin/create-account";
       const payload = {
         name: formData.name,
         username: formData.username,
         email: formData.email,
         password: formData.password,
         yearLevel: formData.yearLevel,
-        role: activeTab === "Teachers" ? "admin" : "user"
+        role: activeTab === "Teachers" ? "admin" : "user",
       };
       if (formMode === "edit") delete payload.email;
       const method = formMode === "edit" ? axios.put : axios.post;
       await method(urlBase, payload, { baseURL: "http://localhost:5000" });
-      toast.success(`\${formMode === "edit" ? "Updated" : "Created"} \${activeTab}`);
+      toast.success(
+        `${formMode === "edit" ? "Updated" : "Created"} ${activeTab}`
+      );
       fetchUsers(selectedGrade);
       fetchTeachers(selectedGrade);
       setShowForm(false);
@@ -145,12 +155,13 @@ const SuperAdmin = () => {
     }
   };
 
-  const handleDelete = async email => {
+  const handleDelete = async (email) => {
     if (!window.confirm("Delete this account?")) return;
     try {
-      const url = activeTab === "Users"
-        ? `/api/superadmin/users/${encodeURIComponent(email)}`
-        : `/api/superadmin/admins/${encodeURIComponent(email)}`;
+      const url =
+        activeTab === "Users"
+          ? `/api/superadmin/users/${encodeURIComponent(email)}`
+          : `/api/superadmin/admins/${encodeURIComponent(email)}`;
       await axios.delete(url, { baseURL: "http://localhost:5000" });
       toast.success("Deleted successfully");
       fetchUsers(selectedGrade);
@@ -176,8 +187,19 @@ const SuperAdmin = () => {
           setSelectedGrade={setSelectedGrade}
           fetchStudents={activeTab === "Users" ? fetchUsers : fetchTeachers}
           setShowLeaderboard={setShowLeaderboard}
+          showLeaderboard={showLeaderboard}
         />
       </div>
+
+      {/* Logout button positioned absolutely - only show when leaderboard is not visible */}
+      {!showLeaderboard && (
+        <div className="logout-container">
+          <button className="btn-logout" onClick={logout}>
+            Logout
+          </button>
+        </div>
+      )}
+
       {showLeaderboard ? (
         <div className="wrapper-lb">
           <LbComponent />
@@ -185,49 +207,88 @@ const SuperAdmin = () => {
       ) : (
         <>
           <div className="levels">
-            {["Grade 7","Grade 8","Grade 9","Grade 10"].map(g => (
+            {["Grade 7", "Grade 8", "Grade 9", "Grade 10"].map((g) => (
               <div
                 key={g}
-                className={`level-item ${g.replace(' ','').toLowerCase()} ${selectedGrade===g?'active':''}`}
-                onClick={()=>handleGradeSelection(g)}
-              >{g.toUpperCase()}</div>
+                className={`level-item ${g.replace(" ", "").toLowerCase()} ${
+                  selectedGrade === g ? "active" : ""
+                }`}
+                onClick={() => handleGradeSelection(g)}
+              >
+                {g.toUpperCase()}
+              </div>
             ))}
           </div>
           <div className="divtabs d-flex justify-content-center">
             <div className="tabs position-absolute">
               <button
-                className={`tabss ${activeTab==='Users'?'active':''}`}
-                onClick={()=>{setActiveTab('Users'); fetchUsers(selectedGrade);}}
-              >Users</button>
+                className={`tabss ${activeTab === "Users" ? "active" : ""}`}
+                onClick={() => {
+                  setActiveTab("Users");
+                  fetchUsers(selectedGrade);
+                }}
+              >
+                Users
+              </button>
               <button
-                className={`tabss ${activeTab==='Teachers'?'active':''}`}
-                onClick={()=>{setActiveTab('Teachers'); fetchTeachers(selectedGrade);}}
-              >Teacher</button>
+                className={`tabss ${activeTab === "Teachers" ? "active" : ""}`}
+                onClick={() => {
+                  setActiveTab("Teachers");
+                  fetchTeachers(selectedGrade);
+                }}
+              >
+                Teacher
+              </button>
             </div>
           </div>
           <div className="table-container">
             <div className="Create">
               <button
                 className="btn text-light px-1 py-1"
-                style={{backgroundColor:'#4A2574',borderRadius:10,fontWeight:'bold',fontSize:'1.5rem',padding:'30px',display:'flex',alignItems:'center'}}
-                onClick={()=>openForm('create')}
+                style={{
+                  backgroundColor: "#4A2574",
+                  borderRadius: 10,
+                  fontWeight: "bold",
+                  fontSize: "1.5rem",
+                  padding: "30px",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+                onClick={() => openForm("create")}
               >
-                <FaUserPlus/> Create
+                <FaUserPlus /> Create
               </button>
             </div>
             <div className="contentdiv">
               <table className="dashboard-table text-light">
-                <thead><tr><th>Name</th><th>Username</th><th>Email</th><th>Year Level</th><th></th></tr></thead>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Year Level</th>
+                    <th></th>
+                  </tr>
+                </thead>
                 <tbody>
-                  {dataToDisplay.map(u=>(
+                  {dataToDisplay.map((u) => (
                     <tr key={u.email}>
-                      <td>{u.name||'N/A'}</td>
+                      <td>{u.name || "N/A"}</td>
                       <td>{u.username}</td>
                       <td>{u.email}</td>
-                      <td>{u.yearLevel||'N/A'}</td>
+                      <td>{u.yearLevel || "N/A"}</td>
                       <td>
                         <div className="action-admin">
-                          <button onClick={openProgress} className="btn text-white fs-5 px-3 py-2 rounded-4" style={{backgroundColor:'#2e86c1',border:'none'}}>Progress</button>
+                          <button
+                            onClick={openProgress}
+                            className="btn text-white fs-5 px-3 py-2 rounded-4"
+                            style={{
+                              backgroundColor: "#2e86c1",
+                              border: "none",
+                            }}
+                          >
+                            Progress
+                          </button>
                           {showProgressTracker && (
                             <div
                               className="progress-modal-container "
@@ -244,7 +305,7 @@ const SuperAdmin = () => {
                                 flexDirection: "column",
                                 alignContent: "center",
                                 justifyContent: "center",
-                                
+                                right: "20%",
                               }}
                             >
                               {/* Close button */}
@@ -270,41 +331,121 @@ const SuperAdmin = () => {
                               </div>
 
                               {/* Scrollable content area including all space */}
-                              
 
-                                <ProgressTracker />
-                          
-                              
+                              <ProgressTracker />
                             </div>
-                            )}
-                          <img src={EditIcon} alt="Edit" className="img-action" onClick={()=>openForm('edit',u)} style={{cursor:'pointer'}}/>
-                          <img src={RemoveIcon} alt="Remove" className="img-action" onClick={()=>handleDelete(u.email)} style={{cursor:'pointer',marginRight:'30px'}}/>
+                          )}
+                          <img
+                            src={EditIcon}
+                            alt="Edit"
+                            className="img-action"
+                            onClick={() => openForm("edit", u)}
+                            style={{ cursor: "pointer" }}
+                          />
+                          <img
+                            src={RemoveIcon}
+                            alt="Remove"
+                            className="img-action"
+                            onClick={() => handleDelete(u.email)}
+                            style={{ cursor: "pointer", marginRight: "30px" }}
+                          />
                         </div>
-                        
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-            <button className="btn-logout" onClick={logout}>Logout</button>
             {showForm && (
               <div className="popup-form">
                 <div className="popup-content">
-                  <h3>{formMode==='edit'?'Edit':'Add'} {activeTab.slice(0,-1)}</h3>
+                  <h3>
+                    {formMode === "edit" ? "Edit" : "Add"}{" "}
+                    {activeTab.slice(0, -1)}
+                  </h3>
                   <form onSubmit={handleFormSubmit}>
-                    <input name="name" value={formData.name} onChange={handleInputChange} placeholder="Name" required/>
-                    <input name="username" value={formData.username} onChange={handleInputChange} placeholder="Username" required/>
-                    <select name="yearLevel" value={formData.yearLevel} onChange={handleInputChange} required>
-                      <option value="">-- Select Year Level --</option>
-                      {['Grade 7','Grade 8','Grade 9','Grade 10'].map(g=><option key={g} value={g}>{g}</option>)}
-                    </select>
-                    <input type="email" name="email" value={formData.email} onChange={handleInputChange} placeholder="Email" required/>
-                    <input type="password" name="password" value={formData.password} onChange={handleInputChange} placeholder="Password" required={!formMode==='edit'}/>
-                    <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleInputChange} placeholder="Confirm Password" required={!formMode==='edit'}/>
+                    <div className="form-group">
+                      <input
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        className="form-control"
+                        placeholder="Name"
+                        required
+                      />
+                    </div>
+                    <div className="form-group">
+                      <input
+                        name="username"
+                        value={formData.username}
+                        onChange={handleInputChange}
+                        className="form-control"
+                        placeholder="Username"
+                        required
+                      />
+                    </div>
+                    <div className="form-group">
+                      <select
+                        name="yearLevel"
+                        value={formData.yearLevel}
+                        onChange={handleInputChange}
+                        className="form-control"
+                        required
+                      >
+                        <option value="">-- Select Year Level --</option>
+                        {["Grade 7", "Grade 8", "Grade 9", "Grade 10"].map(
+                          (g) => (
+                            <option key={g} value={g}>
+                              {g}
+                            </option>
+                          )
+                        )}
+                      </select>
+                    </div>
+                    <div className="form-group">
+                      <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        className="form-control"
+                        placeholder="Email"
+                        required
+                      />
+                    </div>
+                    <div className="form-group">
+                      <input
+                        type="password"
+                        name="password"
+                        value={formData.password}
+                        onChange={handleInputChange}
+                        className="form-control"
+                        placeholder="Password"
+                        required={formMode !== "edit"}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <input
+                        type="password"
+                        name="confirmPassword"
+                        value={formData.confirmPassword}
+                        onChange={handleInputChange}
+                        className="form-control"
+                        placeholder="Confirm Password"
+                        required={formMode !== "edit"}
+                      />
+                    </div>
                     <div className="form-actions">
-                      <button type="submit" className="btn-create">{formMode==='edit'?'Save':'Create'}</button>
-                      <button type="button" className="btn-cancel" onClick={()=>setShowForm(false)}>Cancel</button>
+                      <button type="submit" className="btn-create">
+                        {formMode === "edit" ? "Save Changes" : "Create"}
+                      </button>
+                      <button
+                        type="button"
+                        className="btn-cancel"
+                        onClick={() => setShowForm(false)}
+                      >
+                        Cancel
+                      </button>
                     </div>
                   </form>
                 </div>

@@ -260,7 +260,7 @@ const DashboardAdmin = () => {
                                 flexDirection: "column",
                                 alignContent: "center",
                                 justifyContent: "center",
-                                
+                                right: "20%",
                               }}
                             >
                               {/* Close button */}
@@ -286,11 +286,8 @@ const DashboardAdmin = () => {
                               </div>
 
                               {/* Scrollable content area including all space */}
-                             
-  
-                                <ProgressTracker />
-                         
-                              
+
+                              <ProgressTracker />
                             </div>
                           )}
                           <img
@@ -315,10 +312,11 @@ const DashboardAdmin = () => {
               </table>
             </div>
           </div>
-
-          <button className="btn-logout" onClick={logout}>
-            Logout
-          </button>
+          <div className="logout-container">
+            <button className="btn-logout" onClick={logout}>
+              Logout
+            </button>
+          </div>
 
           {showForm && (
             <div className="popup-form">

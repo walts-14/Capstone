@@ -1,12 +1,40 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import DashboardIcon from "../assets/dashboardlogo.png";
 import LeaderboardIcon from "../assets/leaderboardicon.png";
 import "../css/Admin.css";
 
-const Sidebar = ({ setSelectedGrade, fetchStudents, setShowLeaderboard }) => {
+const Sidebar = ({
+  setSelectedGrade,
+  fetchStudents,
+  setShowLeaderboard,
+  showLeaderboard,
+}) => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [activeItem, setActiveItem] = useState("dashboard");
+
+  // Set the initial active item based on showLeaderboard or pathname
+  useEffect(() => {
+    if (showLeaderboard) {
+      setActiveItem("leaderboard");
+    } else {
+      setActiveItem("dashboard");
+    }
+  }, [showLeaderboard]);
+
+  const handleDashboardClick = () => {
+    setSelectedGrade("");
+    fetchStudents();
+    setShowLeaderboard(false);
+    setActiveItem("dashboard");
+    navigate("/admin");
+  };
+
+  const handleLeaderboardClick = () => {
+    setShowLeaderboard(true);
+    setActiveItem("leaderboard");
+  };
 
   return (
     <>
@@ -17,14 +45,9 @@ const Sidebar = ({ setSelectedGrade, fetchStudents, setShowLeaderboard }) => {
         <div className="sidebar-box">
           <div
             className={`sidebar-item ${
-              location.pathname === "/admin" ? "active" : ""
+              activeItem === "dashboard" ? "active" : ""
             }`}
-            onClick={() => {
-              setSelectedGrade("");
-              fetchStudents();
-              setShowLeaderboard(false);
-              navigate("/admin");
-            }}
+            onClick={handleDashboardClick}
           >
             <img src={DashboardIcon} alt="Dashboard" className="sidebar-icon" />
             <span>Dashboard</span>
@@ -32,9 +55,9 @@ const Sidebar = ({ setSelectedGrade, fetchStudents, setShowLeaderboard }) => {
 
           <div
             className={`sidebar-item ${
-              location.pathname === "/leaderboard" ? "active" : ""
+              activeItem === "leaderboard" ? "active" : ""
             }`}
-            onClick={() => setShowLeaderboard(true)}
+            onClick={handleLeaderboardClick}
           >
             <img
               src={LeaderboardIcon}
