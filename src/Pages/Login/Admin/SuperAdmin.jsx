@@ -192,7 +192,10 @@ const SuperAdmin = () => {
       </div>
 
       {showLeaderboard ? (
-        <div className="wrapper-lb">
+        <div
+          className="wrapper-lb"
+          style={{ maxHeight: "100vh", overflowY: "auto" }}
+        >
           <LbComponent />
         </div>
       ) : (

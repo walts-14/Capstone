@@ -156,10 +156,14 @@ const DashboardAdmin = () => {
           setSelectedGrade={setSelectedGrade}
           fetchStudents={fetchStudents}
           setShowLeaderboard={setShowLeaderboard}
+          showLeaderboard={showLeaderboard}
         />
       </div>
       {showLeaderboard ? (
-        <div className="wrapper-lb">
+        <div
+          className="wrapper-lb"
+          style={{ maxHeight: "100vh", overflowY: "auto" }}
+        >
           <LbComponent />
         </div>
       ) : (
