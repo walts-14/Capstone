@@ -8,7 +8,9 @@
 .body {
   overflow-y: auto;
 }
-
+.contentdiv {
+  margin-top: -45rem;
+}
 .superadmin-body {
   position: relative;
   width: 100%;
@@ -21,7 +23,6 @@
   box-sizing: border-box;
   overflow-x: hidden; /* Prevent horizontal scrolling */
 }
-
 .superadmin-body::before {
   content: "";
   position: absolute;

@@ -81,10 +81,27 @@
   width: 35px;
   height: 35px;
   cursor: pointer;
+  margin-left: 5px; /* Reduced spacing between images */
+  margin-right: 5px; /* Added spacing to the right */
 }
-.img-action {
-  margin-left: 20px; /* Add spacing between images */
+
+/* Updated action styles */
+.action-admin {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Changed from flex-start to center */
+  gap: 10px; /* Increased gap between action items */
+  width: 100%; /* Take full width of the cell */
 }
+
+.action-admin button,
+.action-admin img {
+  position: relative;
+  z-index: 11;
+}
+
 .popup-form {
   position: fixed;
   top: 40%;
@@ -161,7 +178,7 @@
   left: 59%; /* Center horizontally */
   transform: translateX(-50%); /* Adjust for centering */
   background-color: #e9170f; /* Red background for the close button */
-  border-radius: 10%;
+  border-radius: 20%;
   width: 40px;
   height: 40px;
   font-size: 1.2rem;
@@ -271,44 +288,67 @@
 .level-item:hover {
   opacity: 0.9; /* Slight hover effect */
 }
-/* Table Container */
+/* Table Container - Updated for scrolling functionality */
 .contentdiv {
   margin-top: -700px;
-  margin-right: -300px;
+  margin-right: -150px;
   position: relative;
   z-index: 5;
-  /* Add new styles for the fixed table header functionality */
-  max-height: 500px; /* Control the height of the scrollable area */
+}
+/* Create a table container wrapper for scrolling */
+.table-wrapper {
+  max-height: 400px; /* Set this to control scroll area height */
+  overflow-y: auto;
+  overflow-x: auto; /* Added horizontal scroll if needed */
+  border-radius: 10px;
+  margin: 8rem 0 0 20rem;
+  width: 75%; /* Slightly increased width */
 }
 
-/* Make the table layout use a different approach for fixed header */
+/* Style the table with fixed header */
 .dashboard-table {
   font-size: 1.4rem;
-  width: 70%;
+  width: 100%;
   color: #ffffff;
   table-layout: fixed;
-  border-radius: 10px;
-  background-color: #2e2e4d;
-  margin: 8rem 0 0 20rem;
-  /* Remove overflow:hidden to allow for the scrolling container */
   border-collapse: separate;
   border-spacing: 0;
+  background-color: #2e2e4d;
 }
-.dashboard-table th,
+
+/* Fixed header styles */
+.dashboard-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.dashboard-table th {
+  background-color: #7338a0;
+  color: #ffffff;
+  padding: 15px;
+  text-align: center;
+}
+
+/* Increase width of the actions column */
+.dashboard-table th.actions-column {
+  z-index: 21;
+  min-width: 250px; /* Increased minimum width */
+  width: 250px; /* Increased width */
+}
+
 .dashboard-table td {
   padding: 15px;
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: inherit;
-}
-.dashboard-table td {
+  text-overflow: ellipsis;
   color: #ffffff;
   font-size: 1.3rem;
+  position: relative;
 }
-.dashboard-table th {
-  background-color: #7338a0;
-  color: #ffffff;
+.dashboard-table td:last-child {
+  background-color: inherit; /* Inherit the row background color */
 }
 .dashboard-table tr:nth-child(even) {
   background-color: #271d3e;
@@ -317,6 +357,26 @@
 .dashboard-table tr:nth-child(odd) {
   background-color: #3f3653;
 }
+
+/* Ensure the scrollbar has a nice style that matches the theme */
+.table-wrapper::-webkit-scrollbar {
+  width: 10px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+  background: #271d3e;
+  border-radius: 5px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+  background: #7338a0;
+  border-radius: 5px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #924dbf;
+}
+
 .btn-create {
   background-color: var(--purple);
   color: var(--white);
@@ -465,7 +525,6 @@
   width: 81.5vw;
   padding-left: 5rem;
 }
-
 .progress-modal-container .lessonTracker {
   width: 100%; /* fill the wrapper's width */
   max-width: 55vh; /* constrain so it doesn't get too wide */

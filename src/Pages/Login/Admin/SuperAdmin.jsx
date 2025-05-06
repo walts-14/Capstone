@@ -26,14 +26,16 @@ const SuperAdmin = () => {
   const [selectedGrade, setSelectedGrade] = useState("");
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showProgressTracker, setShowProgressTracker] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+  const [formMode, setFormMode] = useState("create");
+
   const handleClick = () => {
     setShowProgressTracker(true);
   };
+
   const handleClose = () => {
     setShowProgressTracker(false);
   };
-  const [showForm, setShowForm] = useState(false);
-  const [formMode, setFormMode] = useState("create");
 
   const [formData, setFormData] = useState({
     name: "",
@@ -65,6 +67,7 @@ const SuperAdmin = () => {
       toast.error("Failed to load users.");
     }
   };
+
   const fetchTeachers = async (grade = "") => {
     try {
       const url = grade
@@ -84,9 +87,6 @@ const SuperAdmin = () => {
     if (activeTab === "Users") fetchUsers(grade);
     else fetchTeachers(grade);
   };
-
-  const openProgress = () => setShowProgressTracker(true);
-  const closeProgress = () => setShowProgressTracker(false);
 
   const openForm = (mode = "create", user = null) => {
     setFormMode(mode);
@@ -191,15 +191,6 @@ const SuperAdmin = () => {
         />
       </div>
 
-      {/* Logout button positioned absolutely - only show when leaderboard is not visible */}
-      {!showLeaderboard && (
-        <div className="logout-container">
-          <button className="btn-logout" onClick={logout}>
-            Logout
-          </button>
-        </div>
-      )}
-
       {showLeaderboard ? (
         <div className="wrapper-lb">
           <LbComponent />
@@ -207,18 +198,22 @@ const SuperAdmin = () => {
       ) : (
         <>
           <div className="levels">
-            {["Grade 7", "Grade 8", "Grade 9", "Grade 10"].map((g) => (
-              <div
-                key={g}
-                className={`level-item ${g.replace(" ", "").toLowerCase()} ${
-                  selectedGrade === g ? "active" : ""
-                }`}
-                onClick={() => handleGradeSelection(g)}
-              >
-                {g.toUpperCase()}
-              </div>
-            ))}
+            {["Grade 7", "Grade 8", "Grade 9", "Grade 10"].map((grade) => {
+              const gradeClass = grade.replace(" ", "").toLowerCase();
+              return (
+                <div
+                  key={grade}
+                  className={`level-item ${gradeClass} ${
+                    selectedGrade === grade ? "active" : ""
+                  }`}
+                  onClick={() => handleGradeSelection(grade)}
+                >
+                  {grade.toUpperCase()}
+                </div>
+              );
+            })}
           </div>
+
           <div
             className="divtabs d-flex justify-content-center"
             style={{ zIndex: showProgressTracker ? 1 : 10 }}
@@ -244,12 +239,14 @@ const SuperAdmin = () => {
               </button>
             </div>
           </div>
+
           <div className="table-container">
             <div className="Create">
               <button
                 className="btn text-light px-1 py-1"
                 style={{
                   backgroundColor: "#4A2574",
+                  color: "#FFF",
                   borderRadius: 10,
                   fontWeight: "bold",
                   fontSize: "1.5rem",
@@ -262,199 +259,209 @@ const SuperAdmin = () => {
                 <FaUserPlus /> Create
               </button>
             </div>
+
             <div className="contentdiv">
-              <table className="dashboard-table text-light">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>Year Level</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {dataToDisplay.map((u) => (
-                    <tr key={u.email}>
-                      <td>{u.name || "N/A"}</td>
-                      <td>{u.username}</td>
-                      <td>{u.email}</td>
-                      <td>{u.yearLevel || "N/A"}</td>
-                      <td>
-                        <div className="action-admin">
-                          <button
-                            onClick={openProgress}
-                            className="btn text-white fs-5 px-3 py-2 rounded-4"
-                            style={{
-                              backgroundColor: "#2e86c1",
-                              border: "none",
-                            }}
-                          >
-                            Progress
-                          </button>
-                          {showProgressTracker && (
-                            <div
-                              className="progress-modal-container"
+              <div className="table-wrapper">
+                <table className="dashboard-table text-light">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Username</th>
+                      <th>Email</th>
+                      {activeTab === "Users" && <th>Password</th>}
+                      <th>Year Level</th>
+                      <th className="actions-column"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {dataToDisplay.map((u) => (
+                      <tr key={u.email}>
+                        <td>{u.name || "N/A"}</td>
+                        <td>{u.username}</td>
+                        <td>{u.email}</td>
+                        {activeTab === "Users" && <td>{u.password}</td>}
+                        <td>{u.yearLevel || "N/A"}</td>
+                        <td>
+                          <div className="action-admin">
+                            <button
+                              onClick={handleClick}
+                              className="btn text-white fs-5 px-3 py-2 rounded-4"
                               style={{
-                                top: "43%",
-                                transform: "translate(-40%, -41%)",
-                                width: "65vh",
-                                height: "90vh",
-                                borderRadius: "30px",
-                                zIndex: 999,
-                                backgroundColor: "#1a1230",
-                                border: "3px solid #7338a0",
-                                position: "fixed",
-                                display: "flex",
-                                flexDirection: "column",
-                                alignContent: "center",
-                                justifyContent: "center",
-                                right: "20%",
+                                backgroundColor: "#2e86c1",
+                                border: "none",
+                                marginLeft: "2rem",
                               }}
                             >
-                              {/* Close button */}
-                              <div
-                                style={{
-                                  position: "fixed",
-                                  top: "15px",
-                                  right: "92%",
-                                  zIndex: 2,
-                                }}
-                              >
-                                <button
-                                  type="button"
-                                  className="btn-close"
-                                  onClick={handleClose}
-                                  aria-label="Close"
-                                  style={{
-                                    backgroundColor: "red",
-                                    borderRadius: "20%",
-                                    padding: "4px",
-                                  }}
-                                ></button>
-                              </div>
-
-                              {/* Scrollable content area including all space */}
-                              <ProgressTracker />
-                            </div>
-                          )}
-                          <img
-                            src={EditIcon}
-                            alt="Edit"
-                            className="img-action"
-                            onClick={() => openForm("edit", u)}
-                            style={{ cursor: "pointer" }}
-                          />
-                          <img
-                            src={RemoveIcon}
-                            alt="Remove"
-                            className="img-action"
-                            onClick={() => handleDelete(u.email)}
-                            style={{ cursor: "pointer", marginRight: "30px" }}
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            {showForm && (
-              <div className="popup-form">
-                <div className="popup-content">
-                  <h3>
-                    {formMode === "edit" ? "Edit" : "Add"}{" "}
-                    {activeTab.slice(0, -1)}
-                  </h3>
-                  <form onSubmit={handleFormSubmit}>
-                    <div className="form-group">
-                      <input
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        className="form-control"
-                        placeholder="Name"
-                        required
-                      />
-                    </div>
-                    <div className="form-group">
-                      <input
-                        name="username"
-                        value={formData.username}
-                        onChange={handleInputChange}
-                        className="form-control"
-                        placeholder="Username"
-                        required
-                      />
-                    </div>
-                    <div className="form-group">
-                      <select
-                        name="yearLevel"
-                        value={formData.yearLevel}
-                        onChange={handleInputChange}
-                        className="form-control"
-                        required
-                      >
-                        <option value="">-- Select Year Level --</option>
-                        {["Grade 7", "Grade 8", "Grade 9", "Grade 10"].map(
-                          (g) => (
-                            <option key={g} value={g}>
-                              {g}
-                            </option>
-                          )
-                        )}
-                      </select>
-                    </div>
-                    <div className="form-group">
-                      <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        className="form-control"
-                        placeholder="Email"
-                        required
-                      />
-                    </div>
-                    <div className="form-group">
-                      <input
-                        type="password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleInputChange}
-                        className="form-control"
-                        placeholder="Password"
-                        required={formMode !== "edit"}
-                      />
-                    </div>
-                    <div className="form-group">
-                      <input
-                        type="password"
-                        name="confirmPassword"
-                        value={formData.confirmPassword}
-                        onChange={handleInputChange}
-                        className="form-control"
-                        placeholder="Confirm Password"
-                        required={formMode !== "edit"}
-                      />
-                    </div>
-                    <div className="form-actions">
-                      <button type="submit" className="btn-create">
-                        {formMode === "edit" ? "Save Changes" : "Create"}
-                      </button>
-                      <button
-                        type="button"
-                        className="btn-cancel"
-                        onClick={() => setShowForm(false)}
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </form>
-                </div>
+                              Progress
+                            </button>
+                            <img
+                              src={EditIcon}
+                              alt="Edit"
+                              className="img-action"
+                              style={{ cursor: "pointer" }}
+                              onClick={() => openForm("edit", u)}
+                            />
+                            <img
+                              src={RemoveIcon}
+                              alt="Remove"
+                              className="img-action"
+                              style={{ marginRight: "50px", cursor: "pointer" }}
+                              onClick={() => handleDelete(u.email)}
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
-            )}
+            </div>
           </div>
+
+          <div className="logout-container">
+            <button className="btn-logout" onClick={logout}>
+              Logout
+            </button>
+          </div>
+
+          {showForm && (
+            <div className="popup-form">
+              <div className="popup-content">
+                <h3>
+                  {formMode === "edit" ? "Edit" : "Add"}{" "}
+                  {activeTab.slice(0, -1)}
+                </h3>
+                <form onSubmit={handleFormSubmit}>
+                  <div className="form-group">
+                    <input
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      className="form-control"
+                      placeholder="Name"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <input
+                      name="username"
+                      value={formData.username}
+                      onChange={handleInputChange}
+                      className="form-control"
+                      placeholder="Username"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <select
+                      name="yearLevel"
+                      value={formData.yearLevel}
+                      onChange={handleInputChange}
+                      className="form-control"
+                      required
+                    >
+                      <option value="">-- Select Year Level --</option>
+                      <option value="Grade 7">Grade 7</option>
+                      <option value="Grade 8">Grade 8</option>
+                      <option value="Grade 9">Grade 9</option>
+                      <option value="Grade 10">Grade 10</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      className="form-control"
+                      placeholder="Email"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <input
+                      type="password"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleInputChange}
+                      className="form-control"
+                      placeholder="Password"
+                      required={formMode !== "edit"}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <input
+                      type="password"
+                      name="confirmPassword"
+                      value={formData.confirmPassword}
+                      onChange={handleInputChange}
+                      className="form-control"
+                      placeholder="Confirm Password"
+                      required={formMode !== "edit"}
+                    />
+                  </div>
+                  <div className="form-actions">
+                    <button type="submit" className="btn-create">
+                      {formMode === "edit" ? "Save Changes" : "Create"}
+                    </button>
+                    <button
+                      type="button"
+                      className="btn-cancel"
+                      onClick={() => setShowForm(false)}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
+
+          {showProgressTracker && (
+            <div
+              className="progress-modal-container"
+              style={{
+                top: "50%",
+                transform: "translate(-40%, -50%)",
+                width: "65vh",
+                height: "90vh",
+                borderRadius: "30px",
+                zIndex: 1000,
+                backgroundColor: "#1a1230",
+                border: "3px solid #7338a0",
+                position: "fixed",
+                display: "flex",
+                flexDirection: "column",
+                alignContent: "center",
+                justifyContent: "center",
+                right: "20%",
+              }}
+            >
+              {/* Close button */}
+              <div
+                style={{
+                  position: "fixed",
+                  top: "15px",
+                  right: "92%",
+                  zIndex: 2,
+                }}
+              >
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={handleClose}
+                  aria-label="Close"
+                  style={{
+                    backgroundColor: "red",
+                    borderRadius: "20%",
+                    padding: "4px",
+                  }}
+                ></button>
+              </div>
+
+              <ProgressTracker />
+            </div>
+          )}
         </>
       )}
     </div>
