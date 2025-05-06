@@ -249,12 +249,13 @@ const DashboardAdmin = () => {
                               className="progress-modal-container "
                               style={{
                                 top: "50%",
-                                transform: "translate(-40%, -41%)",
-                                width: "63vh",
-                                height: "122vh",
+                                transform: "translate(-40%, -50%)",
+                                width: "65vh",
+                                height: "90vh",
                                 borderRadius: "30px",
                                 zIndex: 999,
                                 backgroundColor: "#1a1230",
+                                border: "3px solid #7338a0",
                                 position: "fixed",
                                 display: "flex",
                                 flexDirection: "column",

@@ -293,13 +293,14 @@ const SuperAdmin = () => {
                             <div
                               className="progress-modal-container "
                               style={{
-                                top: "50%",
+                                top: "43%",
                                 transform: "translate(-40%, -41%)",
-                                width: "63vh",
-                                height: "122vh",
+                                width: "65vh",
+                                height: "90vh",
                                 borderRadius: "30px",
                                 zIndex: 999,
                                 backgroundColor: "#1a1230",
+                                border: "3px solid #7338a0",
                                 position: "fixed",
                                 display: "flex",
                                 flexDirection: "column",
