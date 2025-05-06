@@ -123,16 +123,18 @@ const LesoneContent = () => {
   }, [currentIndex, currentPageTerms]);
 
   // 6. Progress
+  // 6. Progress
   useEffect(() => {
-    if (!hasUpdated && currentIndex === currentPageTerms.length - 1) {
-      updateProgress(
-        level,
-        lessonKey,
-        step === 1 ? "step1Lecture" : "step2Lecture"
-      );
-      setHasUpdated(true);
-    }
-  }, [hasUpdated, currentIndex, step]);
+        // Only auto-update here if we did NOT come from lecture.
+        if (!fromLecture && !hasUpdated && currentIndex === currentPageTerms.length - 1) {
+          updateProgress(
+            level,
+            lessonKey,
+            step === 1 ? "step1Lecture" : "step2Lecture"
+          );
+          setHasUpdated(true);
+        }
+      }, [hasUpdated, currentIndex, step]);
 
   useEffect(() => { setHasUpdated(false); }, [step]);
   
@@ -196,8 +198,18 @@ const LesoneContent = () => {
 
   const handleBack = () => {
     if (location.state?.fromLecture) {
-      navigate(`/lectureorquiz/${lessonKey}`, { state: { lessonKey } });
-      navigate(`/page/${lessonKey}`, { state: { lessonKey } });
+     
+      
+      navigate(
+               `/page/${lessonKey}`,
+               {
+                 state: {
+                   lessonKey,
+                   difficulty: location.state?.difficulty,
+                   step:       location.state?.step,
+                 }
+               }
+             );
     } else {
       navigate(`/terms/${lessonKey}`, { state: { lessonKey } });
     }
