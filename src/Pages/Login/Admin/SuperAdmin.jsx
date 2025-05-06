@@ -219,7 +219,10 @@ const SuperAdmin = () => {
               </div>
             ))}
           </div>
-          <div className="divtabs d-flex justify-content-center">
+          <div
+            className="divtabs d-flex justify-content-center"
+            style={{ zIndex: showProgressTracker ? 1 : 10 }}
+          >
             <div className="tabs position-absolute">
               <button
                 className={`tabss ${activeTab === "Users" ? "active" : ""}`}
@@ -291,7 +294,7 @@ const SuperAdmin = () => {
                           </button>
                           {showProgressTracker && (
                             <div
-                              className="progress-modal-container "
+                              className="progress-modal-container"
                               style={{
                                 top: "43%",
                                 transform: "translate(-40%, -41%)",
@@ -332,7 +335,6 @@ const SuperAdmin = () => {
                               </div>
 
                               {/* Scrollable content area including all space */}
-
                               <ProgressTracker />
                             </div>
                           )}

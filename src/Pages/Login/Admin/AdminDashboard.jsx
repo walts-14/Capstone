@@ -165,17 +165,20 @@ const DashboardAdmin = () => {
       ) : (
         <>
           <div className="levels">
-            {["Grade 7", "Grade 8", "Grade 9", "Grade 10"].map((grade) => (
-              <div
-                key={grade}
-                className={`level-item ${grade
-                  .replace(" ", "")
-                  .toLowerCase()} ${selectedGrade === grade ? "active" : ""}`}
-                onClick={() => handleGradeSelection(grade)}
-              >
-                {grade.toUpperCase()}
-              </div>
-            ))}
+            {["Grade 7", "Grade 8", "Grade 9", "Grade 10"].map((grade) => {
+              const gradeClass = grade.replace(" ", "").toLowerCase();
+              return (
+                <div
+                  key={grade}
+                  className={`level-item ${gradeClass} ${
+                    selectedGrade === grade ? "active" : ""
+                  }`}
+                  onClick={() => handleGradeSelection(grade)}
+                >
+                  {grade.toUpperCase()}
+                </div>
+              );
+            })}
           </div>
 
           <div className="table-container">
@@ -253,7 +256,7 @@ const DashboardAdmin = () => {
                                 width: "65vh",
                                 height: "90vh",
                                 borderRadius: "30px",
-                                zIndex: 999,
+                                zIndex: 1000,
                                 backgroundColor: "#1a1230",
                                 border: "3px solid #7338a0",
                                 position: "fixed",

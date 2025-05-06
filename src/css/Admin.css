@@ -237,8 +237,9 @@
   align-items: flex-start;
   gap: 10px;
   margin-top: 20px;
-  cursor: pointer;
   margin-left: -20px;
+  position: relative; /* Add position relative to ensure z-index works properly */
+  z-index: 10; /* Ensure levels are above other elements */
 }
 .level-item {
   color: #ffffff;
@@ -251,6 +252,9 @@
   color: var(--white);
   font-family: "Baloo", sans-serif;
   font-size: 2rem;
+  cursor: pointer; /* Ensure cursor shows it's clickable */
+  position: relative; /* Add position relative for z-index */
+  z-index: 11; /* Ensure each item is above other elements */
 }
 .level-item.grade7 {
   background-color: #9e72c3;
@@ -271,16 +275,24 @@
 .contentdiv {
   margin-top: -700px;
   margin-right: -300px;
+  position: relative;
+  z-index: 5;
+  /* Add new styles for the fixed table header functionality */
+  max-height: 500px; /* Control the height of the scrollable area */
 }
+
+/* Make the table layout use a different approach for fixed header */
 .dashboard-table {
   font-size: 1.4rem;
   width: 70%;
   color: #ffffff;
   table-layout: fixed;
   border-radius: 10px;
-  overflow: hidden;
   background-color: #2e2e4d;
   margin: 8rem 0 0 20rem;
+  /* Remove overflow:hidden to allow for the scrolling container */
+  border-collapse: separate;
+  border-spacing: 0;
 }
 .dashboard-table th,
 .dashboard-table td {
@@ -455,9 +467,7 @@
 }
 
 .progress-modal-container .lessonTracker {
-  width: 100%; /* fill the wrapper’s width */
-  max-width: 55vh; /* constrain so it doesn’t get too wide */
-  height: 68%; /* fill the wrapper’s height */
+  width: 100%; /* fill the wrapper's width */
+  max-width: 55vh; /* constrain so it doesn't get too wide */
+  height: 68%; /* fill the wrapper's height */
 }
-
-
