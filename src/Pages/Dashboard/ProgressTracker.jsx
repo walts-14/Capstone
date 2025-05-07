@@ -1,5 +1,7 @@
-import React, { useContext } from "react";
+// src/components/Dashboard/ProgressTracker.jsx
+import React, { useContext, useEffect, useState } from "react";
 import { ProgressContext } from "./ProgressContext.jsx";
+import axios from "axios";
 import trophy from "../../assets/trophy.png";
 
 const calculateProgress = (progressObj = {}) => {
@@ -23,9 +25,51 @@ const lessonOffsets = {
   advanced: 8,
 };
 
-function ProgressTracker() {
-  const { currentUserName, progressData, streakData } =
-    useContext(ProgressContext);
+function ProgressTracker({ student }) {
+  // Use currentUserName and currentUserEmail from context as fallback
+  const { progressData, streakData, currentUserName, currentUserEmail } = useContext(ProgressContext);
+  const [userRank, setUserRank] = useState(null);
+  const [userName, setUserName] = useState(student?.name || currentUserName || "Unknown Student");
+
+  // Use email from student prop or fallback to currentUserEmail
+  const studentEmail = student?.email || currentUserEmail;
+
+  useEffect(() => {
+    const fetchLeaderboard = async () => {
+      try {
+        console.log("Fetching leaderboard for student email:", studentEmail);
+        const response = await axios.get(
+          "http://localhost:5000/api/leaderboard",
+          { headers: axios.defaults.headers.common }
+        );
+        console.log("Leaderboard API response data:", response.data);
+        const sortedLeaderboard = [...response.data].sort(
+          (a, b) => b.points - a.points
+        );
+        console.log("Sorted leaderboard emails:", sortedLeaderboard.map(u => u.email));
+        // Normalize names for comparison since email is missing in leaderboard data
+        const normalizedStudentName = (student?.name || currentUserName)?.trim().toLowerCase();
+        console.log("Normalized student name:", normalizedStudentName);
+        const rankIndex = sortedLeaderboard.findIndex((u) => {
+          if (u.name && normalizedStudentName) {
+            const nameMatch = u.name.trim().toLowerCase() === normalizedStudentName;
+            console.log(`Comparing name ${u.name.trim().toLowerCase()} to ${normalizedStudentName}: ${nameMatch}`);
+            return nameMatch;
+          }
+          return false;
+        });
+        console.log("Rank index found:", rankIndex);
+        setUserRank(rankIndex >= 0 ? rankIndex + 1 : "N/A");
+        if (rankIndex >= 0) {
+          setUserName(sortedLeaderboard[rankIndex].name || currentUserName || "Unknown Student");
+        }
+      } catch (error) {
+        console.error("❌ Error fetching leaderboard:", error);
+        setUserRank("N/A");
+      }
+    };
+    if (studentEmail) fetchLeaderboard();
+  }, [studentEmail, currentUserName]);
 
   const styles = {
     basic: { backgroundColor: "#205D87" },
@@ -42,8 +86,15 @@ function ProgressTracker() {
             className="h-auto mt-4 ms-3 mb-3 pl-5 img-fluid"
             alt="trophy"
           />
-          <p className="fs-1 text-center ms-4">#1</p>
-          <p className="text-nowrap fs-2">{currentUserName}</p>
+          <p className="fs-1 text-center ms-4">
+            {userRank === null
+              ? "..."
+              : typeof userRank === "number"
+              ? `#${userRank}`
+              : "Unranked"}
+          </p>
+          {/* ✔︎ display the clicked student’s name */}
+          <p className="text-nowrap fs-2">{userName}</p>
         </div>
       </div>
 
@@ -59,7 +110,9 @@ function ProgressTracker() {
             {lessonsByLevel[level].map((lessonKey, idx) => {
               const lessonProgress = progressData[level]?.[lessonKey] || {};
               const progressPercent = calculateProgress(lessonProgress);
-              const displayName = `Lesson ${lessonOffsets[level] + idx + 1}`;
+              const displayName = `Lesson ${
+                lessonOffsets[level] + idx + 1
+              }`;
 
               return (
                 <div
@@ -68,7 +121,9 @@ function ProgressTracker() {
                   style={styles[level]}
                 >
                   <span>{displayName}</span>
-                  <span style={{ color: "#160A2E" }}>{progressPercent}%</span>
+                  <span style={{ color: "#160A2E" }}>
+                    {progressPercent}%
+                  </span>
                 </div>
               );
             })}

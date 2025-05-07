@@ -4,26 +4,24 @@ import Quiz from "../models/quiz.js";
 /**
  * Utility: Randomly select n items from an array.
  */
-const randomSelect = (array, n) => {
-  const copy = [...array];
-  const result = [];
-  for (let i = 0; i < n; i++) {
-    const index = Math.floor(Math.random() * copy.length);
-    result.push(copy[index]);
-    copy.splice(index, 1);
+const shuffleArray = (arr) => {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
   }
-  return result;
+  return arr;
 };
 
-/**
- * Utility: Shuffle an array (Fisher-Yates algorithm).
- */
-const shuffleArray = (array) => {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
+/** Pick n random items from an array */
+const randomSelect = (arr, n) => {
+  const copy = [...arr];
+  const result = [];
+  for (let i = 0; i < n; i++) {
+    const idx = Math.floor(Math.random() * copy.length);
+    result.push(copy[idx]);
+    copy.splice(idx, 1);
   }
-  return array;
+  return result;
 };
 
 /**
@@ -94,23 +92,73 @@ export const getRandomQuiz = async (req, res) => {
 };
 
 export const createQuiz = async (req, res) => {
-    try {
-      const { question, choices, correctAnswer } = req.body;
-  
-      const newQuiz = new Quiz({
-        question,
-        choices,
-        correctAnswer,
-      });
+  try {
+    const { question, level, lessonNumber, quizPart, correctAnswer } = req.body;
 
-      if (!question || !choices || choices.length !== 4 || !correctAnswer) {
-        return res.status(400).json({ error: "All fields are required and must be valid." });
-      }
-  
-      await newQuiz.save();
-      res.status(201).json({ message: "Quiz created successfully." });
-    } catch (error) {
-      console.error("Error creating quiz:", error);
-      res.status(500).json({ error: "Failed to create quiz." });
+    // Basic validation
+    if (
+      !question ||
+      !level ||
+      ![1,2].includes(Number(quizPart)) ||
+      !lessonNumber ||
+      !correctAnswer
+    ) {
+      return res
+        .status(400)
+        .json({ error: "question, level, lessonNumber, quizPart and correctAnswer are required." });
     }
-  };
+
+    // Determine term range for this part
+    const part = Number(quizPart);
+    const startTerm = part === 1 ? 1 : 16;
+    const endTerm = part === 1 ? 15 : 30;
+
+    // Fetch all videos in the same slice
+    const pool = await Video.find({
+      level,
+      lessonNumber: Number(lessonNumber),
+      termNumber: { $gte: startTerm, $lte: endTerm }
+    }).select("_id word videoUrl");
+
+    // Must have at least 4 total videos
+    if (pool.length < 4) {
+      return res
+        .status(400)
+        .json({ error: "Not enough videos in this level/lesson/part to build choices." });
+    }
+
+    // Ensure correctAnswer is in that pool
+    const correctVideo = pool.find(v => v._id.toString() === correctAnswer);
+    if (!correctVideo) {
+      return res
+        .status(400)
+        .json({ error: "correctAnswer must be a video from the specified level/lesson/part." });
+    }
+
+    // Remove the correct one, pick 3 wrong
+    const wrongPool = pool.filter(v => v._id.toString() !== correctAnswer);
+    const wrongChoices = randomSelect(wrongPool, 3);
+
+    // Combine and shuffle
+    const allChoices = shuffleArray([correctVideo, ...wrongChoices]);
+
+    // Build the Quiz doc
+    const quizDoc = new Quiz({
+      question,
+      level,
+      lessonNumber,
+      quizPart: part,
+      correctAnswer,
+      choices: allChoices.map((video, idx) => ({
+        videoId: video._id,
+        label: ["A", "B", "C", "D"][idx]
+      }))
+    });
+
+    await quizDoc.save();
+    res.status(201).json({ message: "Quiz created successfully.", quiz: quizDoc });
+  } catch (err) {
+    console.error("Error creating quiz:", err);
+    res.status(500).json({ error: "Failed to create quiz." });
+  }
+};

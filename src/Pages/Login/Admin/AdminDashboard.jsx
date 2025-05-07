@@ -21,12 +21,15 @@ const DashboardAdmin = () => {
   // ─── state ─────────────────────────────────────────────────────
   const [users, setUsers] = useState([]);
   const [showForm, setShowForm] = useState(false);
-  const [showProgressTracker, setShowProgressTracker] = useState(false);
-  const handleClick = () => {
-    setShowProgressTracker(true);
+  const [showProgressTracker, setShowProgressTracker] = useState(null); // store user object or null
+  const [leaderboard, setLeaderboard] = useState([]);
+  const [selectedUserRank, setSelectedUserRank] = useState(null);
+  const handleClick = (user) => {
+    setShowProgressTracker(user);
   };
   const handleClose = () => {
-    setShowProgressTracker(false);
+    setShowProgressTracker(null);
+    setSelectedUserRank(null);
   };
   const [formData, setFormData] = useState({
     id: "",
@@ -61,6 +64,18 @@ const DashboardAdmin = () => {
   // ─── Load all students on mount ────────────────────────────────
   useEffect(() => {
     fetchStudents();
+    // Fetch leaderboard data
+    const fetchLeaderboard = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/leaderboard", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setLeaderboard(response.data);
+      } catch (error) {
+        console.error("Error fetching leaderboard:", error);
+      }
+    };
+    fetchLeaderboard();
   }, []);
 
   // ─── form handlers ─────────────────────────────────────────────
@@ -242,7 +257,7 @@ const DashboardAdmin = () => {
                           <div className="action-admin">
                             {/* Progress button */}
                             <button
-                              onClick={handleClick}
+                              onClick={() => handleClick(u)}
                               className="btn text-white fs-5 px-3 py-2 rounded-4"
                               style={{
                                 backgroundColor: "#2e86c1",
@@ -414,7 +429,7 @@ const DashboardAdmin = () => {
                 ></button>
               </div>
 
-              <ProgressTracker />
+              <ProgressTracker student={showProgressTracker} />
             </div>
           )}
         </>

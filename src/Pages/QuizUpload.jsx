@@ -4,116 +4,139 @@ import axios from "axios";
 
 function QuizUpload() {
   const [question, setQuestion] = useState("");
-  const [choices, setChoices] = useState(["", "", "", ""]);
+  const [level, setLevel] = useState("basic");
+  const [lessonNumber, setLessonNumber] = useState(1);
+  const [quizPart, setQuizPart] = useState(1);
+  const [allVideos, setAllVideos] = useState([]);
   const [correctAnswer, setCorrectAnswer] = useState("");
-  const [videos, setVideos] = useState([]);
 
-  // Load videos to populate the options; assumes videos have _id and word.
+  // 1) Fetch all videos once
   useEffect(() => {
     axios
       .get("http://localhost:5000/api/videos")
-      .then((response) => {
-        setVideos(response.data);
-      })
-      .catch((error) => console.error("Error fetching videos:", error));
+      .then((res) => setAllVideos(res.data))
+      .catch((err) => console.error("Error fetching videos:", err));
   }, []);
 
-  const handleChoiceChange = (index, value) => {
-    const newChoices = [...choices];
-    newChoices[index] = value;
-    setChoices(newChoices);
-  };
+  // 2) Filter down to only the 15 videos matching level, lessonNumber, and quizPart
+  const filteredVideos = allVideos.filter((v) => {
+    if (v.level !== level) return false;
+    if (v.lessonNumber !== Number(lessonNumber)) return false;
+
+    // term 1–15 for part 1, 16–30 for part 2
+    const minTerm = quizPart === 1 ? 1 : 16;
+    const maxTerm = quizPart === 1 ? 15 : 30;
+    return v.termNumber >= minTerm && v.termNumber <= maxTerm;
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Format the choices: each choice contains the videoId and a label.
-      const formattedChoices = choices.map((videoId, idx) => ({
-        videoId,
-        label: ["A", "B", "C", "D"][idx],
-      }));
-  
-      // Create the payload that will be sent to the backend.
-      const payload = {
+      await axios.post("http://localhost:5000/api/quizzes/uploadquiz", {
         question,
-        choices: formattedChoices,
+        level,
+        lessonNumber,
+        quizPart,
         correctAnswer,
-      };
-  
-      // Post the payload to the backend endpoint.
-      const response = await axios.post("http://localhost:5000/api/quizzes/uploadquiz", payload);
-      alert(response.data.message);
-      // Clear fields after submission.
+      });
+      alert("Quiz created!");
+      // reset
       setQuestion("");
-      setChoices(["", "", "", ""]);
       setCorrectAnswer("");
-    } catch (error) {
-      console.error("Error submitting quiz:", error);
-      alert("Error submitting quiz. Please try again.");
+    } catch (err) {
+      console.error(err);
+      alert("Error submitting quiz.");
     }
   };
-  
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2 class = "text-white">Create New Quiz</h2>
-      <label class = "text-white">
-        Question:
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-4 p-4 bg-gray-800 rounded max-w-md mx-auto"
+    >
+      <h2 className="text-xl font-semibold text-white">Create New Quiz</h2>
+
+      {/* Question */}
+      <div>
+        <label className="text-white block">Question:</label>
         <input
           type="text"
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
+          required
+          className="mt-1 w-full p-2 rounded"
         />
-      </label>
-      <br />
-      <h3 class = "text-white">Select Videos for Answer Choices:</h3>
-      {["A", "B", "C", "D"].map((label, idx) => (
-        <div key={idx}>
-          <label class = "text-white">
-            Choice {label}:
-            <select value={choices[idx]} onChange={(e) => handleChoiceChange(idx, e.target.value)} required>
-              <option value="">--Select Video--</option>
-              {videos.map((video) => (
-                <option key={video._id} value={video._id}>
-                  {video.word}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-      ))}
-      <br />
-      <label className="text-white">
-  Correct Answer:
-  <select
-    value={correctAnswer}
-    onChange={(e) => setCorrectAnswer(e.target.value)}
-    required
-  >
-    <option value="">--Select Correct Answer--</option>
-    {choices.map((choiceVideoId, idx) => {
-      const video = videos.find((v) => v._id === choiceVideoId);
-      return (
-        video && (
-          <option key={choiceVideoId} value={choiceVideoId}>
-            {["A", "B", "C", "D"][idx]}: {video.word}
-          </option>
-        )
-      );
-    })}
-  </select>
-</label>
-      <br />
-      <button type="submit" style={{
-            padding: "10px 20px",
-            fontSize: "18px",
-            color: "#fff",
-            backgroundColor: "#007bff",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-            marginTop: "10px",
-          }}>Create Quiz</button>
+      </div>
+
+      {/* Level */}
+      <div>
+        <label className="text-white block">Level:</label>
+        <select
+          value={level}
+          onChange={(e) => setLevel(e.target.value)}
+          className="mt-1 p-2 rounded w-full"
+        >
+          <option value="basic">Basic</option>
+          <option value="intermediate">Intermediate</option>
+          <option value="advanced">Advanced</option>
+        </select>
+      </div>
+
+      {/* Lesson Number */}
+      <div>
+        <label className="text-white block">Lesson Number:</label>
+        <input
+          type="number"
+          min="1"
+          max="4"
+          value={lessonNumber}
+          onChange={(e) => setLessonNumber(e.target.value)}
+          className="mt-1 p-2 rounded w-full"
+        />
+      </div>
+
+      {/* Quiz Part */}
+      <div>
+        <label className="text-white block">Quiz Part:</label>
+        <select
+          value={quizPart}
+          onChange={(e) => setQuizPart(Number(e.target.value))}
+          className="mt-1 p-2 rounded w-full"
+        >
+          <option value={1}>Part 1 (Terms 1–15)</option>
+          <option value={2}>Part 2 (Terms 16–30)</option>
+        </select>
+      </div>
+
+      {/* Correct Answer */}
+      <div>
+        <label className="text-white block">Correct Answer Video:</label>
+        <select
+          value={correctAnswer}
+          onChange={(e) => setCorrectAnswer(e.target.value)}
+          required
+          className="mt-1 p-2 rounded w-full"
+        >
+          <option value="">-- Select Video --</option>
+          {filteredVideos.map((v) => (
+            <option key={v._id} value={v._id}>
+              {`[Term ${v.termNumber}] ${v.word}`}
+            </option>
+          ))}
+        </select>
+        {filteredVideos.length === 0 && (
+          <p className="text-sm text-yellow-300 mt-1">
+            No videos found for that level/lesson/part.
+          </p>
+        )}
+      </div>
+
+      <button
+        type="submit"
+        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded w-full"
+      >
+        Create Quiz
+      </button>
     </form>
   );
 }

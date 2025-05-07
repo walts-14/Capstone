@@ -25,16 +25,16 @@ const SuperAdmin = () => {
   const [activeTab, setActiveTab] = useState("Users");
   const [selectedGrade, setSelectedGrade] = useState("");
   const [showLeaderboard, setShowLeaderboard] = useState(false);
-  const [showProgressTracker, setShowProgressTracker] = useState(false);
+  const [showProgressTracker, setShowProgressTracker] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [formMode, setFormMode] = useState("create");
 
-  const handleClick = () => {
-    setShowProgressTracker(true);
+  const handleClick = (user) => {
+    setShowProgressTracker(user);
   };
 
   const handleClose = () => {
-    setShowProgressTracker(false);
+    setShowProgressTracker(null);
   };
 
   const [formData, setFormData] = useState({
@@ -287,7 +287,7 @@ const SuperAdmin = () => {
                         <td>
                           <div className="action-admin">
                             <button
-                              onClick={handleClick}
+                              onClick={() => handleClick(u)}
                               className="btn text-white fs-5 px-3 py-2 rounded-4"
                               style={{
                                 backgroundColor: "#2e86c1",
@@ -462,7 +462,7 @@ const SuperAdmin = () => {
                 ></button>
               </div>
 
-              <ProgressTracker />
+              <ProgressTracker student={showProgressTracker} />
             </div>
           )}
         </>

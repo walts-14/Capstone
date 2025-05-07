@@ -10,7 +10,7 @@ export const getLeaderboard = async (req, res) => {
       role: { $nin: ["admin", "super_admin"] }
     })
       .sort({ points: -1 })
-      .select("name points profilePic yearLevel")
+      .select("name email points profilePic yearLevel")
       .lean();
 
     // Normalize missing values
