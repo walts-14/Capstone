@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import dashboardlogo from "../assets/dashboardlogo.png";
 import libicon from "../assets/libicon.png";
 import leaderboardicon from "../assets/leaderboardicon.png";
+import introhand from "../assets/introhand.png";
 import settingsicon from "../assets/settingsicon.png";
 
 function Sidenav() {
@@ -53,6 +54,20 @@ function Sidenav() {
             />
             <a className="nav-link mb-5" href="/leaderboard">
               Leaderboard
+            </a>
+          </div>
+          <div
+            className={`introduction mt-4 p-2 pt-4 ${
+              location.pathname === "/introduction" ? "active" : ""
+            }`}
+          >
+            <img
+              src={introhand}
+              className="img-fluid ms-5"
+              alt="introduction logo"
+            />
+            <a className="nav-link mb-5" href="/introduction">
+              Introduction
             </a>
           </div>
           <div

@@ -12,6 +12,7 @@ import LoginForm from "./Pages/Login/LoginForm.jsx";
 import SignupForm from "./Pages/Signup/SignupForm.jsx";
 import Dashboard from "./Pages/Dashboard/Dashboard.jsx";
 import Leaderboard from "./Pages/Leaderboard/Leaderboard.jsx";
+import Introduction from "./Pages/Introduction/Introduction.jsx";
 import Library from "./Pages/Library/Library.jsx";
 import BasicLibrary from "./Pages/Library/BasicLibrary.jsx";
 import IntermediateLibrary from "./Pages/Library/IntermediateLibrary.jsx";
@@ -53,6 +54,7 @@ const router = createBrowserRouter([
       { path: "intermediatelibrary", element: <IntermediateLibrary /> },
       { path: "advancedlibrary", element: <AdvancedLibrary /> },
       { path: "leaderboard", element: <Leaderboard /> },
+      { path: "introduction", element: <Introduction /> },
       { path: "settings", element: <Settings /> },
       { path: "lectureorquiz/:termId", element: <LectureorQuiz /> },
       { path: "lessonbutton", element: <LessonButtons /> },

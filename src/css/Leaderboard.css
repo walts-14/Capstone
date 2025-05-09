@@ -100,3 +100,28 @@
   margin-left: -28rem;
   min-width: 9.375rem;
 }
+/* Works on Chrome, Edge, and Safari */
+.leaderboard-scroll-wrapper::-webkit-scrollbar {
+  width: 10px;
+}
+
+.leaderboard-scroll-wrapper::-webkit-scrollbar-track {
+  background: #1e1e2f; /* dark background */
+  border-radius: 10px;
+}
+
+.leaderboard-scroll-wrapper::-webkit-scrollbar-thumb {
+  background-color: #6c63ff; /* customize this */
+  border-radius: 10px;
+  border: 2px solid #1e1e2f; /* adds padding around thumb */
+}
+
+.leaderboard-scroll-wrapper::-webkit-scrollbar-thumb:hover {
+  background-color: #574fd6;
+}
+
+/* Firefox */
+.leaderboard-scroll-wrapper {
+  scrollbar-width: thin;
+  scrollbar-color: #6c63ff #1e1e2f;
+}

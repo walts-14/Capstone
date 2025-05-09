@@ -16,7 +16,17 @@ function Leaderboard() {
     <>
       <div className="leaderboard-container d-flex flex-column align-items-center justify-content-center my-4">
         <Sidenav />
-        <LbComponent />
+        <div
+          className="leaderboard-scroll-wrapper "
+          style={{
+            overflowY: "auto",
+            width: "100%",
+            maxHeight: "90vh", // adjust based on how much of the screen it should take
+            padding: "1rem",
+          }}
+        >
+          <LbComponent />
+        </div>
       </div>
     </>
   );

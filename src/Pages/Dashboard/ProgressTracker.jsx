@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { ProgressContext } from "./ProgressContext.jsx";
 import axios from "axios";
 import trophy from "../../assets/trophy.png";
+import fire from "../../assets/fire.png";
 
 const calculateProgress = (progressObj = {}) => {
   let score = 0;
@@ -27,9 +28,12 @@ const lessonOffsets = {
 
 function ProgressTracker({ student }) {
   // Use currentUserName and currentUserEmail from context as fallback
-  const { progressData, streakData, currentUserName, currentUserEmail } = useContext(ProgressContext);
+  const { progressData, streakData, currentUserName, currentUserEmail } =
+    useContext(ProgressContext);
   const [userRank, setUserRank] = useState(null);
-  const [userName, setUserName] = useState(student?.name || currentUserName || "Unknown Student");
+  const [userName, setUserName] = useState(
+    student?.name || currentUserName || "Unknown Student"
+  );
 
   // Use email from student prop or fallback to currentUserEmail
   const studentEmail = student?.email || currentUserEmail;
@@ -46,14 +50,24 @@ function ProgressTracker({ student }) {
         const sortedLeaderboard = [...response.data].sort(
           (a, b) => b.points - a.points
         );
-        console.log("Sorted leaderboard emails:", sortedLeaderboard.map(u => u.email));
+        console.log(
+          "Sorted leaderboard emails:",
+          sortedLeaderboard.map((u) => u.email)
+        );
         // Normalize names for comparison since email is missing in leaderboard data
-        const normalizedStudentName = (student?.name || currentUserName)?.trim().toLowerCase();
+        const normalizedStudentName = (student?.name || currentUserName)
+          ?.trim()
+          .toLowerCase();
         console.log("Normalized student name:", normalizedStudentName);
         const rankIndex = sortedLeaderboard.findIndex((u) => {
           if (u.name && normalizedStudentName) {
-            const nameMatch = u.name.trim().toLowerCase() === normalizedStudentName;
-            console.log(`Comparing name ${u.name.trim().toLowerCase()} to ${normalizedStudentName}: ${nameMatch}`);
+            const nameMatch =
+              u.name.trim().toLowerCase() === normalizedStudentName;
+            console.log(
+              `Comparing name ${u.name
+                .trim()
+                .toLowerCase()} to ${normalizedStudentName}: ${nameMatch}`
+            );
             return nameMatch;
           }
           return false;
@@ -61,7 +75,11 @@ function ProgressTracker({ student }) {
         console.log("Rank index found:", rankIndex);
         setUserRank(rankIndex >= 0 ? rankIndex + 1 : "N/A");
         if (rankIndex >= 0) {
-          setUserName(sortedLeaderboard[rankIndex].name || currentUserName || "Unknown Student");
+          setUserName(
+            sortedLeaderboard[rankIndex].name ||
+              currentUserName ||
+              "Unknown Student"
+          );
         }
       } catch (error) {
         console.error("❌ Error fetching leaderboard:", error);
@@ -80,13 +98,26 @@ function ProgressTracker({ student }) {
   return (
     <>
       <div className="tracker">
+        <div className="streak d-flex flex-row rounded-4">
+          <img
+            src={fire}
+            className="h-auto mt-4 ms-3 mb-3 img-fluid"
+            alt="streak"
+          />
+          <div className="streak-num text-center text-white fs-1 ms-2 mt-2">
+            {streakData.currentStreak}
+          </div>
+          <span className="text-white mt-5 justify-content-center text-center pt-2">
+            Day Streak
+          </span>
+        </div>
         <div className="position-lb d-flex align-items-center gap-1">
           <img
             src={trophy}
-            className="h-auto mt-4 ms-3 mb-3 pl-5 img-fluid"
+            className="h-auto mt-4 ms-3 mb-3 img-fluid"
             alt="trophy"
           />
-          <p className="fs-1 text-center ms-4">
+          <p className="fs-1 text-center ms-2">
             {userRank === null
               ? "..."
               : typeof userRank === "number"
@@ -99,8 +130,6 @@ function ProgressTracker({ student }) {
       </div>
 
       <div className="lessonTracker d-flex flex-column text-white rounded-4 p-3">
-        <h2>Your Current Streak: {streakData.currentStreak}</h2>
-
         {Object.keys(lessonsByLevel).map((level) => (
           <div key={level} className={`${level}Tracker rounded-4 mt-4`}>
             <div className={`${level}Title fs-1 text-center mb-3`}>
@@ -110,9 +139,7 @@ function ProgressTracker({ student }) {
             {lessonsByLevel[level].map((lessonKey, idx) => {
               const lessonProgress = progressData[level]?.[lessonKey] || {};
               const progressPercent = calculateProgress(lessonProgress);
-              const displayName = `Lesson ${
-                lessonOffsets[level] + idx + 1
-              }`;
+              const displayName = `Lesson ${lessonOffsets[level] + idx + 1}`;
 
               return (
                 <div
@@ -121,9 +148,7 @@ function ProgressTracker({ student }) {
                   style={styles[level]}
                 >
                   <span>{displayName}</span>
-                  <span style={{ color: "#160A2E" }}>
-                    {progressPercent}%
-                  </span>
+                  <span style={{ color: "#160A2E" }}>{progressPercent}%</span>
                 </div>
               );
             })}

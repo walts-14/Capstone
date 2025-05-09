@@ -136,6 +136,37 @@ body {
   right: 15rem;
   bottom: 0.2rem;
 }
+.introduction {
+  background-color: var(--purple);
+  text-align: center;
+  margin-left: -2rem;
+  margin-top: 1.5rem;
+  position: sticky;
+  padding-top: 25px;
+  height: 10vh;
+  width: clamp(18vw, 10vw, 15vw);
+  border-radius: 1rem;
+}
+.introduction:hover {
+  background-color: var(--semidark-purple);
+  border: 4px solid var(--mid-purple);
+}
+.introduction .nav-link {
+  padding-left: 7rem;
+}
+.introduction img {
+  height: auto;
+  width: 4vw;
+  position: absolute;
+  right: 15rem;
+  bottom: 0.2rem;
+}
+.intro-text {
+  background-color: var(--purple);
+  font-size: 3rem;
+  top: 1rem;
+  left: 10em;
+}
 .settings {
   background-color: var(--purple);
   text-align: center;
@@ -187,7 +218,7 @@ body {
   border-radius: 1.4rem;
   background-color: var(--dark-purple);
   height: 10vh;
-  width: 25vw;
+  width: 18vw;
   position: fixed;
   right: 3em;
   top: 5em;
@@ -196,8 +227,22 @@ body {
 .position-lb p {
   justify-content: center;
   padding-top: 0.5em;
-  padding-left: 0.5em;
+  padding-left: 0.2em;
   font-size: 1.5rem;
+}
+.streak {
+  background-color: var(--dark-purple);
+  height: 10vh;
+  width: 6vw;
+  position: fixed;
+  right: 26em;
+  top: 5em;
+}
+.streak span {
+  font-size: 0.8rem;
+  margin-left: -2rem;
+  margin-bottom: 2rem;
+  margin-right: 1rem;
 }
 .lessonTracker {
   position: absolute;
@@ -260,4 +305,12 @@ body {
   width: 35%;
   height: 7vh;
   background-color: var(--midlight-red);
+}
+.twobuttons button {
+  background-color: #924dbf;
+  padding: 0.2rem;
+}
+.twobuttons {
+  left: 12em;
+  top: 10rem;
 }
