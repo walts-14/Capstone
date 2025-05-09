@@ -8,31 +8,31 @@ import "../../../css/lesoneContent.css";
 import { ProgressContext } from "../../../Pages/Dashboard/ProgressContext";
 
 const levelMapping = {
-  termsone:   "basic",
-  termstwo:   "basic",
+  termsone: "basic",
+  termstwo: "basic",
   termsthree: "basic",
-  termsfour:  "basic",
-  termsfive:  "intermediate",
-  termssix:   "intermediate",
+  termsfour: "basic",
+  termsfive: "intermediate",
+  termssix: "intermediate",
   termsseven: "intermediate",
   termseight: "intermediate",
-  termsnine:  "advanced",
-  termsten:   "advanced",
-  termseleven:"advanced",
-  termstwelve:"advanced",
+  termsnine: "advanced",
+  termsten: "advanced",
+  termseleven: "advanced",
+  termstwelve: "advanced",
 };
 
 const lessonNumberMapping = {
-  termsone:    1,
-  termstwo:    2,
-  termsthree:  3,
-  termsfour:   4,
-  termsfive:   1,
-  termssix:    2,
-  termsseven:  3,
-  termseight:  4,
-  termsnine:   1,
-  termsten:    2,
+  termsone: 1,
+  termstwo: 2,
+  termsthree: 3,
+  termsfour: 4,
+  termsfive: 1,
+  termssix: 2,
+  termsseven: 3,
+  termseight: 4,
+  termsnine: 1,
+  termsten: 2,
   termseleven: 3,
   termstwelve: 4,
 };
@@ -44,32 +44,38 @@ const LesoneContent = () => {
   const { updateProgress } = useContext(ProgressContext);
   const videoRef = useRef(null);
 
-  const showButton  = location.state?.showButton  || false;
+  const showButton = location.state?.showButton || false;
   const fromLecture = location.state?.fromLecture || false;
   const lectureStep = location.state?.step;
 
-  const level        = levelMapping[lessonKey]       || "basic";
+  const level = levelMapping[lessonKey] || "basic";
   const lessonNumber = lessonNumberMapping[lessonKey] || 1;
 
   const [termsArray, setTermsArray] = useState([]);
-  const [loading, setLoading]       = useState(true);
-  const [error, setError]           = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [hasUpdated, setHasUpdated] = useState(false);
 
   // helper to match TermsCard coloring logic
   const getOverrideStyle = () => {
     // intermediate lessons
-    if (["termsfive","termssix","termsseven","termseight"].includes(lessonKey)) {
+    if (
+      ["termsfive", "termssix", "termsseven", "termseight"].includes(lessonKey)
+    ) {
       return {
         backgroundColor: "var(--intermediate-yellow)",
-        boxShadow:       "0 5px 1px 8px var(--intermediate-shadow)",
+        boxShadow: "0 5px 1px 8px var(--intermediate-shadow)",
       };
     }
     // advanced lessons
-    if (["termsnine","termsten","termseleven","termstwelve"].includes(lessonKey)) {
+    if (
+      ["termsnine", "termsten", "termseleven", "termstwelve"].includes(
+        lessonKey
+      )
+    ) {
       return {
         backgroundColor: "var(--advance-red)",
-        boxShadow:       "0 5px 1px 8px var(--advance-shadow)",
+        boxShadow: "0 5px 1px 8px var(--advance-shadow)",
       };
     }
     // default basic
@@ -78,66 +84,77 @@ const LesoneContent = () => {
 
   // 1. Fetch and sort
   useEffect(() => {
-    const qs = new URLSearchParams({ level, lessonNumber: lessonNumber.toString() });
+    const qs = new URLSearchParams({
+      level,
+      lessonNumber: lessonNumber.toString(),
+    });
     setLoading(true);
     fetch(`http://localhost:5000/api/videos?${qs}`)
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         data.sort((a, b) => a.termNumber - b.termNumber);
-        setTermsArray(data.map(v => ({
-          id:         v._id,
-          word:       v.word,
-          definition: v.description,
-          video:      v.videoUrl,
-          termNumber: v.termNumber,
-        })));
+        setTermsArray(
+          data.map((v) => ({
+            id: v._id,
+            word: v.word,
+            definition: v.description,
+            video: v.videoUrl,
+            termNumber: v.termNumber,
+          }))
+        );
         setLoading(false);
       })
-      .catch(err => { setError(err); setLoading(false); });
+      .catch((err) => {
+        setError(err);
+        setLoading(false);
+      });
   }, [lessonKey]);
 
   // 2. Partition
-  const firstPageTerms  = termsArray.slice(0, 15);
+  const firstPageTerms = termsArray.slice(0, 15);
   const secondPageTerms = termsArray.slice(15, 30);
 
   // 3. Find index
-  const idx1 = firstPageTerms.findIndex(t => t.id === termId);
-  const idx2 = secondPageTerms.findIndex(t => t.id === termId);
+  const idx1 = firstPageTerms.findIndex((t) => t.id === termId);
+  const idx2 = secondPageTerms.findIndex((t) => t.id === termId);
 
   // 4. Determine step
-  const step = fromLecture && lectureStep
-    ? lectureStep
-    : (idx1 !== -1 ? 1 : 2);
+  const step = fromLecture && lectureStep ? lectureStep : idx1 !== -1 ? 1 : 2;
 
   const currentPageTerms = step === 1 ? firstPageTerms : secondPageTerms;
-  const currentIndex     = step === 1 ? idx1 : idx2;
+  const currentIndex = step === 1 ? idx1 : idx2;
 
   // 5. Redirect invalid IDs
   useEffect(() => {
     if (currentIndex === -1 && currentPageTerms.length) {
-      navigate(
-        `/lesonecontent/${lessonKey}/${currentPageTerms[0].id}`,
-        { state: { showButton, fromLecture, step } }
-      );
+      navigate(`/lesonecontent/${lessonKey}/${currentPageTerms[0].id}`, {
+        state: { showButton, fromLecture, step },
+      });
     }
   }, [currentIndex, currentPageTerms]);
 
   // 6. Progress
   // 6. Progress
   useEffect(() => {
-        // Only auto-update here if we did NOT come from lecture.
-        if (!fromLecture && !hasUpdated && currentIndex === currentPageTerms.length - 1) {
-          updateProgress(
-            level,
-            lessonKey,
-            step === 1 ? "step1Lecture" : "step2Lecture"
-          );
-          setHasUpdated(true);
-        }
-      }, [hasUpdated, currentIndex, step]);
+    // Only auto-update here if we did NOT come from lecture.
+    if (
+      !fromLecture &&
+      !hasUpdated &&
+      currentIndex === currentPageTerms.length - 1
+    ) {
+      updateProgress(
+        level,
+        lessonKey,
+        step === 1 ? "step1Lecture" : "step2Lecture"
+      );
+      setHasUpdated(true);
+    }
+  }, [hasUpdated, currentIndex, step]);
 
-  useEffect(() => { setHasUpdated(false); }, [step]);
-  
+  useEffect(() => {
+    setHasUpdated(false);
+  }, [step]);
+
   // 7. Replay
   useEffect(() => {
     if (videoRef.current) {
@@ -147,32 +164,33 @@ const LesoneContent = () => {
   }, [termId]);
 
   if (loading) return <p>Loading…</p>;
-  if (error)   return <p>Error loading content.</p>;
+  if (error) return <p>Error loading content.</p>;
   if (currentIndex === -1) return <p>No term found.</p>;
 
   // Utilities
   const currentTerm = currentPageTerms[currentIndex];
-  const prevTerm    = currentPageTerms[currentIndex - 1] || currentPageTerms[0];
-  const nextTerm    = currentPageTerms[currentIndex + 1] || currentPageTerms.slice(-1)[0];
+  const prevTerm = currentPageTerms[currentIndex - 1] || currentPageTerms[0];
+  const nextTerm =
+    currentPageTerms[currentIndex + 1] || currentPageTerms.slice(-1)[0];
 
   const navStyle = getOverrideStyle();
 
-  const handleNavigation = direction => {
+  const handleNavigation = (direction) => {
     if (direction === "prev" && currentIndex > 0) {
-      return navigate(
-        `/lesonecontent/${lessonKey}/${prevTerm.id}`,
-        { state: { showButton, fromLecture, step } }
-      );
+      return navigate(`/lesonecontent/${lessonKey}/${prevTerm.id}`, {
+        state: { showButton, fromLecture, step },
+      });
     }
     if (direction === "next") {
       if (fromLecture) {
         if (currentIndex === currentPageTerms.length - 1) {
-          return navigate("/finishlecture", { state: { lessonKey, level, step } });
+          return navigate("/finishlecture", {
+            state: { lessonKey, level, step },
+          });
         }
-        return navigate(
-          `/lesonecontent/${lessonKey}/${nextTerm.id}`,
-          { state: { showButton, fromLecture, step } }
-        );
+        return navigate(`/lesonecontent/${lessonKey}/${nextTerm.id}`, {
+          state: { showButton, fromLecture, step },
+        });
       }
       if (step === 1 && currentIndex === firstPageTerms.length - 1) {
         return navigate(
@@ -181,35 +199,29 @@ const LesoneContent = () => {
         );
       }
       if (currentIndex < currentPageTerms.length - 1) {
-        return navigate(
-          `/lesonecontent/${lessonKey}/${nextTerm.id}`,
-          { state: { showButton, fromLecture, step } }
-        );
+        return navigate(`/lesonecontent/${lessonKey}/${nextTerm.id}`, {
+          state: { showButton, fromLecture, step },
+        });
       }
       console.log("End of lesson reached.");
     }
   };
 
-   // **Split definition into English and Tagalog**
-   const rawDef = currentTerm.definition || "";
-   const [englishPart, tagalogPart] = rawDef.includes("Tagalog:")
-     ? rawDef.split(/Tagalog:/)
-     : [rawDef, ""];
+  // **Split definition into English and Tagalog**
+  const rawDef = currentTerm.definition || "";
+  const [englishPart, tagalogPart] = rawDef.includes("Tagalog:")
+    ? rawDef.split(/Tagalog:/)
+    : [rawDef, ""];
 
   const handleBack = () => {
     if (location.state?.fromLecture) {
-     
-      
-      navigate(
-               `/page/${lessonKey}`,
-               {
-                 state: {
-                   lessonKey,
-                   difficulty: location.state?.difficulty,
-                   step:       location.state?.step,
-                 }
-               }
-             );
+      navigate(`/page/${lessonKey}`, {
+        state: {
+          lessonKey,
+          difficulty: location.state?.difficulty,
+          step: location.state?.step,
+        },
+      });
     } else {
       navigate(`/terms/${lessonKey}`, { state: { lessonKey } });
     }
@@ -228,7 +240,6 @@ const LesoneContent = () => {
             key={currentTerm.video}
             width="650"
             height="400"
-            controls
             autoPlay
             loop
           >
@@ -238,13 +249,13 @@ const LesoneContent = () => {
 
         <div className="text-container d-flex flex-column align-items-center justify-content-center gap-5 mt-4">
           <div className="letter-container">
-            <button onClick={() => handleNavigation("prev")} >
+            <button onClick={() => handleNavigation("prev")}>
               <img src={leftArrow} alt="Left Arrow" className="arrow" />
             </button>
             <div className="textOne" style={navStyle}>
               <p className="m-0">{currentTerm.word}</p>
             </div>
-            <button onClick={() => handleNavigation("next")} >
+            <button onClick={() => handleNavigation("next")}>
               <img src={rightArrow} alt="Right Arrow" className="arrow" />
             </button>
           </div>
