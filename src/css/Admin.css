@@ -297,13 +297,16 @@
 }
 /* Create a table container wrapper for scrolling */
 .table-wrapper {
-  max-height: 400px; /* Set this to control scroll area height */
+  max-height: 700px; /* Set this to control scroll area height */
   overflow-y: auto;
   overflow-x: auto; /* Added horizontal scroll if needed */
   border-radius: 10px;
   margin: 8rem 0 0 20rem;
   width: 75%; /* Slightly increased width */
+  position: relative;
+  z-index: 1;   
 }
+
 
 /* Style the table with fixed header */
 .dashboard-table {

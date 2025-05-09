@@ -173,7 +173,7 @@
   display: flex;
   justify-content: flex-end; /* Align the button to the right */
   align-items: center;
-  margin-top: 25rem; /* Adjust spacing above the button */
+  margin-top: 30rem; /* Adjust spacing above the button */
   margin-left: 10rem;
 }
 
