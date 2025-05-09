@@ -67,9 +67,12 @@ const DashboardAdmin = () => {
     // Fetch leaderboard data
     const fetchLeaderboard = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/leaderboard", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.get(
+          "http://localhost:5000/api/leaderboard",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         setLeaderboard(response.data);
       } catch (error) {
         console.error("Error fetching leaderboard:", error);

@@ -55,8 +55,7 @@ function Quiz() {
     },
     termsfive: {
       1: questions.lesson5_Part1,
- 
-    }
+    },
     // Add additional mappings as needed...
   };
 
@@ -211,7 +210,9 @@ function Quiz() {
       );
       setHasUpdatedQuiz(true);
       // Navigate immediately without delay and pass lesson info
-      navigate("/finish", { state: { correctAnswers, wrongAnswers, lessonKey, level } });
+      navigate("/finish", {
+        state: { correctAnswers, wrongAnswers, lessonKey, level },
+      });
     }
   }, [
     quizFinished,
@@ -259,7 +260,7 @@ function Quiz() {
 
       {quizFinished ? null : (
         <>
-          <div className="quiz-container fw-bold">
+          <div className="quiz-container fw-bold d-flex">
             <p className="quiz-question">{quiz.question}</p>
           </div>
 
@@ -274,7 +275,9 @@ function Quiz() {
                 style={{ pointerEvents: showResult ? "none" : "auto" }}
               >
                 <div
-                  className={`choice-${["A", "B", "C", "D"][index].toLowerCase()} rounded-4 m-4 ${
+                  className={`choice-${["A", "B", "C", "D"][
+                    index
+                  ].toLowerCase()} rounded-4 m-4 ${
                     selectedAnswer === index ? "selected" : ""
                   }`}
                 >
@@ -297,15 +300,23 @@ function Quiz() {
 
           {showResult && (
             <div
-              className={`result-ans d-flex justify-content-between text-center ps-5 pt-3 fs-2 ${
+              className={`result-ans d-flex justify-content-between text-center ps-5 fs-2 ${
                 isCorrect ? "correct-ans" : "wrong-ans"
               }`}
+              style={{
+                height: "12vh",
+                marginTop: "-2.9rem",
+              }}
             >
-              <span className="me-auto">
-                {isCorrect ? "Correct answer" : "Wrong answer"}
+              <span className="me-auto mb-5 text-nowrap">
+                {isCorrect ? "Correct answer!" : "Wrong answer"}
               </span>
               {isCorrect && (
-                <img src={check} className="check-icon mt-5" alt="Correct" />
+                <img
+                  src={check}
+                  className="check-icon mt-5 me-4"
+                  alt="Correct"
+                />
               )}
               {!isCorrect && (
                 <img src={ekis} className="ekis-icon" alt="Wrong" />

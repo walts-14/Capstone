@@ -49,6 +49,10 @@
   left: 1rem;
   top: 14rem;
 }
+.quiz-container p {
+  position: absolute;
+  bottom: 0.5rem;
+}
 .grid {
   font-family: "Baloo", sans-serif;
   color: var(--white);
@@ -59,16 +63,17 @@
   grid-template-columns: repeat(2, 25vw);
   grid-template-rows: repeat(1, 100px);
   background-color: var(--dark-purple);
-  gap: 2.3rem;
-  padding-top: 9rem;
-  margin-top: -3rem;
+  gap: 10rem;
+  padding-top: 8.5rem;
+  margin-top: 1rem;
 }
 .choices {
   border: 4px solid #574f69;
-  height: 11vh;
+  height: 18vh;
+  width: 30vw;
   position: relative;
-  top: 10rem;
-  right: 1.5rem;
+  top: 2rem;
+  right: 5.5rem;
   cursor: pointer;
 }
 .grid .choices:nth-child(1) {
@@ -162,15 +167,16 @@ selected {
   color: white !important;
 }
 .choices video {
-  width: 8vw; /* Prevents video from taking too much space */
+  width: 14vw; /* Prevents video from taking too much space */
   height: auto;
   position: absolute;
   left: 10rem;
-  bottom: 0.2rem;
+  bottom: 0.5rem;
+  gap: 15rem;
   transition: transform 0.3s ease-in-out;
 }
 .choices video:hover {
-  transform: scale(3.5);
+  transform: scale(1.5);
   z-index: 1;
 }
 .result-ans {
@@ -178,6 +184,7 @@ selected {
   padding: 10px 20px;
   border-radius: 10px;
   width: fit-content;
+  height: 20vh;
 }
 
 .correct-ans {
