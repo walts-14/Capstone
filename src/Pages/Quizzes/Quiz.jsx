@@ -176,6 +176,20 @@ function Quiz() {
     setShowResult(false);
   };
 
+  const handleBack = () => {
+  if (location.state?.fromLecture) {
+    // go back to the LectureorQuiz screen, carrying the same lessonKey + difficulty/step
+    navigate(`/page/${lessonKey}`, {
+      state: {
+        lessonKey,
+        difficulty: location.state.difficulty,
+        step:       location.state.step,
+      },
+    });
+  } else {
+    console.log("Back button clicked, but no fromLecture state.");
+  }
+};
   // NEW: Automatically update quiz progress and navigate to finish when quiz is complete
   useEffect(() => {
     if (quizFinished && !hasUpdatedQuiz) {
@@ -210,8 +224,7 @@ function Quiz() {
     <>
       <div
         className="back fs-1 fw-bold d-flex"
-        onClick={() => navigate(`/page/${lessonKey}`)}
-      >
+        onClick={handleBack}>
         <img src={backkpoint} className="img-fluid p-1 mt-1" alt="Back" />
         <p>Back</p>
       </div>

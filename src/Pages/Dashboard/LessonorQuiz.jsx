@@ -161,7 +161,13 @@ function LectureorQuiz() {
             className="quiz-outer justify-content-center rounded-5"
             onClick={() =>
               navigate(`/quiz/${lessonKey}`, {
-                state: { currentStep, difficulty },
+                state: { 
+                  showButton:  true,
+                  fromLecture: true,
+                  lessonKey,      // pass through for LesoneContent
+                  step: currentStep,
+                  difficulty,   
+                 },
               })
             }
           >
