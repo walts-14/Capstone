@@ -26,9 +26,10 @@ const initialProgress = {
   }
 };
 
-export const ProgressProvider = ({ children }) => {
-  const storedEmail = localStorage.getItem("userEmail") || "";
-  const storedName  = localStorage.getItem("userName")  || "";
+export const ProgressProvider = ({ children, initialUserEmail = "", initialUserName = "" }) => {
+  // Use initialUserEmail and initialUserName props if provided, else fallback to localStorage
+  const storedEmail = initialUserEmail || localStorage.getItem("userEmail") || "";
+  const storedName  = initialUserName  || localStorage.getItem("userName")  || "";
 
   const [currentUserEmail, setCurrentUserEmail] = useState(storedEmail);
   const [currentUserName, setCurrentUserName]   = useState(storedName);

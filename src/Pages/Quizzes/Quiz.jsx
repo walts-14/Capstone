@@ -6,7 +6,6 @@ import check from "../../assets/check.png";
 import ekis from "../../assets/ekis.png";
 import "../../css/Quiz.css";
 import toast from "react-hot-toast";
-import { questions } from "./QuizQuestions/Questions";
 import axios from "axios";
 import { ProgressContext } from "../../../src/Pages/Dashboard/ProgressContext"; // NEW: Import progress context
 import LivesandDiamonds from "../../Components/LiveandDiamonds";
@@ -35,45 +34,19 @@ function Quiz() {
 
   const level = levelMapping[lessonKey] || "basic";
 
-  // Mapping of lessonKey to question set (nested by step)
-  const quizMapping = {
-    termsone: {
-      1: questions.lesson1_Part1,
-      2: questions.lesson1_Part2,
-    },
-    termstwo: {
-      1: questions.lesson2_Part1,
-      2: questions.lesson2_Part2,
-    },
-    termsthree: {
-      1: questions.lesson3_Part1,
-      2: questions.lesson3_Part2,
-    },
-    termsfour: {
-      1: questions.lesson4_Part1,
-      2: questions.lesson4_Part2,
-    },
-    termsfive: {
-      1: questions.lesson5_Part1,
-    },
-    // Add additional mappings as needed...
-  };
+  // Map currentStep to quizPart for backend API
+  const quizPart = currentStep; // Assuming step 1 = quizPart 1, step 2 = quizPart 2
 
-  const quizQuestions = quizMapping[lessonKey]
-    ? quizMapping[lessonKey][currentStep] || []
-    : [];
   const totalQuestions = 10;
 
-  const [quiz, setQuiz] = useState(null);
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [quizQuestions, setQuizQuestions] = useState([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [selectedAnswerIndex, setSelectedAnswerIndex] = useState(null);
   const [attempts, setAttempts] = useState(0);
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [wrongAnswers, setWrongAnswers] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
-  const [remainingQuestions, setRemainingQuestions] = useState([
-    ...quizQuestions,
-  ]);
   const [quizFinished, setQuizFinished] = useState(false); // Flag when quiz is complete
 
   // NEW: Local flag to ensure progress is updated only once
@@ -108,52 +81,53 @@ function Quiz() {
     fetchLives();
   }, [backendURL]);
 
+  // Fetch quiz questions from backend API
   useEffect(() => {
-    if (!quizFinished) {
-      selectRandomQuestion();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [quizFinished]);
+    const fetchQuizQuestions = async () => {
+      try {
+        const lessonNumber = 1; // TODO: Map lessonKey to lessonNumber if needed
+        const response = await axios.get(
+          `${backendURL}/api/quizzes/random`,
+          {
+            params: {
+              level,
+              lessonNumber,
+              quizPart,
+            },
+          }
+        );
+        setQuizQuestions(response.data);
+        setCurrentQuestionIndex(0);
+        setSelectedAnswerIndex(null);
+        setAttempts(0);
+        setCorrectAnswers(0);
+        setWrongAnswers(0);
+        setShowResult(false);
+        setIsCorrect(false);
+        setQuizFinished(false);
+      } catch (error) {
+        console.error("Error fetching quiz questions:", error);
+        toast.error("Failed to load quiz questions. Please try again.");
+      }
+    };
 
-  // Shuffle answer options for the selected question
-  const selectRandomQuestion = () => {
-    if (
-      remainingQuestions.length === 0 ||
-      attempts >= totalQuestions ||
-      lives <= 0
-    ) {
-      setQuizFinished(true);
-      toast.success("Quiz completed!");
-      return;
-    }
+    fetchQuizQuestions();
+  }, [level, lessonKey, quizPart, backendURL]);
 
-    const randomIndex = Math.floor(Math.random() * remainingQuestions.length);
-    const selectedQuiz = remainingQuestions[randomIndex];
-    // Shuffle answer options randomly
-    const shuffledOptions = [...selectedQuiz.answerOptions].sort(
-      () => Math.random() - 0.5
-    );
-    const updatedQuiz = { ...selectedQuiz, answerOptions: shuffledOptions };
-
-    setRemainingQuestions((prev) =>
-      prev.filter((_, index) => index !== randomIndex)
-    );
-    setQuiz(updatedQuiz);
-    setSelectedAnswer(null);
-    setShowResult(false);
-  };
+  const currentQuestion = quizQuestions[currentQuestionIndex];
 
   const handleChoiceClick = (index) => {
     if (showResult || lives <= 0) return;
-    setSelectedAnswer(index);
-    const isCorrectAnswer = quiz.answerOptions[index].isCorrect;
-    setIsCorrect(isCorrectAnswer);
+    setSelectedAnswerIndex(index);
+    const selectedChoice = currentQuestion.choices[index];
+    const isAnswerCorrect = selectedChoice.videoId === currentQuestion.correctAnswer;
+    setIsCorrect(isAnswerCorrect);
   };
 
   const handleNext = async () => {
     const userEmail = localStorage.getItem("userEmail");
 
-    if (selectedAnswer === null) {
+    if (selectedAnswerIndex === null) {
       toast.error("Please select an answer before proceeding.");
       return;
     }
@@ -197,7 +171,9 @@ function Quiz() {
       return;
     }
 
-    selectRandomQuestion();
+    setCurrentQuestionIndex((prev) => prev + 1);
+    setSelectedAnswerIndex(null);
+    setShowResult(false);
   };
 
   // NEW: Automatically update quiz progress and navigate to finish when quiz is complete
@@ -226,7 +202,7 @@ function Quiz() {
     wrongAnswers,
   ]);
 
-  if (!quiz && !quizFinished) {
+  if (quizQuestions.length === 0 && !quizFinished) {
     return <div>Loading quiz...</div>;
   }
 
@@ -261,24 +237,22 @@ function Quiz() {
       {quizFinished ? null : (
         <>
           <div className="quiz-container fw-bold d-flex">
-            <p className="quiz-question">{quiz.question}</p>
+            <p className="quiz-question">{currentQuestion.question}</p>
           </div>
 
           <div className="grid text-center fw-bold rounded-4">
-            {quiz.answerOptions.map((option, index) => (
+            {currentQuestion.choices.map((option, index) => (
               <div
-                key={`${quiz.question}-${index}`}
+                key={`${currentQuestion.question}-${index}`}
                 className={`choices d-flex justify-content-between align-items-center rounded-4 col-md-6 col-lg-11 m-5 ${
-                  selectedAnswer === index ? "selected" : ""
+                  selectedAnswerIndex === index ? "selected" : ""
                 }`}
                 onClick={() => handleChoiceClick(index)}
                 style={{ pointerEvents: showResult ? "none" : "auto" }}
               >
                 <div
-                  className={`choice-${["A", "B", "C", "D"][
-                    index
-                  ].toLowerCase()} rounded-4 m-4 ${
-                    selectedAnswer === index ? "selected" : ""
+                  className={`choice-${["A", "B", "C", "D"][index].toLowerCase()} rounded-4 m-4 ${
+                    selectedAnswerIndex === index ? "selected" : ""
                   }`}
                 >
                   <strong>{["A", "B", "C", "D"][index]}</strong>
@@ -290,7 +264,7 @@ function Quiz() {
                     muted
                     loop
                   >
-                    <source src={option.video} type="video/mp4" />
+                    <source src={option.videoUrl} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
                 </div>

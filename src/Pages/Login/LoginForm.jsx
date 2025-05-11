@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { ProgressContext } from "../Dashboard/ProgressContext.jsx";
 import { Form, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
@@ -8,6 +9,7 @@ import toast from "react-hot-toast";
 
 function LoginForm() {
   const navigate = useNavigate();
+  const { setCurrentUserEmail, setCurrentUserName } = useContext(ProgressContext);
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -33,6 +35,10 @@ function LoginForm() {
         localStorage.setItem("userUsername", response.data.user.username);
         localStorage.setItem("userEmail", response.data.user.email);
         localStorage.setItem("loggedIn", "true");
+
+        // Update ProgressContext state immediately
+        setCurrentUserEmail(response.data.user.email);
+        setCurrentUserName(response.data.user.name);
   
         console.log("✅ Token stored:", localStorage.getItem("token"));
         console.log("✅ Email stored:", localStorage.getItem("userEmail"));
