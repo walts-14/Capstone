@@ -58,23 +58,28 @@
   color: var(--white);
   display: grid;
   min-width: 80vw;
-  min-height: 70vh;
+  min-height: 75vh;
   justify-content: center;
-  grid-template-columns: repeat(2, 25vw);
+  grid-template-columns: repeat(2, 28vw);
   grid-template-rows: repeat(1, 100px);
   background-color: var(--dark-purple);
-  gap: 10rem;
-  padding-top: 8.5rem;
-  margin-top: 1rem;
+  gap: 8rem;
+  padding-top: 10rem;
+  margin-top: 2rem;
 }
 .choices {
   border: 4px solid #574f69;
-  height: 18vh;
-  width: 30vw;
+  height: 20vh;
+  width: 33vw;
   position: relative;
-  top: 2rem;
-  right: 5.5rem;
+  top: 5rem;
+  right: 7rem;
   cursor: pointer;
+  padding: 10px 20px;
+  
+}
+.choices video {
+  margin-left: 80px;
 }
 .grid .choices:nth-child(1) {
   position: relative;
@@ -147,7 +152,7 @@
   transition: width 0.4s ease-in-out;
 }
 
-selected {
+.selected {
   background-color: #924dbf !important; /* Highlight color */
   border-color: #fff !important;
   color: #fff !important;

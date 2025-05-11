@@ -272,7 +272,7 @@ function Quiz() {
                   <video
                     width="200"
                     height="150"
-                    className="rounded-2"
+                    className="rounded-2 mb-1" 
                     autoPlay
                     muted
                     loop
