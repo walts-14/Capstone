@@ -35,78 +35,78 @@ function LbComponent() {
   return (
     <>
       <div className="leaderboard-header d-flex flex-row align-items-center justify-content-center">
-        {/* Second Place */}
-       {/* Second Place */}
-<div className="second-place d-flex align-items-center gap-2">
-  <img src={medal2} className="img-fluid" alt="medal img" />
-  <div className="d-flex flex-column align-items-start">
-    <div className="profile-second d-flex align-items-center gap-2">
-      <img
-        src={picFor(1, profile2)}
-        className="img-fluid user-avatar"
-        alt="profile img"
-      />
-      <p className="text-white fs-1">
-        {sortedLeaderboard[1]?.name || "TBD"}
-      </p>
-    </div>
-    <div className="dia-total-second d-flex align-items-center text-white">
-      <img src={diamond} className="img-fluid me-2" alt="diamond img" />
-      <p className="fs-3 mt-2 ms-2">
-        {sortedLeaderboard[1]?.points ?? 0}
-      </p>
-    </div>
-  </div>
-</div>
+              {/* Second Place */}
+            {/* Second Place */}
+      <div className="second-place d-flex align-items-center gap-2">
+        <img src={medal2} className="img-fluid" alt="medal img" />
+        <div className="d-flex flex-column align-items-start">
+          <div className="profile-second d-flex align-items-center gap-2">
+            <img
+              src={picFor(1, profile2)}
+              className="img-fluid user-avatar"
+              alt="profile img"
+            />
+            <p className="text-white fs-1">
+              {sortedLeaderboard[1]?.name || "TBD"}
+            </p>
+          </div>
+          <div className="dia-total-second d-flex align-items-center text-white">
+            <img src={diamond} className="img-fluid me-2" alt="diamond img" />
+            <p className="fs-3 mt-2 ms-2">
+              {sortedLeaderboard[1]?.points ?? 0}
+            </p>
+          </div>
+        </div>
+      </div>
 
-{/* First Place */}
-<div
-  className="first-place d-flex align-items-center gap-2"
-  style={{ marginBottom: "5rem" }}
->
-  <img src={medal1} className="img-fluid ms-5" alt="medal img" />
-  <div className="d-flex flex-column align-items-start">
-    <div className="profile-first d-flex align-items-center gap-2">
-      <img
-        src={picFor(0, profile1)}
-        className="img-fluid user-avatar"
-        alt="profile img"
-      />
-      <p className="text-white fs-1">
-        {sortedLeaderboard[0]?.name || "TBD"}
-      </p>
-    </div>
-    <div className="dia-total-first d-flex align-items-center text-white">
-      <img src={diamond} className="img-fluid me-2" alt="diamond img" />
-      <p className="fs-3 mt-2 ms-2">
-        {sortedLeaderboard[0]?.points ?? 0}
-      </p>
-    </div>
-  </div>
-</div>
+      {/* First Place */}
+      <div
+        className="first-place d-flex align-items-center gap-2"
+        style={{ marginBottom: "5rem" }}
+      >
+        <img src={medal1} className="img-fluid ms-5" alt="medal img" />
+        <div className="d-flex flex-column align-items-start">
+          <div className="profile-first d-flex align-items-center gap-2">
+            <img
+              src={picFor(0, profile1)}
+              className="img-fluid user-avatar"
+              alt="profile img"
+            />
+            <p className="text-white fs-1">
+              {sortedLeaderboard[0]?.name || "TBD"}
+            </p>
+          </div>
+          <div className="dia-total-first d-flex align-items-center text-white">
+            <img src={diamond} className="img-fluid me-2" alt="diamond img" />
+            <p className="fs-3 mt-2 ms-2">
+              {sortedLeaderboard[0]?.points ?? 0}
+            </p>
+          </div>
+        </div>
+      </div>
 
-{/* Third Place */}
-<div className="third-place d-flex align-items-center gap-2">
-  <img src={medal3} className="img-fluid" alt="medal img" />
-  <div className="d-flex flex-column align-items-start">
-    <div className="profile-third d-flex align-items-center gap-2">
-      <img
-        src={picFor(2, profile3)}
-        className="img-fluid user-avatar"
-        alt="profile img"
-      />
-      <p className="text-white fs-1">
-        {sortedLeaderboard[2]?.name || "TBD"}
-      </p>
-    </div>
-    <div className="dia-total-third d-flex align-items-center text-white">
-      <img src={diamond} className="img-fluid me-2" alt="diamond img" />
-      <p className="fs-3 mt-2 ms-2">
-        {sortedLeaderboard[2]?.points ?? 0}
-      </p>
-    </div>
-  </div>
-</div>
+      {/* Third Place */}
+      <div className="third-place d-flex align-items-center gap-2">
+        <img src={medal3} className="img-fluid" alt="medal img" />
+        <div className="d-flex flex-column align-items-start">
+          <div className="profile-third d-flex align-items-center gap-2">
+            <img
+              src={picFor(2, profile3)}
+              className="img-fluid user-avatar"
+              alt="profile img"
+            />
+            <p className="text-white fs-1">
+              {sortedLeaderboard[2]?.name || "TBD"}
+            </p>
+          </div>
+          <div className="dia-total-third d-flex align-items-center text-white">
+            <img src={diamond} className="img-fluid me-2" alt="diamond img" />
+            <p className="fs-3 mt-2 ms-2">
+              {sortedLeaderboard[2]?.points ?? 0}
+            </p>
+          </div>
+        </div>
+      </div>
 
         </div>
 

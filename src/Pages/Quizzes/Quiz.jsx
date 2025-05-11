@@ -229,7 +229,7 @@ function Quiz() {
         <p>Back</p>
       </div>
       <div className="lives-quizz d-flex position-absolute gap-4">
-        <LivesandDiamonds />
+        <LivesandDiamonds showDiamonds={false} />
       </div>
       {/* Only render the progress bar when quiz is in progress */}
       {!quizFinished && (

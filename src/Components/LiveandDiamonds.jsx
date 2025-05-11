@@ -4,7 +4,7 @@ import heart from "../assets/heart.png";
 import diamond from "../assets/diamond.png";
 import "../css/Lesson.css";
 
-function LivesandDiamonds() {
+function LivesandDiamonds({showDiamonds = true}) {
   const [lives, setLives] = useState(5);
   const [points, setPoints] = useState(0);
 
@@ -58,10 +58,12 @@ function LivesandDiamonds() {
         <img src={heart} className="heart-logo img-fluid" alt="lives logo" />
         <p className="heart-num m-0 text-danger fw-bold fs-4 ms-1">{lives}</p>
       </div>
-      <div className="d-flex align-items-center gap-1">
-        <img src={diamond} className="dia-logo img-fluid" alt="diamond logo" />
-        <p className="dia-num m-0 fw-bold fs-4 ms-1">{points}</p>
-      </div>
+       {showDiamonds && (
+        <div className="d-flex align-items-center gap-1">
+          <img src={diamond} className="dia-logo img-fluid" alt="Points" />
+          <p className="dia-num m-0 fw-bold fs-4 ms-1">{points}</p>
+        </div>
+      )}
     </>
   );
 }
