@@ -1,0 +1,165 @@
+@font-face {
+  font-family: "Baloo";
+  src: url("/src/font/Baloo-Regular.ttf") format("truetype");
+  font-style: normal;
+}
+
+:root {
+  --background: #100429;
+  --semidark-purple: #271d3e;
+  --dark-purple: #271d3e;
+  --mid-purple: #7338a0;
+  --grey-purple: #6f687e;
+  --purple: #4a2574;
+  --light-purple: #cf96ff;
+  --stroke-gray: #6f687e;
+  --input-gray: #3f3653;
+  --placeholder: #9f9aa9;
+  --white: #ffff;
+  --basic-blue: #2e86c1;
+  --intermediate-yellow: #d4ac0d;
+  --advance-red: #c0392b;
+  --dark-blue: #174360;
+  --semidark-blue: #205d87;
+  --dark-yellow: #6a5606;
+  --semidark-yellow: #947809;
+  --dark-red: #601c15;
+  --semidark-red: #86271e;
+  --midlight-red: #d7443e;
+  --midblue: #04aae0;
+}
+.introduction-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  margin-left: 25em; /* space for the sidebar */
+  background: var(--background);
+}
+.intro-header {
+  flex: 0 0 auto;
+  padding: 2rem 0 1rem;
+  margin-left: 2rem;
+}
+.introductions {
+  margin-left: 25em;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  z-index: 0;
+  position: relative;
+}
+
+.intro-text {
+  display: inline-block;
+  background-color: var(--mid-purple);
+  color: white;
+  font-size: 2.5rem;
+  font-weight: bold;
+  padding: 1rem 2rem;
+  border-radius: 1rem;
+}
+.interpreter-intro {
+  background-color: var(--mid-purple);
+  font-size: 1.1rem;
+  width: 74vw;
+  height: 35vh;
+  left: 29rem;
+  top: 17rem;
+  margin-bottom: 2rem;
+}
+.interpreter-intro .interpreter-details {
+  margin-right: 20rem;
+  margin-top: -2rem;
+  margin-bottom: 5rem;
+}
+.interpreter-introo {
+  background-color: var(--mid-purple);
+  font-size: 1.1rem;
+  width: 74vw;
+  height: 35vh;
+  left: 29rem;
+  top: 45rem;
+  margin-bottom: 2rem;
+}
+.interpreter-introo .interpreter-detailss {
+  margin-right: 20rem;
+  margin-top: -2rem;
+  margin-bottom: 5rem;
+}
+.twobuttons {
+  margin-top: 1rem;
+}
+.twobuttons button {
+  background-color: var(--dark-purple);
+  color: white;
+  border: none;
+  font-size: 2rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+.twobuttons button:hover {
+  background-color: var(--light-purple);
+}
+.twobuttons .active-btn {
+  background-color: #924dbf !important;
+  color: #fff;
+}
+.scroll-area {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 0 2rem 2rem;
+}
+
+/* ensure your inner components fill the width */
+.component-display {
+  width: 100%;
+}
+.how {
+  background-color: #271d3e;
+  width: 74vw;
+  font-size: 1rem;
+  height: 35vh;
+  left: 20rem;
+  top: 45rem;
+  margin-bottom: 2rem;
+}
+.how img {
+  margin: auto 0 auto 13rem;
+}
+.howw {
+  background-color: #271d3e;
+  width: 74vw;
+  font-size: 1rem;
+  height: 35vh;
+  left: 20rem;
+  top: 45rem;
+  margin-bottom: 2rem;
+}
+.howw img {
+  margin: auto 0 1rem 13rem;
+}
+.howw3 {
+  background-color: #271d3e;
+  width: 74vw;
+  font-size: 1rem;
+  height: 35vh;
+  left: 20rem;
+  top: 45rem;
+  margin-bottom: 2rem;
+}
+.howw3 img {
+  margin: auto 0 1rem 13rem;
+}
+.howw4 {
+  background-color: #271d3e;
+  width: 74vw;
+  font-size: 1rem;
+  height: 35vh;
+  left: 20rem;
+  top: 45rem;
+  margin-bottom: 2rem;
+}
+.howw4 img {
+  margin: auto 0 1rem 13rem;
+}

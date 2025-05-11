@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Sidenav from "../../Components/Sidenav";
 import LibraryButtons from "../Library/LibraryButtons";
 import "../../css/LevelofDifficulty.css"; // Ensure this path is correct
@@ -10,36 +11,36 @@ function AdvancedLibrary() {
       <Sidenav />
       <LibraryButtons />
       <div className="level-container fw-bold mb-1">
-        <a href="/terms/termsnine">
+        <Link to="/terms/termsnine">
           <div className="level-content rounded-3">
-            <span className="fs-3"> Lesson 1 </span>
-            <span className="fs-4"> 30 items</span>
+            <span className="fs-3">Lesson 1</span>
+            <span className="fs-4">30 items</span>
             <p className="fs-1">
               Advanced Vocabulary - School, Work, and Hobbies
             </p>
           </div>
-        </a>
-        <a href="/terms/termsten">
+        </Link>
+        <Link to="/terms/termsten">
           <div className="level-content rounded-3">
-            <span className="fs-3"> Lesson 2 </span>
-            <span className="fs-4"> 30 items</span>
+            <span className="fs-3">Lesson 2</span>
+            <span className="fs-4">30 items</span>
             <p className="fs-1">Storytelling Basics</p>
           </div>
-        </a>
-        <a href="/terms/termseleven">
+        </Link>
+        <Link to="/terms/termseleven">
           <div className="level-content rounded-3">
-            <span className="fs-3"> Lesson 3 </span>
-            <span className="fs-4"> 30 items</span>
-            <p className="fs-1"> Cultural Insights and Idioms</p>
+            <span className="fs-3">Lesson 3</span>
+            <span className="fs-4">30 items</span>
+            <p className="fs-1">Cultural Insights and Idioms</p>
           </div>
-        </a>
-        <a href="/terms/termstwelve">
+        </Link>
+        <Link to="/terms/termstwelve">
           <div className="level-content rounded-3">
-            <span className="fs-3"> Lesson 4 </span>
-            <span className="fs-4"> 30 items</span>
-            <p className="fs-1"> Expressing Opinions and Debate</p>
+            <span className="fs-3">Lesson 4</span>
+            <span className="fs-4">30 items</span>
+            <p className="fs-1">Expressing Opinions and Debate</p>
           </div>
-        </a>
+        </Link>
       </div>
     </div>
   );
