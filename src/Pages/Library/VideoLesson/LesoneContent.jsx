@@ -238,8 +238,7 @@ const LesoneContent = () => {
           <video
             ref={videoRef}
             key={currentTerm.video}
-            width="650"
-            height="400"
+            
             autoPlay
             loop
           >

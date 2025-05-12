@@ -46,10 +46,13 @@ body {
 }
 
 .tryone-container video {
-  width: 100%;
-  height: auto;
+  width: 100%;          /* fill container width */
+  max-width: 1080px;     /* optional: cap the width */
+  height: 620px;        /* fixed height for uniformity */
+  object-fit: contain;  /* scale each video to fit without cropping */
   border: 15px solid #271d3e; /* Adds a white border */
   border-radius: 50px; /* Rounds the corners */
+  
 }
 .back {
   color: var(--purple);
