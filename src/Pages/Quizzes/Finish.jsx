@@ -10,7 +10,35 @@ import repeatLogo from "../../assets/repeat logo.png";
 import arrow from "../../assets/arrow.png";
 import dashboardlogo from "../../assets/dashboardlogo.png";
 import { ProgressContext } from "../../../src/Pages/Dashboard/ProgressContext";
+const levelMapping = {
+  termsone:   "basic",
+  termstwo:   "basic",
+  termsthree: "basic",
+  termsfour:  "basic",
+  termsfive:  "intermediate",
+  termssix:   "intermediate",
+  termsseven: "intermediate",
+  termseight: "intermediate",
+  termsnine:  "advanced",
+  termsten:   "advanced",
+  termseleven:"advanced",
+  termstwelve:"advanced",
+};
 
+const lessonNumberMapping = {
+  termsone:    1,
+  termstwo:    2,
+  termsthree:  3,
+  termsfour:   4,
+  termsfive:   1,
+  termssix:    2,
+  termsseven:  3,
+  termseight:  4,
+  termsnine:   1,
+  termsten:    2,
+  termseleven: 3,
+  termstwelve: 4,
+};
 function Finish() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -107,7 +135,16 @@ function Finish() {
         <button
           type="button"
           className="continue d-flex justify-content-center align-items-center rounded-4 pt-4 mb-4 ms-auto me-5 fs-1"
-          onClick={() => navigate(`/page/${lessonKey}`, { state: { lessonKey } })}
+           onClick={() => navigate(
+        `/page/${lessonKey}`,
+        { 
+          state: {
+            lessonKey,
+            difficulty: location.state?.difficulty ?? levelMapping[lessonKey], 
+            step: 2      // ← tell LectureorQuiz to start on Part 2
+              }
+            }
+          )}
         >
           Continue
           <img

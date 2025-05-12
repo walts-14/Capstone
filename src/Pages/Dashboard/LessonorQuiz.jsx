@@ -76,7 +76,10 @@ function LectureorQuiz() {
       });
   }, [level, lessonNumber]);
 
-  const [currentStep, setCurrentStep] = useState(1);
+    // start on the step that was passed in (e.g. step=2), default to 1
+  const [currentStep, setCurrentStep] = useState(
+    () => Number(location.state?.step) || 1
+  );
 
   const sliceStart    = currentStep === 1 ? 0 : 15;
   const filteredTerms = lessonTerms.slice(sliceStart, sliceStart + 15);
