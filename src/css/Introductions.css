@@ -62,30 +62,32 @@
   background-color: var(--mid-purple);
   font-size: 1.1rem;
   width: 74vw;
-  height: 35vh;
-  left: 29rem;
-  top: 17rem;
+  height: 50vh;
   margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.interpreter-intro .interpreter-details {
-  margin-right: 20rem;
-  margin-top: -2rem;
-  margin-bottom: 5rem;
+ .interpreter-details p {
+  font-size: 2rem;
+  color: white;
+  margin: 0;
+  
 }
-.interpreter-introo {
-  background-color: var(--mid-purple);
-  font-size: 1.1rem;
-  width: 74vw;
-  height: 35vh;
-  left: 29rem;
-  top: 45rem;
-  margin-bottom: 2rem;
+.interpreter-details p span {
+  font-size: 2.5rem;
+  color: var(--background);
+  font-weight: bold;  
 }
-.interpreter-introo .interpreter-detailss {
-  margin-right: 20rem;
-  margin-top: -2rem;
-  margin-bottom: 5rem;
+.interpreter-video {
+  width: 100%;          /* fill container width */
+  max-width: 600px;     /* optional: cap the width */
+  height: 338px;        /* fixed height for uniformity */
+  object-fit: contain;  /* scale each video to fit without cropping */
+  background: black;    /* black bars show where aspect ratios differ */
+  border-radius: 15px; /* optional: rounded corners */
 }
+
 .twobuttons {
   margin-top: 1rem;
 }
@@ -115,51 +117,14 @@
 .component-display {
   width: 100%;
 }
+
 .how {
-  background-color: #271d3e;
-  width: 74vw;
-  font-size: 1rem;
+  width: 75vw;
   height: 35vh;
   left: 20rem;
   top: 45rem;
-  margin-bottom: 2rem;
+  margin-bottom: 15rem;
 }
 .how img {
-  margin: auto 0 auto 13rem;
-}
-.howw {
-  background-color: #271d3e;
-  width: 74vw;
-  font-size: 1rem;
-  height: 35vh;
-  left: 20rem;
-  top: 45rem;
-  margin-bottom: 2rem;
-}
-.howw img {
-  margin: auto 0 1rem 13rem;
-}
-.howw3 {
-  background-color: #271d3e;
-  width: 74vw;
-  font-size: 1rem;
-  height: 35vh;
-  left: 20rem;
-  top: 45rem;
-  margin-bottom: 2rem;
-}
-.howw3 img {
-  margin: auto 0 1rem 13rem;
-}
-.howw4 {
-  background-color: #271d3e;
-  width: 74vw;
-  font-size: 1rem;
-  height: 35vh;
-  left: 20rem;
-  top: 45rem;
-  margin-bottom: 2rem;
-}
-.howw4 img {
-  margin: auto 0 1rem 13rem;
+  width: 75vw;
 }

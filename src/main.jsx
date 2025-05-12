@@ -38,6 +38,7 @@ import { ProgressProvider } from "../src/Pages/Dashboard/ProgressContext.jsx"; /
 import VideoList from "./Components/VideoList.jsx"; // adjust the path accordingly
 import QuizUpload from "./Pages/QuizUpload.jsx"; // adjust the path accordingly
 
+
 const router = createBrowserRouter([
   { path: "/", element: <Navigate to="/login" replace /> }, // Redirect "/" to "/login"
   { path: "/login", element: <LoginForm /> },
@@ -74,6 +75,7 @@ const router = createBrowserRouter([
       { path: "VideoList", element: <VideoList /> },
       { path: "QuizUpload", element: <QuizUpload /> },
       { path: "finishLecture", element: <FinishLecture /> },
+
     ],
   },
 
