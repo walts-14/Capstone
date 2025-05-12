@@ -91,6 +91,68 @@ export const getRandomQuiz = async (req, res) => {
   }
 };
 
+/**
+ * Returns stored quiz questions for a given lesson part.
+ * Query parameters:
+ *   - level: string ("basic", "intermediate", "advanced")
+ *   - lessonNumber: number (e.g., 1)
+ *   - quizPart: number (1 or 2)
+ */
+export const getStoredQuizQuestions = async (req, res) => {
+  try {
+    const { level, lessonNumber, quizPart } = req.query;
+    if (!level || !lessonNumber || !quizPart) {
+      return res.status(400).json({ error: "Missing query parameters: level, lessonNumber, and quizPart are required." });
+    }
+    const lessonNum = Number(lessonNumber);
+    const part = Number(quizPart);
+
+    // Fetch stored quiz questions from Quiz collection
+    const quizzes = await Quiz.find({
+      level,
+      lessonNumber: lessonNum,
+      quizPart: part
+    }).populate("correctAnswer choices.videoId");
+
+    if (!quizzes || quizzes.length === 0) {
+      return res.status(404).json({ error: "No stored quiz questions found for the specified parameters." });
+    }
+
+    // Utility to shuffle an array
+    const shuffleArray = (arr) => {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    };
+
+    // Randomly select up to 10 questions
+    const selectedQuizzes = quizzes.length > 10 ? shuffleArray(quizzes).slice(0, 10) : quizzes;
+
+    // Format the response to match frontend expectations with shuffled choices
+    const formattedQuizzes = selectedQuizzes.map(q => {
+      const shuffledChoices = shuffleArray(q.choices.map(choice => ({
+        videoId: choice.videoId._id,
+        word: choice.videoId.word,
+        videoUrl: choice.videoId.videoUrl,
+        label: choice.label
+      })));
+      return {
+        questionId: q._id,
+        question: q.question,
+        correctAnswer: q.correctAnswer._id,
+        choices: shuffledChoices
+      };
+    });
+
+    res.json(formattedQuizzes);
+  } catch (error) {
+    console.error("Error fetching stored quiz questions:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
 export const createQuiz = async (req, res) => {
   try {
     const { question, level, lessonNumber, quizPart, correctAnswer } = req.body;

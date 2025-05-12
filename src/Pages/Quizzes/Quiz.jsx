@@ -85,9 +85,24 @@ function Quiz() {
   useEffect(() => {
     const fetchQuizQuestions = async () => {
       try {
-        const lessonNumber = 1; // TODO: Map lessonKey to lessonNumber if needed
+        // Map lessonKey to lessonNumber
+        const lessonNumberMapping = {
+          termsone: 1,
+          termstwo: 2,
+          termsthree: 3,
+          termsfour: 4,
+          termsfive: 5,
+          termssix: 6,
+          termsseven: 7,
+          termseight: 8,
+          termsnine: 9,
+          termsten: 10,
+          termseleven: 11,
+          termstwelve: 12,
+        };
+        const lessonNumber = lessonNumberMapping[lessonKey] || 1;
         const response = await axios.get(
-          `${backendURL}/api/quizzes/random`,
+          `${backendURL}/api/quizzes/stored`,
           {
             params: {
               level,
