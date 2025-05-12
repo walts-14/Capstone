@@ -238,9 +238,15 @@ const LesoneContent = () => {
           <video
             ref={videoRef}
             key={currentTerm.video}
-            
             autoPlay
             loop
+            onLoadedMetadata={() => {
+              // ensure normal speed
+              if (videoRef.current) {
+                videoRef.current.playbackRate = 1.0;
+                videoRef.current.defaultPlaybackRate = 1.0;
+              }
+            }}
           >
             <source src={currentTerm.video} type="video/mp4" />
           </video>
