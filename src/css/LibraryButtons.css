@@ -44,13 +44,13 @@ body {
   top: 75px;
   left: 38%;
 }
-.library-contents .btns-content:nth-child(1) {
+.library-contents .btns-content:nth-child(2) {
   width: 9vw;
   height: 7vh;
   justify-content: center;
   background-color: var(--basic-blue);
 }
-.library-contents .btns-content:nth-child(2) {
+.library-contents .btns-content:nth-child(3) {
   width: 13vw;
   height: 7vh;
   justify-content: center;

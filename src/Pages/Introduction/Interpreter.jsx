@@ -31,7 +31,7 @@ const interpreters = [
 export default function Interpreter() {
   return (
     <>
-      <Sidenav />
+      
       {interpreters.map((intp) => (
         <div
           key={intp.id}

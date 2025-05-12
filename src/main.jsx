@@ -37,6 +37,7 @@ import ProgressTracker from "./Pages/Dashboard/ProgressTracker.jsx";
 import { ProgressProvider } from "../src/Pages/Dashboard/ProgressContext.jsx"; // adjust the path accordingly
 import VideoList from "./Components/VideoList.jsx"; // adjust the path accordingly
 import QuizUpload from "./Pages/QuizUpload.jsx"; // adjust the path accordingly
+import IntroductionModal from "./Components/IntroductionModal.jsx"; // adjust the path accordingly
 
 
 const router = createBrowserRouter([
@@ -75,7 +76,7 @@ const router = createBrowserRouter([
       { path: "VideoList", element: <VideoList /> },
       { path: "QuizUpload", element: <QuizUpload /> },
       { path: "finishLecture", element: <FinishLecture /> },
-
+      { path: "introductionmodal", element: <IntroductionModal /> },
     ],
   },
 

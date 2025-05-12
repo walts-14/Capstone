@@ -2,13 +2,15 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../css/LibraryButtons.css";
 import { Outlet, useNavigate } from "react-router-dom";
-
+import IntroductionModal from "../../Components/IntroductionModal";
 function LibraryButtons() {
   const navigate = useNavigate();
   return (
     <>
 
       <div className="library-contents d-flex fs-3 fw-bold">
+        
+        <IntroductionModal />
         <button
           className="btns-content rounded-4"
           onClick={() => navigate("/BasicLibrary")}
@@ -27,8 +29,9 @@ function LibraryButtons() {
         >
           ADVANCED
         </button>
+          
       </div>
- 
+    
     </>
   );
 }

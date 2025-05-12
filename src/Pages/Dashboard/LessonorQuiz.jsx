@@ -7,7 +7,7 @@ import Video from "../../assets/Video.png";
 import Ideas from "../../assets/Ideas.png";
 import backkpoint from "../../assets/backkpoint.png";
 import LivesandDiamonds from "../../Components/LiveandDiamonds";
-
+import IntroductionModal from "../../Components/IntroductionModal";
 const levelMapping = {
   termsone:   "basic",
   termstwo:   "basic",
@@ -115,18 +115,25 @@ function LectureorQuiz() {
           className="img-fluid p-1 mt-1"
           alt="Back"
         />
+                      
         <p>Back</p>
       </div>
 
       <div className="container d-flex flex-column justify-content-center align-items-center">
-        <div className="status-bar">
+        
+        < div className="status-bar">
           {/* This badge uses the dynamic difficulty */}
+          <div>
+            <IntroductionModal/>
+          </div>
           <div
             className="difficulty text-center"
             style={{ backgroundColor: difficultyColors[difficulty] }}
           >
+            
             {difficulty}
           </div>
+          
           <LivesandDiamonds />
         </div>
 

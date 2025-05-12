@@ -8,7 +8,7 @@ export default function HowtoPlay() {
   const howImages = [how1, how2, how3, how4];
   return (
     <>
-      <Sidenav />
+   
       {howImages.map((src, idx) => (
         <div key={idx} className="how rounded-4">
           <img src={src} className="img-fluid" alt={`tutorial step ${idx + 1}`} />

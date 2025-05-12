@@ -104,7 +104,16 @@
   align-items: center;
   justify-content: center;
   gap: 1rem;
+  position: relative;    /* make this the absolute‐positioning context */
+  overflow: visible; 
+  bottom: 10px;
+  height: 7vh;
 }
+.status-bar .modal-content {
+  position: absolute;
+  left: 17rem;
+}
+
 .difficulty {
   background-color: #3498db;
   color: white;
