@@ -269,35 +269,64 @@ function Quiz() {
           </div>
 
           <div className="grid text-center fw-bold rounded-4">
-            {currentQuestion.choices.map((option, index) => (
-              <div
-                key={`${currentQuestion.question}-${index}`}
-                className={`choices d-flex justify-content-between align-items-center rounded-4 col-md-6 col-lg-11 m-5 ${
-                  selectedAnswerIndex === index ? "selected" : ""
-                }`}
-                onClick={() => handleChoiceClick(index)}
-                style={{ pointerEvents: showResult ? "none" : "auto" }}
-              >
-                <div
-                  className={`choice-${["A", "B", "C", "D"][index].toLowerCase()} rounded-4 m-4 ${
-                    selectedAnswerIndex === index ? "selected" : ""
-                  }`}
-                >
-                  <strong>{["A", "B", "C", "D"][index]}</strong>
-                  <video
-                    width="200"
-                    height="150"
-                    className="rounded-2 mb-1" 
-                    autoPlay
-                    muted
-                    loop
-                  >
-                    <source src={option.videoUrl} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                </div>
-              </div>
-            ))}
+           {currentQuestion.choices.map((option, index) => {
+  // figure out which choice is actually correct
+  const correctIndex = currentQuestion.choices.findIndex(
+    (c) => c.videoId === currentQuestion.correctAnswer
+  );
+
+  const isSelected = selectedAnswerIndex === index;
+  let extraClass = "";
+
+  if (isSelected) {
+    // user’s picked box
+    extraClass = showResult
+      ? isCorrect
+        ? " selected correct"  // green
+        : " selected wrong"    // red
+      : " selected";           // pre-result purple
+  }
+
+  // if they picked wrong, highlight the real correct box too
+  if (showResult && !isCorrect && index === correctIndex) {
+    extraClass += " correct";   // green
+  }
+
+  return (
+    <div
+      key={`${currentQuestion.question}-${index}`}
+      className={
+        `choices d-flex justify-content-between align-items-center 
+         rounded-4 col-md-6 col-lg-11 m-5` +
+        extraClass
+      }
+      onClick={() => handleChoiceClick(index)}
+      style={{ pointerEvents: showResult ? "none" : "auto" }}
+    >
+      <div
+        className={`choice-${
+          ["A","B","C","D"][index].toLowerCase()
+        } rounded-4 m-4${
+          isSelected ? " selected" : ""
+        }`}
+      >
+        <strong>{["A","B","C","D"][index]}</strong>
+        <video
+          width="200"
+          height="150"
+          className="rounded-2 mb-1"
+          autoPlay
+          muted
+          loop
+        >
+          <source src={option.videoUrl} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
+  );
+})}
+
           </div>
 
            {showResult && (

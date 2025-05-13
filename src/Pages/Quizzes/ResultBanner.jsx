@@ -1,6 +1,7 @@
 import React from "react";
 import check from "../../assets/check.png";
 import ekis from "../../assets/ekis.png";
+import "../../css/ResultBanner.css";
 
 const correctPhrases = [
   "Great job!",
@@ -20,6 +21,7 @@ const wrongPhrases = [
   "Don’t give up!",
   "One more time!",
   "Practice makes perfect!",
+  "Practice makes perfect!",
 ];
 
 export default function ResultBanner({ isCorrect }) {
@@ -34,17 +36,12 @@ export default function ResultBanner({ isCorrect }) {
 
   return (
     <div
-      className={`result-ans d-flex flex-column align-items-center text-center ps-5 fs-2 ${
+      className={`result-ans d-flex flex-column align-items-center justify-content-center  ${
         isCorrect ? "correct-ans" : "wrong-ans"
       }`}
-      style={{
-        height: "12vh",
-        marginTop: "-2.9rem",
-        rowGap: "0.5rem",   // spacing between lines
-      }}
     >
       <div className="d-flex justify-content-between w-100">
-        <span className="me-auto mb-0 text-nowrap ">
+        <span className="banner-label me-auto mb-0 text-nowrap ">
           {isCorrect ? "Correct answer!" : "Wrong answer"}
         </span>
 
@@ -65,8 +62,10 @@ export default function ResultBanner({ isCorrect }) {
 
       {/* the random encouragement line, upper-cased + colored */}
       <span
-        className="fs-4 text-nowrap"
-        style={{ color: phraseColor }}
+        
+        style={{ 
+          color: phraseColor,
+          fontSize: "2.2rem",}}
       >
         {phrase}
       </span>

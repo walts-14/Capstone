@@ -198,25 +198,30 @@
   border-radius: 10px;
   font-family: "Baloo", sans-serif;
 }
-.wrong-ans {
-  background-color: #e74c3c;
-  padding: 15px;
-  font-weight: bold;
-  border-radius: 10px;
-  position: relative;
-  font-family: "Baloo", sans-serif;
-}
 
-.ekis-icon {
-  width: 3.5vw;
-  height: auto;
-  position: absolute;
-  right: 1em;
-  top: 50%;
-  transform: translateY(-50%);
-}
+
+
 .lives-quizz {
   right: 15rem;
   top: 10rem;
   
+}
+
+
+/* user-picked correct */
+.choices.selected.correct {
+  border: 6px solid #2ecc71 !important;
+  color:            #000     !important;
+}
+
+/* user-picked wrong */
+.choices.selected.wrong {
+  border: 6px solid #86271e !important;
+  color:            #000     !important;
+}
+
+/* actual correct when user was wrong */
+.choices.correct {
+  border: 6px solid #2ecc71 !important;
+
 }

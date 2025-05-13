@@ -22,9 +22,7 @@ import LectureorQuiz from "./Pages/Dashboard/LessonorQuiz.jsx";
 import Page from "./Pages/Dashboard/Page.jsx";
 import Quiz from "./Pages/Quizzes/Quiz.jsx";
 import Termspage from "./Pages/Library/Terms/Termspage.jsx";
-import Correct from "./Pages/Quizzes/Correct.jsx";
-import Wrong from "./Pages/Quizzes/Wrong.jsx";
-import Repeat from "./Pages/Quizzes/Repeat.jsx";
+
 import Finish from "./Pages/Quizzes/Finish.jsx";
 import FinishLecture from "./Pages/Library/Terms/FinishLecture.jsx";
 import VideoLecture from "./Pages/Library/Lectures/LectureVids.jsx";
@@ -63,9 +61,6 @@ const router = createBrowserRouter([
       { path: "quiz/:lessonKey", element: <Quiz /> },
       { path: "page/:termId", element: <Page /> },
       { path: "terms/:termId", element: <Termspage /> },
-      { path: "correct", element: <Correct /> },
-      { path: "wrong", element: <Wrong /> },
-      { path: "repeat", element: <Repeat /> },
       { path: "finish", element: <Finish /> },
       { path: "VideoLecture/:title", element: <VideoLecture /> },
       { path: "lesonecontent/:lessonKey/:termId", element: <LesoneContent /> },
