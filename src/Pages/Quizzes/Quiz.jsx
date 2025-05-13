@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { ProgressContext } from "../../../src/Pages/Dashboard/ProgressContext"; // NEW: Import progress context
 import LivesandDiamonds from "../../Components/LiveandDiamonds";
-
+import ResultBanner from "./ResultBanner"; // NEW: Import ResultBanner component
 function Quiz() {
   const navigate = useNavigate();
   const { lessonKey } = useParams(); // e.g., "termsone", "termstwo", etc.
@@ -300,31 +300,13 @@ function Quiz() {
             ))}
           </div>
 
-          {showResult && (
-            <div
-              className={`result-ans d-flex justify-content-between text-center ps-5 fs-2 ${
-                isCorrect ? "correct-ans" : "wrong-ans"
-              }`}
-              style={{
-                height: "12vh",
-                marginTop: "-2.9rem",
-              }}
-            >
-              <span className="me-auto mb-5 text-nowrap">
-                {isCorrect ? "Correct answer!" : "Wrong answer"}
-              </span>
-              {isCorrect && (
-                <img
-                  src={check}
-                  className="check-icon mt-5 me-4"
-                  alt="Correct"
-                />
-              )}
-              {!isCorrect && (
-                <img src={ekis} className="ekis-icon" alt="Wrong" />
-              )}
-            </div>
-          )}
+           {showResult && (
+             <ResultBanner
+               isCorrect={isCorrect}
+               checkIcon={check}
+               wrongIcon={ekis}
+             />
+           )}
 
           <button
             type="button"

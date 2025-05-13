@@ -62,15 +62,22 @@
   bottom: 36.5em;
 }
 .wrong-ans {
-  background-color: #bd3025;
+  /* abrupt cut at 50% */
+  background: linear-gradient(
+    to bottom,
+    #BF2020 0%,
+    #BF2020 50%,
+    #992222 50%,
+    #992222 100%
+  );
   color: #100429;
   position: absolute;
   top: 13rem;
   height: 7vh;
   width: 25rem;
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
+  border-radius: 0 1rem 1rem 0;
 }
+
 .repeated-ans img {
   min-height: 8vh;
   justify-content: center;

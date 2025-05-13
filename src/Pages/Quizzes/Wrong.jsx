@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import backkpoint from "../../assets/backkpoint.png";
 import arrow from "../../assets/arrow.png";
 import ekis from "../../assets/ekis.png";
+import wrongbg from "../../assets/wrongbg.png";
 import axios from "axios";
 
 function Wrong() {
@@ -66,9 +67,9 @@ function Wrong() {
         {/* Display question only */}
       </div>
       <div className="grids text-center fw-bold rounded-4">
-        <div className="picturee-question d-flex rounded-4"></div>
+       
         <div className="wrong-ans d-flex text-center justify-content-left ps-5 pt-3 fs-3">
-          Wrong Answer
+           <p>Wrong Answer</p>
           <img src={ekis} class="img-fluid p-1 mt-1" alt="wrong img" />
         </div>
         <div className="choicesss rounded-4 col-md-6 col-lg-11 m-5">

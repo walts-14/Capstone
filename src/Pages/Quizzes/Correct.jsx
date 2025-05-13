@@ -67,10 +67,10 @@ function Correct() {
       </div>
 
       <div className="gridd text-center fw-bold rounded-4">
-        <div className="picture-question d-flex ms-auto rounded-4"></div>
-        <div className="correct-ans d-flex text-center justify-content-left ps-5 pt-3 fs-3">
-          Correct Answer
-          <img src={check} class="img-fluid p-1 mt-1" alt="check img" />
+      
+        <div className="wrong-ans d-flex text-center justify-content-left ps-5 pt-3 fs-3">
+            <p>Wrong Answer</p>
+          <img src={ekis} class="img-fluid p-1 mt-1" alt="wrong img" />
         </div>
         <div className="choicess rounded-4 col-md-6 col-lg-11 m-5">
           <div className="choicee-a rounded-4 m-4">a</div>
