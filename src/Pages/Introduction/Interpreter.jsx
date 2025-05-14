@@ -3,54 +3,45 @@ import Sidenav from "../../Components/Sidenav";
 import vid1 from "../../assets/acknowledge.mp4";
 import vid2 from "../../assets/Where are you frtom.mp4";
 
+
 const interpreters = [
   {
     id: 1,
     video: vid1,
-    name: "Loremloremlorem",
-    credentials: "Loremloremlorem",
-    education: "Loremloremlorem",
-    years: "Loremloremlorem",
-    specialty: "Loremloremlorem",
-    whyTeach: "Loremloremlorem",
-    funFact: "Loremloremlorem",
+    name: "Jane “Jay” Doe",
+    teachingExperience: "8 years",
+    journey: "I discovered my passion for FSL while volunteering at a Deaf youth camp.",
+    whereTaught: "Public schools and community youth programs"
   },
   {
     id: 2,
     video: vid2,
-    name: "Loremloremlorem",
-    credentials: "Loremloremlorem",
-    education: "Loremloremlorem",
-    years: "Loremloremlorem",
-    specialty: "Loremloremlorem",
-    whyTeach: "Loremloremlorem",
-    funFact: "Loremloremlorem",
-  },
+    name: "Carlos Rivera",
+    teachingExperience: "5 years",
+    journey: "I began learning FSL in college after taking an intro course and never stopped.",
+    whereTaught: "Local community center and online workshops"
+  }
 ];
 
 export default function Interpreter() {
   return (
     <>
-      
       {interpreters.map((intp) => (
         <div
           key={intp.id}
-          className="interpreter-intro text-white rounded-4 p-5 position-static"
+          className="interpreter-intro text-white rounded-4 p-3 position-static"
         >
           <video
             src={intp.video}
             controls
-            className="interpreter-video "
+            className="interpreter-video"
           />
           <div className="interpreter-details d-flex flex-column ms-auto">
             <p>Interpreter #{intp.id}</p>
             <p>Name: <span>{intp.name}</span></p>
-            <p>Credentials and Certifications: <span>{intp.credentials}</span></p>
-            <p>Education / Trainings: <span>{intp.education}</span></p>
-            <p>Years of Experience: <span>{intp.years}</span></p>
-            <p>Specialty Areas: <span>{intp.specialty}</span></p>
-            <p>Why I teach: <span>{intp.whyTeach}</span></p>
-            <p>Fun Fact: <span>{intp.funFact}</span></p>
+            <p>Teaching Experience: <span>{intp.teachingExperience}</span></p>
+            <p>FSL Journey: <span>{intp.journey}</span></p>
+            <p>Where They’ve Taught: <span>{intp.whereTaught}</span></p>
           </div>
         </div>
       ))}

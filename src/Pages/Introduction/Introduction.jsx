@@ -33,7 +33,7 @@ export default function Introduction() {
               }`}
               onClick={() => setActiveComponent("howtoplay")}
             >
-              How to Play
+              Instructions
             </button>
           </div>
         </div>

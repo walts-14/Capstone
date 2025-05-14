@@ -47,6 +47,7 @@
   align-items: flex-start;
   z-index: 0;
   position: relative;
+  
 }
 
 .intro-text {
@@ -58,25 +59,33 @@
   padding: 1rem 2rem;
   border-radius: 1rem;
 }
+/* interpreter-----------------------------------------------------------------------------------------------------------------------*/
 .interpreter-intro {
   background-color: var(--mid-purple);
   font-size: 1.1rem;
   width: 74vw;
-  height: 50vh;
+  height: 45vh;
   margin-bottom: 2rem;
   display: flex;
   justify-content: center;
   align-items: center;
 }
+ .interpreter-details {
+  padding: 15px;
+ }
+  .interpreter-details p:nth-child(1) {
+  font-size: 2.7rem;
+  color: var(--dark-purple); 
+  }
  .interpreter-details p {
   font-size: 2rem;
-  color: white;
+  color: #D3BDF0 ;
   margin: 0;
   
 }
 .interpreter-details p span {
   font-size: 2.5rem;
-  color: var(--background);
+  color: #F2F2F2;
   font-weight: bold;  
 }
 .interpreter-video {
@@ -117,7 +126,7 @@
 .component-display {
   width: 100%;
 }
-
+/* instructions-----------------------------------------------------------------------------------------------------------------------*/
 .how {
   width: 75vw;
   height: 35vh;
