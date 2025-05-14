@@ -38,6 +38,9 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
     const saved = storedEmail
       ? localStorage.getItem(`progress_${storedEmail}`)
       : null;
+    if (saved) {
+      console.log("Loaded progress from localStorage for", storedEmail, ":", saved);
+    }
     return saved ? JSON.parse(saved) : initialProgress;
   });
 
@@ -51,15 +54,28 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
 
   // 1) Fetch progress & streak when email changes
   useEffect(() => {
-    if (!currentUserEmail) return;
+    if (!currentUserEmail) {
+      setProgressData(initialProgress);
+      return;
+    }
     (async () => {
       try {
+        const saved = localStorage.getItem(STORAGE_KEY(currentUserEmail));
+        if (saved) {
+          console.log("Using cached progress from localStorage for", currentUserEmail, ":", saved);
+          setProgressData(JSON.parse(saved));
+        } else {
+          console.log("No cached progress found for", currentUserEmail);
+          setProgressData(initialProgress);
+        }
+
         const [prgRes, strRes] = await Promise.all([
           axios.get(`/api/progress/email/${currentUserEmail}`),
           axios.get(`/api/streak/email/${currentUserEmail}`)
         ]);
 
         if (prgRes.data.progress) {
+          console.log("Fetched progress from backend for", currentUserEmail, ":", prgRes.data.progress);
           setProgressData(prgRes.data.progress);
           localStorage.setItem(
             STORAGE_KEY(currentUserEmail),
@@ -147,4 +163,4 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
       {children}
     </ProgressContext.Provider>
   );
-}; 
+};

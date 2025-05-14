@@ -101,6 +101,7 @@ export const getRandomQuiz = async (req, res) => {
 export const getStoredQuizQuestions = async (req, res) => {
   try {
     const { level, lessonNumber, quizPart } = req.query;
+    console.log("getStoredQuizQuestions called with:", { level, lessonNumber, quizPart });
     if (!level || !lessonNumber || !quizPart) {
       return res.status(400).json({ error: "Missing query parameters: level, lessonNumber, and quizPart are required." });
     }
@@ -113,6 +114,8 @@ export const getStoredQuizQuestions = async (req, res) => {
       lessonNumber: lessonNum,
       quizPart: part
     }).populate("correctAnswer choices.videoId");
+
+    console.log(`Found ${quizzes.length} quizzes for level=${level}, lessonNumber=${lessonNum}, quizPart=${part}`);
 
     if (!quizzes || quizzes.length === 0) {
       return res.status(404).json({ error: "No stored quiz questions found for the specified parameters." });

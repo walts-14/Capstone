@@ -43,6 +43,7 @@ export const getProgressByEmail = async (req, res) => {
   try {
     const { email } = req.params;
     const user = await User.findOne({ email }).select("progress");
+    console.log("DEBUG: Raw user.progress from DB for", email, ":", user.progress);
     if (!user) return res.status(404).json({ error: "User not found" });
 
     // 1) start from a fresh full tree, 2) overlay stored progress
@@ -70,7 +71,8 @@ export const updateProgressByEmail = async (req, res) => {
     const { email }    = req.params;
     const { progress } = req.body;
 
-    const user = await User.findOne({ email });
+    // Fetch current progress to merge
+    const user = await User.findOne({ email }).select("progress");
     if (!user) return res.status(404).json({ error: "User not found" });
 
     // merge incoming deltas into existing full tree
@@ -79,8 +81,8 @@ export const updateProgressByEmail = async (req, res) => {
       progress
     );
 
-    user.progress = merged;
-    await user.save();
+    // Update only the progress field using updateOne to avoid validation errors
+    await User.updateOne({ email }, { progress: merged });
 
     return res.json({ message: "Progress updated", progress: merged });
   } catch (err) {
@@ -88,3 +90,4 @@ export const updateProgressByEmail = async (req, res) => {
     return res.status(500).json({ error: err.message });
   }
 };
+

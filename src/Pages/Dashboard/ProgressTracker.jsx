@@ -1,9 +1,9 @@
-// src/components/Dashboard/ProgressTracker.jsx
 import React, { useContext, useEffect, useState } from "react";
 import { ProgressContext } from "./ProgressContext.jsx";
 import axios from "axios";
 import trophy from "../../assets/trophy.png";
 import StreakButton from "../../Components/Streak/StreakButton.jsx";
+
 const calculateProgress = (progressObj = {}) => {
   let score = 0;
   if (progressObj.step1Lecture) score += 25;
@@ -27,7 +27,7 @@ const lessonOffsets = {
 
 function ProgressTracker({ student }) {
   // Use currentUserName and currentUserEmail from context as fallback
-  const { progressData, streakData, currentUserName, currentUserEmail } =
+  const { progressData: contextProgressData, streakData, currentUserName, currentUserEmail } =
     useContext(ProgressContext);
   const [userRank, setUserRank] = useState(null);
   const [userName, setUserName] = useState(
@@ -37,41 +37,28 @@ function ProgressTracker({ student }) {
   // Use email from student prop or fallback to currentUserEmail
   const studentEmail = student?.email || currentUserEmail;
 
+  // Local state for fetched progress data
+  const [progressData, setProgressData] = useState(contextProgressData);
+
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        console.log("Fetching leaderboard for student email:", studentEmail);
         const response = await axios.get(
           "http://localhost:5000/api/leaderboard",
           { headers: axios.defaults.headers.common }
         );
-        console.log("Leaderboard API response data:", response.data);
         const sortedLeaderboard = [...response.data].sort(
           (a, b) => b.points - a.points
         );
-        console.log(
-          "Sorted leaderboard emails:",
-          sortedLeaderboard.map((u) => u.email)
-        );
-        // Normalize names for comparison since email is missing in leaderboard data
         const normalizedStudentName = (student?.name || currentUserName)
           ?.trim()
           .toLowerCase();
-        console.log("Normalized student name:", normalizedStudentName);
         const rankIndex = sortedLeaderboard.findIndex((u) => {
           if (u.name && normalizedStudentName) {
-            const nameMatch =
-              u.name.trim().toLowerCase() === normalizedStudentName;
-            console.log(
-              `Comparing name ${u.name
-                .trim()
-                .toLowerCase()} to ${normalizedStudentName}: ${nameMatch}`
-            );
-            return nameMatch;
+            return u.name.trim().toLowerCase() === normalizedStudentName;
           }
           return false;
         });
-        console.log("Rank index found:", rankIndex);
         setUserRank(rankIndex >= 0 ? rankIndex + 1 : "N/A");
         if (rankIndex >= 0) {
           setUserName(
@@ -85,8 +72,35 @@ function ProgressTracker({ student }) {
         setUserRank("N/A");
       }
     };
+
     if (studentEmail) fetchLeaderboard();
-  }, [studentEmail, currentUserName]);
+  }, [studentEmail, currentUserName, student]);
+
+  // Fetch progress for the student if student prop is provided
+  useEffect(() => {
+    const fetchProgress = async () => {
+      try {
+        if (studentEmail) {
+          const response = await axios.get(
+            `http://localhost:5000/api/progress/email/${studentEmail}`,
+            { headers: axios.defaults.headers.common }
+          );
+          if (response.data.progress) {
+            setProgressData(response.data.progress);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching progress for student:", error);
+        setProgressData(contextProgressData);
+      }
+    };
+
+    if (student) {
+      fetchProgress();
+    } else {
+      setProgressData(contextProgressData);
+    }
+  }, [student, studentEmail, contextProgressData]);
 
   const styles = {
     basic: { backgroundColor: "#205D87" },
