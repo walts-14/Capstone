@@ -175,7 +175,7 @@ function LectureorQuiz() {
                   showButton:  true,
                   fromLecture: true,
                   lessonKey,      // pass through for LesoneContent
-                  step: currentStep,
+                  currentStep: currentStep,
                   difficulty,   
                  },
               })

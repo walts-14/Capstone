@@ -14,7 +14,8 @@ function Quiz() {
   const navigate = useNavigate();
   const { lessonKey } = useParams(); // e.g., "termsone", "termstwo", etc.
   const location = useLocation();
-  const currentStep = location.state?.currentStep || 1; // Default to step 1 if not passed
+  const currentStep = location.state?.currentStep || 1;
+
 
   // NEW: Determine level based on lessonKey
   const levelMapping = {
@@ -192,7 +193,6 @@ function Quiz() {
   };
 
   const handleBack = () => {
-  if (location.state?.fromLecture) {
     // go back to the LectureorQuiz screen, carrying the same lessonKey + difficulty/step
     navigate(`/page/${lessonKey}`, {
       state: {
@@ -201,9 +201,7 @@ function Quiz() {
         step:       location.state.step,
       },
     });
-  } else {
-    console.log("Back button clicked, but no fromLecture state.");
-  }
+  
 };
   // NEW: Automatically update quiz progress and navigate to finish when quiz is complete
   useEffect(() => {

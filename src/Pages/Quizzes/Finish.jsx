@@ -135,16 +135,15 @@ function Finish() {
         <button
           type="button"
           className="continue d-flex justify-content-center align-items-center rounded-4 pt-4 mb-4 ms-auto me-5 fs-1"
-           onClick={() => navigate(
-        `/page/${lessonKey}`,
-        { 
-          state: {
-            lessonKey,
-            difficulty: location.state?.difficulty ?? levelMapping[lessonKey], 
-            step: 2      // ← tell LectureorQuiz to start on Part 2
-              }
+           onClick={() => 
+          navigate(`/page/${lessonKey}`, {
+            state: {
+              lessonKey,
+              difficulty: location.state?.difficulty ?? levelMapping[lessonKey], 
+              step: 2,
+              fromLecture: true,
             }
-          )}
+          })}
         >
           Continue
           <img
