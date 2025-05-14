@@ -40,18 +40,22 @@
 
 .quiz-container {
   font-size: clamp(2.5rem, 2vw, 1.5rem);
-  max-width: 80%;
+  max-width: 60%;
   margin: 0 auto;
   color: var(--white);
   font-family: "Baloo", sans-serif;
   position: relative;
   text-align: left;
   left: 1rem;
-  top: 14rem;
+  top: 15rem;
+  
 }
 .quiz-container p {
-  position: absolute;
-  bottom: 0.5rem;
+  position: fixed;
+  top:  19rem;
+  left: 24rem;
+  margin: 0;
+  width: 65%;
 }
 .grid {
   font-family: "Baloo", sans-serif;
@@ -189,7 +193,7 @@
   padding: 10px 20px;
   border-radius: 10px;
   width: fit-content;
-  height: 20vh;
+  height: 25vh;
 }
 
 .correct-ans {
@@ -216,7 +220,7 @@
 
 /* user-picked wrong */
 .choices.selected.wrong {
-  border: 6px solid #86271e !important;
+  border: 6px solid #cc2e2e  !important;
   color:            #000     !important;
 }
 
