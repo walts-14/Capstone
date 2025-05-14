@@ -6,6 +6,7 @@ import "../../css/Settings.css";
 import { useNavigate } from "react-router-dom";
 import changepic from "../../assets/changepic.png";
 import axios from "axios";
+import MaintenanceModal from "../../Components/Maintenance/MaintenanceModal.jsx";
 
 function Settings() {
   const navigate = useNavigate();
@@ -148,7 +149,10 @@ function Settings() {
           >
             Delete Picture
           </button>
-
+         <button
+          onclick={MaintenanceModal}>
+          maintenance
+         </button>
           <div className="camera-overlay d-flex justify-content-center align-items-center">
             <i className="fas fa-camera fa-2x text-white"></i>
           </div>

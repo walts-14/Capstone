@@ -3,8 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { ProgressContext } from "./ProgressContext.jsx";
 import axios from "axios";
 import trophy from "../../assets/trophy.png";
-import fire from "../../assets/fire.png";
-
+import StreakButton from "../../Components/Streak/StreakButton.jsx";
 const calculateProgress = (progressObj = {}) => {
   let score = 0;
   if (progressObj.step1Lecture) score += 25;
@@ -98,20 +97,9 @@ function ProgressTracker({ student }) {
   return (
     <>
       <div className="tracker">
-        <div className="streak d-flex flex-row rounded-4">
-          <img
-            src={fire}
-            className="h-auto mt-4 ms-3 mb-3 img-fluid"
-            alt="streak"
-          />
-          <div className="streak-num text-center text-white fs-1 ms-2 mt-2">
-            {streakData.currentStreak}
-          </div>
-          <span className="text-white mt-5 justify-content-center text-center pt-2">
-            Day Streak
-          </span>
-        </div>
+        <StreakButton></StreakButton>
         <div className="position-lb d-flex align-items-center gap-1">
+          
           <img
             src={trophy}
             className="h-auto mt-4 ms-3 mb-3 img-fluid"
