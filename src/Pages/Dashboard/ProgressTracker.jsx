@@ -99,7 +99,6 @@ function ProgressTracker({ student }) {
       <div className="tracker">
         <StreakButton></StreakButton>
         <div className="position-lb d-flex align-items-center gap-1">
-          
           <img
             src={trophy}
             className="h-auto mt-4 ms-3 mb-3 img-fluid"

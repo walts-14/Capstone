@@ -18,28 +18,28 @@ export default function StreakButton({ streak }) {
       </button>
 
       {isOpen && (
-         <div className="modal-backdrop" onClick={toggle}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+         <div className="streak-modal-backdrop" onClick={toggle}>
+          <div className="streak-modal-content" onClick={(e) => e.stopPropagation()}>
             {/* Header with flame icon + number */}
-            <div className="modal-header">
-              <div className="header-number">30</div>
-              <img src={fire} alt="flame" className="header-flame" />
+            <div className="streak-modal-header">
+              <div className="streak-header-number">30</div>
+              <img src={fire} alt="flame" className="streak-header-flame" />
             </div>
 
             {/* Title and subtitle */}
-            <h2 className="modal-title">DAY STREAK!</h2>
-            <p className="modal-subtitle">
+            <h2 className="streak-modal-title">DAY STREAK!</h2>
+            <p className="streak-modal-subtitle">
               Learn new FSL to earn points and build streak
             </p>
 
             {/* Reward row */}
-            <div className="modal-reward">
-              <img src={medal} alt="medal" className="reward-icon" />
-              <span className="reward-text">+100</span>
+            <div className="streak-modal-reward">
+              <img src={medal} alt="medal" className="streak-reward-icon" />
+              <span className="streak-reward-text">+100</span>
             </div>
 
             {/* Close button */}
-            <button className="close-btn" onClick={toggle}>
+            <button className="streak-close-btn" onClick={toggle}>
               Close
             </button>
           </div>

@@ -1,16 +1,23 @@
 import React from "react";
-import "./MaintenanceModal.css"; // styling below
-import maintenanceIcon from "../../assets/maintenance-icon.png"; // Replace with actual path
-const MaintenanceModal = ({ show }) => {
+import "./MaintenanceModal.css";
+import maintenanceIcon from "../../assets/maintenance-icon.png";
+
+const MaintenanceModal = ({ show, onClose }) => {
   if (!show) return null;
 
+  // Stop clicks inside the box from closing
+  const stopPropagation = (e) => e.stopPropagation();
+
   return (
-    <div className="modal-backdrop">
-      <div className="modal-box">
+    <div className="maintenance-modal-backdrop" onClick={onClose}>
+      <div className="maintenance-modal-box" onClick={stopPropagation}>
+        <button className="modal-close-btn" onClick={onClose}>
+          ×
+        </button>
         <img
-          src={maintenanceIcon} // Replace with actual path
+          src={maintenanceIcon}
           alt="Maintenance Icon"
-          className="modal-image"
+          className="maintenance-modal-image"
         />
         <h2>Oops! site under maintenance</h2>
         <p>

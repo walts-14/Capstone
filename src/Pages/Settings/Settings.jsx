@@ -102,9 +102,21 @@ function Settings() {
     localStorage.removeItem("loggedIn");
     navigate("/login", { replace: true });
   };
+  const [showModal, setShowModal] = useState(false);
 
   return (
     <>
+       <button onClick={() => setShowModal(true)}
+        style={{ position: "absolute", top: "10px", right: "10px" }}>
+        Maintenance
+      </button>
+
+      {/* modal only renders when showModal===true */}
+      <MaintenanceModal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+      />
+
       <Sidenav />
       <div className="settings-container rounded-4 position-absolute">
         {/* ——— STUDENT INFO (no design changes) ——— */}
@@ -149,10 +161,7 @@ function Settings() {
           >
             Delete Picture
           </button>
-         <button
-          onclick={MaintenanceModal}>
-          maintenance
-         </button>
+        
           <div className="camera-overlay d-flex justify-content-center align-items-center">
             <i className="fas fa-camera fa-2x text-white"></i>
           </div>
