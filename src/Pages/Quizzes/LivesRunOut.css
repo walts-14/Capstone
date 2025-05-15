@@ -1,0 +1,48 @@
+/* src/Components/LivesRunOut.css */
+.lro-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.7);
+  display: flex; justify-content: center; align-items: center;
+  z-index: 2000;
+}
+.lro-modal {
+  background: #2A213A;
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  position: relative;
+  max-width: 90%;
+  width: 400px;
+}
+.lro-icon {
+  width: 64px;
+  margin-bottom: 1rem;
+}
+.lro-title {
+  margin: 0.5rem 0;
+  font-size: 1.5rem;
+  color: #ffffff;
+}
+.lro-text {
+  color: #ddd;
+  margin-bottom: 1.5rem;
+  line-height: 1.4;
+}
+.lro-button {
+  background: #6C5CE7;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+.lro-btn-icon {
+  width: 24px;
+  height: 24px;
+}
