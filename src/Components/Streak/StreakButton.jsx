@@ -8,6 +8,7 @@ export default function StreakButton() {
   const { streakData, incrementStreak } = useContext(ProgressContext);
   const [isOpen, setIsOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [modalShownDate, setModalShownDate] = useState(null);
 
   const toggle = () => setIsOpen((v) => !v);
 
@@ -24,8 +25,9 @@ export default function StreakButton() {
       if (streakData.currentStreak < 1) {
         incrementStreak();
         setShowModal(true);
+        setModalShownDate(new Date().toDateString());
       }
-      return;
+      return; 
     }
     const lastDate = new Date(streakData.lastUpdated);
     const now = new Date();
@@ -36,16 +38,15 @@ export default function StreakButton() {
 
     if (diffDays >= 1) {
       incrementStreak();
-      setShowModal(true);
+      // Show modal only if not shown today
+      if (modalShownDate !== new Date().toDateString()) {
+        setShowModal(true);
+        setModalShownDate(new Date().toDateString());
+      }
     }
-  }, [streakData.lastUpdated, streakData.currentStreak, incrementStreak]);
+  }, [streakData.lastUpdated, streakData.currentStreak, incrementStreak, modalShownDate]);
 
-  // Show modal automatically when streak increments
-  useEffect(() => {
-    if (streakData.currentStreak > 0) {
-      setShowModal(true);
-    }
-  }, [streakData.currentStreak]);
+  // Remove the second useEffect that shows modal automatically on streakData.currentStreak change
 
   return (
     <>
@@ -75,7 +76,19 @@ export default function StreakButton() {
             {/* Reward row */}
             <div className="streak-modal-reward">
               <img src={medal} alt="medal" className="streak-reward-icon" />
-              <span className="streak-reward-text">+100</span>
+              <span className="streak-reward-text">
+                +{(() => {
+                  const day = streakData.currentStreak;
+                  if (day === 1) return 5;
+                  else if (day === 2) return 10;
+                  else if (day === 3) return 15;
+                  else if (day === 4) return 20;
+                  else if (day === 5) return 30;
+                  else if (day === 6) return 40;
+                  else if (day >= 7) return 50;
+                  else return 0;
+                })()}
+              </span>
             </div>
 
             {/* Close button */}

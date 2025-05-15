@@ -7,17 +7,16 @@ import ekis from "../../assets/ekis.png";
 import "../../css/Quiz.css";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { ProgressContext } from "../../../src/Pages/Dashboard/ProgressContext"; // NEW: Import progress context
+import { ProgressContext } from "../../../src/Pages/Dashboard/ProgressContext";
 import LivesandDiamonds from "../../Components/LiveandDiamonds";
-import ResultBanner from "./ResultBanner"; // NEW: Import ResultBanner component
+import ResultBanner from "./ResultBanner";
+
 function Quiz() {
   const navigate = useNavigate();
-  const { lessonKey } = useParams(); // e.g., "termsone", "termstwo", etc.
+  const { lessonKey } = useParams();
   const location = useLocation();
   const currentStep = location.state?.currentStep || 1;
 
-
-  // NEW: Determine level based on lessonKey
   const levelMapping = {
     termsone: "basic",
     termstwo: "basic",
@@ -34,11 +33,16 @@ function Quiz() {
   };
 
   const level = levelMapping[lessonKey] || "basic";
-
-  // Map currentStep to quizPart for backend API
-  const quizPart = currentStep; // Assuming step 1 = quizPart 1, step 2 = quizPart 2
-
+  const quizPart = currentStep;
   const totalQuestions = 10;
+
+  const minPointsRequired = {
+    basic: 70,
+    intermediate: 105,
+    advanced: 140,
+  };
+
+  const pointsPerCorrectAnswer = 10;
 
   const [quizQuestions, setQuizQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -48,45 +52,36 @@ function Quiz() {
   const [wrongAnswers, setWrongAnswers] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
-  const [quizFinished, setQuizFinished] = useState(false); // Flag when quiz is complete
-
-  // NEW: Local flag to ensure progress is updated only once
+  const [quizFinished, setQuizFinished] = useState(false);
   const [hasUpdatedQuiz, setHasUpdatedQuiz] = useState(false);
+  const [failedPointsRequirement, setFailedPointsRequirement] = useState(false);
 
-  // Lives system
-  const [lives, setLives] = useState(5); // Default lives
+  const [lives, setLives] = useState(5);
   const [streak, setStreak] = useState(0);
 
   const backendURL = "http://localhost:5000";
 
-  const { updateProgress } = useContext(ProgressContext); // NEW: Get progress updater
+  const { updateProgress } = useContext(ProgressContext);
 
   useEffect(() => {
     const fetchLives = async () => {
       try {
         const userEmail = localStorage.getItem("userEmail");
-        if (!userEmail) {
-          console.error("User email not found in localStorage.");
-          return;
-        }
+        if (!userEmail) return;
         const response = await axios.get(
           `${backendURL}/api/lives/email/${userEmail}`
         );
         setLives(response.data.lives);
       } catch (error) {
-        console.error("Error fetching lives:", error);
         toast.error("Failed to fetch lives. Please try again.");
       }
     };
-
     fetchLives();
   }, [backendURL]);
 
-  // Fetch quiz questions from backend API
   useEffect(() => {
     const fetchQuizQuestions = async () => {
       try {
-        // Map lessonKey to lessonNumber
         const lessonNumberMapping = {
           termsone: 1,
           termstwo: 2,
@@ -105,11 +100,7 @@ function Quiz() {
         const response = await axios.get(
           `${backendURL}/api/quizzes/stored`,
           {
-            params: {
-              level,
-              lessonNumber,
-              quizPart,
-            },
+            params: { level, lessonNumber, quizPart },
           }
         );
         setQuizQuestions(response.data);
@@ -121,12 +112,12 @@ function Quiz() {
         setShowResult(false);
         setIsCorrect(false);
         setQuizFinished(false);
+        setFailedPointsRequirement(false);
+        setHasUpdatedQuiz(false);
       } catch (error) {
-        console.error("Error fetching quiz questions:", error);
         toast.error("Failed to load quiz questions. Please try again.");
       }
     };
-
     fetchQuizQuestions();
   }, [level, lessonKey, quizPart, backendURL]);
 
@@ -136,25 +127,20 @@ function Quiz() {
     if (showResult || lives <= 0) return;
     setSelectedAnswerIndex(index);
     const selectedChoice = currentQuestion.choices[index];
-    const isAnswerCorrect = selectedChoice.videoId === currentQuestion.correctAnswer;
-    setIsCorrect(isAnswerCorrect);
+    setIsCorrect(selectedChoice.videoId === currentQuestion.correctAnswer);
   };
 
   const handleNext = async () => {
     const userEmail = localStorage.getItem("userEmail");
-
     if (selectedAnswerIndex === null) {
       toast.error("Please select an answer before proceeding.");
       return;
     }
-
     if (!showResult) {
       setShowResult(true);
       try {
         if (!isCorrect) {
-          await axios.post(
-            `${backendURL}/api/lives/email/${userEmail}/lose-life`
-          );
+          await axios.post(`${backendURL}/api/lives/email/${userEmail}/lose-life`);
           setLives((prev) => Math.max(0, prev - 1));
           setStreak(0);
           setWrongAnswers((prev) => prev + 1);
@@ -162,57 +148,63 @@ function Quiz() {
           setCorrectAnswers((prev) => prev + 1);
           setStreak((prev) => prev + 1);
           if ((streak + 1) % 3 === 0) {
-            await axios.post(
-              `${backendURL}/api/lives/email/${userEmail}/gain-life`
-            );
+            await axios.post(`${backendURL}/api/lives/email/${userEmail}/gain-life`);
             setLives((prev) => prev + 1);
             toast.success("Streak bonus! +1 life");
           }
-          await axios.post(
-            `${backendURL}/api/points/email/${userEmail}/gain-points`,
-            { points: 10 }
-          );
+          await axios.post(`${backendURL}/api/points/email/${userEmail}/gain-points`, { points: 10 });
         }
       } catch (error) {
-        console.error("Error updating lives/points:", error);
         toast.error("Failed to update lives/points. Please try again.");
       }
       return;
     }
-
     setAttempts((prev) => prev + 1);
     if (attempts + 1 >= totalQuestions || lives <= 0) {
       setQuizFinished(true);
       toast.success("Quiz completed!");
       return;
     }
-
     setCurrentQuestionIndex((prev) => prev + 1);
     setSelectedAnswerIndex(null);
     setShowResult(false);
   };
 
   const handleBack = () => {
-    // go back to the LectureorQuiz screen, carrying the same lessonKey + difficulty/step
     navigate(`/page/${lessonKey}`, {
       state: {
         lessonKey,
         difficulty: location.state.difficulty,
-        step:       location.state.step,
+        step: location.state.step,
       },
     });
-  
-};
-  // NEW: Automatically update quiz progress and navigate to finish when quiz is complete
+  };
+
+  const handleRetry = () => {
+    setQuizFinished(false);
+    setFailedPointsRequirement(false);
+    setCurrentQuestionIndex(0);
+    setSelectedAnswerIndex(null);
+    setAttempts(0);
+    setCorrectAnswers(0);
+    setWrongAnswers(0);
+    setShowResult(false);
+    setIsCorrect(false);
+    setHasUpdatedQuiz(false);
+  };
+
   useEffect(() => {
     if (quizFinished && !hasUpdatedQuiz) {
+      const userPoints = correctAnswers * pointsPerCorrectAnswer;
+      const requiredPoints = minPointsRequired[level] || 70;
+      if (userPoints < requiredPoints) {
+        setFailedPointsRequirement(true);
+        toast.error(`You need at least ${requiredPoints} points to proceed. Your score: ${userPoints}`);
+        return;
+      }
       const progressKey = currentStep === 1 ? "step1Quiz" : "step2Quiz";
       updateProgress(level, lessonKey, progressKey);
-      console.log(
-        `Automatically updated progress for ${lessonKey} ${progressKey}`
-      );
       setHasUpdatedQuiz(true);
-      // Navigate immediately without delay and pass lesson info
       navigate("/finish", {
         state: { correctAnswers, wrongAnswers, lessonKey, level },
       });
@@ -233,18 +225,30 @@ function Quiz() {
     return <div>Loading quiz...</div>;
   }
 
+  if (failedPointsRequirement) {
+    return (
+      <div className="failed-quiz-container">
+        <ResultBanner isCorrect={false} />
+        <p className="failed-message">
+          You did not meet the minimum points requirement to proceed.
+          Please try the quiz again.
+        </p>
+        <button className="retry-button" onClick={handleRetry}>
+          Retry Quiz
+        </button>
+      </div>
+    );
+  }
+
   return (
     <>
-      <div
-        className="back fs-1 fw-bold d-flex"
-        onClick={handleBack}>
+      <div className="back fs-1 fw-bold d-flex" onClick={handleBack}>
         <img src={backkpoint} className="img-fluid p-1 mt-1" alt="Back" />
         <p>Back</p>
       </div>
       <div className="lives-quizz d-flex position-absolute gap-4">
         <LivesandDiamonds showDiamonds={false} />
       </div>
-      {/* Only render the progress bar when quiz is in progress */}
       {!quizFinished && (
         <div
           className="progress"
@@ -259,82 +263,67 @@ function Quiz() {
           ></div>
         </div>
       )}
-
       {quizFinished ? null : (
         <>
           <div className="quiz-container fw-bold d-flex">
             <p className="quiz-question">{currentQuestion.question}</p>
           </div>
-
           <div className="grid text-center fw-bold rounded-4">
-           {currentQuestion.choices.map((option, index) => {
-  // figure out which choice is actually correct
-  const correctIndex = currentQuestion.choices.findIndex(
-    (c) => c.videoId === currentQuestion.correctAnswer
-  );
-
-  const isSelected = selectedAnswerIndex === index;
-  let extraClass = "";
-
-  if (isSelected) {
-    // user’s picked box
-    extraClass = showResult
-      ? isCorrect
-        ? " selected correct"  // green
-        : " selected wrong"    // red
-      : " selected";           // pre-result purple
-  }
-
-  // if they picked wrong, highlight the real correct box too
-  if (showResult && !isCorrect && index === correctIndex) {
-    extraClass += " correct";   // green
-  }
-
-  return (
-    <div
-      key={`${currentQuestion.question}-${index}`}
-      className={
-        `choices d-flex justify-content-between align-items-center 
-         rounded-4 col-md-6 col-lg-11 m-5` +
-        extraClass
-      }
-      onClick={() => handleChoiceClick(index)}
-      style={{ pointerEvents: showResult ? "none" : "auto" }}
-    >
-      <div
-        className={`choice-${
-          ["A","B","C","D"][index].toLowerCase()
-        } rounded-4 m-4${
-          isSelected ? " selected" : ""
-        }`}
-      >
-        <strong>{["A","B","C","D"][index]}</strong>
-        <video
-          width="200"
-          height="150"
-          className="rounded-2 mb-1"
-          autoPlay
-          muted
-          loop
-        >
-          <source src={option.videoUrl} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-      </div>
-    </div>
-  );
-})}
-
+            {currentQuestion.choices.map((option, index) => {
+              const correctIndex = currentQuestion.choices.findIndex(
+                (c) => c.videoId === currentQuestion.correctAnswer
+              );
+              const isSelected = selectedAnswerIndex === index;
+              let extraClass = "";
+              if (isSelected) {
+                extraClass = showResult
+                  ? isCorrect
+                    ? " selected correct"
+                    : " selected wrong"
+                  : " selected";
+              }
+              if (showResult && !isCorrect && index === correctIndex) {
+                extraClass += " correct";
+              }
+              return (
+                <div
+                  key={`${currentQuestion.question}-${index}`}
+                  className={
+                    `choices d-flex justify-content-between align-items-center 
+                     rounded-4 col-md-6 col-lg-11 m-5` + extraClass
+                  }
+                  onClick={() => handleChoiceClick(index)}
+                  style={{ pointerEvents: showResult ? "none" : "auto" }}
+                >
+                  <div
+                    className={`choice-${
+                      ["A", "B", "C", "D"][index].toLowerCase()
+                    } rounded-4 m-4${isSelected ? " selected" : ""}`}
+                  >
+                    <strong>{["A", "B", "C", "D"][index]}</strong>
+                    <video
+                      width="200"
+                      height="150"
+                      className="rounded-2 mb-1"
+                      autoPlay
+                      muted
+                      loop
+                    >
+                      <source src={option.videoUrl} type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
+                  </div>
+                </div>
+              );
+            })}
           </div>
-
-           {showResult && (
-             <ResultBanner
-               isCorrect={isCorrect}
-               checkIcon={check}
-               wrongIcon={ekis}
-             />
-           )}
-
+          {showResult && (
+            <ResultBanner
+              isCorrect={isCorrect}
+              checkIcon={check}
+              wrongIcon={ekis}
+            />
+          )}
           <button
             type="button"
             className="continue d-flex rounded-4 p-3 pt-2 ms-auto"

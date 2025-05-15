@@ -22,9 +22,28 @@ export const updateStreak = async (req, res) => {
   try {
     const { userId } = req.params;
     const { streak } = req.body;
-    const user = await User.findByIdAndUpdate(userId, { streak }, { new: true });
+
+    // Calculate points based on streak day
+    const day = streak.currentStreak;
+    let pointsToAdd = 0;
+    if (day === 1) pointsToAdd = 5;
+    else if (day === 2) pointsToAdd = 10;
+    else if (day === 3) pointsToAdd = 15;
+    else if (day === 4) pointsToAdd = 20;
+    else if (day === 5) pointsToAdd = 30;
+    else if (day === 6) pointsToAdd = 40;
+    else if (day >= 7) pointsToAdd = 50;
+
+    // Find user and update streak and points atomically
+    const user = await User.findById(userId);
     if (!user) return res.status(404).json({ error: "User not found" });
-    res.json({ message: "Streak updated", streak: user.streak });
+
+    user.streak = streak;
+    user.points += pointsToAdd;
+
+    await user.save();
+
+    res.json({ message: "Streak and points updated", streak: user.streak, points: user.points, pointsAdded: pointsToAdd });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

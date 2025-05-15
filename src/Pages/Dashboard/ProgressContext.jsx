@@ -139,12 +139,28 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
     }));
   };
 
-  const incrementStreak = () => {
-    setStreakData(prev => ({
-      ...prev,
-      currentStreak: prev.currentStreak + 1,
-      lastUpdated:   new Date(),
-    }));
+  const incrementStreak = async () => {
+    setStreakData(prev => {
+      const newStreak = {
+        ...prev,
+        currentStreak: prev.currentStreak + 1,
+        lastUpdated: new Date(),
+      };
+      // Call backend to update streak and points
+      if (currentUserEmail) {
+        axios.put(`/api/streak/email/${currentUserEmail}`, { streak: newStreak })
+          .then(res => {
+            if (res.data.pointsAdded) {
+              // Optionally, you can update points in local state or notify user here
+              console.log(`Points added: ${res.data.pointsAdded}`);
+            }
+          })
+          .catch(err => {
+            console.error("Error updating streak:", err);
+          });
+      }
+      return newStreak;
+    });
   };
 
   return (
