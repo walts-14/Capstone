@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
 import fire from "../../assets/fire.png";  // adjust the path as needed
 import medal from "../../assets/diamond.png"; // adjust the path as needed
+console.log("fire import:", fire);
+console.log("medal import:", medal);
 import "./StreakButton.css";
 import { ProgressContext } from "../../Pages/Dashboard/ProgressContext";
 
-export default function StreakButton() {
+export default function StreakButton({ showOnFirstLogin = false }) {
   const { streakData, incrementStreak } = useContext(ProgressContext);
   const [isOpen, setIsOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -17,6 +19,14 @@ export default function StreakButton() {
     setShowModal(false);
     setIsOpen(false);
   };
+
+  // Show modal on first login if prop is true
+  useEffect(() => {
+    if (showOnFirstLogin) {
+      setShowModal(true);
+      setModalShownDate(new Date().toDateString());
+    }
+  }, [showOnFirstLogin]);
 
   // Check if a day has passed since lastUpdated and increment streak if so
   useEffect(() => {

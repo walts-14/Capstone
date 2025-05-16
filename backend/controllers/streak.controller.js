@@ -5,8 +5,8 @@ import User from "../models/user.js";
  */
 export const getStreak = async (req, res) => {
   try {
-    const { userId } = req.params;
-    const user = await User.findById(userId).select("streak");
+    const { email } = req.params;
+    const user = await User.findOne({ email }).select("streak");
     if (!user) return res.status(404).json({ error: "User not found" });
     res.json({ streak: user.streak });
   } catch (err) {
@@ -20,10 +20,47 @@ export const getStreak = async (req, res) => {
  */
 export const updateStreak = async (req, res) => {
   try {
-    const { userId } = req.params;
+    const { email } = req.params;
     const { streak } = req.body;
 
-    // Calculate points based on streak day
+    console.log(`updateStreak called for email: ${email}`);
+    console.log(`Streak data received:`, streak);
+
+    // Find user
+    const user = await User.findOne({ email });
+    if (!user) {
+      console.log(`User not found for email: ${email}`);
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    console.log(`User points before update: ${user.points}`);
+
+    // Check if points were already added today
+    const lastUpdated = user.streak?.lastUpdated ? new Date(user.streak.lastUpdated) : null;
+    const now = new Date();
+
+    console.log(`Last updated date: ${lastUpdated}`);
+    console.log(`Current date: ${now}`);
+
+    // If lastUpdated is null, treat as points not added today
+    let isSameDay = false;
+    if (lastUpdated) {
+      isSameDay = lastUpdated.getFullYear() === now.getFullYear() &&
+        lastUpdated.getMonth() === now.getMonth() &&
+        lastUpdated.getDate() === now.getDate();
+    }
+
+    if (isSameDay) {
+      // Points already added today, do not add again
+      console.log("Points already added today, skipping increment.");
+      // Update streak info but keep lastUpdated unchanged
+      user.streak.currentStreak = streak.currentStreak;
+      user.streak.streakFreeze = streak.streakFreeze;
+      await user.save();
+      return res.json({ message: "Streak updated, points not added again today", streak: user.streak, points: user.points, pointsAdded: 0 });
+    }
+
+    // Calculate points based on currentStreak from request body
     const day = streak.currentStreak;
     let pointsToAdd = 0;
     if (day === 1) pointsToAdd = 5;
@@ -34,17 +71,22 @@ export const updateStreak = async (req, res) => {
     else if (day === 6) pointsToAdd = 40;
     else if (day >= 7) pointsToAdd = 50;
 
-    // Find user and update streak and points atomically
-    const user = await User.findById(userId);
-    if (!user) return res.status(404).json({ error: "User not found" });
-
-    user.streak = streak;
+    // Add points and update streak info including lastUpdated to now
     user.points += pointsToAdd;
+    user.streak.currentStreak = streak.currentStreak;
+    user.streak.streakFreeze = streak.streakFreeze;
+    user.streak.lastUpdated = now;
+
+    // Mark streak as modified to ensure mongoose detects changes
+    user.markModified('streak');
 
     await user.save();
 
+    console.log(`User points after update: ${user.points}`);
+
     res.json({ message: "Streak and points updated", streak: user.streak, points: user.points, pointsAdded: pointsToAdd });
   } catch (err) {
+    console.error("Error in updateStreak:", err);
     res.status(500).json({ error: err.message });
   }
 };

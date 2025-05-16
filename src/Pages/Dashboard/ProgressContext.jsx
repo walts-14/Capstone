@@ -30,9 +30,64 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
   // Use initialUserEmail and initialUserName props if provided, else fallback to localStorage
   const storedEmail = initialUserEmail || localStorage.getItem("userEmail") || "";
   const storedName  = initialUserName  || localStorage.getItem("userName")  || "";
+  const storedUsername = localStorage.getItem("userUsername") || "";
 
   const [currentUserEmail, setCurrentUserEmail] = useState(storedEmail);
   const [currentUserName, setCurrentUserName]   = useState(storedName);
+  const [currentUserUsername, setCurrentUserUsername] = useState(storedUsername);
+
+  // New points state added
+  const [points, setPoints] = useState(0);
+
+  // Sync currentUserUsername state with localStorage changes
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const username = localStorage.getItem("userUsername") || "";
+      console.log("ProgressContext: localStorage userUsername =", username);
+      setCurrentUserUsername(username);
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    // Also call once on mount to sync initial value
+    handleStorageChange();
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
+  // Fetch user profile if username missing in localStorage
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (localStorage.getItem("userUsername")) return;
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+        const res = await fetch("http://localhost:5000/api/user/profile", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.username) {
+            localStorage.setItem("userUsername", data.username);
+            setCurrentUserUsername(data.username);
+          }
+          if (data.email) {
+            localStorage.setItem("userEmail", data.email);
+            setCurrentUserEmail(data.email);
+          }
+          if (data.name) {
+            localStorage.setItem("userName", data.name);
+            setCurrentUserName(data.name);
+          }
+        }
+      } catch (err) {
+        console.error("Error fetching user profile:", err);
+      }
+    };
+    fetchUserProfile();
+  }, []);
 
   const [progressData, setProgressData] = useState(() => {
     const saved = storedEmail
@@ -45,17 +100,18 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
   });
 
   const [streakData, setStreakData] = useState({
-    currentStreak: 0,
+    currentStreak: 1,  // Changed from 0 to 1 to match backend default
     lastUpdated:   null,
     streakFreeze:  false,
   });
 
   const STORAGE_KEY = (email) => `progress_${email}`;
 
-  // 1) Fetch progress & streak when email changes
+  // 1) Fetch progress, streak, and points when email changes
   useEffect(() => {
     if (!currentUserEmail) {
       setProgressData(initialProgress);
+      setPoints(0);
       return;
     }
     (async () => {
@@ -69,9 +125,10 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
           setProgressData(initialProgress);
         }
 
-        const [prgRes, strRes] = await Promise.all([
-          axios.get(`/api/progress/email/${currentUserEmail}`),
-          axios.get(`/api/streak/email/${currentUserEmail}`)
+        const [prgRes, strRes, ptsRes] = await Promise.all([
+          axios.get(`/api/progress/email/${encodeURIComponent(currentUserEmail)}`),
+          axios.get(`/api/streak/email/${encodeURIComponent(currentUserEmail)}`),
+          axios.get(`/api/points/email/${encodeURIComponent(currentUserEmail)}`)  // Fetch points
         ]);
 
         if (prgRes.data.progress) {
@@ -86,8 +143,12 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
         if (strRes.data.streak) {
           setStreakData(strRes.data.streak);
         }
+
+        if (ptsRes.data.points !== undefined) {
+          setPoints(ptsRes.data.points);
+        }
       } catch (err) {
-        console.error("Error fetching progress/streak:", err);
+        console.error("Error fetching progress/streak/points:", err);
       }
     })();
   }, [currentUserEmail]);
@@ -102,7 +163,7 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
     (async () => {
       try {
         await axios.put(
-          `/api/progress/email/${currentUserEmail}`,
+          `/api/progress/email/${encodeURIComponent(currentUserEmail)}`,
           { progress: progressData }
         );
       } catch (err) {
@@ -117,7 +178,7 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
     (async () => {
       try {
         await axios.put(
-          `/api/streak/email/${currentUserEmail}`,
+          `/api/streak/email/${encodeURIComponent(currentUserEmail)}`,
           { streak: streakData }
         );
       } catch (err) {
@@ -150,8 +211,8 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
       if (currentUserEmail) {
         axios.put(`/api/streak/email/${currentUserEmail}`, { streak: newStreak })
           .then(res => {
-            if (res.data.pointsAdded) {
-              // Optionally, you can update points in local state or notify user here
+            if (res.data.pointsAdded !== undefined) {
+              setPoints(prevPoints => prevPoints + res.data.pointsAdded);
               console.log(`Points added: ${res.data.pointsAdded}`);
             }
           })
@@ -170,10 +231,14 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
         setCurrentUserEmail,
         currentUserName,
         setCurrentUserName,
+        currentUserUsername,
+        setCurrentUserUsername,
         progressData,
         updateProgress,
         streakData,
         incrementStreak,
+        points,  // expose points state
+        setPoints,
       }}
     >
       {children}

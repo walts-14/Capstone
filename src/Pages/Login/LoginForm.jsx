@@ -9,7 +9,12 @@ import toast from "react-hot-toast";
 
 function LoginForm() {
   const navigate = useNavigate();
-  const { setCurrentUserEmail, setCurrentUserName } = useContext(ProgressContext);
+  const {
+    setCurrentUserEmail,
+    setCurrentUserName,
+    setCurrentUserUsername,  // <-- add this
+  } = useContext(ProgressContext);
+
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -17,33 +22,28 @@ function LoginForm() {
 
   const loginUser = async (e) => {
     e.preventDefault();
-  
     try {
       const response = await axios.post("http://localhost:5000/api/login", {
         email: data.email,
         password: data.password,
       });
-  
-      console.log("📩 Login response:", response.data);
-  
+
       if (response.status === 200 && response.data.status === "ok") {
         toast.success("✅ Login successful!");
-  
+
         // Store token and user data
         localStorage.setItem("token", response.data.data);
         localStorage.setItem("userName", response.data.user.name);
-        localStorage.setItem("userUsername", response.data.user.username);
+        localStorage.setItem("userUsername", response.data.user.username); // <-- store username
         localStorage.setItem("userEmail", response.data.user.email);
         localStorage.setItem("loggedIn", "true");
 
-        // Update ProgressContext state immediately
+        // Update context
         setCurrentUserEmail(response.data.user.email);
         setCurrentUserName(response.data.user.name);
-  
-        console.log("✅ Token stored:", localStorage.getItem("token"));
-        console.log("✅ Email stored:", localStorage.getItem("userEmail"));
-  
-        // Role-based redirection:
+        console.log(setCurrentUserUsername(response.data.user.username));         // <-- update context
+
+        // Role-based redirect
         const role = response.data.user.role;
         if (role === "super_admin") {
           navigate("/superadmin", { replace: true });
@@ -60,41 +60,30 @@ function LoginForm() {
       toast.error(error.response?.data?.message || "❌ Login failed");
     }
   };
-  
 
-    
-    useEffect(() => {
-      const verifyToken = async () => {
-        const token = localStorage.getItem("token");
-    
-        if (!token) return; // No token, no redirection
-    
-        try {
-          const response = await axios.get("http://localhost:5000/api/verify-token", {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-    
-          if (response.status === 200) {
-            console.log("✅ Token valid, redirecting...");
-            navigate("/dashboard", { replace: true });
-          } else {
-            console.log("❌ Token invalid, clearing storage...");
-            localStorage.removeItem("token");
-          }
-        } catch (error) {
-          console.error("❌ Token verification failed:", error);
+  useEffect(() => {
+    const verifyToken = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+      try {
+        const response = await axios.get("http://localhost:5000/api/verify-token", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (response.status === 200) {
+          navigate("/dashboard", { replace: true });
+        } else {
           localStorage.removeItem("token");
         }
-      };
-    
-      verifyToken();
-    }, []);
-    
-    
+      } catch {
+        localStorage.removeItem("token");
+      }
+    };
+    verifyToken();
+  }, [navigate]);
 
   return (
     <div className="login-container">
-      <div className="login-card login-width ">
+      <div className="login-card login-width">
         <h1>LOGIN</h1>
         <Form onSubmit={loginUser}>
           <Form.Group className="mb-2">
