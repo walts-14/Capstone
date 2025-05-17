@@ -37,6 +37,10 @@ function Settings() {
       setUserUsername(d.username);
       setUserEmail(d.email);
 
+      localStorage.setItem("userName", d.name);
+      localStorage.setItem("userUsername", d.username);
+      localStorage.setItem("userEmail", d.email);
+
       const pic = d.profilePic || DEFAULT_PROFILE_PIC;
       setProfilePic(pic);
       localStorage.setItem("profilePic", pic);

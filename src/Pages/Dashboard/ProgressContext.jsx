@@ -30,9 +30,29 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
   // Use initialUserEmail and initialUserName props if provided, else fallback to localStorage
   const storedEmail = initialUserEmail || localStorage.getItem("userEmail") || "";
   const storedName  = initialUserName  || localStorage.getItem("userName")  || "";
+  const storedUsername = localStorage.getItem("userUsername") || "";
 
   const [currentUserEmail, setCurrentUserEmail] = useState(storedEmail);
   const [currentUserName, setCurrentUserName]   = useState(storedName);
+  const [currentUserUsername, setCurrentUserUsername] = useState(storedUsername);
+
+  // Sync currentUserUsername state with localStorage changes
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const username = localStorage.getItem("userUsername") || "";
+      console.log("ProgressContext: localStorage userUsername =", username);
+      setCurrentUserUsername(username);
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    // Also call once on mount to sync initial value
+    handleStorageChange();
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
 
   const [progressData, setProgressData] = useState(() => {
     const saved = storedEmail
@@ -45,7 +65,7 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
   });
 
   const [streakData, setStreakData] = useState({
-    currentStreak: 0,
+    currentStreak: 1,  // Changed from 0 to 1 to match backend default
     lastUpdated:   null,
     streakFreeze:  false,
   });
@@ -70,8 +90,8 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
         }
 
         const [prgRes, strRes] = await Promise.all([
-          axios.get(`/api/progress/email/${currentUserEmail}`),
-          axios.get(`/api/streak/email/${currentUserEmail}`)
+        axios.get(`/api/progress/email/${encodeURIComponent(currentUserEmail)}`),
+        axios.get(`/api/streak/email/${encodeURIComponent(currentUserEmail)}`)
         ]);
 
         if (prgRes.data.progress) {
@@ -102,7 +122,7 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
     (async () => {
       try {
         await axios.put(
-          `/api/progress/email/${currentUserEmail}`,
+          `/api/progress/email/${encodeURIComponent(currentUserEmail)}`,
           { progress: progressData }
         );
       } catch (err) {
@@ -117,7 +137,7 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
     (async () => {
       try {
         await axios.put(
-          `/api/streak/email/${currentUserEmail}`,
+          `/api/streak/email/${encodeURIComponent(currentUserEmail)}`,
           { streak: streakData }
         );
       } catch (err) {
@@ -170,6 +190,8 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
         setCurrentUserEmail,
         currentUserName,
         setCurrentUserName,
+        currentUserUsername,
+        setCurrentUserUsername,
         progressData,
         updateProgress,
         streakData,

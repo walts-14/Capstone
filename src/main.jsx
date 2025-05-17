@@ -67,7 +67,7 @@ const router = createBrowserRouter([
       { path: "videoupload", element: <VideoUpload /> },
       { path: "admin", element: <Admin /> },
       { path: "superadmin", element: <SuperAdmin /> },
-      { path: "progresstracker", element: <ProgressTracker /> },
+      { path: "progresstracker", element: <ProgressTracker student={{ username: localStorage.getItem("userUsername"), email: localStorage.getItem("userEmail") }} /> },
       { path: "VideoList", element: <VideoList /> },
       { path: "QuizUpload", element: <QuizUpload /> },
       { path: "finishLecture", element: <FinishLecture /> },
@@ -91,7 +91,11 @@ createRoot(document.getElementById("root")).render(
         style: { background: "#363636", color: "#fff" },
       }}
     />
-    <ProgressProvider>
+    <ProgressProvider
+      initialUserEmail={localStorage.getItem("userEmail")}
+      initialUserName={localStorage.getItem("userName")}
+      initialUserUsername={localStorage.getItem("userUsername")}
+    >
       <RouterProvider router={router} />
     </ProgressProvider>
   </StrictMode>

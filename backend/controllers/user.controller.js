@@ -156,7 +156,7 @@ export const loginUser = async (req, res) => {
       success: true,
       message: "Login Successful",
       data: token,
-      user: { _id: user._id, name: user.name, email: user.email, role: user.role },
+      user: { _id: user._id, name: user.name, username: user.username, email: user.email, role: user.role },
     });
   } catch (err) {
     console.error("🔥 Server error during login:", err.message);
