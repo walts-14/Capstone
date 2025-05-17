@@ -267,7 +267,7 @@ const LesoneContent = () => {
           <div className="textOne" style={navStyle}>
             <p className="m-0">{englishPart.trim()}</p>
             {tagalogPart.trim() && (
-              <p className="m-0">Tagalog: {tagalogPart.trim()}</p>
+              <p className="m-0">Filipino: {tagalogPart.trim()}</p>
             )}
           </div>
         </div>
