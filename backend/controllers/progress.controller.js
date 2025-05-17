@@ -43,7 +43,6 @@ export const getProgressByEmail = async (req, res) => {
   try {
     const { email } = req.params;
     const user = await User.findOne({ email }).select("progress");
-    console.log("DEBUG: Raw user.progress from DB for", email, ":", user.progress);
     if (!user) return res.status(404).json({ error: "User not found" });
 
     // 1) start from a fresh full tree, 2) overlay stored progress

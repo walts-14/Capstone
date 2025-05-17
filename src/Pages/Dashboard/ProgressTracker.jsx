@@ -25,48 +25,39 @@ export default function ProgressTracker({ student }) {
   const {
     progressData: contextProgressData,
     streakData,
-    currentUserUsername,   // ← make sure we grab this
+    currentUserUsername,
     currentUserName,
     currentUserEmail,
   } = useContext(ProgressContext);
 
-  const [displayUsername, setDisplayUsername] = useState(
-    currentUserUsername || localStorage.getItem("userUsername") || student?.username || "UnknownStudent"
-  );
-
-  useEffect(() => {
-    console.log("ProgressTracker: currentUserUsername =", currentUserUsername);
-    console.log("ProgressTracker: localStorage userUsername =", localStorage.getItem("userUsername"));
-    setDisplayUsername(
-      currentUserUsername || localStorage.getItem("userUsername") || student?.username || "UnknownStudent"
-    );
-  }, [currentUserUsername, student?.username]);
-
+  // Display the username: prioritize the student prop when showing someone else's progress
+  const displayUsername = student?.username
+    || currentUserUsername
+    || localStorage.getItem("userUsername")
+    || "UnknownStudent";
 
   // Rank: still matching by the API’s `name` field against currentUserName
   const [userRank, setUserRank] = useState(null);
 
-  // Which email to fetch progress for (unchanged)
+  // Which email to fetch progress for
   const studentEmail = student?.email || currentUserEmail;
   const [progressData, setProgressData] = useState(contextProgressData);
-
+ const targetName = student?.name?.trim() || currentUserName?.trim() || "";
   // ———— Leaderboard effect ————
   useEffect(() => {
-    if (!currentUserName) {
+    if (!targetName) {
       setUserRank("Unranked");
       return;
     }
     (async () => {
       try {
-        const { data } = await axios.get(
-          "http://localhost:5000/api/leaderboard",
-          { headers: axios.defaults.headers.common }
-        );
+        const { data } = await axios.get("/api/leaderboard", {
+          headers: axios.defaults.headers.common
+        });
         const sorted = [...data].sort((a, b) => b.points - a.points);
+        // match on the student’s name
         const idx = sorted.findIndex(
-          (u) =>
-            u.name.trim().toLowerCase() ===
-            currentUserName.trim().toLowerCase()
+          u => u.name.trim().toLowerCase() === targetName.toLowerCase()
         );
         setUserRank(idx >= 0 ? idx + 1 : "Unranked");
       } catch (err) {
@@ -74,7 +65,7 @@ export default function ProgressTracker({ student }) {
         setUserRank("Unranked");
       }
     })();
-  }, [currentUserName]);
+  }, [targetName]);
 
   // ———— Progress fetch effect ————
   useEffect(() => {

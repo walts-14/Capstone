@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Sidenav from "../../Components/Sidenav";
@@ -7,9 +7,11 @@ import { useNavigate } from "react-router-dom";
 import changepic from "../../assets/changepic.png";
 import axios from "axios";
 import MaintenanceModal from "../../Components/Maintenance/MaintenanceModal.jsx";
+import { ProgressContext } from "../Dashboard/ProgressContext.jsx";
 
 function Settings() {
   const navigate = useNavigate();
+  const { setCurrentUserEmail, setCurrentUserName, setCurrentUserUsername } = useContext(ProgressContext);
 
   const DEFAULT_PROFILE_PIC =
     "https://res.cloudinary.com/deohrrkw9/image/upload/v1745911019/changepic_qrpmur.png";
@@ -104,6 +106,12 @@ function Settings() {
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("loggedIn");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("userUsername");
+    localStorage.removeItem("userEmail");
+    setCurrentUserName("");
+    setCurrentUserUsername("");
+    setCurrentUserEmail("");
     navigate("/login", { replace: true });
   };
   const [showModal, setShowModal] = useState(false);
