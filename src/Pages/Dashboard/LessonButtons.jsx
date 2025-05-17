@@ -22,8 +22,6 @@ const lessonRoutes = [
 function LessonButtons() {
   const navigate = useNavigate();
   const [difficulty, setDifficulty] = useState("BASIC");
-  const [lives, setLives] = useState(0);
-  const [points, setPoints] = useState(0);
   const buttonContainerRef = useRef(null);
 
   const difficultyColors = {

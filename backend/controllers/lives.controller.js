@@ -1,6 +1,3 @@
-
-const MAX_LIVES = 10;
-
 import User from "../models/user.js";
 import mongoose from "mongoose";
 
@@ -46,9 +43,8 @@ export const gainLife = async (req, res) => {
         const user = await User.findOne({ email });
         if (!user) return res.status(404).json({ message: "User not found" });
 
-        if (user.lives < MAX_LIVES) {
+        if (user.lives < 5) {
             user.lives += 1;
-            user.lastLifeTime = new Date();
             await user.save();
         }
 
@@ -75,9 +71,9 @@ export const regenerateLives = async (req, res) => {
       const additionalLives = Math.floor(minutesPassed / 10);
   
       // Only update if at least one full 10-minute interval has passed and user hasn't reached max lives
-      if (additionalLives > 0 && user.lives < MAX_LIVES) {
-          // Increase lives but cap at MAX_LIVES
-          user.lives = Math.min(user.lives + additionalLives, MAX_LIVES);
+      if (additionalLives > 0 && user.lives < 5) {
+          // Increase lives but cap at 5
+          user.lives = Math.min(user.lives + additionalLives, 5);
           // Instead of resetting to now, increment lastLifeTime by the amount of time used
           user.lastLifeTime = new Date(lastTime.getTime() + additionalLives * 10 * 60 * 1000);
           await user.save();

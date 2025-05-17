@@ -26,7 +26,7 @@ const progressStructure = {
 
 // Streak schema to track bonus streaks
 const streakSchema = {
-  currentStreak: { type: Number, default: 1 },
+  currentStreak: { type: Number, default: 0 },
   lastUpdated:   { type: Date,   default: null },
   streakFreeze:  { type: Boolean, default: false }
 };
@@ -65,9 +65,8 @@ const userSchema = new mongoose.Schema(
       url:       { type: String, default: 'https://res.cloudinary.com/deohrrkw9/image/upload/v1745911019/changepic_qrpmur.png' },
       public_id: { type: String, default: null },
     },
-    lastLoginDate: { type: Date, default: null },
   },
-{ timestamps: true }
+  { timestamps: true }
 );
 
 // Pre-save hook to hash password

@@ -2,123 +2,116 @@ import React, { useContext, useEffect, useState } from "react";
 import { ProgressContext } from "./ProgressContext.jsx";
 import axios from "axios";
 import trophy from "../../assets/trophy.png";
-console.log("trophy import:", trophy);
 import StreakButton from "../../Components/Streak/StreakButton.jsx";
 
-// Helper to compute % complete for a lesson
 const calculateProgress = (progressObj = {}) => {
   let score = 0;
   if (progressObj.step1Lecture) score += 25;
-  if (progressObj.step1Quiz)    score += 25;
+  if (progressObj.step1Quiz) score += 25;
   if (progressObj.step2Lecture) score += 25;
-  if (progressObj.step2Quiz)    score += 25;
+  if (progressObj.step2Quiz) score += 25;
   return score;
 };
 
 const lessonsByLevel = {
-  basic:        ["termsone","termstwo","termsthree","termsfour"],
-  intermediate: ["termsfive","termssix","termsseven","termseight"],
-  advanced:     ["termsnine","termsten","termseleven","termstwelve"],
+  basic: ["termsone", "termstwo", "termsthree", "termsfour"],
+  intermediate: ["termsfive", "termssix", "termsseven", "termseight"],
+  advanced: ["termsnine", "termsten", "termseleven", "termstwelve"],
 };
-const lessonOffsets = { basic: 0, intermediate: 4, advanced: 8 };
 
-export default function ProgressTracker({ student }) {
-  console.log("ProgressTracker student prop:", student);
-  const {
-    progressData: contextProgressData,
-    streakData,
-    currentUserUsername,   // ← make sure we grab this
-    currentUserName,
-    currentUserEmail,
-  } = useContext(ProgressContext);
+const lessonOffsets = {
+  basic: 0,
+  intermediate: 4,
+  advanced: 8,
+};
 
-  const [displayUsername, setDisplayUsername] = useState(
-    currentUserUsername || localStorage.getItem("userUsername") || student?.username || "UnknownStudent"
+function ProgressTracker({ student }) {
+  // Use currentUserName and currentUserEmail from context as fallback
+  const { progressData: contextProgressData, streakData, currentUserName, currentUserEmail } =
+    useContext(ProgressContext);
+  const [userRank, setUserRank] = useState(null);
+  const [userName, setUserName] = useState(
+    student?.name || currentUserName || "Unknown Student"
   );
 
-  const [showStreakModalOnLogin, setShowStreakModalOnLogin] = useState(false);
-
-  useEffect(() => {
-    console.log("ProgressTracker: currentUserUsername =", currentUserUsername);
-    console.log("ProgressTracker: localStorage userUsername =", localStorage.getItem("userUsername"));
-    setDisplayUsername(
-      currentUserUsername || localStorage.getItem("userUsername") || student?.username || "UnknownStudent"
-    );
-  }, [currentUserUsername, student?.username]);
-
-  // Listen for firstLoginToday flag from localStorage or context (to be set on login)
-  useEffect(() => {
-    const firstLoginToday = localStorage.getItem("firstLoginToday");
-    if (firstLoginToday === "true") {
-      setShowStreakModalOnLogin(true);
-      // Clear the flag after showing modal once
-      localStorage.removeItem("firstLoginToday");
-    }
-  }, []);
-
-  // Rank: still matching by the API’s `name` field against currentUserName
-  const [userRank, setUserRank] = useState(null);
-
-  // Which email to fetch progress for (unchanged)
+  // Use email from student prop or fallback to currentUserEmail
   const studentEmail = student?.email || currentUserEmail;
+
+  // Local state for fetched progress data
   const [progressData, setProgressData] = useState(contextProgressData);
 
-  // ———— Leaderboard effect ————
   useEffect(() => {
-    if (!currentUserName) {
-      setUserRank("Unranked");
-      return;
-    }
-    (async () => {
+    const fetchLeaderboard = async () => {
       try {
-        const { data } = await axios.get(
+        const response = await axios.get(
           "http://localhost:5000/api/leaderboard",
           { headers: axios.defaults.headers.common }
         );
-        const sorted = [...data].sort((a, b) => b.points - a.points);
-        const idx = sorted.findIndex(
-          (u) =>
-            u.name.trim().toLowerCase() ===
-            currentUserName.trim().toLowerCase()
+        const sortedLeaderboard = [...response.data].sort(
+          (a, b) => b.points - a.points
         );
-        setUserRank(idx >= 0 ? idx + 1 : "Unranked");
-      } catch (err) {
-        console.error("❌ Error fetching leaderboard:", err);
-        setUserRank("Unranked");
+        const normalizedStudentName = (student?.name || currentUserName)
+          ?.trim()
+          .toLowerCase();
+        const rankIndex = sortedLeaderboard.findIndex((u) => {
+          if (u.name && normalizedStudentName) {
+            return u.name.trim().toLowerCase() === normalizedStudentName;
+          }
+          return false;
+        });
+        setUserRank(rankIndex >= 0 ? rankIndex + 1 : "N/A");
+        if (rankIndex >= 0) {
+          setUserName(
+            sortedLeaderboard[rankIndex].name ||
+              currentUserName ||
+              "Unknown Student"
+          );
+        }
+      } catch (error) {
+        console.error("❌ Error fetching leaderboard:", error);
+        setUserRank("N/A");
       }
-    })();
-  }, [currentUserName]);
+    };
 
-  // ———— Progress fetch effect ————
+    if (studentEmail) fetchLeaderboard();
+  }, [studentEmail, currentUserName, student]);
+
+  // Fetch progress for the student if student prop is provided
   useEffect(() => {
-    if (!studentEmail) {
-      setProgressData(contextProgressData);
-      return;
-    }
-    (async () => {
+    const fetchProgress = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:5000/api/progress/email/${studentEmail}`,
-          { headers: axios.defaults.headers.common }
-        );
-        setProgressData(res.data.progress || contextProgressData);
-      } catch (err) {
-        console.error("Error fetching progress:", err);
+        if (studentEmail) {
+          const response = await axios.get(
+            `http://localhost:5000/api/progress/email/${studentEmail}`,
+            { headers: axios.defaults.headers.common }
+          );
+          if (response.data.progress) {
+            setProgressData(response.data.progress);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching progress for student:", error);
         setProgressData(contextProgressData);
       }
-    })();
-  }, [studentEmail, contextProgressData]);
+    };
+
+    if (student) {
+      fetchProgress();
+    } else {
+      setProgressData(contextProgressData);
+    }
+  }, [student, studentEmail, contextProgressData]);
 
   const styles = {
-    basic:        { backgroundColor: "#205D87" },
+    basic: { backgroundColor: "#205D87" },
     intermediate: { backgroundColor: "#947809" },
-    advanced:     { backgroundColor: "#86271E" },
+    advanced: { backgroundColor: "#86271E" },
   };
 
   return (
     <>
       <div className="tracker">
-        <StreakButton showOnFirstLogin={showStreakModalOnLogin} />
+        <StreakButton></StreakButton>
         <div className="position-lb d-flex align-items-center gap-1">
           <img
             src={trophy}
@@ -126,13 +119,14 @@ export default function ProgressTracker({ student }) {
             alt="trophy"
           />
           <p className="fs-1 text-center ms-2">
-            {userRank == null
+            {userRank === null
               ? "..."
               : typeof userRank === "number"
               ? `#${userRank}`
               : "Unranked"}
           </p>
-          <p className="text-nowrap fs-2">{displayUsername}</p>
+          {/* ✔︎ display the clicked student’s name */}
+          <p className="text-nowrap fs-2">{userName}</p>
         </div>
       </div>
 
@@ -144,17 +138,18 @@ export default function ProgressTracker({ student }) {
             </div>
 
             {lessonsByLevel[level].map((lessonKey, idx) => {
-              const prog = progressData[level]?.[lessonKey] || {};
-              const pct  = calculateProgress(prog);
-              const lbl  = `Lesson ${lessonOffsets[level] + idx + 1}`;
+              const lessonProgress = progressData[level]?.[lessonKey] || {};
+              const progressPercent = calculateProgress(lessonProgress);
+              const displayName = `Lesson ${lessonOffsets[level] + idx + 1}`;
+
               return (
                 <div
                   key={lessonKey}
                   className={`${level}tracker d-flex m-3 rounded-4 p-2 justify-content-between`}
                   style={styles[level]}
                 >
-                  <span>{lbl}</span>
-                  <span style={{ color: "#160A2E" }}>{pct}%</span>
+                  <span>{displayName}</span>
+                  <span style={{ color: "#160A2E" }}>{progressPercent}%</span>
                 </div>
               );
             })}
@@ -164,3 +159,5 @@ export default function ProgressTracker({ student }) {
     </>
   );
 }
+
+export default ProgressTracker;

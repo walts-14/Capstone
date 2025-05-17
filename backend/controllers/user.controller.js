@@ -149,23 +149,6 @@ export const loginUser = async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    // Determine if this is the first login of the day
-    const now = new Date();
-    const lastLoginDate = user.lastLoginDate ? new Date(user.lastLoginDate) : null;
-    let isFirstLoginToday = false;
-    if (!lastLoginDate) {
-      isFirstLoginToday = true;
-    } else {
-      isFirstLoginToday = !(
-        lastLoginDate.getFullYear() === now.getFullYear() &&
-        lastLoginDate.getMonth() === now.getMonth() &&
-        lastLoginDate.getDate() === now.getDate()
-      );
-    }
-
-    // Update lastLoginDate to now without triggering validation errors
-    await User.updateOne({ _id: user._id }, { lastLoginDate: now });
-
     console.log("✅ Login successful for:", email);
 
     res.status(200).json({
@@ -173,8 +156,7 @@ export const loginUser = async (req, res) => {
       success: true,
       message: "Login Successful",
       data: token,
-      user: { _id: user._id, name: user.name, username: user.username, email: user.email, role: user.role },
-      firstLoginToday: isFirstLoginToday,
+      user: { _id: user._id, name: user.name, email: user.email, role: user.role },
     });
   } catch (err) {
     console.error("🔥 Server error during login:", err.message);
