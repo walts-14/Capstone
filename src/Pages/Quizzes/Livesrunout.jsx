@@ -1,8 +1,8 @@
 // src/Components/LivesRunOut.jsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import brokenHeart from '../assets/Heartbroken.png';    // your broken-heart asset
-import dashboardIcon from '../assets/dashboardlogo.png'; // your dashboard icon
+import brokenHeart from '../../assets/Heartbroken.png';    // your broken-heart asset
+import dashboardIcon from '../../assets/dashboardlogo.png'; // your dashboard icon
 import './LivesRunOut.css';
 
 export default function LivesRunOut() {

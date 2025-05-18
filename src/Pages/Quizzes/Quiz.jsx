@@ -10,6 +10,10 @@ import axios from "axios";
 import { ProgressContext } from "../../../src/Pages/Dashboard/ProgressContext";
 import LivesandDiamonds from "../../Components/LiveandDiamonds";
 import ResultBanner from "./ResultBanner";
+import dashboardlogo from "../../assets/dashboardlogo.png";
+import failed from "../../assets/failedquiz.png";
+import retry from "../../assets/repeat logo.png";
+import LivesRunOut from "./Livesrunout";
 
 function Quiz() {
   const navigate = useNavigate();
@@ -221,22 +225,48 @@ function Quiz() {
     wrongAnswers,
   ]);
 
+    // if they ever run out of lives, immediately show the “Out of Lives” screen:
+  if (lives <= 0 && !failedPointsRequirement) {
+    return <LivesRunOut />;
+  }
+
   if (quizQuestions.length === 0 && !quizFinished) {
     return <div>Loading quiz...</div>;
   }
 
   if (failedPointsRequirement) {
     return (
-      <div className="failed-quiz-container">
-        <ResultBanner isCorrect={false} />
-        <p className="failed-message">
-          You did not meet the minimum points requirement to proceed.
-          Please try the quiz again.
-        </p>
-        <button className="retry-button" onClick={handleRetry}>
-          Retry Quiz
-        </button>
+      <div className="d-flex flex-column align-items-center justify-content-center gap-4">
+        <img src={failed} alt="" />
+        <div className="d-flex flex-column align-items-center justify-content-center gap-2">
+           <h1 >You've almost got it</h1>
+           <h2 className="text-center">You need at least 7 correct answers to pass the quiz</h2>
+        </div>
+        <div className="finishbuttons rounded-4 d-flex align-items-center justify-content-center gap-4">
+          <button
+            type="button"
+            className="dashboard-button d-flex justify-content-center align-items-center rounded-4 fs-1"
+            onClick={() => navigate("/dashboard")}
+          >
+            <img
+              src={dashboardlogo}
+              className="img-fluid d-flex p-1 mt-1"
+              alt="dashboard img"
+            />
+            Dashboard
+          </button>
+
+          <button className="retry-button d-flex flex-direction-row justify-content-center align-items-center" onClick={handleRetry}>
+            <img
+              src={retry}
+              className="img-fluid "
+              alt="dashboard img"
+            />
+            <p>Try again</p>
+          </button>
+        </div>
       </div>
+     
     );
   }
 

@@ -229,3 +229,29 @@
   border: 6px solid #2ecc71 !important;
 
 }
+
+.retry-button {
+  background-color: #7338a0;
+  font-family: "Baloo", sans-serif;
+  height: 9.5vh;
+  width: 15vw;
+  text-align: center;
+  justify-content: center;
+  position: relative;
+  top: 1rem;
+  border-radius: 10px;
+  margin-bottom: 30px;
+}
+.retry-button p {
+  font-size: clamp(2.5rem, 1.8vw, 3rem);
+  width: 200px;
+  text-align: center;
+  margin: 0;
+}
+.retry-button img {
+  margin: 0px;
+  width: 3vw;
+}
+.failed .dashboard-button  {
+ margin: 0px 0px;
+}

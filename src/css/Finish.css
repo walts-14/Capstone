@@ -68,6 +68,7 @@
   font-family: "Baloo", sans-serif;
   color: var(--white);
   padding: 0% 0% 0% 0%; 
+  
 }
 .finishbuttons .dashboard-button:hover {
   background-color: #100429;

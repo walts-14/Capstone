@@ -3,46 +3,49 @@
   position: fixed;
   top: 0; left: 0;
   width: 100vw; height: 100vh;
-  background: rgba(0,0,0,0.7);
+  background: rgba(0, 0, 0, 0.1);
   display: flex; justify-content: center; align-items: center;
   z-index: 2000;
 }
 .lro-modal {
   background: #2A213A;
   padding: 2rem;
-  border-radius: 12px;
+  border-radius: 55px;
   text-align: center;
   position: relative;
-  max-width: 90%;
-  width: 400px;
+  max-width: 100%;
+  width: 650px;
+  height: 550px;
+  border: 5px solid #878194;
 }
 .lro-icon {
-  width: 64px;
+  width: 150px;
   margin-bottom: 1rem;
 }
 .lro-title {
   margin: 0.5rem 0;
-  font-size: 1.5rem;
+  font-size: 3.5rem;
   color: #ffffff;
 }
 .lro-text {
   color: #ddd;
   margin-bottom: 1.5rem;
   line-height: 1.4;
+  font-size: 1.8rem;
 }
 .lro-button {
-  background: #6C5CE7;
+  background: var(--semidark-purple);
   color: white;
-  border: none;
+  border: 5px solid var(--mid-purple);
   padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-size: 1rem;
+  border-radius: 15px;
+  font-size: 2.8rem;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
 }
 .lro-btn-icon {
-  width: 24px;
-  height: 24px;
+  width: 60px;
+  height: 60px;
 }
