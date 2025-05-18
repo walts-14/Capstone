@@ -6,7 +6,6 @@ import authRoutes from "./routes/authRoutes.js";
 import { connectDB } from "./config/db.js";
 import leaderboardRoutes from "./routes/leaderboardRoutes.js";
 import livesRoutes from "./routes/livesRoutes.js";
-import pointsRoutes from "./routes/pointsRoutes.js";
 import videoRoutes from "./routes/videoRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import superadminRoutes from "./routes/superadminRoutes.js";
