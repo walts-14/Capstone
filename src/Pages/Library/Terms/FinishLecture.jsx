@@ -25,7 +25,7 @@
     const [didUpdate, setDidUpdate] = useState(false);
     // Parse the step value as a number
     const numericStep = parseInt(step, 10);
-
+    const key = numericStep === 1 ? "step1Lecture" : "step2Lecture";
     useEffect(() => {
          // only if we haven't already, and we have valid inputs
          if (!didUpdate && lessonKey && level && (numericStep === 1 || numericStep === 2)) {
@@ -76,7 +76,8 @@
     const displayName = `Lesson ${lessonOffsets[level] + lessonIndex + 1}`;
 
     // Calculate diamond reward: base reward (correctAnswers*10) plus bonus 50 for finishing the lesson.
-    const diamondReward = correctAnswers * 10 + 50;
+    const [showLectureBonus] = useState(() => !lessonProgress[key]);
+    const diamondReward = correctAnswers * 10 + (showLectureBonus ? 50 : 0);
 
     // Handle quiz navigation based on the current step.
     // This special button will use current step to decide which quiz to load.
@@ -93,12 +94,13 @@
           <img src={Applause} className="img-fluid p-1 mb-3" alt="Applause" />
           <p>You've Finished the Lesson</p>
 
+        {showLectureBonus   && (
           <div className="dia-reward d-flex pt-1">
             <img src={diamond} className="img-fluid p-1 ms-5" alt="diamond" />
             {/* Display diamond reward including the bonus */}
             <p className="dia-number ms-3 me-5">{diamondReward}</p>
           </div>
-
+        )}
           <div
             key={lessonKey}
             className={`${level}tracker text.white d-flex m-0 rounded-4 p-3 justify-content-between custom-gap`}
