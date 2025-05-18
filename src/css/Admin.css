@@ -20,9 +20,9 @@
   justify-content: flex-start;
   padding: 10px;
   box-sizing: border-box;
-  overflow-x: hidden; /* Prevent horizontal scrolling */
+  overflow-x: hidden;
+  overflow-y: auto;
 }
-
 /* Prevent gray background when scrolling horizontally */
 .admin-body::before {
   content: "";
@@ -86,14 +86,16 @@
 }
 
 /* Updated action styles */
+
 .action-admin {
   position: relative;
   z-index: 10;
   display: flex;
   align-items: center;
-  justify-content: center; /* Changed from flex-start to center */
-  gap: 10px; /* Increased gap between action items */
-  width: 100%; /* Take full width of the cell */
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  pointer-events: auto;
 }
 
 .action-admin button,
@@ -255,8 +257,11 @@
   gap: 10px;
   margin-top: 20px;
   margin-left: -20px;
-  position: relative; /* Add position relative to ensure z-index works properly */
-  z-index: 10; /* Ensure levels are above other elements */
+  position: relative;
+  z-index: 10; /* Keep higher z-index for clickability */
+  pointer-events: auto;
+  /* Prevent levels from overlapping the scrollbar */
+  width: 300px; /* Match width of level items */
 }
 .level-item {
   color: #ffffff;
@@ -269,9 +274,9 @@
   color: var(--white);
   font-family: "Baloo", sans-serif;
   font-size: 2rem;
-  cursor: pointer; /* Ensure cursor shows it's clickable */
-  position: relative; /* Add position relative for z-index */
-  z-index: 11; /* Ensure each item is above other elements */
+  cursor: pointer;
+  position: relative;
+  z-index: 11;
 }
 .level-item.grade7 {
   background-color: #9e72c3;
@@ -290,21 +295,28 @@
 }
 /* Table Container - Updated for scrolling functionality */
 .contentdiv {
-  margin-top: -700px;
+  margin-top: -45rem;
   margin-right: -150px;
   position: relative;
   z-index: 5;
+  pointer-events: auto;
+  /* Create a positioning context for the table */
+  transform: translateZ(0);
 }
 /* Create a table container wrapper for scrolling */
 .table-wrapper {
-  max-height: 700px; /* Set this to control scroll area height */
+  max-height: 700px;
   overflow-y: auto;
-  overflow-x: auto; /* Added horizontal scroll if needed */
+  overflow-x: auto;
   border-radius: 10px;
-  margin: 8rem 0 0 20rem;
-  width: 75%; /* Slightly increased width */
+  margin: 7rem 0 0 20rem;
+  width: 75%;
   position: relative;
-  z-index: 1;
+  z-index: 5;
+  /* This is critical - creates a new stacking context */
+  transform: translateZ(0);
+  /* Ensure scrollbar is fully functional */
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Style the table with fixed header */
@@ -316,8 +328,8 @@
   border-collapse: separate;
   border-spacing: 0;
   background-color: #2e2e4d;
+  position: relative;
 }
-
 /* Fixed header styles */
 .dashboard-table thead {
   position: sticky;
@@ -334,9 +346,15 @@
 
 /* Increase width of the actions column */
 .dashboard-table th.actions-column {
-  z-index: 21;
-  min-width: 250px; /* Increased minimum width */
-  width: 250px; /* Increased width */
+  position: sticky;
+  right: 0;
+  z-index: 7;
+  background-color: #7338a0;
+}
+.dashboard-table td:last-child {
+  position: sticky;
+  right: 0;
+  z-index: 6;
 }
 
 .dashboard-table td {
@@ -349,9 +367,7 @@
   font-size: 1.3rem;
   position: relative;
 }
-.dashboard-table td:last-child {
-  background-color: inherit; /* Inherit the row background color */
-}
+
 .dashboard-table tr:nth-child(even) {
   background-color: #271d3e;
 }
@@ -362,7 +378,8 @@
 
 /* Ensure the scrollbar has a nice style that matches the theme */
 .table-wrapper::-webkit-scrollbar {
-  width: 10px;
+  width: 12px; /* Slightly wider for better clicking */
+  height: 12px; /* For horizontal scrollbar */
 }
 
 .table-wrapper::-webkit-scrollbar-track {
@@ -373,6 +390,7 @@
 .table-wrapper::-webkit-scrollbar-thumb {
   background: #7338a0;
   border-radius: 5px;
+  border: 2px solid #271d3e; /* Border to make it more visible */
 }
 
 .table-wrapper::-webkit-scrollbar-thumb:hover {
@@ -403,8 +421,10 @@
   border-radius: 50px;
   cursor: pointer;
   margin-left: auto;
-  position: absolute;
+  position: fixed;
   right: 3rem;
+  bottom: 1rem;
+  z-index: 10;
 }
 .btn-logout:hover {
   background-color: var(--semidark-red);

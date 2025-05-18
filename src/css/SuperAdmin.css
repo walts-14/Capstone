@@ -8,9 +8,7 @@
 .body {
   overflow-y: auto;
 }
-.contentdiv {
-  margin-top: -45rem;
-}
+
 .superadmin-body {
   position: relative;
   width: 100%;
