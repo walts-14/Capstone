@@ -12,7 +12,8 @@ import superadminRoutes from "./routes/superadminRoutes.js";
 import quizRoutes from "./routes/quizRoutes.js";
 import progressRoutes from "./routes/progressRoutes.js";
 import streakRoutes from "./routes/streakRoutes.js";
-
+import pointsRoutes from "./routes/pointsRoutes.js";
+// ...other imports
 //initializing express
 const app = express();
 //middleware
