@@ -14,6 +14,7 @@ import dashboardlogo from "../../assets/dashboardlogo.png";
 import failed from "../../assets/failedquiz.png";
 import retry from "../../assets/repeat logo.png";
 import LivesRunOut from "./Livesrunout";
+import LazyVideo from "./LazyVideo";
 
 function Quiz() {
   const navigate = useNavigate();
@@ -60,6 +61,7 @@ function Quiz() {
   const [hasUpdatedQuiz, setHasUpdatedQuiz] = useState(false);
   const [failedPointsRequirement, setFailedPointsRequirement] = useState(false);
 
+  
   const [lives, setLives] = useState(5);
   const [streak, setStreak] = useState(0);
 
@@ -124,7 +126,30 @@ function Quiz() {
     };
     fetchQuizQuestions();
   }, [level, lessonKey, quizPart, backendURL]);
+  
+    // after your fetchQuizQuestions useEffect
+  useEffect(() => {
+    if (!quizQuestions.length) return;
 
+    // for each choice across all questions, insert a <link preload> into <head>
+    const links = quizQuestions.flatMap(q =>
+      q.choices.map(({ videoUrl }) => {
+        const link = document.createElement("link");
+        link.rel   = "preload";
+        link.as    = "video";
+        link.href  = videoUrl;
+        document.head.appendChild(link);
+        return link;
+      })
+    );
+
+    // cleanup on unmount or when questions change
+    return () => {
+      links.forEach(link => document.head.removeChild(link));
+    };
+  }, [quizQuestions]);
+
+  
   const currentQuestion = quizQuestions[currentQuestionIndex];
 
   const handleChoiceClick = (index) => {
@@ -197,6 +222,17 @@ function Quiz() {
     setHasUpdatedQuiz(false);
   };
 
+   const failMessages = [
+    "You've almost got it!",
+    "Keep going—you’re close!",
+    "Don’t give up now!",
+    "You can do this!",
+    "Almost there—try again!",
+  ];
+  // pick one at random
+  const failHeading =
+    failMessages[Math.floor(Math.random() * failMessages.length)];
+
   useEffect(() => {
     if (quizFinished && !hasUpdatedQuiz) {
       const userPoints = correctAnswers * pointsPerCorrectAnswer;
@@ -236,11 +272,17 @@ function Quiz() {
 
   if (failedPointsRequirement) {
     return (
-      <div className="d-flex flex-column align-items-center justify-content-center gap-4">
+      <div className="d-flex flex-column align-items-center justify-content-center gap-2">
         <img src={failed} alt="" />
+        <div className="stats-quiz d-flex flex-row gap-1 text-center">
+                  <img src={check} className="tama img-fluid p-1" alt="check img" />
+                  <p className="check-number ms-1 fs-1">{correctAnswers}</p>
+                  <img src={ekis} className="mali img-fluid p-1 ms-5" alt="ekis img" />
+                  <p className="ekis-number ms-1 fs-1" >{wrongAnswers}</p>
+                </div>
         <div className="d-flex flex-column align-items-center justify-content-center gap-2">
-           <h1 >You've almost got it</h1>
-           <h2 className="text-center">You need at least 7 correct answers to pass the quiz</h2>
+          <h1 >{failHeading}</h1>
+           <h2 style={{ color: 'gray' }}>You need at least 7 correct answers to pass the quiz</h2>
         </div>
         <div className="finishbuttons rounded-4 d-flex align-items-center justify-content-center gap-4">
           <button
@@ -331,17 +373,12 @@ function Quiz() {
                     } rounded-4 m-4${isSelected ? " selected" : ""}`}
                   >
                     <strong>{["A", "B", "C", "D"][index]}</strong>
-                    <video
-                      width="200"
-                      height="150"
-                      className="rounded-2 mb-1"
-                      autoPlay
-                      muted
-                      loop
-                    >
-                      <source src={option.videoUrl} type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
+                     <LazyVideo
+   src={option.videoUrl}
+   poster="path/to/placeholder.jpg" 
+   width={200}
+   height={150}
+ />
                   </div>
                 </div>
               );

@@ -6,6 +6,7 @@ import leftArrow from "../../../assets/leftArrow.png";
 import rightArrow from "../../../assets/rightArrow.png";
 import "../../../css/lesoneContent.css";
 import { ProgressContext } from "../../../Pages/Dashboard/ProgressContext";
+import TrimmedVideo from "./TrimmedVideo";
 
 const levelMapping = {
   termsone: "basic",
@@ -235,21 +236,14 @@ const LesoneContent = () => {
 
       <div className="container-lecture d-flex flex-column align-items-center justify-content-center">
         <div className="tryone-container">
-          <video
-            ref={videoRef}
-            key={currentTerm.video}
-            autoPlay
-            loop
-            onLoadedMetadata={() => {
-              // ensure normal speed
-              if (videoRef.current) {
-                videoRef.current.playbackRate = 1.0;
-                videoRef.current.defaultPlaybackRate = 1.0;
-              }
-            }}
-          >
-            <source src={currentTerm.video} type="video/mp4" />
-          </video>
+       <TrimmedVideo
+          src={currentTerm.video}
+          width={200}
+          height={150}
+          start={.5}    // cut off the first 1 second
+          end={11}      // when it reaches 8s, loop back to 1s
+          playbackRate={1.3}
+          />
         </div>
 
         <div className="text-container d-flex flex-column align-items-center justify-content-center gap-5 mt-4">
