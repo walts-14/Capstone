@@ -1,7 +1,6 @@
 import express from "express";
 import cors from "cors";
 import {
-  createUser,
   loginUser,
   uploadProfilePicture,
   deleteProfilePicture,
@@ -19,7 +18,7 @@ router.use(
   })
 );
 
-router.post("/signup", createUser);
+//router.post("/signup", createUser);
 router.post("/login", loginUser);
 
 // Profile picture routes (protected)

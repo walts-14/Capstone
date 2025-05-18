@@ -1,6 +1,6 @@
 // routes/quizRoutes.js
 import express from "express";
-import { getRandomQuiz, createQuiz, getStoredQuizQuestions } from "../controllers/quiz.controller.js";
+import { getRandomQuiz, createQuiz, getStoredQuizQuestions, updateUserPointsForQuiz } from "../controllers/quiz.controller.js";
 
 const router = express.Router();
 
@@ -10,6 +10,21 @@ router.get("/random", getRandomQuiz);
 // GET /api/quizzes/stored - Get stored quiz questions (by level, lessonNumber, quizPart).
 router.get("/stored", getStoredQuizQuestions);
 
-router.post("/uploadquiz", createQuiz )
+router.post("/uploadquiz", createQuiz );
+
+// New route to update user points for quiz attempts
+router.post("/update-points", async (req, res) => {
+  try {
+    const { userId, level, attempt } = req.body;
+    if (!userId || !level || !attempt) {
+      return res.status(400).json({ error: "userId, level, and attempt are required" });
+    }
+    await updateUserPointsForQuiz(userId, level, attempt);
+    res.json({ message: "User points updated for quiz" });
+  } catch (error) {
+    console.error("Error updating user points for quiz:", error);
+    res.status(500).json({ error: "Failed to update user points" });
+  }
+});
 
 export default router;

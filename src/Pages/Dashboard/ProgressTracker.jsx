@@ -21,6 +21,51 @@ const lessonsByLevel = {
 };
 const lessonOffsets = { basic: 0, intermediate: 4, advanced: 8 };
 
+// New utility to calculate overall progress and current lesson
+const calculateOverallProgress = (progressData) => {
+  if (!progressData) return { overallPercent: 0, currentLesson: 1 };
+
+  const levels = ["basic", "intermediate", "advanced"];
+  let totalSteps = 0;
+  let completedSteps = 0;
+  let currentLesson = 1;
+  let lessonFound = false;
+
+  for (const level of levels) {
+    const lessons = lessonsByLevel[level];
+    for (let i = 0; i < lessons.length; i++) {
+      const lessonKey = lessons[i];
+      const lessonProgress = progressData[level]?.[lessonKey] || {};
+      const steps = ["step1Lecture", "step1Quiz", "step2Lecture", "step2Quiz"];
+      totalSteps += steps.length;
+
+      // Count completed steps
+      let lessonCompletedSteps = 0;
+      for (const step of steps) {
+        if (lessonProgress[step]) {
+          completedSteps++;
+          lessonCompletedSteps++;
+        }
+      }
+
+      // Determine current lesson as first lesson with incomplete steps
+      if (!lessonFound && lessonCompletedSteps < steps.length) {
+        currentLesson = lessonOffsets[level] + i + 1;
+        lessonFound = true;
+      }
+    }
+  }
+
+  // If all lessons completed, currentLesson is max lesson
+  if (!lessonFound) {
+    currentLesson = 12;
+  }
+
+  const overallPercent = totalSteps === 0 ? 0 : Math.round((completedSteps / totalSteps) * 100);
+
+  return { overallPercent, currentLesson };
+};
+
 export default function ProgressTracker({ student }) {
   const {
     progressData: contextProgressData,
@@ -42,7 +87,11 @@ export default function ProgressTracker({ student }) {
   // Which email to fetch progress for
   const studentEmail = student?.email || currentUserEmail;
   const [progressData, setProgressData] = useState(contextProgressData);
- const targetName = student?.name?.trim() || currentUserName?.trim() || "";
+  const targetName = student?.name?.trim() || currentUserName?.trim() || "";
+
+  // Calculate overall progress and current lesson
+  const { overallPercent, currentLesson } = calculateOverallProgress(progressData);
+
   // ———— Leaderboard effect ————
   useEffect(() => {
     if (!targetName) {
@@ -112,6 +161,7 @@ export default function ProgressTracker({ student }) {
           </p>
           <p className="text-nowrap fs-2">{displayUsername}</p>
         </div>
+        
       </div>
 
       <div className="lessonTracker d-flex flex-column text-white rounded-4 p-3">

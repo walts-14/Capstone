@@ -70,23 +70,60 @@ export const updateProgressByEmail = async (req, res) => {
     const { email }    = req.params;
     const { progress } = req.body;
 
-    // Fetch current progress to merge
-    const user = await User.findOne({ email }).select("progress");
+    // Fetch current progress and ensure we start from a fresh full tree
+    const user = await User.findOne({ email }).select("progress points");
     if (!user) return res.status(404).json({ error: "User not found" });
 
-    // merge incoming deltas into existing full tree
+    // Always clone the default structure to avoid mutating shared state
+    const base = JSON.parse(JSON.stringify(progressStructure));
+    // Merge existing user progress into base, then overlay incoming updates
     const merged = deepMerge(
-      user.progress || JSON.parse(JSON.stringify(progressStructure)),
+      deepMerge(base, user.progress || {}),
       progress
     );
 
-    // Update only the progress field using updateOne to avoid validation errors
-    await User.updateOne({ email }, { progress: merged });
+    // Points mapping
+    const lecturePoints = { basic: 50, intermediate: 75, advanced: 100 };
+    const lessonCompletionBonus = { basic: 100, intermediate: 150, advanced: 200 };
 
-    return res.json({ message: "Progress updated", progress: merged });
+    let pointsToAdd = 0;
+
+    // Helper to check if a lecture step is newly completed
+    const isNewlyCompleted = (oldProg, newProg, lvl, term, step) =>
+      !oldProg?.[lvl]?.[term]?.[step] && newProg?.[lvl]?.[term]?.[step];
+
+    // Award points for newly completed lectures
+    ["basic","intermediate","advanced"].forEach(level => {
+      Object.keys(merged[level]).forEach(term => {
+        ["step1Lecture","step2Lecture"].forEach(step => {
+          if (isNewlyCompleted(user.progress, merged, level, term, step)) {
+            pointsToAdd += lecturePoints[level];
+          }
+        });
+      });
+    });
+
+    // Award bonus when a lesson is fully completed
+    const isLessonCompleted = (prog, lvl, term) =>
+      prog[lvl][term] && Object.values(prog[lvl][term]).every(v => v === true);
+
+    ["basic","intermediate","advanced"].forEach(level => {
+      Object.keys(merged[level]).forEach(term => {
+        if (!isLessonCompleted(user.progress || {}, level, term)
+            && isLessonCompleted(merged, level, term)) {
+          pointsToAdd += lessonCompletionBonus[level];
+        }
+      });
+    });
+
+    // Persist updates
+    user.progress = merged;
+    user.points += pointsToAdd;
+    await user.save();
+
+    return res.json({ message: "Progress updated", progress: merged, pointsAdded: pointsToAdd, totalPoints: user.points });
   } catch (err) {
     console.error("updateProgressByEmail error:", err);
     return res.status(500).json({ error: err.message });
   }
 };
-
