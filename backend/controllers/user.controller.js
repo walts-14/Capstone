@@ -1,4 +1,6 @@
 import User from "../models/user.js";
+import fs from "fs";
+import cloudinary from "../config/cloudinary.js";
 import jwt from "jsonwebtoken";
 import { comparePassword } from "../middlewares/auth.js";
 
