@@ -1,13 +1,19 @@
-// routes/streakRoutes.js
 import express from "express";
-import { getStreak, updateStreak } from "../controllers/streak.controller.js";
+import {
+  getStreakByEmail,
+  updateStreakByEmail,
+  getStreak,
+  updateStreak
+} from "../controllers/streak.controller.js";
 
 const router = express.Router();
 
-// GET /api/streak/:userId - Get user streak.
-router.get("/:userId", getStreak);
+// match /api/streak/email/:email
+router.get("/email/:email",    getStreakByEmail);
+router.put("/email/:email",   updateStreakByEmail);
 
-// PUT /api/streak/:userId - Update user streak.
-router.put("/:userId", updateStreak);
+// fall‑back ID‑based routes (if you ever want to look up by Mongo _id)
+router.get("/:userId",         getStreak);
+router.put("/:userId",        updateStreak);
 
 export default router;

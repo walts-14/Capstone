@@ -1,7 +1,7 @@
 import "../../css/Introductions.css";
 import Sidenav from "../../Components/Sidenav";
 import vid1 from "../../assets/introduction.mp4";
-import vid2 from "../../assets/Where are you frtom.mp4";
+import vid2 from "../../assets/introduction2.mp4";
 
 
 const interpreters = [
@@ -9,10 +9,11 @@ const interpreters = [
     id: 1,
     video: vid2,
     name: "Daisy Jane P. Noble",
-    teachingExperience: "Since January 2024",
+    teachingExperience: "Since January 2024 until now",
+    // journey: "I founded the ADAE (Advocates for Deaf Awareness and Equality) to eliminate communication barriers and to raise awareness of Deaf Culture, providing training to promote understanding and support Deaf leaders and education. ",
     journey: "I founded ADAE(Advocates for Deaf Awareness and Equality) to break communication barriers and raise Deaf awareness.",
     whereTaught: "Community seminars, organizations, and awareness programs"
-  },
+  },  
   {
     id: 2,
     video: vid1,
@@ -35,6 +36,9 @@ export default function Interpreter() {
           <video
             src={intp.video}
             controls
+            autoPlay
+            loop
+            
             className="interpreter-video"
           />
           <div className="interpreter-details d-flex flex-column ms-auto">
