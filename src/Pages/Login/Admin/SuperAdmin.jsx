@@ -286,17 +286,19 @@ const SuperAdmin = () => {
                         <td>{u.yearLevel || "N/A"}</td>
                         <td>
                           <div className="action-admin">
-                            <button
-                              onClick={() => handleClick(u)}
-                              className="btn text-white fs-5 px-3 py-2 rounded-4"
-                              style={{
-                                backgroundColor: "#2e86c1",
-                                border: "none",
-                                marginLeft: "2rem",
-                              }}
-                            >
-                              Progress
-                            </button>
+                            {activeTab === "Users" && (
+                              <button
+                                onClick={() => handleClick(u)}
+                                className="btn text-white fs-5 px-3 py-2 rounded-4"
+                                style={{
+                                  backgroundColor: "#2e86c1",
+                                  border: "none",
+                                  marginLeft: "2rem",
+                                }}
+                              >
+                                Progress
+                              </button>
+                            )}
                             <img
                               src={EditIcon}
                               alt="Edit"
