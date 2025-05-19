@@ -15,11 +15,11 @@ router.post("/uploadquiz", createQuiz );
 // New route to update user points for quiz attempts
 router.post("/update-points", async (req, res) => {
   try {
-    const { userId, level, attempt } = req.body;
-    if (!userId || !level || !attempt) {
-      return res.status(400).json({ error: "userId, level, and attempt are required" });
+    const { userId, level, attempt, isSuccess } = req.body;
+    if (!userId || !level || !attempt || typeof isSuccess !== 'boolean') {
+      return res.status(400).json({ error: "userId, level, attempt, and isSuccess are required" });
     }
-    await updateUserPointsForQuiz(userId, level, attempt);
+    await updateUserPointsForQuiz(userId, level, attempt, isSuccess);
     res.json({ message: "User points updated for quiz" });
   } catch (error) {
     console.error("Error updating user points for quiz:", error);

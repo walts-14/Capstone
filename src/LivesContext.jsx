@@ -42,7 +42,7 @@ export const LivesProvider = ({ children }) => {
     // Check regeneration every minute
     const interval = setInterval(checkRegeneration, 60000);
     return () => clearInterval(interval);
-  }, [lives]);
+  }, []);
 
   const loseLife = async () => {
     const userEmail = localStorage.getItem("userEmail");

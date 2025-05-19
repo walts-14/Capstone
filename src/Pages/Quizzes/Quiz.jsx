@@ -52,7 +52,8 @@ function Quiz() {
   const [quizQuestions, setQuizQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswerIndex, setSelectedAnswerIndex] = useState(null);
-  const [attempts, setAttempts] = useState(0);
+  // Change attempts to track per-question attempts as an object: { questionId: attemptCount }
+  const [attempts, setAttempts] = useState({});
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [wrongAnswers, setWrongAnswers] = useState(0);
   const [showResult, setShowResult] = useState(false);
@@ -112,7 +113,7 @@ function Quiz() {
         setQuizQuestions(response.data);
         setCurrentQuestionIndex(0);
         setSelectedAnswerIndex(null);
-        setAttempts(0);
+        setAttempts( {});
         setCorrectAnswers(0);
         setWrongAnswers(0);
         setShowResult(false);
@@ -160,6 +161,10 @@ function Quiz() {
   };
 
   const handleNext = async () => {
+    if (lives <= 0) {
+      toast.error("No lives left. Cannot continue.");
+      return;
+    }
     const userEmail = localStorage.getItem("userEmail");
     if (selectedAnswerIndex === null) {
       toast.error("Please select an answer before proceeding.");
@@ -167,29 +172,59 @@ function Quiz() {
     }
     if (!showResult) {
       setShowResult(true);
-      try {
-        if (!isCorrect) {
-          await axios.post(`${backendURL}/api/lives/email/${userEmail}/lose-life`);
-          setLives((prev) => Math.max(0, prev - 1));
-          setStreak(0);
-          setWrongAnswers((prev) => prev + 1);
-        } else {
-          setCorrectAnswers((prev) => prev + 1);
-          setStreak((prev) => prev + 1);
-          if ((streak + 1) % 3 === 0) {
-            await axios.post(`${backendURL}/api/lives/email/${userEmail}/gain-life`);
-            setLives((prev) => prev + 1);
-            toast.success("Streak bonus! +1 life");
+          try {
+            if (!isCorrect) {
+              // Do not add points if answer is incorrect
+              await axios.post(`${backendURL}/api/lives/email/${userEmail}/lose-life`);
+              setLives((prev) => Math.max(0, prev - 1));
+              setStreak(0);
+              setWrongAnswers((prev) => prev + 1);
+              return; // Early return to prevent points awarding
+            }
+            setCorrectAnswers((prev) => prev + 1);
+            setStreak((prev) => prev + 1);
+            if ((streak + 1) % 3 === 0) {
+              await axios.post(`${backendURL}/api/lives/email/${userEmail}/gain-life`);
+              setLives((prev) => prev + 1);
+              toast.success("Streak bonus! +1 life");
+            }
+            // Calculate points based on attempt number and level
+            const questionId = currentQuestion._id || currentQuestion.question; // fallback to question text if no id
+
+            // Increment attempt count for current question before awarding points
+            const newAttemptCount = attempts[questionId] ? attempts[questionId] + 1 : 1;
+            setAttempts((prev) => ({
+              ...prev,
+              [questionId]: newAttemptCount,
+            }));
+
+            const pointsTable = {
+              basic: { 1: 10, 2: 10, 3: 5, 4: 2 },
+              intermediate: { 1: 15, 2: 15, 3: 8, 4: 3 },
+              advanced: { 1: 20, 2: 20, 3: 10, 4: 5 },
+            };
+
+            // Use 4th+ try points for attempts >= 4
+            const attemptKey = newAttemptCount >= 4 ? 4 : newAttemptCount;
+            const pointsToAward = pointsTable[level][attemptKey] || 0;
+
+            await axios.post(`${backendURL}/api/points/email/${userEmail}/gain-points`, { points: pointsToAward });
+          } catch (error) {
+            toast.error("Failed to update lives/points. Please try again.");
           }
-          await axios.post(`${backendURL}/api/points/email/${userEmail}/gain-points`, { points: 10 });
-        }
-      } catch (error) {
-        toast.error("Failed to update lives/points. Please try again.");
-      }
       return;
     }
-    setAttempts((prev) => prev + 1);
-    if (attempts + 1 >= totalQuestions || lives <= 0) {
+    // Increment attempt count for current question
+    const questionId = currentQuestion._id || currentQuestion.question;
+    setAttempts((prev) => ({
+      ...prev,
+      [questionId]: prev[questionId] ? prev[questionId] + 1 : 1,
+    }));
+
+    // Calculate total attempts so far (sum of all question attempts)
+    const totalAttempts = Object.values(attempts).reduce((a, b) => a + b, 0) + 1;
+
+    if ((currentQuestionIndex + 1) >= totalQuestions || lives <= 0) {
       setQuizFinished(true);
       toast.success("Quiz completed!");
       return;
@@ -214,7 +249,7 @@ function Quiz() {
     setFailedPointsRequirement(false);
     setCurrentQuestionIndex(0);
     setSelectedAnswerIndex(null);
-    setAttempts(0);
+    setAttempts({});
     setCorrectAnswers(0);
     setWrongAnswers(0);
     setShowResult(false);
@@ -235,6 +270,11 @@ function Quiz() {
 
   useEffect(() => {
     if (quizFinished && !hasUpdatedQuiz) {
+      // Only show failed result if all questions are answered
+      if ((currentQuestionIndex + 1) < totalQuestions) {
+        // Not finished all questions yet, do not show failed result
+        return;
+      }
       const userPoints = correctAnswers * pointsPerCorrectAnswer;
       const requiredPoints = minPointsRequired[level] || 70;
       if (userPoints < requiredPoints) {
@@ -325,14 +365,14 @@ function Quiz() {
         <div
           className="progress"
           role="progressbar"
-          aria-valuenow={(attempts / totalQuestions) * 100}
-          aria-valuemin="0"
-          aria-valuemax="100"
-        >
-          <div
-            className="progress-bar"
-            style={{ width: `${(attempts / totalQuestions) * 100}%` }}
-          ></div>
+      aria-valuenow={(currentQuestionIndex / totalQuestions) * 100}
+      aria-valuemin="0"
+      aria-valuemax="100"
+    >
+      <div
+        className="progress-bar"
+        style={{ width: `${(currentQuestionIndex / totalQuestions) * 100}%` }}
+      ></div>
         </div>
       )}
       {quizFinished ? null : (

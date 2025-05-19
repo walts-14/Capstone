@@ -48,7 +48,7 @@ const userSchema = new mongoose.Schema(
       enum: ["user", "admin", "super_admin"]
     },
     points:       { type: Number, default: 0 },
-    lives:        { type: Number, default: 10 },
+    lives:        { type: Number, default: 5 },
     lastLifeTime: { type: Date,   default: Date.now },
 
     // Use a function for default so each user gets a fresh copy

@@ -67,15 +67,15 @@ export const regenerateLives = async (req, res) => {
       // Calculate minutes passed since last life update
       const minutesPassed = Math.floor((now - lastTime) / (1000 * 60));
   
-      // Calculate the number of additional lives based on full 10-minute intervals
-      const additionalLives = Math.floor(minutesPassed / 10);
+      // Calculate the number of additional lives based on full 40-minute intervals
+      const additionalLives = Math.floor(minutesPassed / 40);
   
-      // Only update if at least one full 10-minute interval has passed and user hasn't reached max lives
+      // Only update if at least one full 40-minute interval has passed and user hasn't reached max lives
       if (additionalLives > 0 && user.lives < 5) {
           // Increase lives but cap at 5
           user.lives = Math.min(user.lives + additionalLives, 5);
           // Instead of resetting to now, increment lastLifeTime by the amount of time used
-          user.lastLifeTime = new Date(lastTime.getTime() + additionalLives * 10 * 60 * 1000);
+          user.lastLifeTime = new Date(lastTime.getTime() + additionalLives * 40 * 60 * 1000);
           await user.save();
       }
   

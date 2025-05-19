@@ -1,4 +1,4 @@
-import Video from "../models/videoLesson.js";
+ import Video from "../models/videoLesson.js";
 import Quiz from "../models/quiz.js";
 import User from "../models/user.js";
 
@@ -89,12 +89,17 @@ export const getRandomQuiz = async (req, res) => {
  * Update user points and progress for a quiz attempt.
  * Expects: userId, level, lessonNumber, quizPart, attempt
  */
-export const updateUserPointsForQuiz = async (userId, level, lessonNumber, quizPart, attempt) => {
+export const updateUserPointsForQuiz = async (userId, level, attempt, isSuccess) => {
   const pointsArr = quizPointsMap[level] || [0,0,0];
   const pointsToAdd = attempt === 1 ? pointsArr[0] : attempt === 2 ? pointsArr[1] : pointsArr[2];
 
   const user = await User.findById(userId);
   if (!user) throw new Error('User not found');
+
+  // If attempt failed and lives are 0, do not add points
+  if (!isSuccess && user.lives === 0) {
+    return 0;
+  }
 
   // 1) Add quiz points
   user.points = (user.points || 0) + pointsToAdd;
