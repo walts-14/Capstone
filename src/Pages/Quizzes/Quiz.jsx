@@ -4,6 +4,7 @@ import backkpoint from "../../assets/backkpoint.png";
 import arrow from "../../assets/arrow.png";
 import check from "../../assets/check.png";
 import ekis from "../../assets/ekis.png";
+import diamond from "../../assets/diamond.png";
 import "../../css/Quiz.css";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -314,13 +315,17 @@ function Quiz() {
     return (
       <div className="d-flex flex-column align-items-center justify-content-center gap-2">
         <img src={failed} alt="" />
+         <div className="dia-reward d-flex pt-1">
+          <img src={diamond} className="img-fluid p-1 ms-5" alt="diamond img" />
+          <p className="dia-number ms-3 me-5  fs-1">{correctAnswers * 10}</p>
+        </div>
         <div className="stats-quiz d-flex flex-row gap-1 text-center">
                   <img src={check} className="tama img-fluid p-1" alt="check img" />
                   <p className="check-number ms-1 fs-1">{correctAnswers}</p>
                   <img src={ekis} className="mali img-fluid p-1 ms-5" alt="ekis img" />
                   <p className="ekis-number ms-1 fs-1" >{wrongAnswers}</p>
                 </div>
-        <div className="d-flex flex-column align-items-center justify-content-center gap-2">
+        <div className="d-flex flex-column align-items-center justify-content-center  ">
           <h1 >{failHeading}</h1>
            <h2 style={{ color: 'gray' }}>You need at least 7 correct answers to pass the quiz</h2>
         </div>
