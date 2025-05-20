@@ -29,10 +29,10 @@
   --midblue: #04aae0;
   --lightblue: #579ecd;
   --shadowblue: #246b9a;
-  --intermediate-yellow: #DCBC3D;
-  --intermediate-shadow: #A9890A;
-  --advance-red: #CC6055;
-  --advance-shadow: #992D22;
+  --intermediate-yellow: #dcbc3d;
+  --intermediate-shadow: #a9890a;
+  --advance-red: #cc6055;
+  --advance-shadow: #992d22;
 }
 /* Section 1: Lessons 1-5 */
 
@@ -63,7 +63,7 @@
   font-size: 5rem;
   font-weight: bold;
   margin: 0;
-  color: #FFCB5B;
+  color: #ffcb5b;
   font-family: "Baloo", sans-serif;
 }
 
@@ -211,20 +211,26 @@
 }
 
 /* Global transitions for all lesson buttons */
-.lessons {
-  transition: 
-    transform 0.2s ease, 
-    box-shadow 0.2s ease, 
+.lessons,
+.lessons2,
+.lessons3 {
+  transition: transform 0.2s ease, box-shadow 0.2s ease,
     background-color 0.2s ease;
 }
 
-.lessons:hover {
+/* Hover effects only for unlocked lessons */
+div[style*="cursor: pointer"][style*="opacity: 1"]:hover {
   transform: translateY(-4px) scale(1.03);
-  /* We use the same inline box-shadow color, so you only need to change the spread */
   box-shadow: 0 8px 2px 10px currentColor;
 }
 
-.lessons:active {
+div[style*="cursor: pointer"][style*="opacity: 1"]:active {
   transform: translateY(0) scale(0.98);
   box-shadow: 0 3px 1px 6px currentColor;
+}
+
+/* Remove hover effects for locked lessons */
+div[style*="cursor: not-allowed"][style*="opacity: 0.5"]:hover {
+  transform: none;
+  box-shadow: inherit;
 }

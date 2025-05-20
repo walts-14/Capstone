@@ -1,30 +1,34 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../../css/Lesson.css";
 import LivesandDiamonds from "../../Components/LiveandDiamonds";
+import { ProgressContext } from "./ProgressContext.jsx"; // Import the ProgressContext
 
-const lessonRoutes = [
-  { id: 1, termId: "termsone", unlocked: true },
-  { id: 2, termId: "termstwo", unlocked: true },
-  { id: 3, termId: "termsthree", unlocked: true },
-  { id: 4, termId: "termsfour", unlocked: true },
-  { id: 5, termId: "termsfive", unlocked: true },
-  { id: 6, termId: "termssix", unlocked: true },
-  { id: 7, termId: "termsseven", unlocked: true },
-  { id: 8, termId: "termseight", unlocked: true },
-  { id: 9, termId: "termsnine", unlocked: true },
-  { id: 10, termId: "termsten", unlocked: true },
-  { id: 11, termId: "termseleven", unlocked: true },
-  { id: 12, termId: "termstwelve", unlocked: true },
-];
+// Helper function to calculate lesson progress
+const calculateProgress = (progressObj = {}) => {
+  let score = 0;
+  if (progressObj.step1Lecture) score += 25;
+  if (progressObj.step1Quiz) score += 25;
+  if (progressObj.step2Lecture) score += 25;
+  if (progressObj.step2Quiz) score += 25;
+  return score;
+};
+
+const lessonsByLevel = {
+  basic: ["termsone", "termstwo", "termsthree", "termsfour"],
+  intermediate: ["termsfive", "termssix", "termsseven", "termseight"],
+  advanced: ["termsnine", "termsten", "termseleven", "termstwelve"],
+};
 
 function LessonButtons() {
   const navigate = useNavigate();
   const [difficulty, setDifficulty] = useState("BASIC");
   const [lives, setLives] = useState(0);
   const [points, setPoints] = useState(0);
+  const [unlockedLessons, setUnlockedLessons] = useState([1]); // Only lesson 1 is unlocked initially
   const buttonContainerRef = useRef(null);
+  const { progressData } = useContext(ProgressContext); // Get progress data from context
 
   const difficultyColors = {
     BASIC: "#579ecd",
@@ -64,6 +68,61 @@ function LessonButtons() {
       }
     };
   }, []);
+
+  // Determine which lessons are unlocked based on progress data
+  useEffect(() => {
+    if (!progressData) return;
+
+    const unlockedLessonIds = [1]; // First lesson is always unlocked
+
+    // Map terms to lesson IDs
+    const termToLessonId = {};
+    let idCounter = 1;
+
+    for (const level of ["basic", "intermediate", "advanced"]) {
+      for (const term of lessonsByLevel[level]) {
+        termToLessonId[term] = idCounter++;
+      }
+    }
+
+    let allPreviousComplete = true;
+
+    // Check lessons in order
+    for (let lessonId = 1; lessonId < 12; lessonId++) {
+      // Find the term ID for this lesson
+      const termId = Object.keys(termToLessonId).find(
+        (term) => termToLessonId[term] === lessonId
+      );
+
+      if (!termId) continue;
+
+      // Find which level this term belongs to
+      let level;
+      for (const l of ["basic", "intermediate", "advanced"]) {
+        if (lessonsByLevel[l].includes(termId)) {
+          level = l;
+          break;
+        }
+      }
+
+      if (!level) continue;
+
+      // Check if the current lesson is 100% complete
+      const currentLessonProgress = progressData[level]?.[termId] || {};
+      const completionPercent = calculateProgress(currentLessonProgress);
+
+      if (allPreviousComplete) {
+        unlockedLessonIds.push(lessonId);
+
+        // If this lesson isn't 100% complete, stop unlocking further lessons
+        if (completionPercent < 100) {
+          allPreviousComplete = false;
+        }
+      }
+    }
+
+    setUnlockedLessons(unlockedLessonIds);
+  }, [progressData]);
 
   useEffect(() => {
     const fetchLives = async () => {
@@ -108,6 +167,21 @@ function LessonButtons() {
     const pointsInterval = setInterval(fetchPoints, 5000);
     return () => clearInterval(pointsInterval);
   }, []);
+
+  const lessonRoutes = [
+    { id: 1, termId: "termsone", unlocked: unlockedLessons.includes(1) },
+    { id: 2, termId: "termstwo", unlocked: unlockedLessons.includes(2) },
+    { id: 3, termId: "termsthree", unlocked: unlockedLessons.includes(3) },
+    { id: 4, termId: "termsfour", unlocked: unlockedLessons.includes(4) },
+    { id: 5, termId: "termsfive", unlocked: unlockedLessons.includes(5) },
+    { id: 6, termId: "termssix", unlocked: unlockedLessons.includes(6) },
+    { id: 7, termId: "termsseven", unlocked: unlockedLessons.includes(7) },
+    { id: 8, termId: "termseight", unlocked: unlockedLessons.includes(8) },
+    { id: 9, termId: "termsnine", unlocked: unlockedLessons.includes(9) },
+    { id: 10, termId: "termsten", unlocked: unlockedLessons.includes(10) },
+    { id: 11, termId: "termseleven", unlocked: unlockedLessons.includes(11) },
+    { id: 12, termId: "termstwelve", unlocked: unlockedLessons.includes(12) },
+  ];
 
   const chunkSize = 4;
   const lessonGroups = [];
