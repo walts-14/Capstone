@@ -130,9 +130,9 @@ function LoginForm() {
         </Form>
 
         <div className="sign-up">
-          <p className="text-center text-light">
+          {/* <p className="text-center text-light">
             Don't have an account? <a href="/signup">Sign up</a>
-          </p>
+          </p> */}
         </div>
       </div>
     </div>
