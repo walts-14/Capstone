@@ -1,3 +1,4 @@
+ 
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { FaUserPlus } from "react-icons/fa";
@@ -131,7 +132,9 @@ const DashboardAdmin = () => {
         });
       }
       toast.success(response.data.message);
-      fetchStudents(selectedGrade);
+      await fetchStudents(selectedGrade);
+      setShowDeleteModal(false);
+      setUserToDelete(null);
       setShowForm(false);
     } catch (err) {
       console.error("Error submitting form:", err.response?.data || err);
@@ -152,8 +155,11 @@ const DashboardAdmin = () => {
     setShowForm(true);
   };
 
+  // Modal state for delete confirmation
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [userToDelete, setUserToDelete] = useState(null);
+
   const handleDeleteUser = async (email) => {
-    if (!window.confirm("Delete this user?")) return;
     try {
       await axios.delete(`/api/admin/students/${encodeURIComponent(email)}`, {
         baseURL: "http://localhost:5000",
@@ -246,7 +252,7 @@ const DashboardAdmin = () => {
               </button>
             </div>
 
-            {/* Updated table with wrapper for scrolling */}
+          {/* Updated table with wrapper for scrolling */}
             <div className="contentdiv">
               <div className="table-wrapper">
                 <table className="dashboard-table text-light">
@@ -293,17 +299,80 @@ const DashboardAdmin = () => {
                               alt="Remove"
                               className="img-action"
                               style={{ marginRight: "50px", cursor: "pointer" }}
-                              onClick={() => handleDeleteUser(u.email)}
+                              onClick={() => {
+                                setUserToDelete(u.email);
+                                setShowDeleteModal(true);
+                              }}
                             />
-                          </div>
-                        </td>
-                      </tr>
+      </div>
+    </td>
+  </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
             </div>
           </div>
+
+          {/* Delete Confirmation Modal - always fixed and centered in viewport */}
+          {showDeleteModal && (
+            <div
+              className="modal-overlay"
+              style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                width: '100vw',
+                height: '100vh',
+                zIndex: 4000,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                background: 'rgba(0,0,0,0.3)',
+              }}
+            >
+              <div
+                className="modal-content"
+                style={{
+                  width: '440px',
+                  maxWidth: '95vw',
+                  padding: '1.5rem 1.5rem',
+                  borderRadius: '16px',
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.2)',
+                  background: '#fff',
+                  color: '#222',
+                  textAlign: 'center',
+                  position: 'relative',
+                  marginRight: '10%',
+                }}
+              >
+                <h3>Confirm Deletion</h3>
+                <p>Are you sure you want to delete this user?</p>
+                <div className="modal-actions" style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '1.5rem' }}>
+                  <button
+                    className="btn btn-danger"
+                    onClick={async () => {
+                      await handleDeleteUser(userToDelete);
+                      setShowDeleteModal(false);
+                      setUserToDelete(null);
+                    }}
+                  >
+                    Delete
+                  </button>
+                  <button
+                    className="btn btn-secondary"
+                    onClick={() => {
+                      setShowDeleteModal(false);
+                      setUserToDelete(null);
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="logout-container">
             <button className="btn-logout" onClick={logout}>
               Logout

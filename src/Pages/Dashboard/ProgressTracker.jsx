@@ -66,6 +66,7 @@ const calculateOverallProgress = (progressData) => {
   return { overallPercent, currentLesson };
 };
 
+
 export default function ProgressTracker({ student }) {
   const {
     progressData: contextProgressData,
@@ -76,10 +77,16 @@ export default function ProgressTracker({ student }) {
   } = useContext(ProgressContext);
 
   // Display the username: prioritize the student prop when showing someone else's progress
-  const displayUsername = student?.username
-    || currentUserUsername
-    || localStorage.getItem("userUsername")
-    || "UnknownStudent";
+  const [displayUsername, setDisplayUsername] = useState(
+    student?.username || currentUserUsername || localStorage.getItem("userUsername") || "UnknownStudent"
+  );
+
+  useEffect(() => {
+    // Always get the latest username from props/context/localStorage
+    setDisplayUsername(
+      student?.username || currentUserUsername || localStorage.getItem("userUsername") || "UnknownStudent"
+    );
+  }, [student, currentUserUsername]);
 
   // Rank: still matching by the API’s `name` field against currentUserName
   const [userRank, setUserRank] = useState(null);
