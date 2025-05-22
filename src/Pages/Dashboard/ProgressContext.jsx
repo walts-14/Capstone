@@ -64,10 +64,13 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
     return saved ? JSON.parse(saved) : initialProgress;
   });
 
-  const [streakData, setStreakData] = useState({
-    currentStreak: 1,  // Changed from 0 to 1 to match backend default
-    lastUpdated:   null,
-    streakFreeze:  false,
+  const [streakData, setStreakData] = useState(() => {
+    // Try to use value from localStorage if available (optional), else fallback to backend fetch
+    return {
+      currentStreak: null,
+      lastUpdated: null,
+      streakFreeze: false,
+    };
   });
 
   const STORAGE_KEY = (email) => `progress_${email}`;
@@ -160,27 +163,27 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
   };
 
   const incrementStreak = async () => {
-    setStreakData(prev => {
+    if (!currentUserEmail) return;
+    try {
+      // Prepare new streak object
       const newStreak = {
-        ...prev,
-        currentStreak: prev.currentStreak + 1,
+        ...streakData,
+        currentStreak: (streakData.currentStreak || 0) + 1,
         lastUpdated: new Date(),
       };
-      // Call backend to update streak and points
-      if (currentUserEmail) {
-        axios.put(`/api/streak/email/${currentUserEmail}`, { streak: newStreak })
-          .then(res => {
-            if (res.data.pointsAdded) {
-              // Optionally, you can update points in local state or notify user here
-              console.log(`Points added: ${res.data.pointsAdded}`);
-            }
-          })
-          .catch(err => {
-            console.error("Error updating streak:", err);
-          });
+      // Call backend to update streak and points, and use backend's streak in state
+      const res = await axios.put(`/api/streak/email/${currentUserEmail}`, { streak: newStreak });
+      if (res.data && res.data.streak) {
+        setStreakData(res.data.streak); // Always use backend's streak
+      } else {
+        setStreakData(newStreak); // fallback
       }
-      return newStreak;
-    });
+      if (res.data && res.data.pointsAdded) {
+        console.log(`Points added: ${res.data.pointsAdded}`);
+      }
+    } catch (err) {
+      console.error("Error updating streak:", err);
+    }
   };
 
   return (
