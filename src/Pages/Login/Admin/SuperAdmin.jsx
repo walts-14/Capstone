@@ -119,8 +119,11 @@ const SuperAdmin = () => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    if (formData.password !== formData.confirmPassword) {
-      return toast.error("Passwords do not match!");
+    // Only require password fields if creating, or if editing and password is being changed
+    if (formMode !== "edit" || formData.password) {
+      if (formData.password !== formData.confirmPassword) {
+        return toast.error("Passwords do not match!");
+      }
     }
     if (!formData.name || !formData.username || !formData.email) {
       return toast.error("All fields are required!");
@@ -135,12 +138,18 @@ const SuperAdmin = () => {
       const payload = {
         name: formData.name,
         username: formData.username,
-        email: formData.email,
-        password: formData.password,
         yearLevel: formData.yearLevel,
         role: activeTab === "Teachers" ? "admin" : "user",
       };
-      if (formMode === "edit") delete payload.email;
+      if (formMode !== "edit") {
+        payload.email = formData.email;
+        payload.password = formData.password;
+      } else {
+        // Only include password if user entered a new one
+        if (formData.password) {
+          payload.password = formData.password;
+        }
+      }
       const method = formMode === "edit" ? axios.put : axios.post;
       await method(urlBase, payload, { baseURL: "http://localhost:5000" });
       toast.success(
@@ -155,8 +164,11 @@ const SuperAdmin = () => {
     }
   };
 
+  // Modal state for delete confirmation
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [userToDelete, setUserToDelete] = useState(null);
+
   const handleDelete = async (email) => {
-    if (!window.confirm("Delete this account?")) return;
     try {
       const url =
         activeTab === "Users"
@@ -271,7 +283,7 @@ const SuperAdmin = () => {
                       <th>Name</th>
                       <th>Username</th>
                       <th>Email</th>
-                      {activeTab === "Users" && <th>Year Level</th>}
+                      <th>Year Level</th>
                       <th className="actions-column"></th>
                     </tr>
                   </thead>
@@ -281,7 +293,7 @@ const SuperAdmin = () => {
                         <td>{u.name || "N/A"}</td>
                         <td>{u.username}</td>
                         <td>{u.email}</td>
-                        {activeTab === "Users" && <td>{u.yearLevel || "N/A"}</td>}
+                        <td>{u.yearLevel || "N/A"}</td>
                         <td>
                           <div className="action-admin">
                             {activeTab === "Users" && (
@@ -309,8 +321,12 @@ const SuperAdmin = () => {
                               alt="Remove"
                               className="img-action"
                               style={{ marginRight: "50px", cursor: "pointer" }}
-                              onClick={() => handleDelete(u.email)}
+                              onClick={() => {
+                                setUserToDelete(u.email);
+                                setShowDeleteModal(true);
+                              }}
                             />
+         
                           </div>
                         </td>
                       </tr>
@@ -320,7 +336,64 @@ const SuperAdmin = () => {
               </div>
             </div>
           </div>
-
+ {/* Delete Confirmation Modal - always fixed and centered in viewport */}
+          {showDeleteModal && (
+            <div
+              className="modal-overlay"
+              style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                width: '100vw',
+                height: '100vh',
+                zIndex: 4000,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                background: 'rgba(0,0,0,0.3)',
+              }}
+            >
+              <div
+                className="modal-content"
+                style={{
+                  width: '440px',
+                  maxWidth: '85vw',
+                  padding: '1.5rem 1.5rem',
+                  borderRadius: '16px',
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.2)',
+                  background: '#fff',
+                  color: '#222',
+                  textAlign: 'center',
+                  position: 'relative',
+                  marginRight: '10%',
+                }}
+              >
+                <h3>Confirm Deletion</h3>
+                <p>Are you sure you want to delete this account?</p>
+                <div className="modal-actions" style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '1.5rem' }}>
+                  <button
+                    className="btn btn-danger"
+                    onClick={async () => {
+                      await handleDelete(userToDelete);
+                      setShowDeleteModal(false);
+                      setUserToDelete(null);
+                    }}
+                  >
+                    Delete
+                  </button>
+                  <button
+                    className="btn btn-secondary"
+                    onClick={() => {
+                      setShowDeleteModal(false);
+                      setUserToDelete(null);
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
           <div className="logout-container">
             <button className="btn-logout" onClick={logout}>
               Logout

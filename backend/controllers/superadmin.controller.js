@@ -116,7 +116,7 @@ export const updateStudentByEmailSuper = async (req, res) => {
     if (newEmail) student.email = newEmail;
     if (yearLevel) student.yearLevel = yearLevel;
     if (password) {
-      student.password = await bcrypt.hash(password, 10);
+      student.password = password; // let pre-save hook hash it
     }
 
     await student.save();
@@ -180,7 +180,7 @@ export const updateAdminByEmail = async (req, res) => {
     if (username) admin.username = username;
     if (newEmail) admin.email = newEmail;
     if (password) {
-      admin.password = await bcrypt.hash(password, 10);
+      admin.password = password; // let pre-save hook hash it
     }
 
     await admin.save();
