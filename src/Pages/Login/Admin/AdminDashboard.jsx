@@ -104,15 +104,27 @@ const DashboardAdmin = () => {
     try {
       let response;
       if (formData.id) {
+        // Prepare update payload for editing
+        const updatePayload = {
+          username: formData.username,
+          name: formData.name,
+          yearLevel: formData.yearLevel,
+        };
+        // Only include password if set
+        if (formData.password) updatePayload.password = formData.password;
+        // Only include newEmail if email was changed
+        if (formData.email !== formData.id) updatePayload.newEmail = formData.email;
+
         response = await axios.put(
           `/api/admin/students/${encodeURIComponent(formData.id)}`,
-          formData,
+          updatePayload,
           {
             baseURL: "http://localhost:5000",
             headers: { Authorization: `Bearer ${token}` },
           }
         );
       } else {
+        // Create new student
         response = await axios.post(`/api/admin/students`, formData, {
           baseURL: "http://localhost:5000",
           headers: { Authorization: `Bearer ${token}` },
@@ -243,7 +255,6 @@ const DashboardAdmin = () => {
                       <th>Name</th>
                       <th>Username</th>
                       <th>Email</th>
-                      <th>Password</th>
                       <th>Year Level</th>
                       <th className="actions-column"></th>
                     </tr>
@@ -254,7 +265,6 @@ const DashboardAdmin = () => {
                         <td>{u.name || "N/A"}</td>
                         <td>{u.username}</td>
                         <td>{u.email}</td>
-                        <td>{u.password}</td>
                         <td>{u.yearLevel || "N/A"}</td>
                         <td>
                           <div className="action-admin">

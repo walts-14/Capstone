@@ -132,6 +132,9 @@ function LessonButtons() {
           console.error("User email not found in localStorage.");
           return;
         }
+        // Call regenerate endpoint first
+        await axios.post(`http://localhost:5000/api/lives/email/${userEmail}/regenerate`);
+        // Then fetch the updated lives
         const response = await axios.get(
           `http://localhost:5000/api/lives/email/${userEmail}`
         );

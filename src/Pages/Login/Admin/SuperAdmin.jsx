@@ -271,8 +271,7 @@ const SuperAdmin = () => {
                       <th>Name</th>
                       <th>Username</th>
                       <th>Email</th>
-                      {activeTab === "Users" && <th>Password</th>}
-                      <th>Year Level</th>
+                      {activeTab === "Users" && <th>Year Level</th>}
                       <th className="actions-column"></th>
                     </tr>
                   </thead>
@@ -282,8 +281,7 @@ const SuperAdmin = () => {
                         <td>{u.name || "N/A"}</td>
                         <td>{u.username}</td>
                         <td>{u.email}</td>
-                        {activeTab === "Users" && <td>{u.password}</td>}
-                        <td>{u.yearLevel || "N/A"}</td>
+                        {activeTab === "Users" && <td>{u.yearLevel || "N/A"}</td>}
                         <td>
                           <div className="action-admin">
                             {activeTab === "Users" && (

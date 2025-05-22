@@ -75,7 +75,7 @@ export const getStudentByEmail = async (req, res) => {
 export const updateStudentByEmail = async (req, res) => {
   try {
     const { email } = req.params;
-    const { username, newEmail, password } = req.body;
+    const { username, newEmail, password, name, yearLevel } = req.body;
 
     const student = await User.findOne({ email, role: "user" });
     if (!student) {
@@ -84,6 +84,8 @@ export const updateStudentByEmail = async (req, res) => {
 
     if (username) student.username = username;
     if (newEmail) student.email = newEmail;
+    if (name) student.name = name;
+    if (yearLevel) student.yearLevel = yearLevel;
     if (password) student.password = password; // pre-save hook hashes if modified
 
     await student.save();
