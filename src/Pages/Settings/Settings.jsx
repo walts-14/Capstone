@@ -11,12 +11,13 @@ import { ProgressContext } from "../Dashboard/ProgressContext.jsx";
 
 function Settings() {
   const navigate = useNavigate();
-  const { setCurrentUserEmail, setCurrentUserName, setCurrentUserUsername } = useContext(ProgressContext);
+  const { setCurrentUserEmail, setCurrentUserName, setCurrentUserUsername } =
+    useContext(ProgressContext);
 
   const DEFAULT_PROFILE_PIC =
     "https://res.cloudinary.com/deohrrkw9/image/upload/v1745911019/changepic_qrpmur.png";
 
-  // — state for the three fields matching LoginForm’s keys
+  // — state for the three fields matching LoginForm's keys
   const [userName, setUserName] = useState("");
   const [userUsername, setUserUsername] = useState("");
   const [userEmail, setUserEmail] = useState("");
@@ -24,8 +25,11 @@ function Settings() {
   // — state for profile pic as before
   const [profilePic, setProfilePic] = useState(DEFAULT_PROFILE_PIC);
 
-  // pull everything straight from localStorage once
+  // — loading states for profile picture operations
+  const [isUploadingPic, setIsUploadingPic] = useState(false);
+  const [isDeletingPic, setIsDeletingPic] = useState(false);
 
+  // pull everything straight from localStorage once
   const fetchUserData = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -61,6 +65,12 @@ function Settings() {
     const file = event.target.files[0];
     if (!file) return;
 
+    setIsUploadingPic(true);
+
+    // Show preview immediately for better UX
+    const previewUrl = URL.createObjectURL(file);
+    setProfilePic(previewUrl);
+
     // build form-data
     const formData = new FormData();
     formData.append("image", file);
@@ -78,18 +88,32 @@ function Settings() {
         }
       );
 
+      // Clean up preview URL
+      URL.revokeObjectURL(previewUrl);
+
       // res.data.profilePic = { url, public_id }
       const url = res.data.profilePic.url;
-      setProfilePic(url);
-      // if you still want to cache per-user:
+      setProfilePic(url + "?t=" + new Date().getTime()); // Add timestamp to prevent caching
       localStorage.setItem("profilePic", url);
+
+      // Reset file input
+      event.target.value = "";
     } catch (err) {
       console.error("Upload failed:", err);
+      // Revert to previous image on error
+      const previousPic =
+        localStorage.getItem("profilePic") || DEFAULT_PROFILE_PIC;
+      setProfilePic(previousPic);
+      URL.revokeObjectURL(previewUrl);
+    } finally {
+      setIsUploadingPic(false);
     }
   };
 
   // delete pic → reset to default (and localStorage)
   const handleDeleteProfilePicture = async () => {
+    setIsDeletingPic(true);
+
     try {
       const token = localStorage.getItem("token");
       // 2) correct endpoint
@@ -100,6 +124,8 @@ function Settings() {
       await fetchUserData();
     } catch (error) {
       console.error("Failed to delete profile picture:", error);
+    } finally {
+      setIsDeletingPic(false);
     }
   };
 
@@ -118,16 +144,15 @@ function Settings() {
 
   return (
     <>
-       <button onClick={() => setShowModal(true)}
-        style={{ position: "absolute", top: "10px", right: "10px" }}>
+      <button
+        onClick={() => setShowModal(true)}
+        style={{ position: "absolute", top: "10px", right: "10px" }}
+      >
         Maintenance
       </button>
 
       {/* modal only renders when showModal===true */}
-      <MaintenanceModal
-        show={showModal}
-        onClose={() => setShowModal(false)}
-      />
+      <MaintenanceModal show={showModal} onClose={() => setShowModal(false)} />
 
       <Sidenav />
       <div className="settings-container rounded-4 position-absolute">
@@ -155,25 +180,78 @@ function Settings() {
           </div>
         </div>
 
-        {/* ——— PROFILE PICTURE (unchanged layout) ——— */}
+        {/* ——— PROFILE PICTURE (with loading states) ——— */}
         <div className="profile-picture-wrapper position-relative m-5">
-          <img src={profilePic} className="img-fluid" alt="profile picture" />
+          <div className="position-relative">
+            <img src={profilePic} className="img-fluid" alt="profile picture" />
+
+            {/* Loading overlay for upload */}
+            {isUploadingPic && (
+              <div
+                className="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+                style={{
+                  backgroundColor: "rgba(0, 0, 0, 0.7)",
+                  borderRadius: "50%",
+                  aspectRatio: "1/1",
+                  marginLeft: "1.5rem",
+                }}
+              >
+                <div className="text-center text-white">
+                  <div className="spinner-border text-light mb-2" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                  <div className="fw-bold">Uploading...</div>
+                </div>
+              </div>
+            )}
+
+            {/* Loading overlay for delete */}
+            {isDeletingPic && (
+              <div
+                className="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+                style={{
+                  backgroundColor: "rgba(0, 0, 0, 0.7)",
+                  borderRadius: "50%",
+                  aspectRatio: "1/1",
+                  marginLeft: "1.5rem",
+                }}
+              >
+                <div className="text-center text-white">
+                  <div className="spinner-border text-light mb-2" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                  <div className="fw-bold">Deleting...</div>
+                </div>
+              </div>
+            )}
+          </div>
 
           <label
             htmlFor="file-upload"
             className="change-pic text-white fw-bold fs-1 rounded-4 p-2 text-center m-5 text-nowrap position-absolute"
-            style={{ cursor: "pointer" }}
+            style={{
+              cursor:
+                isUploadingPic || isDeletingPic ? "not-allowed" : "pointer",
+              opacity: isUploadingPic || isDeletingPic ? 0.6 : 1,
+              pointerEvents: isUploadingPic || isDeletingPic ? "none" : "auto",
+            }}
           >
             Change Profile
           </label>
 
           <button
-            className="deletee btn-secondary fw-bold fs-5 rounded-4 position-absolute h-25 text-nowrap"
+            className={`deletee btn-secondary fw-bold fs-5 rounded-4 position-absolute h-25 text-nowrap ${
+              isUploadingPic || isDeletingPic ? "disabled" : ""
+            }`}
             onClick={handleDeleteProfilePicture}
+            disabled={isUploadingPic || isDeletingPic}
+            style={{
+              opacity: isUploadingPic || isDeletingPic ? 0.6 : 1,
+            }}
           >
-            Delete Picture
+            {isDeletingPic ? "Deleting..." : "Delete Picture"}
           </button>
-        
+
           <div className="camera-overlay d-flex justify-content-center align-items-center">
             <i className="fas fa-camera fa-2x text-white"></i>
           </div>
@@ -183,7 +261,9 @@ function Settings() {
             id="file-upload"
             accept="image/*"
             onChange={handleImageChange}
+            disabled={isUploadingPic || isDeletingPic}
             style={{ display: "none" }}
+            key={isUploadingPic ? "uploading" : "ready"}
           />
         </div>
 
