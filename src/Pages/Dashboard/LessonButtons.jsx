@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "../../css/Lesson.css";
 import LivesandDiamonds from "../../Components/LiveandDiamonds";
-import { ProgressContext } from "./ProgressContext.jsx"; // Import the ProgressContext
+import { ProgressContext } from "./ProgressContext.jsx";
 
 // Helper function to calculate lesson progress
 const calculateProgress = (progressObj = {}) => {
@@ -26,9 +25,9 @@ function LessonButtons() {
   const [difficulty, setDifficulty] = useState("BASIC");
   const [lives, setLives] = useState(0);
   const [points, setPoints] = useState(0);
-  const [unlockedLessons, setUnlockedLessons] = useState([1]); // Only lesson 1 is unlocked initially
+  const [unlockedLessons, setUnlockedLessons] = useState([1]);
   const buttonContainerRef = useRef(null);
-  const { progressData } = useContext(ProgressContext); // Get progress data from context
+  const { progressData } = useContext(ProgressContext);
 
   const difficultyColors = {
     BASIC: "#579ecd",
@@ -73,9 +72,7 @@ function LessonButtons() {
   useEffect(() => {
     if (!progressData) return;
 
-    const unlockedLessonIds = [1]; // First lesson is always unlocked
-
-    // Map terms to lesson IDs
+    const unlockedLessonIds = [1];
     const termToLessonId = {};
     let idCounter = 1;
 
@@ -87,16 +84,13 @@ function LessonButtons() {
 
     let allPreviousComplete = true;
 
-    // Check lessons in order
     for (let lessonId = 1; lessonId < 12; lessonId++) {
-      // Find the term ID for this lesson
       const termId = Object.keys(termToLessonId).find(
         (term) => termToLessonId[term] === lessonId
       );
 
       if (!termId) continue;
 
-      // Find which level this term belongs to
       let level;
       for (const l of ["basic", "intermediate", "advanced"]) {
         if (lessonsByLevel[l].includes(termId)) {
@@ -107,14 +101,12 @@ function LessonButtons() {
 
       if (!level) continue;
 
-      // Check if the current lesson is 100% complete
       const currentLessonProgress = progressData[level]?.[termId] || {};
       const completionPercent = calculateProgress(currentLessonProgress);
 
       if (allPreviousComplete) {
         unlockedLessonIds.push(lessonId);
 
-        // If this lesson isn't 100% complete, stop unlocking further lessons
         if (completionPercent < 100) {
           allPreviousComplete = false;
         }
@@ -132,9 +124,9 @@ function LessonButtons() {
           console.error("User email not found in localStorage.");
           return;
         }
-        // Call regenerate endpoint first
-        await axios.post(`http://localhost:5000/api/lives/email/${userEmail}/regenerate`);
-        // Then fetch the updated lives
+        await axios.post(
+          `http://localhost:5000/api/lives/email/${userEmail}/regenerate`
+        );
         const response = await axios.get(
           `http://localhost:5000/api/lives/email/${userEmail}`
         );
@@ -186,57 +178,157 @@ function LessonButtons() {
     { id: 12, termId: "termstwelve", unlocked: unlockedLessons.includes(12) },
   ];
 
+  const getLessonButtonClass = (lesson) => {
+    const baseClasses =
+      "h-40 w-57 text-7xl flex justify-center items-center text-white rounded-xl font-bold transition-all duration-200 ease-in-out";
+
+    let colorClasses = "";
+    if (lesson.id >= 1 && lesson.id <= 4) {
+      // Basic lessons - blue
+      colorClasses = "bg-[#579ecd] shadow-[0px_12px_0px_#246b9a]";
+    } else if (lesson.id >= 5 && lesson.id <= 8) {
+      // Intermediate lessons - yellow
+      colorClasses = "bg-[#dcbc3d] shadow-[0px_12px_0px_#a9890a]";
+    } else {
+      // Advanced lessons - red
+      colorClasses = "bg-[#cc6055] shadow-[0px_12px_0px_#992d22]";
+    }
+
+    const interactionClasses = lesson.unlocked
+      ? "cursor-pointer opacity-100 hover:-translate-y-1 hover:scale-105 active:translate-y-0 active:scale-95"
+      : "cursor-not-allowed opacity-50";
+
+    return `${baseClasses} ${colorClasses} ${interactionClasses}`;
+  };
+
+  // Function to get the position class for zigzag pattern
+  const getPositionClass = (index) => {
+    const isEven = index % 2 === 0;
+    return isEven ? "ml-20" : "ml-auto mr-20";
+  };
+
   const chunkSize = 4;
   const lessonGroups = [];
   for (let i = 0; i < lessonRoutes.length; i += chunkSize) {
     lessonGroups.push(lessonRoutes.slice(i, i + chunkSize));
   }
 
-  const sectionClasses = [
-    "lessons-container",
-    "lessons-container2",
-    "lessons-container3",
-  ];
-
   return (
-    <div className="ButtonContainer" ref={buttonContainerRef}>
-      <div className="diff-life-gem d-flex align-items-center gap-4 sticky-top">
+    <div
+      className="max-h-screen overflow-auto p-8 mr-[7.5rem] ml-auto scrollbar-hide"
+      ref={buttonContainerRef}
+      style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+    >
+      <style jsx>{`
+        div::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
+
+      {/* Header with difficulty and lives/diamonds */}
+      <div className="flex items-center gap-5 sticky top-3 z-10 mb-15 text-white">
         <div
-          className="diff text-center px-3 py-2 rounded-4 fw-bold"
+          className="text-center px-5 py-2 rounded-2xl font-bold text-white text-[2.5rem] w-[24vw]"
           style={{ backgroundColor: difficultyColors[difficulty] }}
         >
           {difficulty}
         </div>
         <LivesandDiamonds />
       </div>
-      {lessonGroups.map((group, index) => (
-        <div
-          key={index}
-          className={sectionClasses[index] || "lessons-container"}
-        >
-          {group.map((lesson) => (
-            <div
-              key={lesson.id}
-              className={`lessons lessons${index + 1} d-flex rounded-4`}
-              onClick={() => {
-                if (lesson.unlocked) {
-                  let difficulty = "BASIC";
-                  if (lesson.id >= 5 && lesson.id <= 8)
-                    difficulty = "INTERMEDIATE";
-                  if (lesson.id >= 9 && lesson.id <= 12)
-                    difficulty = "ADVANCED";
 
-                  navigate(`/page/${lesson.termId}`, { state: { difficulty } });
-                }
-              }}
-              style={{
-                cursor: lesson.unlocked ? "pointer" : "not-allowed",
-                opacity: lesson.unlocked ? 1 : 0.5,
-              }}
-            >
-              {lesson.id}
+      {/* Lesson Groups with Zigzag Layout */}
+      {lessonGroups.map((group, groupIndex) => (
+        <div key={groupIndex} className="mb-10">
+          {/* Section Label */}
+          {groupIndex === 0 && (
+            <div className="lessons-container flex flex-col space-y-10">
+              {group.map((lesson, lessonIndex) => (
+                <div
+                  key={lesson.id}
+                  className={`flex ${getPositionClass(lessonIndex)}`}
+                >
+                  <div
+                    className={getLessonButtonClass(lesson)}
+                    onClick={() => {
+                      if (lesson.unlocked) {
+                        let difficulty = "BASIC";
+                        if (lesson.id >= 5 && lesson.id <= 8)
+                          difficulty = "INTERMEDIATE";
+                        if (lesson.id >= 9 && lesson.id <= 12)
+                          difficulty = "ADVANCED";
+
+                        navigate(`/page/${lesson.termId}`, {
+                          state: { difficulty },
+                        });
+                      }
+                    }}
+                  >
+                    {lesson.id}
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+          )}
+
+          {groupIndex === 1 && (
+            <div className="lessons-container2 flex flex-col space-y-10">
+              {group.map((lesson, lessonIndex) => (
+                <div
+                  key={lesson.id}
+                  className={`flex ${getPositionClass(lessonIndex)}`}
+                >
+                  <div
+                    className={getLessonButtonClass(lesson)}
+                    onClick={() => {
+                      if (lesson.unlocked) {
+                        let difficulty = "BASIC";
+                        if (lesson.id >= 5 && lesson.id <= 8)
+                          difficulty = "INTERMEDIATE";
+                        if (lesson.id >= 9 && lesson.id <= 12)
+                          difficulty = "ADVANCED";
+
+                        navigate(`/page/${lesson.termId}`, {
+                          state: { difficulty },
+                        });
+                      }
+                    }}
+                  >
+                    {lesson.id}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {groupIndex === 2 && (
+            <div className="lessons-container3 flex flex-col space-y-10">
+              {group.map((lesson, lessonIndex) => (
+                <div
+                  key={lesson.id}
+                  className={`flex ${getPositionClass(lessonIndex)}`}
+                >
+                  <div
+                    className={getLessonButtonClass(lesson)}
+                    onClick={() => {
+                      if (lesson.unlocked) {
+                        let difficulty = "BASIC";
+                        if (lesson.id >= 5 && lesson.id <= 8)
+                          difficulty = "INTERMEDIATE";
+                        if (lesson.id >= 9 && lesson.id <= 12)
+                          difficulty = "ADVANCED";
+
+                        navigate(`/page/${lesson.termId}`, {
+                          state: { difficulty },
+                        });
+                      }
+                    }}
+                  >
+                    {lesson.id}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       ))}
     </div>

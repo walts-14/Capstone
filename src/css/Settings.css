@@ -147,3 +147,27 @@ body {
   left: 2em;
   background-color: #d7443e;
 }
+.btns {
+  display: flex;
+  position: fixed;
+  bottom: 5em;
+  left: -3em;
+  width: 30em;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+}
+.btns .btn:nth-child(1) {
+  font-family: "Baloo", sans-serif;
+  width: 35%;
+  height: 7vh;
+  background-color: var(--midlight-red);
+}
+.twobuttons button {
+  background-color: #924dbf;
+  padding: 0.2rem;
+}
+.twobuttons {
+  left: 12em;
+  top: 10rem;
+}

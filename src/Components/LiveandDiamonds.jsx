@@ -2,9 +2,8 @@ import axios from "axios";
 import React, { useState, useEffect, useRef } from "react";
 import heart from "../assets/heart.png";
 import diamond from "../assets/diamond.png";
-import "../css/Lesson.css";
 
-function LivesandDiamonds({showDiamonds = true}) {
+function LivesandDiamonds({ showDiamonds = true }) {
   const [lives, setLives] = useState(5);
   const [points, setPoints] = useState(0);
 
@@ -54,17 +53,26 @@ function LivesandDiamonds({showDiamonds = true}) {
 
   return (
     <>
-      <div className="d-flex align-items-center gap-1">
-        <img src={heart} className="heart-logo img-fluid" alt="lives logo" />
-        <p className="heart-num m-0 text-danger fw-bold fs-4 ms-1">{lives}</p>
+      <div className="flex items-center gap-1">
+        <img
+          src={heart}
+          className="w-12 h-12 object-contain"
+          alt="lives logo"
+        />
+        <p className="m-0 text-red-500 font-bold text-3xl ml-1">{lives}</p>
       </div>
-       {showDiamonds && (
-        <div className="d-flex align-items-center gap-1">
-          <img src={diamond} className="dia-logo img-fluid" alt="Points" />
-          <p className="dia-num m-0 fw-bold fs-4 ms-1">{points}</p>
+      {showDiamonds && (
+        <div className="flex items-center gap-1 text-white">
+          <img
+            src={diamond}
+            className="w-12 h-12 object-contain"
+            alt="Points"
+          />
+          <p className="m-0 font-bold text-3xl ml-1">{points}</p>
         </div>
       )}
     </>
   );
 }
+
 export default LivesandDiamonds;
