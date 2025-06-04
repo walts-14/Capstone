@@ -7,9 +7,7 @@ function LibraryButtons() {
   const navigate = useNavigate();
   return (
     <>
-
-      <div className="library-contents d-flex fs-3 fw-bold">
-        
+      <div className="library-contents flex text-2xl font-bold text-center">
         <IntroductionModal />
         <button
           className="btns-content rounded-4"
@@ -29,9 +27,7 @@ function LibraryButtons() {
         >
           ADVANCED
         </button>
-          
       </div>
-    
     </>
   );
 }

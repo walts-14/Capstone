@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
 import dashboardlogo from "../assets/dashboardlogo.png";
 import libicon from "../assets/libicon.png";
@@ -8,264 +8,174 @@ import settingsicon from "../assets/settingsicon.png";
 
 function Sidenav() {
   const location = useLocation();
+  const [isOpen, setIsOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check if device is mobile
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkIfMobile();
+    window.addEventListener("resize", checkIfMobile);
+
+    return () => window.removeEventListener("resize", checkIfMobile);
+  }, []);
+
+  // Close menu when route changes (mobile)
+  useEffect(() => {
+    if (isMobile) {
+      setIsOpen(false);
+    }
+  }, [location.pathname, isMobile]);
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const menuItems = [
+    { path: "/dashboard", label: "Dashboard", icon: dashboardlogo },
+    { path: "/Library", label: "Library", icon: libicon },
+    { path: "/leaderboard", label: "Leaderboard", icon: leaderboardicon },
+    { path: "/introduction", label: "Introduction", icon: introhand },
+    { path: "/settings", label: "Settings", icon: settingsicon },
+  ];
 
   return (
     <>
       {/* Logo */}
       <div
-        className="fixed top-7 left-12 text-white font-bold text-6xl z-10"
+        className={`fixed top-7 ${
+          isMobile ? "left-4" : "left-12"
+        } text-white font-bold ${isMobile ? "text-4xl" : "text-6xl"} z-20`}
         style={{ fontFamily: '"Baloo", sans-serif' }}
       >
         <p className="m-0">WeSign</p>
       </div>
 
+      {/* Hamburger Menu Button (Mobile Only) */}
+      {isMobile && (
+        <button
+          onClick={toggleMenu}
+          className="fixed top-7 right-4 z-30 text-white focus:outline-none"
+          aria-label="Toggle menu"
+        >
+          <div className="w-6 h-6 flex flex-col justify-center items-center">
+            <span
+              className={`block w-6 h-0.5 bg-white transition-all duration-300 ${
+                isOpen ? "rotate-45 translate-y-1.5" : ""
+              }`}
+            ></span>
+            <span
+              className={`block w-6 h-0.5 bg-white transition-all duration-300 mt-1 ${
+                isOpen ? "opacity-0" : ""
+              }`}
+            ></span>
+            <span
+              className={`block w-6 h-0.5 bg-white transition-all duration-300 mt-1 ${
+                isOpen ? "-rotate-45 -translate-y-1.5" : ""
+              }`}
+            ></span>
+          </div>
+        </button>
+      )}
+
+      {/* Overlay for mobile */}
+      {isMobile && isOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-20"
+          onClick={toggleMenu}
+        ></div>
+      )}
+
       {/* Navbar Background */}
       <div
-        className="fixed top-28 left-0 bottom-28 w-auto text-center rounded-r-2xl flex p-5"
+        className={`fixed ${
+          isMobile
+            ? `top-0 left-0 h-full w-80 transform transition-transform duration-300 z-25 ${
+                isOpen ? "translate-x-0" : "-translate-x-full"
+              }`
+            : "top-28 left-0 bottom-28 w-auto rounded-r-2xl"
+        } text-center flex p-5`}
         style={{
           backgroundColor: "var(--purple)",
-          height: "80vh",
+          height: isMobile ? "100vh" : "80vh",
+          paddingTop: isMobile ? "5rem" : "1.25rem",
         }}
       >
         <nav
-          className="text-white flex flex-col text-2xl w-full z-10"
+          className={`text-white flex flex-col w-full z-10 ${
+            isMobile ? "gap-3" : "gap-4"
+          }`}
           style={{ fontFamily: '"Baloo", sans-serif' }}
         >
-          {/* Dashboard */}
-          <div
-            className={`flex justify-center items-center relative mb-4 pt-6 h-24 rounded-2xl transition-all duration-200 cursor-pointer ${
-              location.pathname === "/dashboard" ? "border-4" : ""
-            }`}
-            style={{
-              backgroundColor:
-                location.pathname === "/dashboard"
-                  ? "var(--semidark-purple)"
-                  : "var(--purple)",
-              borderColor:
-                location.pathname === "/dashboard"
-                  ? "var(--mid-purple)"
-                  : "transparent",
-              marginLeft: "-2rem",
-              width: "clamp(18vw, 10vw, 15vw)",
-            }}
-            onMouseEnter={(e) => {
-              if (location.pathname !== "/dashboard") {
-                e.currentTarget.style.backgroundColor =
-                  "var(--semidark-purple)";
-                e.currentTarget.style.borderWidth = "4px";
-                e.currentTarget.style.borderColor = "var(--mid-purple)";
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (location.pathname !== "/dashboard") {
-                e.currentTarget.style.backgroundColor = "var(--purple)";
-                e.currentTarget.style.borderWidth = "0px";
-                e.currentTarget.style.borderColor = "transparent";
-              }
-            }}
-          >
-            <img
-              src={dashboardlogo}
-              className="absolute left-6 w-15 h-auto bottom-3.5"
-              alt="dashboard logo"
-            />
-            <Link
-              className="text-white no-underline pl-20 pb-3.5 text-4xl"
-              to="/dashboard"
-              style={{ textDecoration: "none" }}
-            >
-              Dashboard
-            </Link>
-          </div>
-
-          {/* Library */}
-          <div
-            className={`flex justify-center items-center relative mb-4 pt-6 h-24 rounded-2xl transition-all duration-200 cursor-pointer ${
-              location.pathname === "/Library" ? "border-4" : ""
-            }`}
-            style={{
-              backgroundColor:
-                location.pathname === "/Library"
-                  ? "var(--semidark-purple)"
-                  : "var(--purple)",
-              borderColor:
-                location.pathname === "/Library"
-                  ? "var(--mid-purple)"
-                  : "transparent",
-              marginLeft: "-2rem",
-              width: "clamp(18vw, 10vw, 15vw)",
-            }}
-            onMouseEnter={(e) => {
-              if (location.pathname !== "/Library") {
-                e.currentTarget.style.backgroundColor =
-                  "var(--semidark-purple)";
-                e.currentTarget.style.borderWidth = "4px";
-                e.currentTarget.style.borderColor = "var(--mid-purple)";
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (location.pathname !== "/Library") {
-                e.currentTarget.style.backgroundColor = "var(--purple)";
-                e.currentTarget.style.borderWidth = "0px";
-                e.currentTarget.style.borderColor = "transparent";
-              }
-            }}
-          >
-            <img
-              src={libicon}
-              className="absolute left-6 w-15 h-auto bottom-3.5"
-              alt="library logo"
-            />
-            <Link
-              className="text-white no-underline pl-8 pb-3.5 text-4xl"
-              to="/Library"
-              style={{ textDecoration: "none" }}
-            >
-              Library
-            </Link>
-          </div>
-
-          {/* Leaderboard */}
-          <div
-            className={`flex justify-center items-center relative mb-0.5 pt-6 h-24 rounded-2xl transition-all duration-200 cursor-pointer ${
-              location.pathname === "/leaderboard" ? "border-4" : ""
-            }`}
-            style={{
-              backgroundColor:
-                location.pathname === "/leaderboard"
-                  ? "var(--semidark-purple)"
-                  : "var(--purple)",
-              borderColor:
-                location.pathname === "/leaderboard"
-                  ? "var(--mid-purple)"
-                  : "transparent",
-              marginLeft: "-2rem",
-              width: "clamp(18vw, 10vw, 15vw)",
-            }}
-            onMouseEnter={(e) => {
-              if (location.pathname !== "/leaderboard") {
-                e.currentTarget.style.backgroundColor =
-                  "var(--semidark-purple)";
-                e.currentTarget.style.borderWidth = "4px";
-                e.currentTarget.style.borderColor = "var(--mid-purple)";
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (location.pathname !== "/leaderboard") {
-                e.currentTarget.style.backgroundColor = "var(--purple)";
-                e.currentTarget.style.borderWidth = "0px";
-                e.currentTarget.style.borderColor = "transparent";
-              }
-            }}
-          >
-            <img
-              src={leaderboardicon}
-              className="absolute left-6 w-15 h-auto bottom-3.5"
-              alt="leaderboard logo"
-            />
-            <Link
-              className="text-white no-underline pl-25 pb-3.5 text-4xl"
-              to="/leaderboard"
-              style={{ textDecoration: "none" }}
-            >
-              Leaderboard
-            </Link>
-          </div>
-
-          {/* Introduction */}
-          <div
-            className={`flex justify-center items-center relative mb-4 pt-6 h-24 rounded-2xl transition-all duration-200 cursor-pointer ${
-              location.pathname === "/introduction" ? "border-4" : ""
-            }`}
-            style={{
-              backgroundColor:
-                location.pathname === "/introduction"
-                  ? "var(--semidark-purple)"
-                  : "var(--purple)",
-              borderColor:
-                location.pathname === "/introduction"
-                  ? "var(--mid-purple)"
-                  : "transparent",
-              marginLeft: "-2rem",
-              marginTop: "1.5rem",
-              width: "clamp(18vw, 10vw, 15vw)",
-            }}
-            onMouseEnter={(e) => {
-              if (location.pathname !== "/introduction") {
-                e.currentTarget.style.backgroundColor =
-                  "var(--semidark-purple)";
-                e.currentTarget.style.borderWidth = "4px";
-                e.currentTarget.style.borderColor = "var(--mid-purple)";
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (location.pathname !== "/introduction") {
-                e.currentTarget.style.backgroundColor = "var(--purple)";
-                e.currentTarget.style.borderWidth = "0px";
-                e.currentTarget.style.borderColor = "transparent";
-              }
-            }}
-          >
-            <img
-              src={introhand}
-              className="absolute left-6 w-15 h-auto bottom-3.5"
-              alt="introduction logo"
-            />
-            <Link
-              className="text-white no-underline pl-25 pb-3.5 text-4xl"
-              to="/introduction"
-              style={{ textDecoration: "none" }}
-            >
-              Introduction
-            </Link>
-          </div>
-
-          {/* Settings */}
-          <div
-            className={`flex justify-center items-center relative mb-4 pt-6 h-24 rounded-2xl transition-all duration-200 cursor-pointer ${
-              location.pathname === "/settings" ? "border-4" : ""
-            }`}
-            style={{
-              backgroundColor:
-                location.pathname === "/settings"
-                  ? "var(--semidark-purple)"
-                  : "var(--purple)",
-              borderColor:
-                location.pathname === "/settings"
-                  ? "var(--mid-purple)"
-                  : "transparent",
-              marginLeft: "-2rem",
-              width: "clamp(18vw, 10vw, 15vw)",
-            }}
-            onMouseEnter={(e) => {
-              if (location.pathname !== "/settings") {
-                e.currentTarget.style.backgroundColor =
-                  "var(--semidark-purple)";
-                e.currentTarget.style.borderWidth = "4px";
-                e.currentTarget.style.borderColor = "var(--mid-purple)";
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (location.pathname !== "/settings") {
-                e.currentTarget.style.backgroundColor = "var(--purple)";
-                e.currentTarget.style.borderWidth = "0px";
-                e.currentTarget.style.borderColor = "transparent";
-              }
-            }}
-          >
-            <img
-              src={settingsicon}
-              className="absolute left-6 w-15 h-auto bottom-3.5"
-              alt="settings logo"
-            />
-            <Link
-              className="text-white no-underline pl-14 pb-3.5 text-4xl"
-              to="/settings"
-              style={{ textDecoration: "none" }}
-            >
-              Settings
-            </Link>
-          </div>
+          {/* Add gap after leaderboard item for visual separation */}
+          {menuItems.map((item, index) => (
+            <div key={item.path}>
+              <div
+                className={`flex items-center justify-start relative ${
+                  isMobile ? "h-14 sm:h-16" : "h-16 sm:h-18 md:h-20 lg:h-24"
+                } rounded-2xl transition-all duration-200 cursor-pointer ${
+                  location.pathname === item.path ? "border-4" : ""
+                } ${
+                  isMobile ? "px-3 sm:px-4" : "px-4 sm:px-6"
+                } overflow-hidden`}
+                style={{
+                  backgroundColor:
+                    location.pathname === item.path
+                      ? "var(--semidark-purple)"
+                      : "var(--purple)",
+                  borderColor:
+                    location.pathname === item.path
+                      ? "var(--mid-purple)"
+                      : "transparent",
+                  marginLeft: isMobile ? "0" : "-2rem",
+                  width: isMobile ? "100%" : "clamp(15vw, 18vw, 20vw)",
+                }}
+                onMouseEnter={(e) => {
+                  if (location.pathname !== item.path) {
+                    e.currentTarget.style.backgroundColor =
+                      "var(--semidark-purple)";
+                    e.currentTarget.style.borderWidth = "4px";
+                    e.currentTarget.style.borderColor = "var(--mid-purple)";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (location.pathname !== item.path) {
+                    e.currentTarget.style.backgroundColor = "var(--purple)";
+                    e.currentTarget.style.borderWidth = "0px";
+                    e.currentTarget.style.borderColor = "transparent";
+                  }
+                }}
+              >
+                <div className="flex items-center justify-start w-full min-w-0">
+                  <img
+                    src={item.icon}
+                    className={`${
+                      isMobile
+                        ? "w-6 h-6 min-w-[24px] min-h-[24px] sm:w-8 sm:h-8 sm:min-w-[32px] sm:min-h-[32px]"
+                        : "w-8 h-8 min-w-[32px] min-h-[32px] sm:w-10 sm:h-10 sm:min-w-[40px] sm:min-h-[40px] md:w-12 md:h-12 md:min-w-[48px] md:min-h-[48px]"
+                    } flex-shrink-0 object-contain`}
+                    alt={`${item.label.toLowerCase()} logo`}
+                  />
+                  <Link
+                    className={`text-white no-underline truncate flex-1 text-center ${
+                      isMobile
+                        ? "text-lg sm:text-xl ml-2 sm:ml-3"
+                        : "text-xl sm:text-2xl md:text-3xl lg:text-4xl ml-3 sm:ml-4"
+                    }`}
+                    to={item.path}
+                    style={{ textDecoration: "none" }}
+                  >
+                    {item.label}
+                  </Link>
+                </div>
+              </div>
+              {/* Add extra spacing after Leaderboard */}
+              {index === 2 && !isMobile && <div className="h-4"></div>}
+            </div>
+          ))}
         </nav>
       </div>
     </>
