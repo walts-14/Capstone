@@ -14,17 +14,9 @@ import diamond from "../../assets/diamond.png";
 function Leaderboard() {
   return (
     <>
-      <div className="leaderboard-container d-flex flex-column align-items-center justify-content-center my-4">
+      <div className="leaderboard-container flex flex-col items-center justify-center my-4">
         <Sidenav />
-        <div
-          className="leaderboard-scroll-wrapper "
-          style={{
-            overflowY: "auto",
-            width: "100%",
-            maxHeight: "90vh", // adjust based on how much of the screen it should take
-            padding: "1rem",
-          }}
-        >
+        <div className="leaderboard-scroll-wrapper overflow-y-auto w-full max-h-screen p-4">
           <LbComponent />
         </div>
       </div>

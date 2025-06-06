@@ -11,7 +11,6 @@ function Sidenav() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Check if device is mobile
   useEffect(() => {
     const checkIfMobile = () => {
       setIsMobile(window.innerWidth < 768);
@@ -19,11 +18,9 @@ function Sidenav() {
 
     checkIfMobile();
     window.addEventListener("resize", checkIfMobile);
-
     return () => window.removeEventListener("resize", checkIfMobile);
   }, []);
 
-  // Close menu when route changes (mobile)
   useEffect(() => {
     if (isMobile) {
       setIsOpen(false);
@@ -44,7 +41,6 @@ function Sidenav() {
 
   return (
     <>
-      {/* Logo */}
       <div
         className={`fixed top-7 ${
           isMobile ? "left-4" : "left-12"
@@ -54,7 +50,6 @@ function Sidenav() {
         <p className="m-0">WeSign</p>
       </div>
 
-      {/* Hamburger Menu Button (Mobile Only) */}
       {isMobile && (
         <button
           onClick={toggleMenu}
@@ -81,7 +76,6 @@ function Sidenav() {
         </button>
       )}
 
-      {/* Overlay for mobile */}
       {isMobile && isOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 z-20"
@@ -89,7 +83,6 @@ function Sidenav() {
         ></div>
       )}
 
-      {/* Navbar Background */}
       <div
         className={`fixed ${
           isMobile
@@ -110,46 +103,49 @@ function Sidenav() {
           }`}
           style={{ fontFamily: '"Baloo", sans-serif' }}
         >
-          {/* Add gap after leaderboard item for visual separation */}
           {menuItems.map((item, index) => (
             <div key={item.path}>
-              <div
-                className={`flex items-center justify-start relative ${
-                  isMobile ? "h-14 sm:h-16" : "h-16 sm:h-18 md:h-20 lg:h-24"
-                } rounded-2xl transition-all duration-200 cursor-pointer ${
-                  location.pathname === item.path ? "border-4" : ""
-                } ${
-                  isMobile ? "px-3 sm:px-4" : "px-4 sm:px-6"
-                } overflow-hidden`}
-                style={{
-                  backgroundColor:
-                    location.pathname === item.path
-                      ? "var(--semidark-purple)"
-                      : "var(--purple)",
-                  borderColor:
-                    location.pathname === item.path
-                      ? "var(--mid-purple)"
-                      : "transparent",
-                  marginLeft: isMobile ? "0" : "-2rem",
-                  width: isMobile ? "100%" : "clamp(15vw, 18vw, 20vw)",
-                }}
-                onMouseEnter={(e) => {
-                  if (location.pathname !== item.path) {
-                    e.currentTarget.style.backgroundColor =
-                      "var(--semidark-purple)";
-                    e.currentTarget.style.borderWidth = "4px";
-                    e.currentTarget.style.borderColor = "var(--mid-purple)";
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (location.pathname !== item.path) {
-                    e.currentTarget.style.backgroundColor = "var(--purple)";
-                    e.currentTarget.style.borderWidth = "0px";
-                    e.currentTarget.style.borderColor = "transparent";
-                  }
-                }}
+              <Link
+                to={item.path}
+                className="no-underline"
+                style={{ textDecoration: "none" }}
               >
-                <div className="flex items-center justify-start w-full min-w-0">
+                <div
+                  className={`flex items-center justify-start relative ${
+                    isMobile ? "h-14 sm:h-16" : "h-16 sm:h-18 md:h-20 lg:h-24"
+                  } rounded-2xl transition-all duration-200 cursor-pointer ${
+                    location.pathname === item.path ? "border-4" : ""
+                  } ${
+                    isMobile ? "px-3 sm:px-4" : "px-4 sm:px-6"
+                  } overflow-hidden`}
+                  style={{
+                    backgroundColor:
+                      location.pathname === item.path
+                        ? "var(--semidark-purple)"
+                        : "var(--purple)",
+                    borderColor:
+                      location.pathname === item.path
+                        ? "var(--mid-purple)"
+                        : "transparent",
+                    marginLeft: isMobile ? "0" : "-2rem",
+                    width: isMobile ? "100%" : "clamp(15vw, 18vw, 20vw)",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (location.pathname !== item.path) {
+                      e.currentTarget.style.backgroundColor =
+                        "var(--semidark-purple)";
+                      e.currentTarget.style.borderWidth = "4px";
+                      e.currentTarget.style.borderColor = "var(--mid-purple)";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (location.pathname !== item.path) {
+                      e.currentTarget.style.backgroundColor = "var(--purple)";
+                      e.currentTarget.style.borderWidth = "0px";
+                      e.currentTarget.style.borderColor = "transparent";
+                    }
+                  }}
+                >
                   <img
                     src={item.icon}
                     className={`${
@@ -159,20 +155,17 @@ function Sidenav() {
                     } flex-shrink-0 object-contain`}
                     alt={`${item.label.toLowerCase()} logo`}
                   />
-                  <Link
-                    className={`text-white no-underline truncate flex-1 text-center ${
+                  <span
+                    className={`text-white truncate flex-1 text-center ${
                       isMobile
                         ? "text-lg sm:text-xl ml-2 sm:ml-3"
                         : "text-xl sm:text-2xl md:text-3xl lg:text-4xl ml-3 sm:ml-4"
                     }`}
-                    to={item.path}
-                    style={{ textDecoration: "none" }}
                   >
                     {item.label}
-                  </Link>
+                  </span>
                 </div>
-              </div>
-              {/* Add extra spacing after Leaderboard */}
+              </Link>
               {index === 2 && !isMobile && <div className="h-4"></div>}
             </div>
           ))}
