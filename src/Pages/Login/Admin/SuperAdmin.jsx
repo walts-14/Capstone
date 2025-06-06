@@ -281,7 +281,9 @@ const SuperAdmin = () => {
                         <td>{u.name || "N/A"}</td>
                         <td>{u.username}</td>
                         <td>{u.email}</td>
-                        {activeTab === "Users" && <td>{u.yearLevel || "N/A"}</td>}
+                        {activeTab === "Users" && (
+                          <td>{u.yearLevel || "N/A"}</td>
+                        )}
                         <td>
                           <div className="action-admin">
                             {activeTab === "Users" && (
