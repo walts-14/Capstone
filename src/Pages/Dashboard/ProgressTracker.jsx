@@ -2,22 +2,23 @@ import React, { useContext, useEffect, useState } from "react";
 import { ProgressContext } from "./ProgressContext.jsx";
 import axios from "axios";
 import trophy from "../../assets/trophy.png";
-import StreakButton from "../../Components/Streak/StreakButton.jsx";
+import fire from "../../assets/fire.png";
+import medal from "../../assets/diamond.png";
 
 // Helper to compute % complete for a lesson
 const calculateProgress = (progressObj = {}) => {
   let score = 0;
   if (progressObj.step1Lecture) score += 25;
-  if (progressObj.step1Quiz)    score += 25;
+  if (progressObj.step1Quiz) score += 25;
   if (progressObj.step2Lecture) score += 25;
-  if (progressObj.step2Quiz)    score += 25;
+  if (progressObj.step2Quiz) score += 25;
   return score;
 };
 
 const lessonsByLevel = {
-  basic:        ["termsone","termstwo","termsthree","termsfour"],
-  intermediate: ["termsfive","termssix","termsseven","termseight"],
-  advanced:     ["termsnine","termsten","termseleven","termstwelve"],
+  basic: ["termsone", "termstwo", "termsthree", "termsfour"],
+  intermediate: ["termsfive", "termssix", "termsseven", "termseight"],
+  advanced: ["termsnine", "termsten", "termseleven", "termstwelve"],
 };
 const lessonOffsets = { basic: 0, intermediate: 4, advanced: 8 };
 
@@ -61,11 +62,195 @@ const calculateOverallProgress = (progressData) => {
     currentLesson = 12;
   }
 
-  const overallPercent = totalSteps === 0 ? 0 : Math.round((completedSteps / totalSteps) * 100);
+  const overallPercent =
+    totalSteps === 0 ? 0 : Math.round((completedSteps / totalSteps) * 100);
 
   return { overallPercent, currentLesson };
 };
 
+// Integrated StreakButton Component
+function StreakButton() {
+  const { streakData, incrementStreak } = useContext(ProgressContext);
+  const [isOpen, setIsOpen] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [modalShownDate, setModalShownDate] = useState(null);
+  const MODAL_SHOWN_KEY = "streakModalShownDate";
+
+  // On mount, load last shown date from localStorage
+  useEffect(() => {
+    const stored = localStorage.getItem(MODAL_SHOWN_KEY);
+    if (stored) setModalShownDate(stored);
+  }, []);
+
+  const toggle = () => {
+    // Only open the modal for manual view, not the reward modal
+    setIsOpen((v) => !v);
+    // Do NOT set showModal here
+  };
+
+  // Fix close modal function to close both modal states
+  const closeModal = () => {
+    setShowModal(false);
+    setIsOpen(false);
+  };
+
+  // Only run reward modal logic after modalShownDate is loaded
+  useEffect(() => {
+    if (modalShownDate === null) return; // Wait until loaded from localStorage
+    const today = new Date().toDateString();
+    if (modalShownDate === today) return; // Already shown today
+    if (isOpen) return; // Don't show reward modal if info modal is open
+
+    // If streak already updated for today, show modal ONLY if this is the first load for today
+    if (
+      streakData.lastUpdated &&
+      new Date(streakData.lastUpdated).toDateString() === today
+    ) {
+      setShowModal(true);
+      setModalShownDate(today);
+      localStorage.setItem(MODAL_SHOWN_KEY, today);
+      return;
+    }
+
+    // If no lastUpdated and streak is less than 1, increment and show modal (first ever login)
+    if (!streakData.lastUpdated && streakData.currentStreak < 1) {
+      incrementStreak();
+      setShowModal(true);
+      setModalShownDate(today);
+      localStorage.setItem(MODAL_SHOWN_KEY, today);
+      return;
+    }
+
+    // If a day has passed, increment and show modal (first login of a new day)
+    if (streakData.lastUpdated) {
+      const lastDate = new Date(streakData.lastUpdated);
+      const now = new Date();
+      const diffTime = now.getTime() - lastDate.getTime();
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      if (diffDays >= 1) {
+        incrementStreak();
+        setShowModal(true);
+        setModalShownDate(today);
+        localStorage.setItem(MODAL_SHOWN_KEY, today);
+      }
+    }
+    // Add modalShownDate to dependencies so effect only runs after it's loaded
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [streakData.lastUpdated, streakData.currentStreak, modalShownDate]);
+
+  const getStreakReward = (day) => {
+    if (day === 1) return 5;
+    else if (day === 2) return 10;
+    else if (day === 3) return 15;
+    else if (day === 4) return 20;
+    else if (day === 5) return 30;
+    else if (day === 6) return 40;
+    else if (day >= 7) return 50;
+    else return 0;
+  };
+
+  const currentStreakValue =
+    streakData.currentStreak == null ? 1 : streakData.currentStreak;
+
+  return (
+    <>
+      {/* Streak Button */}
+      <button
+        className="flex items-center h-[10vh] w-[6.5vw] rounded-4 px-3 py-2 cursor-pointer absolute right-[25.2rem] top-20"
+        style={{ background: "#271d3e" }}
+        onClick={toggle}
+      >
+        <img src={fire} alt="streak" className="h-auto w-12" />
+        <div className="flex flex-col">
+          <div className="text-white text-4xl mx-2 h-[45px]">
+            {currentStreakValue}
+          </div>
+          <span className="text-[#878194] self-end text-base leading-4">
+            Day <br /> Streak
+          </span>
+        </div>
+      </button>
+
+      {/* Manual Info Modal */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[9999]"
+          onClick={closeModal}
+        >
+          <div
+            className="text-white p-8 rounded-3xl w-[70%] h-[45vh] max-w-[500px] text-center border-4 gap-2 mr-40"
+            style={{ background: "#100429", borderColor: "#FF6536" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header with flame icon + number */}
+            <div className="flex items-center justify-center gap-2 h-[10vh]">
+              <div className="text-[6.5rem] font-bold">
+                {currentStreakValue}
+              </div>
+              <img src={fire} alt="flame" className="w-20 h-auto mb-4" />
+            </div>
+            <h2 className="text-3xl mb-4 uppercase">DAY STREAK!</h2>
+            <p className="text-2xl mb-4 opacity-80">
+              Learn new FSL to earn points and build streak
+            </p>
+            <div className="flex items-center justify-center gap-2 mb-10 h-[50px]">
+              <img src={medal} alt="medal" className="w-14 h-auto" />
+              <span className="text-6xl font-bold text-yellow-400">
+                +{getStreakReward(currentStreakValue)}
+              </span>
+            </div>
+            <button
+              className="py-2 px-4 border-none text-white rounded-lg cursor-pointer text-2xl w-full"
+              style={{ background: "#c0392b" }}
+              onClick={closeModal}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Reward Modal */}
+      {showModal && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[9999]"
+          onClick={closeModal}
+        >
+          <div
+            className="text-white p-8 rounded-5xl w-[70%] h-[45vh] max-w-[500px] text-center border-4 gap-2 mr-40"
+            style={{ background: "#100429", borderColor: "#FF6536" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header with flame icon + number */}
+            <div className="flex items-center justify-center gap-2 h-[10vh]">
+              <div className="text-[6.5rem] font-bold">
+                {currentStreakValue}
+              </div>
+              <img src={fire} alt="flame" className="w-20 h-auto mb-4" />
+            </div>
+            <h2 className="text-3xl mb-4 uppercase">DAY STREAK!</h2>
+            <p className="text-2xl mb-4 opacity-80">
+              Learn new FSL to earn points and build streak
+            </p>
+            <div className="flex items-center justify-center gap-2 mb-10 h-[50px]">
+              <img src={medal} alt="medal" className="w-14 h-auto" />
+              <span className="text-6xl font-bold text-yellow-400">
+                +{getStreakReward(currentStreakValue)}
+              </span>
+            </div>
+            <button
+              className="py-2 px-4 border-none text-white rounded-lg cursor-pointer text-2xl w-full"
+              style={{ background: "#c0392b" }}
+              onClick={closeModal}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
 
 export default function ProgressTracker({ student }) {
   const {
@@ -78,17 +263,23 @@ export default function ProgressTracker({ student }) {
 
   // Display the username: prioritize the student prop when showing someone else's progress
   const [displayUsername, setDisplayUsername] = useState(
-    student?.username || currentUserUsername || localStorage.getItem("userUsername") || "UnknownStudent"
+    student?.username ||
+      currentUserUsername ||
+      localStorage.getItem("userUsername") ||
+      "UnknownStudent"
   );
 
   useEffect(() => {
     // Always get the latest username from props/context/localStorage
     setDisplayUsername(
-      student?.username || currentUserUsername || localStorage.getItem("userUsername") || "UnknownStudent"
+      student?.username ||
+        currentUserUsername ||
+        localStorage.getItem("userUsername") ||
+        "UnknownStudent"
     );
   }, [student, currentUserUsername]);
 
-  // Rank: still matching by the API’s `name` field against currentUserName
+  // Rank: still matching by the API's `name` field against currentUserName
   const [userRank, setUserRank] = useState(null);
 
   // Which email to fetch progress for
@@ -97,7 +288,8 @@ export default function ProgressTracker({ student }) {
   const targetName = student?.name?.trim() || currentUserName?.trim() || "";
 
   // Calculate overall progress and current lesson
-  const { overallPercent, currentLesson } = calculateOverallProgress(progressData);
+  const { overallPercent, currentLesson } =
+    calculateOverallProgress(progressData);
 
   // ———— Leaderboard effect ————
   useEffect(() => {
@@ -108,12 +300,12 @@ export default function ProgressTracker({ student }) {
     (async () => {
       try {
         const { data } = await axios.get("/api/leaderboard", {
-          headers: axios.defaults.headers.common
+          headers: axios.defaults.headers.common,
         });
         const sorted = [...data].sort((a, b) => b.points - a.points);
-        // match on the student’s name
+        // match on the student's name
         const idx = sorted.findIndex(
-          u => u.name.trim().toLowerCase() === targetName.toLowerCase()
+          (u) => u.name.trim().toLowerCase() === targetName.toLowerCase()
         );
         setUserRank(idx >= 0 ? idx + 1 : "Unranked");
       } catch (err) {
@@ -144,52 +336,104 @@ export default function ProgressTracker({ student }) {
   }, [studentEmail, contextProgressData]);
 
   const styles = {
-    basic:        { backgroundColor: "#205D87" },
+    basic: { backgroundColor: "#205D87" },
     intermediate: { backgroundColor: "#947809" },
-    advanced:     { backgroundColor: "#86271E" },
+    advanced: { backgroundColor: "#86271E" },
   };
 
   return (
     <>
       <div className="tracker">
         <StreakButton />
-        <div className="position-lb d-flex align-items-center gap-1">
+        {/* CSS: .position-lb converted to Tailwind */}
+        <div
+          className="flex justify-start items-center text-white rounded-3xl h-[10vh] w-[18vw] fixed right-12 top-20 gap-1"
+          style={{
+            backgroundColor: "var(--dark-purple)",
+            fontFamily: '"Baloo", sans-serif',
+          }}
+        >
           <img
             src={trophy}
-            className="h-auto mt-4 ms-3 mb-3 img-fluid"
+            className="h-auto mt-4 ml-3 mb-3 max-w-full"
             alt="trophy"
           />
-          <p className="fs-1 text-center ms-2">
+          <p className="text-4xl text-center ml-2 pt-2 pl-1">
             {userRank == null
               ? "..."
               : typeof userRank === "number"
               ? `#${userRank}`
               : "Unranked"}
           </p>
-          <p className="text-nowrap fs-2">{displayUsername}</p>
+          <p className="whitespace-nowrap text-3xl pt-2 pl-5">
+            {displayUsername}
+          </p>
         </div>
-        
       </div>
 
-      <div className="lessonTracker d-flex flex-column text-white rounded-4 p-3">
+      {/* CSS: .lessonTracker converted to Tailwind */}
+      <div
+        className="absolute top-48 right-12 text-white rounded-2xl p-3 max-h-[45rem] h-auto w-[25vw] overflow-y-scroll"
+        style={{
+          backgroundColor: "var(--dark-purple)",
+          fontFamily: '"Baloo", sans-serif',
+          scrollbarWidth: "thin",
+          scrollbarColor: "var(--input-gray) transparent",
+        }}
+      >
         {Object.keys(lessonsByLevel).map((level) => (
-          <div key={level} className={`${level}Tracker rounded-4 mt-4`}>
-            <div className={`${level}Title fs-1 text-center mb-3`}>
+          <div
+            key={level}
+            className={`rounded-2xl mt-4 m-0`}
+            style={{
+              backgroundColor: "var(--input-gray)",
+              border: "0px solid var(--input-gray)",
+              height: "42vh",
+            }}
+          >
+            {/* CSS: .basicTitle (and similar) converted to Tailwind */}
+            <div
+              className={`text-4xl text-center mb-3 h-auto w-[13vw] p-2`}
+              style={{
+                backgroundColor:
+                  level === "basic"
+                    ? "var(--basic-blue)"
+                    : level === "intermediate"
+                    ? "#947809"
+                    : "#86271E",
+                borderRadius: "20px 10px 70px 0",
+                fontFamily: '"Baloo", sans-serif',
+              }}
+            >
               {level.charAt(0).toUpperCase() + level.slice(1)}
             </div>
 
             {lessonsByLevel[level].map((lessonKey, idx) => {
               const prog = progressData[level]?.[lessonKey] || {};
-              const pct  = calculateProgress(prog);
-              const lbl  = `Lesson ${lessonOffsets[level] + idx + 1}`;
+              const pct = calculateProgress(prog);
+              const lbl = `Lesson ${lessonOffsets[level] + idx + 1}`;
               return (
                 <div
                   key={lessonKey}
-                  className={`${level}tracker d-flex m-3 rounded-4 p-2 justify-content-between`}
+                  className="flex mx-3 my-3 rounded-2xl p-2 justify-between"
                   style={styles[level]}
                 >
-                  <span>{lbl}</span>
-                  <span style={{ color: "#160A2E" }}>{pct}%</span>
+                  {/* CSS: .lessonTracker span converted to Tailwind */}
+                  <span
+                    className="text-white text-2xl p-2"
+                    style={{ fontFamily: '"Baloo", sans-serif' }}
+                  >
+                    {lbl}
+                  </span>
+                  <span
+                    className="text-2xl p-2"
+                    style={{
+                      color: "#160A2E",
+                      fontFamily: '"Baloo", sans-serif',
+                    }}
+                  >
+                    {pct}%
+                  </span>
                 </div>
               );
             })}
