@@ -31,10 +31,10 @@ export default function Interpreter() {
       {interpreters.map((intp) => (
         <div
           key={intp.id}
-          className="interpreter-intro text-white rounded-4 p-3 position-static"
+          className="interpreter-intro text-white rounded-3xl p-3 relative"
         >
           <video src={intp.video} autoPlay loop className="interpreter-video" />
-          <div className="interpreter-details d-flex flex-column ms-auto">
+          <div className="interpreter-details flex flex-col ms-auto">
             <p>Interpreter #{intp.id}</p>
             <p>
               Name: <span>{intp.name}</span>
