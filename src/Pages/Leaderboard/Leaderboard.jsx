@@ -16,7 +16,7 @@ function Leaderboard() {
     <>
       <div className="leaderboard-container flex flex-col items-center justify-center my-4">
         <Sidenav />
-        <div className="leaderboard-scroll-wrapper overflow-y-auto w-full max-h-screen p-4">
+        <div className="leaderboard-scroll-wrapper overflow-y-auto w-full max-h-screen p-4 mr-9">
           <LbComponent />
         </div>
       </div>

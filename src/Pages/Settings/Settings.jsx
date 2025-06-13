@@ -240,7 +240,7 @@ function Settings() {
           </label>
 
           <button
-            className={`deletee btn-secondary fw-bold fs-5 rounded-4 position-absolute h-25 text-nowrap ${
+            className={`deletee btn-secondary fw-bold fs-5 rounded-4 position-absolute h-25 text-nowrap text-white ${
               isUploadingPic || isDeletingPic ? "disabled" : ""
             }`}
             onClick={handleDeleteProfilePicture}

@@ -16,7 +16,7 @@ export default function IntroductionModal() {
   const location = useLocation();
 
   // Determine which component to show based on path
-   const libPaths = [
+  const libPaths = [
     "/Library",
     "/BasicLibrary",
     "/IntermediateLibrary",
@@ -26,7 +26,7 @@ export default function IntroductionModal() {
   const howImages = [how1, how5, how2, how3, how4, how6];
   const totalSlides = howImages.length;
 
-    const nextSlide = () => {
+  const nextSlide = () => {
     if (slideIndex === totalSlides - 1) {
       setShowModal(false);
     } else {
@@ -39,7 +39,7 @@ export default function IntroductionModal() {
     setSlideIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
   };
 
-   const openModal = () => {
+  const openModal = () => {
     setSlideIndex(0);
     setShowModal(true);
   };
@@ -50,8 +50,8 @@ export default function IntroductionModal() {
         onClick={openModal}
         className="question-button"
         style={{
-          width: "75px",
-          height: "75px",
+          width: "80px",
+          height: "80px",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -68,18 +68,16 @@ export default function IntroductionModal() {
       {/* Modal Overlay */}
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
-           <button
-              onClick={() => setShowModal(false)}
-              className="modal-close-btn"
-            >
-              ✕
-            </button>
+          <button
+            onClick={() => setShowModal(false)}
+            className="modal-close-btn"
+          >
+            ✕
+          </button>
           <div
             className="modal-content rounded-4"
             onClick={(e) => e.stopPropagation()}
           >
-           
-
             {showInterpreter ? (
               <Interpreter />
             ) : (
@@ -90,23 +88,23 @@ export default function IntroductionModal() {
                     alt={`Slide ${slideIndex + 1}`}
                     className="img-fluid"
                   />
-                   <div className="slideshow-controls d-flex justify-content-between mt-3">
-                      <button
-                        onClick={prevSlide}
-                        disabled={totalSlides <= 1}
-                        className="btn rounded-4"
-                      >
-                        PREVIOUS
-                      </button>
+                  <div className="slideshow-controls d-flex justify-content-between mt-3">
+                    <button
+                      onClick={prevSlide}
+                      disabled={totalSlides <= 1}
+                      className="btn rounded-4"
+                    >
+                      PREVIOUS
+                    </button>
 
-                      <button
-                        onClick={nextSlide}
-                        disabled={totalSlides <= 1}
-                        className="btn rounded-4"
-                      >
-                        {slideIndex === totalSlides - 1 ? "CLOSE" : "KEEP GOING"}
-                      </button>
-                   </div>
+                    <button
+                      onClick={nextSlide}
+                      disabled={totalSlides <= 1}
+                      className="btn rounded-4"
+                    >
+                      {slideIndex === totalSlides - 1 ? "CLOSE" : "KEEP GOING"}
+                    </button>
+                  </div>
                 </div>
               </>
             )}

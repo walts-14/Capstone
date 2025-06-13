@@ -127,7 +127,7 @@ function LbComponent() {
       </div>
 
       {/* Table Header */}
-      <div className="user-points rounded-3xl flex text-center justify-between items-center pt-2 ml-8">
+      <div className="user-points rounded-3xl flex text-center justify-between items-center pt-2 ml-8  sm:w-[90%] pl-3  md:w-[80%] lg:w-[70%] xl:w-[60%]">
         <span className="text-white text-2xl mr-auto ml-5">Users</span>
         <span className="text-white text-2xl">Grade Level</span>
         <span className="text-white text-2xl ml-auto mr-5">Points</span>
