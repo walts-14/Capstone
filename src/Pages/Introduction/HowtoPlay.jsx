@@ -10,10 +10,13 @@ export default function HowtoPlay() {
   const howImages = [how1, how5, how2, how3, how4, how6];
   return (
     <>
-   
       {howImages.map((src, idx) => (
         <div key={idx} className="how rounded-4">
-          <img src={src} className="img-fluid" alt={`tutorial step ${idx + 1}`} />
+          <img
+            src={src}
+            className="img-fluid"
+            alt={`tutorial step ${idx + 1}`}
+          />
         </div>
       ))}
     </>

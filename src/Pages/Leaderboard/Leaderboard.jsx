@@ -3,13 +3,6 @@ import axios from "axios";
 import Sidenav from "../../Components/Sidenav";
 import LbComponent from "./LbComponent";
 import "../../css/Leaderboard.css";
-import medal1 from "../../assets/medal1.png";
-import medal2 from "../../assets/medal2.png";
-import medal3 from "../../assets/medal3.png";
-import profile1 from "../../assets/profile1.png";
-import profile2 from "../../assets/profile2.png";
-import profile3 from "../../assets/profile3.png";
-import diamond from "../../assets/diamond.png";
 
 function Leaderboard() {
   return (

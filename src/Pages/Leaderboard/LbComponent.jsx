@@ -127,7 +127,7 @@ function LbComponent() {
       </div>
 
       {/* Table Header */}
-      <div className="user-points rounded-3xl flex text-center justify-between items-center pt-2 ml-8  sm:w-[90%] pl-3  md:w-[80%] lg:w-[70%] xl:w-[60%]">
+      <div className="user-points rounded-3xl flex text-center justify-between items-center pt-2 ml-8  sm:w-[90%] pl-3 text-sm  md:w-[80%] lg:w-[70%] xl:w-[60%]">
         <span className="text-white text-2xl mr-auto ml-5">Users</span>
         <span className="text-white text-2xl">Grade Level</span>
         <span className="text-white text-2xl ml-auto mr-5">Points</span>
@@ -145,7 +145,7 @@ function LbComponent() {
                 {/* Column 1: Rank, Avatar, Name */}
                 <div
                   className="flex items-center"
-                  style={{ minWidth: "300px", gap: "1rem" }}
+                  style={{ minWidth: "300px", gap: "2rem" }}
                 >
                   <span className="number-label text-white">{index + 1}.</span>
                   <img
