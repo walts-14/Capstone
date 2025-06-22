@@ -48,21 +48,9 @@ export default function IntroductionModal() {
       {/* Trigger Button */}
       <button
         onClick={openModal}
-        className="question-button"
-        style={{
-          width: "80px",
-          height: "80px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          position: "absolute",
-          top: "-3px",
-          left: "-100px",
-          borderRadius: "50%",
-          zIndex: 10,
-        }}
+        className="question-button w-20 h-17 flex justify-center items-center absolute -top-1  -left-25 rounded-5 z-10"
       >
-        <img src={question} alt="Help" style={{ width: "75px" }} />
+        <img src={question} alt="Help" className="w-19" />
       </button>
 
       {/* Modal Overlay */}
@@ -75,24 +63,24 @@ export default function IntroductionModal() {
             ✕
           </button>
           <div
-            className="modal-content rounded-4"
+            className="modal-content rounded-xl"
             onClick={(e) => e.stopPropagation()}
           >
             {showInterpreter ? (
               <Interpreter />
             ) : (
               <>
-                <div className="slideshow-container ">
+                <div className="slideshow-container">
                   <img
                     src={howImages[slideIndex]}
                     alt={`Slide ${slideIndex + 1}`}
-                    className="img-fluid"
+                    className="max-w-full h-auto"
                   />
-                  <div className="slideshow-controls d-flex justify-content-between mt-3">
+                  <div className="slideshow-controls flex justify-between mt-3">
                     <button
                       onClick={prevSlide}
                       disabled={totalSlides <= 1}
-                      className="btn rounded-4"
+                      className="btn rounded-xl"
                     >
                       PREVIOUS
                     </button>
@@ -100,7 +88,7 @@ export default function IntroductionModal() {
                     <button
                       onClick={nextSlide}
                       disabled={totalSlides <= 1}
-                      className="btn rounded-4"
+                      className="btn rounded-xl"
                     >
                       {slideIndex === totalSlides - 1 ? "CLOSE" : "KEEP GOING"}
                     </button>
