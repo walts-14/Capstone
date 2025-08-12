@@ -10,6 +10,7 @@ function Dashboard() {
       <Sidenav />
       <ProgressTracker />
       <LessonButtons />
+      <div className="container"></div>
     </>
   );
 }
