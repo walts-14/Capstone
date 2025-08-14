@@ -66,98 +66,41 @@ function Sidenav() {
 
   return (
     <>
-      {/* Logo */}
+      {/* Logo - desktop/laptop */}
       <div
-        className={`fixed top-7 ${
-          isBurgerMenuMode ? "left-4" : "left-12"
-        } text-white font-bold ${
-          isBurgerMenuMode ? "text-4xl" : "text-6xl"
-        } z-20`}
+        className="fixed top-7 left-12 text-white font-bold text-6xl z-20 hidden md:block"
         style={{ fontFamily: '"Baloo", sans-serif' }}
       >
         <p className="m-0">WeSign</p>
       </div>
-
-      {/* Hamburger button visible only in burger menu mode */}
-      {isBurgerMenuMode && (
-        <button
-          onClick={toggleMenu}
-          aria-label="Toggle menu"
-          className="fixed top-7 right-4 z-30 text-white focus:outline-none"
-        >
-          <div className="w-6 h-6 flex flex-col justify-center items-center">
-            <span
-              className={`block w-6 h-0.5 bg-white transition-all duration-300 ${
-                isOpen ? "rotate-45 translate-y-1.5" : ""
-              }`}
-            />
-            <span
-              className={`block w-6 h-0.5 bg-white transition-all duration-300 mt-1 ${
-                isOpen ? "opacity-0" : ""
-              }`}
-            />
-            <span
-              className={`block w-6 h-0.5 bg-white transition-all duration-300 mt-1 ${
-                isOpen ? "-rotate-45 -translate-y-1.5" : ""
-              }`}
-            />
-          </div>
-        </button>
-      )}
-
-      {/* Overlay behind menu when open */}
-      {isBurgerMenuMode && isOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-20"
-          onClick={toggleMenu}
-          aria-hidden="true"
-        />
-      )}
-
-      {/* Sidebar container */}
+      {/* Logo - tablet */}
       <div
-        className={`fixed ${
-          isBurgerMenuMode
-            ? `top-0 left-0 h-full w-80 z-25 transform transition-transform duration-300 ${
-                isOpen ? "translate-x-0" : "-translate-x-full"
-              }`
-            : "top-28 left-0 bottom-28 w-auto rounded-r-2xl"
-        } flex text-center p-5`}
-        style={{
-          backgroundColor: "var(--purple)",
-          height: isBurgerMenuMode ? "100vh" : "80vh",
-          paddingTop: isBurgerMenuMode ? "5rem" : "1.25rem",
-        }}
+        className="fixed top-7 left-8 text-white font-bold text-5xl z-20 md:hidden"
+        style={{ fontFamily: '"Baloo", sans-serif' }}
       >
-        <nav
-          className={`text-white flex flex-col w-full z-10 ${
-            isBurgerMenuMode ? "gap-3" : "gap-4"
-          }`}
-          style={{ fontFamily: '"Baloo", sans-serif' }}
-        >
+        <p className="m-0">W</p>
+      </div>
+
+      {/* Sidebar container - desktop/laptop */}
+      <div
+        className="fixed top-28 left-0 bottom-28 w-auto rounded-r-2xl flex text-center p-5 bg-[var(--purple)] h-[80vh] hidden md:flex"
+        style={{ fontFamily: '"Baloo", sans-serif' }}
+      >
+        <nav className="text-white flex flex-col w-full z-10 gap-4">
           {menuItems.map((item, idx) => {
             const normalizedItemPath = normalizePath(item.path);
             const isActive = currentPath === normalizedItemPath;
-
             return (
               <div key={item.path}>
                 <Link
                   to={item.path}
                   className="no-underline"
                   style={{ textDecoration: "none" }}
-                  onClick={() => {
-                    // Close menu on link click if in burger menu mode
-                    if (isBurgerMenuMode) {
-                      setIsOpen(false);
-                    }
-                  }}
                 >
                   <div
-                    className={`flex items-center justify-start relative rounded-2xl transition-all duration-200 cursor-pointer overflow-hidden ${
-                      isBurgerMenuMode
-                        ? "h-14 sm:h-16 px-3 sm:px-4"
-                        : "h-16 sm:h-18 md:h-20 lg:h-24 px-4 sm:px-6"
-                    } ${isActive ? "border-4" : ""}`}
+                    className={`flex items-center justify-start relative rounded-2xl transition-all duration-200 cursor-pointer overflow-hidden h-16 sm:h-18 md:h-20 lg:h-24 px-4 sm:px-6 ${
+                      isActive ? "border-4" : ""
+                    }`}
                     style={{
                       backgroundColor: isActive
                         ? "var(--semidark-purple)"
@@ -165,50 +108,55 @@ function Sidenav() {
                       borderColor: isActive
                         ? "var(--mid-purple)"
                         : "transparent",
-                      marginLeft: isBurgerMenuMode ? "0" : "-2rem",
-                      width: isBurgerMenuMode
-                        ? "100%"
-                        : "clamp(15vw, 18vw, 20vw)",
-                    }}
-                    onMouseEnter={(e) => {
-                      if (!isActive) {
-                        e.currentTarget.style.backgroundColor =
-                          "var(--semidark-purple)";
-                        e.currentTarget.style.borderWidth = "4px";
-                        e.currentTarget.style.borderColor = "var(--mid-purple)";
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!isActive) {
-                        e.currentTarget.style.backgroundColor = "var(--purple)";
-                        e.currentTarget.style.borderWidth = "0px";
-                        e.currentTarget.style.borderColor = "transparent";
-                      }
+                      marginLeft: "-2rem",
+                      width: "clamp(15vw, 18vw, 20vw)",
                     }}
                   >
                     <img
                       src={item.icon}
                       alt={`${item.label.toLowerCase()} logo`}
-                      className={`flex-shrink-0 object-contain ${
-                        isBurgerMenuMode
-                          ? "w-6 h-6 min-w-[24px] min-h-[24px] sm:w-8 sm:h-8 sm:min-w-[32px] sm:min-h-[32px]"
-                          : "w-8 h-8 min-w-[32px] min-h-[32px] sm:w-10 sm:h-10 sm:min-w-[40px] sm:min-h-[40px] md:w-12 md:h-12 md:min-w-[48px] md:min-h-[48px]"
-                      }`}
+                      className="flex-shrink-0 object-contain w-8 h-8 min-w-[32px] min-h-[32px] sm:w-10 sm:h-10 sm:min-w-[40px] sm:min-h-[40px] md:w-12 md:h-12 md:min-w-[48px] md:min-h-[48px]"
                     />
-                    <span
-                      className={`text-white truncate flex-1 text-center ${
-                        isBurgerMenuMode
-                          ? "text-lg sm:text-xl ml-2 sm:ml-3"
-                          : "text-xl sm:text-2xl md:text-3xl lg:text-4xl ml-3 sm:ml-4"
-                      }`}
-                    >
+                    <span className="text-white truncate flex-1 text-center text-xl sm:text-2xl md:text-3xl lg:text-4xl ml-3 sm:ml-4">
                       {item.label}
                     </span>
                   </div>
                 </Link>
-                {/* Optional spacing after 3rd item (index 2) for desktop */}
-                {idx === 2 && !isBurgerMenuMode && <div className="h-4" />}
+                {idx === 2 && <div className="h-4" />}
               </div>
+            );
+          })}
+        </nav>
+      </div>
+
+      {/* Sidebar container - tablet only (icon vertical bar) */}
+      <div
+        className="fixed top-0 left-0 h-screen w-[6.5rem] bg-[var(--purple)] flex flex-col items-center pt-24 z-10 md:hidden"
+        style={{ fontFamily: '"Baloo", sans-serif' }}
+      >
+        <nav className="flex flex-col gap-10 items-center w-full mt-2">
+          {menuItems.map((item, idx) => {
+            const normalizedItemPath = normalizePath(item.path);
+            const isActive = currentPath === normalizedItemPath;
+            return (
+              <Link
+                key={item.path}
+                to={item.path}
+                className="flex flex-col items-center justify-center w-full"
+                style={{ textDecoration: "none" }}
+              >
+                <div
+                  className={`flex flex-col items-center justify-center w-full py-2 ${
+                    isActive ? "bg-[var(--semidark-purple)] rounded-2xl" : ""
+                  }`}
+                >
+                  <img
+                    src={item.icon}
+                    alt={`${item.label.toLowerCase()} logo`}
+                    className="w-12 h-12 mx-auto mb-1"
+                  />
+                </div>
+              </Link>
             );
           })}
         </nav>
