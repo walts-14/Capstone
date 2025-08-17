@@ -1,3 +1,4 @@
+// ProgressTracker.jsx
 import React, { useContext, useEffect, useState } from "react";
 import { ProgressContext } from "./ProgressContext.jsx";
 import axios from "axios";
@@ -20,6 +21,22 @@ const lessonsByLevel = {
   advanced:     ["termsnine","termsten","termseleven","termstwelve"],
 };
 const lessonOffsets = { basic: 0, intermediate: 4, advanced: 8 };
+
+// Utility: unwrap objects that look like module wrappers { default: ... } or nested objects
+const unwrapDefault = (val) => {
+  if (val === null || val === undefined) return "";
+  if (typeof val !== "object") return val;
+  if (Object.prototype.hasOwnProperty.call(val, "default")) return unwrapDefault(val.default);
+  for (const v of Object.values(val)) {
+    if (typeof v !== "object") return v;
+  }
+  try {
+    return JSON.stringify(val);
+  } catch {
+    return String(val);
+  }
+};
+const srcFrom = (img) => unwrapDefault(img);
 
 // New utility to calculate overall progress and current lesson
 const calculateOverallProgress = (progressData) => {
@@ -66,8 +83,24 @@ const calculateOverallProgress = (progressData) => {
   return { overallPercent, currentLesson };
 };
 
-
 export default function ProgressTracker({ student }) {
+  // Recursively sanitize any object with a 'default' key
+  const sanitizeObjectRecursive = (data) => {
+    if (typeof data === "object" && data !== null) {
+      if (data.default) return sanitizeObjectRecursive(data.default);
+      const sanitized = Array.isArray(data) ? [] : {};
+      for (const key in data) {
+        sanitized[key] = sanitizeObjectRecursive(data[key]);
+      }
+      return sanitized;
+    }
+    return data;
+  };
+
+  // Sanitize the student prop early (safe — uses only the prop)
+  const sanitizedStudent = sanitizeObjectRecursive(student);
+
+  // Get context (must come before state initialization that uses it)
   const {
     progressData: contextProgressData,
     streakData,
@@ -76,30 +109,68 @@ export default function ProgressTracker({ student }) {
     currentUserEmail,
   } = useContext(ProgressContext);
 
-  // Display the username: prioritize the student prop when showing someone else's progress
+  // Which email to fetch progress for
+  const studentEmail = sanitizedStudent?.email || currentUserEmail || "";
+
+  // Display username (unwrap any `.default` or module-like object)
   const [displayUsername, setDisplayUsername] = useState(
-    student?.username || currentUserUsername || localStorage.getItem("userUsername") || "UnknownStudent"
+    unwrapDefault(sanitizedStudent?.username) || currentUserUsername || localStorage.getItem("userUsername") || "UnknownStudent"
   );
 
   useEffect(() => {
-    // Always get the latest username from props/context/localStorage
     setDisplayUsername(
-      student?.username || currentUserUsername || localStorage.getItem("userUsername") || "UnknownStudent"
+      unwrapDefault(sanitizedStudent?.username) || currentUserUsername || localStorage.getItem("userUsername") || "UnknownStudent"
     );
-  }, [student, currentUserUsername]);
+  }, [sanitizedStudent, currentUserUsername]);
 
-  // Rank: still matching by the API’s `name` field against currentUserName
+  // Rank
   const [userRank, setUserRank] = useState(null);
 
-  // Which email to fetch progress for
-  const studentEmail = student?.email || currentUserEmail;
-  const [progressData, setProgressData] = useState(contextProgressData);
-  const targetName = student?.name?.trim() || currentUserName?.trim() || "";
+  // Initialize progressData state using a sanitized copy of contextProgressData
+  const sanitizeProgressRecursive = (data) => {
+    if (typeof data === "object" && data !== null) {
+      if (data.default) {
+        return sanitizeProgressRecursive(data.default);
+      }
+      const sanitized = Array.isArray(data) ? [] : {};
+      for (const key in data) {
+        sanitized[key] = sanitizeProgressRecursive(data[key]);
+      }
+      return sanitized;
+    }
+    return data;
+  };
+  const [progressData, setProgressData] = useState(sanitizeProgressRecursive(contextProgressData));
+
+  const targetName = unwrapDefault(sanitizedStudent?.name)?.trim() || (currentUserName || "").trim() || "";
+
+  // Defensive logger (will not throw)
+  const logDefaultObjects = (data, path = "root") => {
+    try {
+      if (typeof data === "object" && data !== null) {
+        if (data.default) {
+          console.warn(`Found {default: ...} object at path: ${path}`, data);
+        }
+        for (const key in data) {
+          logDefaultObjects(data[key], `${path}.${key}`);
+        }
+      }
+    } catch (e) {
+      // don't let logger crash the app
+      console.warn("logDefaultObjects error:", e);
+    }
+  };
+
+  // Log sanitized copies (safe)
+  logDefaultObjects(sanitizedStudent, "prop.student");
+  logDefaultObjects(progressData, "state.progressData");
+  logDefaultObjects(contextProgressData, "context.progressData");
 
   // Calculate overall progress and current lesson
-  const { overallPercent, currentLesson } = calculateOverallProgress(progressData);
+  const sanitizedProgressData = sanitizeProgressRecursive(progressData);
+  const { overallPercent, currentLesson } = calculateOverallProgress(sanitizedProgressData);
 
-  // ———— Leaderboard effect ————
+  // Leaderboard effect
   useEffect(() => {
     if (!targetName) {
       setUserRank("Unranked");
@@ -111,9 +182,8 @@ export default function ProgressTracker({ student }) {
           headers: axios.defaults.headers.common
         });
         const sorted = [...data].sort((a, b) => b.points - a.points);
-        // match on the student’s name
         const idx = sorted.findIndex(
-          u => u.name.trim().toLowerCase() === targetName.toLowerCase()
+          u => (unwrapDefault(u.name) || "").trim().toLowerCase() === targetName.toLowerCase()
         );
         setUserRank(idx >= 0 ? idx + 1 : "Unranked");
       } catch (err) {
@@ -123,22 +193,24 @@ export default function ProgressTracker({ student }) {
     })();
   }, [targetName]);
 
-  // ———— Progress fetch effect ————
+  // Progress fetch effect
   useEffect(() => {
     if (!studentEmail) {
-      setProgressData(contextProgressData);
+      setProgressData(sanitizeProgressRecursive(contextProgressData));
       return;
     }
     (async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/progress/email/${studentEmail}`,
+          `http://localhost:5000/api/progress/email/${encodeURIComponent(studentEmail)}`,
           { headers: axios.defaults.headers.common }
         );
-        setProgressData(res.data.progress || contextProgressData);
+        // guard against module wrappers:
+        const incoming = res?.data?.progress || contextProgressData;
+        setProgressData(sanitizeProgressRecursive(incoming));
       } catch (err) {
         console.error("Error fetching progress:", err);
-        setProgressData(contextProgressData);
+        setProgressData(sanitizeProgressRecursive(contextProgressData));
       }
     })();
   }, [studentEmail, contextProgressData]);
@@ -149,26 +221,23 @@ export default function ProgressTracker({ student }) {
     advanced:     { backgroundColor: "#86271E" },
   };
 
+  const trophySrc = srcFrom(trophy);
+
   return (
     <>
       <div className="tracker">
         <StreakButton />
         <div className="position-lb d-flex align-items-center gap-1">
           <img
-            src={trophy}
+            src={trophySrc}
             className="h-auto mt-4 ms-3 mb-3 img-fluid"
             alt="trophy"
           />
           <p className="fs-1 text-center ms-2">
-            {userRank == null
-              ? "..."
-              : typeof userRank === "number"
-              ? `#${userRank}`
-              : "Unranked"}
+            {userRank == null ? "..." : (typeof userRank === "number" ? `#${userRank}` : String(userRank))}
           </p>
-          <p className="text-nowrap fs-2">{displayUsername}</p>
+          <p className="text-nowrap fs-2">{unwrapDefault(displayUsername)}</p>
         </div>
-        
       </div>
 
       <div className="lessonTracker d-flex flex-column text-white rounded-4 p-3">
@@ -179,7 +248,7 @@ export default function ProgressTracker({ student }) {
             </div>
 
             {lessonsByLevel[level].map((lessonKey, idx) => {
-              const prog = progressData[level]?.[lessonKey] || {};
+              const prog = sanitizedProgressData[level]?.[lessonKey] || {};
               const pct  = calculateProgress(prog);
               const lbl  = `Lesson ${lessonOffsets[level] + idx + 1}`;
               return (

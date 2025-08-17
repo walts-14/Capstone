@@ -25,8 +25,21 @@ const DashboardAdmin = () => {
   const [showProgressTracker, setShowProgressTracker] = useState(null); // store user object or null
   const [leaderboard, setLeaderboard] = useState([]);
   const [selectedUserRank, setSelectedUserRank] = useState(null);
+  // Helper to sanitize progress data if it has a 'default' key
+  const sanitizeProgress = (progress) => {
+    if (progress && typeof progress === 'object' && progress.default) {
+      return progress.default;
+    }
+    return progress;
+  };
+
   const handleClick = (user) => {
-    setShowProgressTracker(user);
+    // If user has a progress property, sanitize it
+    const sanitizedUser = {
+      ...user,
+      progress: sanitizeProgress(user.progress)
+    };
+    setShowProgressTracker(sanitizedUser);
   };
   const handleClose = () => {
     setShowProgressTracker(null);

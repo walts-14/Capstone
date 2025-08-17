@@ -26,7 +26,7 @@ const progressStructure = {
 
 // Streak schema to track bonus streaks
 const streakSchema = {
-  currentStreak: { type: Number, default: 0 },
+  currentStreak: { type: Number, default: 1 },
   lastUpdated:   { type: Date,   default: null },
   streakFreeze:  { type: Boolean, default: false }
 };
@@ -72,6 +72,10 @@ const userSchema = new mongoose.Schema(
 // Pre-save hook to hash password
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
+  // Only hash if not already hashed (bcrypt hashes start with $2)
+  if (typeof this.password === "string" && this.password.startsWith("$2")) {
+    return next();
+  }
   try {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);

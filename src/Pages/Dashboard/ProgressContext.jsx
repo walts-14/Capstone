@@ -99,6 +99,9 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
 
         if (prgRes.data.progress) {
           console.log("Fetched progress from backend for", currentUserEmail, ":", prgRes.data.progress);
+          if (typeof prgRes.data.progress === "object" && prgRes.data.progress.default) {
+            console.warn("⚠️ Backend returned an object with a 'default' key. This will cause React errors. Fix backend response shape.", prgRes.data.progress);
+          }
           setProgressData(prgRes.data.progress);
           localStorage.setItem(
             STORAGE_KEY(currentUserEmail),
@@ -137,6 +140,8 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
   // 3) Sync streak to backend
   useEffect(() => {
     if (!currentUserEmail) return;
+    // Skip streak syncing for superadmin accounts
+    if (currentUserEmail.toLowerCase().includes('superadmin')) return;
     (async () => {
       try {
         await axios.put(
@@ -163,7 +168,9 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
   };
 
   const incrementStreak = async () => {
-    if (!currentUserEmail) return;
+  if (!currentUserEmail) return;
+  // Skip streak increment for superadmin accounts
+  if (currentUserEmail.toLowerCase().includes('superadmin')) return;
     try {
       // Prepare new streak object
       const newStreak = {
