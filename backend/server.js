@@ -1,6 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import helmet from "helmet";
+import commRoutes from "./src/services/route/comm.js";
+import { verifyConnection as verifySmtp } from "./src/services/mailer.js";
 import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/authRoutes.js";
 import { connectDB } from "./config/db.js";
@@ -15,12 +18,13 @@ import streakRoutes from "./routes/streakRoutes.js";
 import pointsRoutes from "./routes/pointsRoutes.js";
 
 // ...other imports
+//configuring dotenv
+dotenv.config();
+//console.log('ENV: SMTP_HOST=%s SMTP_PORT=%s', process.env.SMTP_HOST, process.env.SMTP_PORT);
 //initializing express
 const app = express();
 //middleware
 app.use(express.json());
-//configuring dotenv
-dotenv.config();
 
 app.use(
   cors({
@@ -28,6 +32,13 @@ app.use(
     origin: "http://localhost:5173",
   })
 );
+
+//security headers
+app.use(helmet());
+
+app.get('/health', (_req, res) => res.json({ ok: true }));
+
+app.use('/comm', commRoutes);
 
 app.use("/api", userRoutes);
 app.use("/api", authRoutes);
@@ -46,5 +57,6 @@ app.use("/api/points", pointsRoutes);
 
 app.listen(5000, () => {
   connectDB();
+  //verifySmtp();
   console.log("Server is running on port 5000");
 });
