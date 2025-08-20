@@ -73,13 +73,20 @@ function Sidenav() {
       >
         <p className="m-0">WeSign</p>
       </div>
-      {/* Logo - tablet */}
+      {/* Logo - tablet (hidden on mobile only) */}
       <div
-        className="fixed top-7 left-8 text-white font-bold text-5xl z-20 md:hidden"
+        className="fixed top-7 left-8 text-white font-bold text-5xl z-20 md:hidden sidenav-tablet-logo"
         style={{ fontFamily: '"Baloo", sans-serif' }}
       >
         <p className="m-0">W</p>
       </div>
+      <style>{`
+        @media (max-width: 640px) {
+          .sidenav-tablet-logo {
+            display: none !important;
+          }
+        }
+      `}</style>
 
       {/* Sidebar container - desktop/laptop */}
       <div
@@ -131,7 +138,7 @@ function Sidenav() {
 
       {/* Sidebar container - tablet only (icon vertical bar) */}
       <div
-        className="fixed top-0 left-0 h-screen w-[6.5rem] bg-[var(--purple)] flex flex-col items-center pt-24 z-10 md:hidden"
+        className="fixed top-0 left-0 h-screen w-[6.5rem] bg-[var(--purple)] flex flex-col items-center pt-24 z-10 md:hidden sm:flex hidden"
         style={{ fontFamily: '"Baloo", sans-serif' }}
       >
         <nav className="flex flex-col gap-10 items-center w-full mt-2">
@@ -161,6 +168,61 @@ function Sidenav() {
           })}
         </nav>
       </div>
+
+      {/* Sidebar container - mobile (bottom bar) */}
+      <div
+        className="sidenav-mobile fixed bottom-0 left-0 w-full h-[6.5rem] bg-[var(--purple)] flex flex-row items-center justify-between px-2 z-20 sm:hidden"
+        style={{ fontFamily: '"Baloo", sans-serif', transition: "all 0.3s" }}
+      >
+        <nav className="flex flex-row justify-between items-center w-full h-full">
+          {menuItems.map((item, idx) => {
+            const normalizedItemPath = normalizePath(item.path);
+            const isActive = currentPath === normalizedItemPath;
+            return (
+              <Link
+                key={item.path}
+                to={item.path}
+                className="flex flex-col items-center justify-center h-full w-full"
+                style={{ textDecoration: "none" }}
+              >
+                <div
+                  className={`flex flex-col items-center justify-center h-full w-full relative`}
+                  style={{ transition: "background 0.3s" }}
+                >
+                  {isActive && (
+                    <div
+                      className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 bg-[var(--semidark-purple)] rounded-2xl"
+                      style={{ width: "3.5rem", height: "3.5rem", zIndex: 1 }}
+                    ></div>
+                  )}
+                  <img
+                    src={item.icon}
+                    alt={`${item.label.toLowerCase()} logo`}
+                    className="w-10 h-10 mb-1 relative"
+                    style={{ zIndex: 2 }}
+                  />
+                  {/* Hide label on mobile for minimal look */}
+                </div>
+              </Link>
+            );
+          })}
+        </nav>
+      </div>
+
+      {/* Responsive styles for smooth transition */}
+      <style>{`
+        @media (max-width: 640px) {
+          .sidenav-mobile {
+            display: flex !important;
+            height: 6.5rem !important;
+          }
+        }
+        @media (min-width: 641px) {
+          .sidenav-mobile {
+            display: none !important;
+          }
+        }
+      `}</style>
     </>
   );
 }
