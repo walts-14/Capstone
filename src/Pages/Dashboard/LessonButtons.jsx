@@ -223,12 +223,160 @@ function LessonButtons() {
         div::-webkit-scrollbar {
           display: none;
         }
+        
+        /* Large tablet responsive styles - ONLY activate at breakpoint */
+        @media (max-width: 1200px) {
+          .lesson-button {
+            height: 9rem !important;
+            width: 11rem !important;
+            font-size: 4rem !important;
+          }
+          
+          .lesson-button-shadow {
+            box-shadow: 0px 10px 0px !important;
+          }
+          
+          .lesson-button-shadow.basic {
+            box-shadow: 0px 10px 0px #246b9a !important;
+          }
+          
+          .lesson-button-shadow.intermediate {
+            box-shadow: 0px 10px 0px #a9890a !important;
+          }
+          
+          .lesson-button-shadow.advanced {
+            box-shadow: 0px 10px 0px #992d22 !important;
+          }
+          
+          .difficulty-button {
+            width: 22vw !important;
+            font-size: 2.25rem !important;
+            padding: 0.75rem 1.25rem !important;
+          }
+          
+          .header-container {
+            gap: 1.5rem !important;
+            margin-bottom: 2.5rem !important;
+            justify-content: center !important;
+          }
+        }
+        
+        /* Tablet responsive styles - ONLY activate at breakpoint */
+        @media (max-width: 1024px) {
+          .lesson-button {
+            height: 8rem !important;
+            width: 10rem !important;
+            font-size: 3.75rem !important;
+          }
+          
+          .lesson-button-shadow {
+            box-shadow: 0px 8px 0px !important;
+          }
+          
+          .lesson-button-shadow.basic {
+            box-shadow: 0px 8px 0px #246b9a !important;
+          }
+          
+          .lesson-button-shadow.intermediate {
+            box-shadow: 0px 8px 0px #a9890a !important;
+          }
+          
+          .lesson-button-shadow.advanced {
+            box-shadow: 0px 8px 0px #992d22 !important;
+          }
+          
+          .difficulty-button {
+            width: 20vw !important;
+            font-size: 2rem !important;
+            padding: 0.5rem 1rem !important;
+          }
+          
+          .header-container {
+            gap: 1rem !important;
+            margin-bottom: 2rem !important;
+            justify-content: center !important;
+          }
+        }
+        
+        /* Small tablet responsive styles - ONLY activate at breakpoint */
+        @media (max-width: 900px) {
+          .lesson-button {
+            height: 7rem !important;
+            width: 9rem !important;
+            font-size: 3.5rem !important;
+          }
+          
+          .lesson-button-shadow {
+            box-shadow: 0px 7px 0px !important;
+          }
+          
+          .lesson-button-shadow.basic {
+            box-shadow: 0px 7px 0px #246b9a !important;
+          }
+          
+          .lesson-button-shadow.intermediate {
+            box-shadow: 0px 7px 0px #a9890a !important;
+          }
+          
+          .lesson-button-shadow.advanced {
+            box-shadow: 0px 7px 0px #992d22 !important;
+          }
+          
+          .difficulty-button {
+            width: 18vw !important;
+            font-size: 1.875rem !important;
+            padding: 0.5rem 1rem !important;
+          }
+          
+          .header-container {
+            gap: 0.75rem !important;
+            margin-bottom: 1.75rem !important;
+            justify-content: center !important;
+          }
+        }
+        
+        /* Mobile responsive styles - ONLY activate at breakpoint */
+        @media (max-width: 640px) {
+          .lesson-button {
+            height: 6rem !important;
+            width: 8rem !important;
+            font-size: 3rem !important;
+          }
+          
+          .lesson-button-shadow {
+            box-shadow: 0px 6px 0px !important;
+          }
+          
+          .lesson-button-shadow.basic {
+            box-shadow: 0px 6px 0px #246b9a !important;
+          }
+          
+          .lesson-button-shadow.intermediate {
+            box-shadow: 0px 6px 0px #a9890a !important;
+          }
+          
+          .lesson-button-shadow.advanced {
+            box-shadow: 0px 6px 0px #992d22 !important;
+          }
+          
+          .difficulty-button {
+            width: 60vw !important;
+            font-size: 1.5rem !important;
+            padding: 0.75rem 1rem !important;
+          }
+          
+          .header-container {
+            gap: 0.5rem !important;
+            margin-bottom: 1.5rem !important;
+            justify-content: center !important;
+          }
+        }
       `}</style>
 
       {/* Header with difficulty and lives/diamonds */}
-      <div className="flex items-center gap-5 sticky top-3 z-10 mb-15 text-white">
+      <div className="flex items-center justify-center gap-5 sticky top-3 z-10 mb-15 text-white header-container">
         <div
-          className="text-center px-5 py-2 rounded-2xl font-bold text-white text-[2.5rem] w-[24vw]"
+          className="text-center px-5 py-2 rounded-2xl font-bold text-white text-[2.5rem] w-[24vw] difficulty-button"
           style={{ backgroundColor: difficultyColors[difficulty] }}
         >
           {difficulty}
@@ -248,7 +396,10 @@ function LessonButtons() {
                   className={`flex ${getPositionClass(lessonIndex)}`}
                 >
                   <div
-                    className={getLessonButtonClass(lesson)}
+                    className={`${getLessonButtonClass(lesson)} lesson-button lesson-button-shadow ${
+                      lesson.id >= 1 && lesson.id <= 4 ? 'basic' : 
+                      lesson.id >= 5 && lesson.id <= 8 ? 'intermediate' : 'advanced'
+                    }`}
                     onClick={() => {
                       if (lesson.unlocked) {
                         let difficulty = "BASIC";
@@ -278,7 +429,10 @@ function LessonButtons() {
                   className={`flex ${getPositionClass(lessonIndex)}`}
                 >
                   <div
-                    className={getLessonButtonClass(lesson)}
+                    className={`${getLessonButtonClass(lesson)} lesson-button lesson-button-shadow ${
+                      lesson.id >= 1 && lesson.id <= 4 ? 'basic' : 
+                      lesson.id >= 5 && lesson.id <= 8 ? 'intermediate' : 'advanced'
+                    }`}
                     onClick={() => {
                       if (lesson.unlocked) {
                         let difficulty = "BASIC";
@@ -308,7 +462,10 @@ function LessonButtons() {
                   className={`flex ${getPositionClass(lessonIndex)}`}
                 >
                   <div
-                    className={getLessonButtonClass(lesson)}
+                    className={`${getLessonButtonClass(lesson)} lesson-button lesson-button-shadow ${
+                      lesson.id >= 1 && lesson.id <= 4 ? 'basic' : 
+                      lesson.id >= 5 && lesson.id <= 8 ? 'intermediate' : 'advanced'
+                    }`}
                     onClick={() => {
                       if (lesson.unlocked) {
                         let difficulty = "BASIC";

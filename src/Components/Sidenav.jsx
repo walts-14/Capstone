@@ -68,29 +68,23 @@ function Sidenav() {
     <>
       {/* Logo - desktop/laptop */}
       <div
-        className="fixed top-7 left-12 text-white font-bold text-6xl z-20 hidden md:block"
+        className="fixed top-7 left-12 text-white font-bold text-6xl z-20 hidden lg:block"
         style={{ fontFamily: '"Baloo", sans-serif' }}
       >
         <p className="m-0">WeSign</p>
       </div>
-      {/* Logo - tablet (hidden on mobile only) */}
+      
+      {/* Logo - tablet (visible from 640px to 1024px) */}
       <div
-        className="fixed top-7 left-8 text-white font-bold text-5xl z-20 md:hidden sidenav-tablet-logo"
+        className="fixed top-7 left-8 text-white font-bold text-5xl z-20 hidden md:block lg:hidden tablet-logo"
         style={{ fontFamily: '"Baloo", sans-serif' }}
       >
         <p className="m-0">W</p>
       </div>
-      <style>{`
-        @media (max-width: 640px) {
-          .sidenav-tablet-logo {
-            display: none !important;
-          }
-        }
-      `}</style>
 
-      {/* Sidebar container - desktop/laptop */}
+      {/* Sidebar container - desktop/laptop (only visible above 1024px) */}
       <div
-        className="fixed top-28 left-0 bottom-28 w-auto rounded-r-2xl flex text-center p-5 bg-[var(--purple)] h-[80vh] hidden md:flex"
+        className="fixed top-28 left-0 bottom-28 w-auto rounded-r-2xl flex text-center p-5 bg-[var(--purple)] h-[80vh] hidden lg:flex"
         style={{ fontFamily: '"Baloo", sans-serif' }}
       >
         <nav className="text-white flex flex-col w-full z-10 gap-4">
@@ -136,9 +130,9 @@ function Sidenav() {
         </nav>
       </div>
 
-      {/* Sidebar container - tablet only (icon vertical bar) */}
+      {/* Sidebar container - tablet (visible from 640px to 1024px) */}
       <div
-        className="fixed top-0 left-0 h-screen w-[6.5rem] bg-[var(--purple)] flex flex-col items-center pt-24 z-10 md:hidden sm:flex hidden"
+        className="fixed top-0 left-0 h-screen w-[6.5rem] bg-[var(--purple)] flex flex-col items-center pt-24 z-10 hidden md:flex lg:hidden tablet-sidenav"
         style={{ fontFamily: '"Baloo", sans-serif' }}
       >
         <nav className="flex flex-col gap-10 items-center w-full mt-2">
@@ -169,9 +163,9 @@ function Sidenav() {
         </nav>
       </div>
 
-      {/* Sidebar container - mobile (bottom bar) */}
+      {/* Sidebar container - mobile (bottom bar, only visible below 640px) */}
       <div
-        className="sidenav-mobile fixed bottom-0 left-0 w-full h-[6.5rem] bg-[var(--purple)] flex flex-row items-center justify-between px-2 z-20 sm:hidden"
+        className="sidenav-mobile fixed bottom-0 left-0 w-full h-[6.5rem] bg-[var(--purple)] flex flex-row items-center justify-between px-2 z-20 md:hidden"
         style={{ fontFamily: '"Baloo", sans-serif', transition: "all 0.3s" }}
       >
         <nav className="flex flex-row justify-between items-center w-full h-full">
@@ -211,13 +205,41 @@ function Sidenav() {
 
       {/* Responsive styles for smooth transition */}
       <style>{`
-        @media (max-width: 640px) {
+        /* Tablet sidenav and logo - show between 640px-1024px */
+        @media (min-width: 640px) and (max-width: 1023px) {
+          .tablet-sidenav {
+            display: flex !important;
+          }
+          .tablet-logo {
+            display: block !important;
+          }
+          .sidenav-mobile {
+            display: none !important;
+          }
+        }
+        
+        /* Mobile sidenav - only show below 640px */
+        @media (max-width: 639px) {
+          .tablet-sidenav {
+            display: none !important;
+          }
+          .tablet-logo {
+            display: none !important;
+          }
           .sidenav-mobile {
             display: flex !important;
             height: 6.5rem !important;
           }
         }
-        @media (min-width: 641px) {
+        
+        /* Desktop sidenav - show above 1024px */
+        @media (min-width: 1024px) {
+          .tablet-sidenav {
+            display: none !important;
+          }
+          .tablet-logo {
+            display: none !important;
+          }
           .sidenav-mobile {
             display: none !important;
           }

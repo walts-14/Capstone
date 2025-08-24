@@ -71,6 +71,39 @@ function LivesandDiamonds({ showDiamonds = true }) {
           <p className="m-0 font-bold text-3xl ml-1">{points}</p>
         </div>
       )}
+
+      <style jsx>{`
+        /* Tablet responsive styles - ONLY activate at breakpoint */
+        @media (max-width: 1024px) {
+          .lives-container {
+            gap: 0.25rem !important;
+          }
+          
+          .heart-icon {
+            width: 2.5rem !important;
+            height: 2.5rem !important;
+          }
+          
+          .lives-number {
+            font-size: 1.875rem !important;
+            margin-left: 0.25rem !important;
+          }
+          
+          .diamonds-container {
+            gap: 0.25rem !important;
+          }
+          
+          .diamond-icon {
+            width: 2.5rem !important;
+            height: 2.5rem !important;
+          }
+          
+          .points-number {
+            font-size: 1.875rem !important;
+            margin-left: 0.25rem !important;
+          }
+        }
+      `}</style>
     </>
   );
 }
