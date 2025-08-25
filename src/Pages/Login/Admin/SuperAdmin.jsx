@@ -41,7 +41,12 @@ const SuperAdmin = () => {
   // Handler for sending message
   const handleSendMessage = (e) => {
     e.preventDefault();
-    if (!newMessage.teacher || !newMessage.grade || !newMessage.student || !newMessage.content) {
+    if (
+      !newMessage.teacher ||
+      !newMessage.grade ||
+      !newMessage.student ||
+      !newMessage.content
+    ) {
       toast.error("Please fill out all fields.");
       return;
     }
@@ -310,7 +315,10 @@ const SuperAdmin = () => {
           </div>
 
           <div className="table-container">
-            <div className="Create" style={{ display: "flex", alignItems: "center" }}>
+            <div
+              className="Create"
+              style={{ display: "flex", alignItems: "center" }}
+            >
               <div style={{ marginRight: "1.5rem" }}>
                 <button
                   className="btn text-light px-1 py-1"
@@ -328,257 +336,351 @@ const SuperAdmin = () => {
                   onClick={handleMessageButtonClick}
                 >
                   {/* Envelope icon SVG */}
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg
+                    width="32"
+                    height="32"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
                     <rect width="24" height="24" rx="6" fill="#4A2574" />
-                    <path d="M4 8V16C4 17.1046 4.89543 18 6 18H18C19.1046 18 20 17.1046 20 16V8C20 6.89543 19.1046 6 18 6H6C4.89543 6 4 6.89543 4 8Z" stroke="#fff" strokeWidth="2" />
+                    <path
+                      d="M4 8V16C4 17.1046 4.89543 18 6 18H18C19.1046 18 20 17.1046 20 16V8C20 6.89543 19.1046 6 18 6H6C4.89543 6 4 6.89543 4 8Z"
+                      stroke="#fff"
+                      strokeWidth="2"
+                    />
                     <path d="M4 8L12 13L20 8" stroke="#fff" strokeWidth="2" />
                   </svg>
                 </button>
               </div>
-            {/* Messages Popup Modal */}
-            {showMessagesPopup && (
-              <div
-                style={{
-                  position: "fixed",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  background: "#1a1230",
-                  borderRadius: "30px",
-                  border: "3px solid #7338a0",
-                  zIndex: 2000,
-                  width: "600px",
-                  height: "550px",
-                  boxShadow: "0 0 20px #000",
-                  padding: "2rem 2.5rem 2rem 2.5rem",
-                  display: "flex",
-                  flexDirection: "column",
-                  overflowY: "auto",
-                }}
-              >
-                {/* Close button - square, centered X */}
-                <button
-                  type="button"
-                  onClick={handleCloseMessagesPopup}
-                  aria-label="Close"
+              {/* Messages Popup Modal */}
+              {showMessagesPopup && (
+                <div
                   style={{
-                    position: "absolute",
-                    top: "32px",
-                    right: "14px",
-                    backgroundColor: "#e74c3c",
-                    color: "#fff",
-                    border: "none",
-                    borderRadius: "10px",
-                    width: "48px",
-                    height: "48px",
-                    fontWeight: "bold",
-                    fontSize: "2.2rem",
-                    cursor: "pointer",
-                    zIndex: 2,
+                    position: "fixed",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    background: "#1a1230",
+                    borderRadius: "30px",
+                    border: "3px solid #7338a0",
+                    zIndex: 2000,
+                    width: "600px",
+                    height: "550px",
+                    boxShadow: "0 0 20px #000",
+                    padding: "2rem 2.5rem 2rem 2.5rem",
                     display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: 0,
+                    flexDirection: "column",
+                    overflowY: "auto",
                   }}
                 >
-                  <span style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>×</span>
-                </button>
-                {/* Plus icon */}
-                <button
-                  type="button"
-                  aria-label="Add Message"
-                  style={{
-                    position: "absolute",
-                    top: "32px",
-                    right: "75px",
-                    backgroundColor: "#7338a0",
-                    color: "#fff",
-                    border: "none",
-                    borderRadius: "12px",
-                    width: "48px",
-                    height: "48px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "2.2rem",
-                    cursor: "pointer",
-                  }}
-                  onClick={handlePlusClick}
-                >
-                  <span style={{ fontSize: "2.7rem", fontWeight: "bold" }}>+</span>
-                </button>
-                <h2 style={{ color: "#fff", fontWeight: "bold", fontSize: "2.2rem", marginBottom: "1.5rem" }}>Message</h2>
-                {/* Message Form Popup */}
-                {showMessageForm && (
-                  <div
+                  {/* Close button - square, centered X */}
+                  <button
+                    type="button"
+                    onClick={handleCloseMessagesPopup}
+                    aria-label="Close"
                     style={{
-                      position: "fixed",
-                      top: "50%",
-                      left: "50%",
-                      transform: "translate(-50%, -50%)",
-                      background: "#2d2342",
-                      borderRadius: "20px",
-                      border: "2px solid #7338a0",
-                      zIndex: 3000,
-                      width: "400px",
-                      boxShadow: "0 0 20px #000",
-                      padding: "2rem 2rem 1.5rem 2rem",
+                      position: "absolute",
+                      top: "32px",
+                      right: "14px",
+                      backgroundColor: "#e74c3c",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "10px",
+                      width: "48px",
+                      height: "48px",
+                      fontWeight: "bold",
+                      fontSize: "2.2rem",
+                      cursor: "pointer",
+                      zIndex: 2,
                       display: "flex",
-                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: 0,
                     }}
                   >
-                    <button
-                      type="button"
-                      onClick={handleMessageFormClose}
-                      aria-label="Close"
+                    <span
                       style={{
-                        position: "absolute",
-                        top: "18px",
-                        right: "18px",
-                        backgroundColor: "#e74c3c",
-                        color: "#fff",
-                        border: "none",
-                        borderRadius: "8px",
-                        width: "32px",
-                        height: "32px",
-                        fontWeight: "bold",
-                        fontSize: "1.5rem",
-                        cursor: "pointer",
-                        zIndex: 2,
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        padding: 0,
+                        width: "100%",
+                        height: "100%",
                       }}
                     >
-                      <span style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>×</span>
-                    </button>
-                    <h2 style={{ color: "#fff", fontWeight: "bold", fontSize: "2rem", marginBottom: "1.5rem", textAlign: "center" }}>Message</h2>
-                    <form onSubmit={handleSendMessage}>
-                      <div style={{ marginBottom: "1rem" }}>
-                        <select
-                          name="teacher"
-                          value={newMessage.teacher}
-                          onChange={handleMessageInputChange}
-                          style={{
-                            width: "100%",
-                            padding: "0.8rem",
-                            borderRadius: "10px",
-                            background: "#3c2e5e",
-                            color: "#fff",
-                            border: "none",
-                            fontSize: "1.1rem",
-                            marginBottom: "0.7rem",
-                          }}
-                        >
-                          <option value="">Teacher</option>
-                          <option value="Ma'am Charm">Ma'am Charm</option>
-                          <option value="Sir John">Sir John</option>
-                        </select>
-                        <select
-                          name="grade"
-                          value={newMessage.grade}
-                          onChange={handleMessageInputChange}
-                          style={{
-                            width: "100%",
-                            padding: "0.8rem",
-                            borderRadius: "10px",
-                            background: "#3c2e5e",
-                            color: "#fff",
-                            border: "none",
-                            fontSize: "1.1rem",
-                            marginBottom: "0.7rem",
-                          }}
-                        >
-                          <option value="">Grade</option>
-                          <option value="GRADE 7">GRADE 7</option>
-                          <option value="GRADE 8">GRADE 8</option>
-                          <option value="GRADE 9">GRADE 9</option>
-                          <option value="GRADE 10">GRADE 10</option>
-                        </select>
-                        <select
-                          name="student"
-                          value={newMessage.student}
-                          onChange={handleMessageInputChange}
-                          style={{
-                            width: "100%",
-                            padding: "0.8rem",
-                            borderRadius: "10px",
-                            background: "#3c2e5e",
-                            color: "#fff",
-                            border: "none",
-                            fontSize: "1.1rem",
-                            marginBottom: "0.7rem",
-                          }}
-                        >
-                          <option value="">Student Name</option>
-                          <option value="Stepehn curry">Stepehn curry</option>
-                          <option value="Jane Doe">Jane Doe</option>
-                        </select>
-                        <textarea
-                          name="content"
-                          value={newMessage.content}
-                          onChange={handleMessageInputChange}
-                          placeholder="Message"
-                          style={{
-                            width: "100%",
-                            minHeight: "120px",
-                            borderRadius: "10px",
-                            background: "#3c2e5e",
-                            color: "#fff",
-                            border: "2px solid #bdbdbd",
-                            fontSize: "1.1rem",
-                            padding: "0.8rem",
-                          }}
-                        />
-                      </div>
+                      ×
+                    </span>
+                  </button>
+                  {/* Plus icon */}
+                  <button
+                    type="button"
+                    aria-label="Add Message"
+                    style={{
+                      position: "absolute",
+                      top: "32px",
+                      right: "75px",
+                      backgroundColor: "#7338a0",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "12px",
+                      width: "48px",
+                      height: "48px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "2.2rem",
+                      cursor: "pointer",
+                    }}
+                    onClick={handlePlusClick}
+                  >
+                    <span style={{ fontSize: "2.7rem", fontWeight: "bold" }}>
+                      +
+                    </span>
+                  </button>
+                  <h2
+                    style={{
+                      color: "#fff",
+                      fontWeight: "bold",
+                      fontSize: "2.2rem",
+                      marginBottom: "1.5rem",
+                    }}
+                  >
+                    Message
+                  </h2>
+                  {/* Message Form Popup */}
+                  {showMessageForm && (
+                    <div
+                      style={{
+                        position: "fixed",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        background: "#2d2342",
+                        borderRadius: "20px",
+                        border: "2px solid #7338a0",
+                        zIndex: 3000,
+                        width: "400px",
+                        boxShadow: "0 0 20px #000",
+                        padding: "2rem 2rem 1.5rem 2rem",
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
                       <button
-                        type="submit"
+                        type="button"
+                        onClick={handleMessageFormClose}
+                        aria-label="Close"
                         style={{
-                          width: "100%",
-                          background: "#7338a0",
+                          position: "absolute",
+                          top: "18px",
+                          right: "18px",
+                          backgroundColor: "#e74c3c",
                           color: "#fff",
                           border: "none",
-                          borderRadius: "10px",
+                          borderRadius: "8px",
+                          width: "32px",
+                          height: "32px",
                           fontWeight: "bold",
                           fontSize: "1.5rem",
-                          padding: "0.7rem 0",
-                          marginTop: "0.5rem",
                           cursor: "pointer",
+                          zIndex: 2,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          padding: 0,
                         }}
                       >
-                        Send
+                        <span
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            width: "100%",
+                            height: "100%",
+                          }}
+                        >
+                          ×
+                        </span>
                       </button>
-                    </form>
-                  </div>
-                )}
-                <div style={{ width: "100%", marginTop: "1rem", flex: 1, overflowY: "auto" }}>
-                  {messages.length === 0 ? (
-                    <div style={{ color: "#fff", textAlign: "center" }}>No messages found.</div>
-                  ) : (
-                    messages.map((msg) => (
-                      <div
-                        key={msg.id}
+                      <h2
                         style={{
-                          background: "#2d2342",
-                          borderRadius: "15px",
-                          padding: "1rem",
-                          marginBottom: "1rem",
                           color: "#fff",
+                          fontWeight: "bold",
+                          fontSize: "2rem",
+                          marginBottom: "1.5rem",
+                          textAlign: "center",
                         }}
                       >
-                        <div style={{ marginBottom: "0.5rem" }}>
-                          <span style={{ background: "#f7c948", color: "#222", borderRadius: "7px", padding: "0.2rem 0.7rem", fontWeight: "bold", marginRight: "0.5rem" }}>{msg.sender}</span>
-                          <span style={{ background: "#7c6ae3", color: "#fff", borderRadius: "7px", padding: "0.2rem 0.7rem", fontWeight: "bold", marginRight: "0.5rem" }}>{msg.grade}</span>
-                          <span style={{ background: "#bdbdbd", color: "#222", borderRadius: "7px", padding: "0.2rem 0.7rem", fontWeight: "bold" }}>{msg.recipient}</span>
+                        Message
+                      </h2>
+                      <form onSubmit={handleSendMessage}>
+                        <div style={{ marginBottom: "1rem" }}>
+                          <select
+                            name="teacher"
+                            value={newMessage.teacher}
+                            onChange={handleMessageInputChange}
+                            style={{
+                              width: "100%",
+                              padding: "0.8rem",
+                              borderRadius: "10px",
+                              background: "#3c2e5e",
+                              color: "#fff",
+                              border: "none",
+                              fontSize: "1.1rem",
+                              marginBottom: "0.7rem",
+                            }}
+                          >
+                            <option value="">Teacher</option>
+                            <option value="Ma'am Charm">Ma'am Charm</option>
+                            <option value="Sir John">Sir John</option>
+                          </select>
+                          <select
+                            name="grade"
+                            value={newMessage.grade}
+                            onChange={handleMessageInputChange}
+                            style={{
+                              width: "100%",
+                              padding: "0.8rem",
+                              borderRadius: "10px",
+                              background: "#3c2e5e",
+                              color: "#fff",
+                              border: "none",
+                              fontSize: "1.1rem",
+                              marginBottom: "0.7rem",
+                            }}
+                          >
+                            <option value="">Grade</option>
+                            <option value="GRADE 7">GRADE 7</option>
+                            <option value="GRADE 8">GRADE 8</option>
+                            <option value="GRADE 9">GRADE 9</option>
+                            <option value="GRADE 10">GRADE 10</option>
+                          </select>
+                          <select
+                            name="student"
+                            value={newMessage.student}
+                            onChange={handleMessageInputChange}
+                            style={{
+                              width: "100%",
+                              padding: "0.8rem",
+                              borderRadius: "10px",
+                              background: "#3c2e5e",
+                              color: "#fff",
+                              border: "none",
+                              fontSize: "1.1rem",
+                              marginBottom: "0.7rem",
+                            }}
+                          >
+                            <option value="">Student Name</option>
+                            <option value="Stepehn curry">Stepehn curry</option>
+                            <option value="Jane Doe">Jane Doe</option>
+                          </select>
+                          <textarea
+                            name="content"
+                            value={newMessage.content}
+                            onChange={handleMessageInputChange}
+                            placeholder="Message"
+                            style={{
+                              width: "100%",
+                              minHeight: "120px",
+                              borderRadius: "10px",
+                              background: "#3c2e5e",
+                              color: "#fff",
+                              border: "2px solid #bdbdbd",
+                              fontSize: "1.1rem",
+                              padding: "0.8rem",
+                            }}
+                          />
                         </div>
-                        <div style={{ color: "#fff", fontSize: "1rem" }}>{msg.content}</div>
-                      </div>
-                    ))
+                        <button
+                          type="submit"
+                          style={{
+                            width: "100%",
+                            background: "#7338a0",
+                            color: "#fff",
+                            border: "none",
+                            borderRadius: "10px",
+                            fontWeight: "bold",
+                            fontSize: "1.5rem",
+                            padding: "0.7rem 0",
+                            marginTop: "0.5rem",
+                            cursor: "pointer",
+                          }}
+                        >
+                          Send
+                        </button>
+                      </form>
+                    </div>
                   )}
+                  <div
+                    style={{
+                      width: "100%",
+                      marginTop: "1rem",
+                      flex: 1,
+                      overflowY: "auto",
+                    }}
+                  >
+                    {messages.length === 0 ? (
+                      <div style={{ color: "#fff", textAlign: "center" }}>
+                        No messages found.
+                      </div>
+                    ) : (
+                      messages.map((msg) => (
+                        <div
+                          key={msg.id}
+                          style={{
+                            background: "#2d2342",
+                            borderRadius: "15px",
+                            padding: "1rem",
+                            marginBottom: "1rem",
+                            color: "#fff",
+                          }}
+                        >
+                          <div style={{ marginBottom: "0.5rem" }}>
+                            <span
+                              style={{
+                                background: "#f7c948",
+                                color: "#222",
+                                borderRadius: "7px",
+                                padding: "0.2rem 0.7rem",
+                                fontWeight: "bold",
+                                marginRight: "0.5rem",
+                              }}
+                            >
+                              {msg.sender}
+                            </span>
+                            <span
+                              style={{
+                                background: "#7c6ae3",
+                                color: "#fff",
+                                borderRadius: "7px",
+                                padding: "0.2rem 0.7rem",
+                                fontWeight: "bold",
+                                marginRight: "0.5rem",
+                              }}
+                            >
+                              {msg.grade}
+                            </span>
+                            <span
+                              style={{
+                                background: "#bdbdbd",
+                                color: "#222",
+                                borderRadius: "7px",
+                                padding: "0.2rem 0.7rem",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              {msg.recipient}
+                            </span>
+                          </div>
+                          <div style={{ color: "#fff", fontSize: "1rem" }}>
+                            {msg.content}
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
               <div>
                 <button
                   className="btn text-light px-1 py-1"
