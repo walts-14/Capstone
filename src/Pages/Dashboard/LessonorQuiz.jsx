@@ -230,7 +230,7 @@ function LectureorQuiz() {
   const navigate = useNavigate();
   const { termId: lessonKey } = useParams(); // your slug e.g. "termsfive"
   const location = useLocation();
-  
+
   // DISPLAYED difficulty comes from the route state (set by the library page)
   const difficulty = location.state?.difficulty?.toUpperCase() || "BASIC";
 
@@ -291,7 +291,7 @@ function LectureorQuiz() {
     return <p>Loading lesson…</p>;
   }
 
-      // get the four-part progress flags for this lesson:
+  // get the four-part progress flags for this lesson:
   const { progressData } = useContext(ProgressContext);
   const lessonProgress = progressData[level]?.[lessonKey] || {
     step1Lecture: false,
@@ -312,7 +312,7 @@ function LectureorQuiz() {
     ? lessonProgress.step1Lecture
     // Quiz Part 2 only after you finish Lecture Part 2
     : lessonProgress.step2Lecture;
-    
+
   return (
     <>
       <div
@@ -370,24 +370,47 @@ function LectureorQuiz() {
             </div>
           </div>
 
-          <div
-            className={`quiz-outer justify-content-center rounded-5${!canQuiz ? " disabled" : ""}`}
-            onClick={() => {
-              if (!canQuiz) return;
-              navigate(`/quiz/${lessonKey}`, {
-                state: {
-                  showButton: true,
-                  fromLecture: true,
-                  lessonKey,
-                  currentStep,
-                  difficulty,
-                },
-              });
-            }}
-          >
-            <p>Quiz</p>
-            <div className="quiz-inner justify-content-center">
-              <img src={Ideas} className="img-fluid" alt="Quiz Icon" />
+          <div style={{ display: "flex", flexDirection: "column", gap: "3rem" }}>
+            <div
+              className={`quiz-outer justify-content-center rounded-5${!canQuiz ? " disabled" : ""}`}
+              onClick={() => {
+                if (!canQuiz) return;
+                navigate(`/quiz/${lessonKey}`, {
+                  state: {
+                    showButton: true,
+                    fromLecture: true,
+                    lessonKey,
+                    currentStep,
+                    difficulty,
+                  },
+                });
+              }}
+            >
+              <p>Quiz</p>
+              <div className="quiz-inner justify-content-center">
+                <img src={Ideas} className="img-fluid" alt="Quiz Icon" />
+              </div>
+            </div>
+
+            <div
+              className={`practice-outer justify-content-center rounded-5${!canQuiz ? " disabled" : ""}`}
+              onClick={() => {
+                if (!canQuiz) return;
+                navigate(`/practice/${lessonKey}`, {
+                  state: {
+                    showButton: true,
+                    fromLecture: true,
+                    lessonKey,
+                    currentStep,
+                    difficulty,
+                  },
+                });
+              }}
+            >
+              <p>Practice</p>
+              <div className="practice-inner justify-content-center">
+                <img src={Ideas} className="img-fluid" alt="Practice Icon" />
+              </div>
             </div>
           </div>
         </div>

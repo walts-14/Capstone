@@ -21,6 +21,7 @@ import Settings from "./Pages/Settings/Settings.jsx";
 import LectureorQuiz from "./Pages/Dashboard/LessonorQuiz.jsx";
 import Page from "./Pages/Dashboard/Page.jsx";
 import Quiz from "./Pages/Quizzes/Quiz.jsx";
+import Practice from "./Pages/Quizzes/Practice.jsx";
 import Termspage from "./Pages/Library/Terms/Termspage.jsx";
 
 import Finish from "./Pages/Quizzes/Finish.jsx";
@@ -75,6 +76,8 @@ const router = createBrowserRouter([
       { path: "introductionmodal", element: <IntroductionModal /> },
       { path: "maintenance", element: <Maintenance /> },
       { path: "livesrunout", element: <LivesRunOut /> },
+      { path: "practice/:lessonKey", element: <Practice /> },
+
     ],
   },
 

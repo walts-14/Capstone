@@ -11,31 +11,31 @@ import dashboardlogo from "../../assets/dashboardlogo.png";
 import { ProgressContext } from "../../../src/Pages/Dashboard/ProgressContext";
 
 const levelMapping = {
-  termsone:   "basic",
-  termstwo:   "basic",
+  termsone: "basic",
+  termstwo: "basic",
   termsthree: "basic",
-  termsfour:  "basic",
-  termsfive:  "intermediate",
-  termssix:   "intermediate",
+  termsfour: "basic",
+  termsfive: "intermediate",
+  termssix: "intermediate",
   termsseven: "intermediate",
   termseight: "intermediate",
-  termsnine:  "advanced",
-  termsten:   "advanced",
-  termseleven:"advanced",
-  termstwelve:"advanced",
+  termsnine: "advanced",
+  termsten: "advanced",
+  termseleven: "advanced",
+  termstwelve: "advanced",
 };
 
 const lessonNumberMapping = {
-  termsone:    1,
-  termstwo:    2,
-  termsthree:  3,
-  termsfour:   4,
-  termsfive:   1,
-  termssix:    2,
-  termsseven:  3,
-  termseight:  4,
-  termsnine:   1,
-  termsten:    2,
+  termsone: 1,
+  termstwo: 2,
+  termsthree: 3,
+  termsfour: 4,
+  termsfive: 1,
+  termssix: 2,
+  termsseven: 3,
+  termseight: 4,
+  termsnine: 1,
+  termsten: 2,
   termseleven: 3,
   termstwelve: 4,
 };
@@ -43,9 +43,10 @@ const lessonNumberMapping = {
 function Finish() {
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   // Expecting lessonKey and level to be passed along with answers info
-  const { correctAnswers = 0, wrongAnswers = 0, lessonKey, level } = location.state || {};
+  const { correctAnswers = 0, wrongAnswers = 0, lessonKey, level, mode } = location.state || {};
+
 
   // Define styles (same as in ProgressTracker)
   const styles = {
@@ -100,10 +101,12 @@ function Finish() {
       <div className="finishtext d-flex flex-column align-items-center position-relative fw-bold fs-1">
         <img src={Applause} className="img-fluid p-1 mb-3" alt="applause img" />
         <p> You've Finished the Quiz </p>
-        <div className="dia-reward d-flex pt-1">
-          <img src={diamond} className="img-fluid p-1 ms-5" alt="diamond img" />
-          <p className="dia-number ms-3 me-5">{correctAnswers * 10}</p>
-        </div>
+        {mode === "practice" ? null : (
+          <div className="dia-reward d-flex pt-1">
+            <img src={diamond} className="img-fluid p-1 ms-5" alt="diamond img" />
+            <p className="dia-number ms-3 me-5">{correctAnswers * 10}</p>
+          </div>
+        )}
         <div className="stats-quiz d-flex flex-row gap-1 text-center">
           <img src={check} className="tama img-fluid p-1" alt="check img" />
           <p className="check-number ms-2">{correctAnswers}</p>
@@ -131,16 +134,16 @@ function Finish() {
             className="img-fluid d-flex p-1 mt-1"
             alt="dashboard img"
           />
-           Dashboard 
+          Dashboard
         </button>
         <button
           type="button"
           className="continue d-flex justify-content-center align-items-center rounded-4 pt-4 mb-4 ms-auto me-5 fs-1"
-          onClick={() => 
+          onClick={() =>
             navigate(`/page/${lessonKey}`, {
               state: {
                 lessonKey,
-                difficulty: location.state?.difficulty ?? levelMapping[lessonKey], 
+                difficulty: location.state?.difficulty ?? levelMapping[lessonKey],
                 step: 2,
                 fromLecture: true,
               }
