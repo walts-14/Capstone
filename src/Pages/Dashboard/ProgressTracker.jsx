@@ -85,6 +85,189 @@ const calculateOverallProgress = (progressData) => {
   return { overallPercent, currentLesson };
 };
 
+// function StreakButton() {
+//   const { streakData, incrementStreak } = useContext(ProgressContext);
+//   const [isOpen, setIsOpen] = useState(false);
+//   const [showModal, setShowModal] = useState(false);
+//   const [modalShownDate, setModalShownDate] = useState(null);
+//   const MODAL_SHOWN_KEY = "streakModalShownDate";
+
+//   // On mount, load last shown date from localStorage
+//   useEffect(() => {
+//     const stored = localStorage.getItem(MODAL_SHOWN_KEY);
+//     if (stored) setModalShownDate(stored);
+//   }, []);
+
+//   const toggle = () => {
+//     // Only open the modal for manual view, not the reward modal
+//     setIsOpen((v) => !v);
+//     // Do NOT set showModal here
+//   };
+
+//   // Fix close modal function to close both modal states
+//   const closeModal = () => {
+//     setShowModal(false);
+//     setIsOpen(false);
+//   };
+
+//   // Only run reward modal logic after modalShownDate is loaded
+//   useEffect(() => {
+//     if (modalShownDate === null) return; // Wait until loaded from localStorage
+//     const today = new Date().toDateString();
+//     if (modalShownDate === today) return; // Already shown today
+//     if (isOpen) return; // Don't show reward modal if info modal is open
+
+//     // If streak already updated for today, show modal ONLY if this is the first load for today
+//     if (
+//       streakData.lastUpdated &&
+//       new Date(streakData.lastUpdated).toDateString() === today
+//     ) {
+//       setShowModal(true);
+//       setModalShownDate(today);
+//       localStorage.setItem(MODAL_SHOWN_KEY, today);
+//       return;
+//     }
+
+//     // If no lastUpdated and streak is less than 1, increment and show modal (first ever login)
+//     if (!streakData.lastUpdated && streakData.currentStreak < 1) {
+//       incrementStreak();
+//       setShowModal(true);
+//       setModalShownDate(today);
+//       localStorage.setItem(MODAL_SHOWN_KEY, today);
+//       return;
+//     }
+
+//     // If a day has passed, increment and show modal (first login of a new day)
+//     if (streakData.lastUpdated) {
+//       const lastDate = new Date(streakData.lastUpdated);
+//       const now = new Date();
+//       const diffTime = now.getTime() - lastDate.getTime();
+//       const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+//       if (diffDays >= 1) {
+//         incrementStreak();
+//         setShowModal(true);
+//         setModalShownDate(today);
+//         localStorage.setItem(MODAL_SHOWN_KEY, today);
+//       }
+//     }
+//     // Add modalShownDate to dependencies so effect only runs after it's loaded
+//     // eslint-disable-next-line react-hooks/exhaustive-deps
+//   }, [streakData.lastUpdated, streakData.currentStreak, modalShownDate]);
+
+//   const getStreakReward = (day) => {
+//     if (day === 1) return 5;
+//     else if (day === 2) return 10;
+//     else if (day === 3) return 15;
+//     else if (day === 4) return 20;
+//     else if (day === 5) return 30;
+//     else if (day === 6) return 40;
+//     else if (day >= 7) return 50;
+//     else return 0;
+//   };
+
+//   const currentStreakValue =
+//     streakData.currentStreak == null ? 1 : streakData.currentStreak;
+
+//   return (
+//     <>
+//       {/* Streak Button */}
+//       <button
+//         className="flex items-center h-[10vh] w-[6.5vw] rounded-4 px-3 py-2 cursor-pointer absolute right-[25.2rem] top-20"
+//         style={{ background: "#271d3e" }}
+//         onClick={toggle}
+//       >
+//         <img src={fire} alt="streak" className="h-auto w-12" />
+//         <div className="flex flex-col">
+//           <div className="text-white text-4xl mx-2 h-[45px]">
+//             {currentStreakValue}
+//           </div>
+//           <span className="text-[#878194] self-end text-base leading-4">
+//             Day <br /> Streak
+//           </span>
+//         </div>
+//       </button>
+
+//       {/* Manual Info Modal */}
+//       {isOpen && (
+//         <div
+//           className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[9999]"
+//           onClick={closeModal}
+//         >
+//           <div
+//             className="text-white p-8 rounded-3xl w-[70%] h-[45vh] max-w-[500px] text-center border-4 gap-2 mr-40"
+//             style={{ background: "#100429", borderColor: "#FF6536" }}
+//             onClick={(e) => e.stopPropagation()}
+//           >
+//             {/* Header with flame icon + number */}
+//             <div className="flex items-center justify-center gap-2 h-[10vh]">
+//               <div className="text-[6.5rem] font-bold">
+//                 {currentStreakValue}
+//               </div>
+//               <img src={fire} alt="flame" className="w-20 h-auto mb-4" />
+//             </div>
+//             <h2 className="text-3xl mb-4 uppercase">DAY STREAK!</h2>
+//             <p className="text-2xl mb-4 opacity-80">
+//               Learn new FSL to earn points and build streak
+//             </p>
+//             <div className="flex items-center justify-center gap-2 mb-10 h-[50px]">
+//               <img src={medal} alt="medal" className="w-14 h-auto" />
+//               <span className="text-6xl font-bold text-yellow-400">
+//                 +{getStreakReward(currentStreakValue)}
+//               </span>
+//             </div>
+//             <button
+//               className="py-2 px-4 border-none text-white rounded-lg cursor-pointer text-2xl w-full"
+//               style={{ background: "#c0392b" }}
+//               onClick={closeModal}
+//             >
+//               Close
+//             </button>
+//           </div>
+//         </div>
+//       )}
+
+//       {/* Reward Modal */}
+//       {showModal && (
+//         <div
+//           className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[9999]"
+//           onClick={closeModal}
+//         >
+//           <div
+//             className="text-white p-8 rounded-5xl w-[70%] h-[45vh] max-w-[500px] text-center border-4 gap-2 mr-40"
+//             style={{ background: "#100429", borderColor: "#FF6536" }}
+//             onClick={(e) => e.stopPropagation()}
+//           >
+//             {/* Header with flame icon + number */}
+//             <div className="flex items-center justify-center gap-2 h-[10vh]">
+//               <div className="text-[6.5rem] font-bold">
+//                 {currentStreakValue}
+//               </div>
+//               <img src={fire} alt="flame" className="w-20 h-auto mb-4" />
+//             </div>
+//             <h2 className="text-3xl mb-4 uppercase">DAY STREAK!</h2>
+//             <p className="text-2xl mb-4 opacity-80">
+//               Learn new FSL to earn points and build streak
+//             </p>
+//             <div className="flex items-center justify-center gap-2 mb-10 h-[50px]">
+//               <img src={medal} alt="medal" className="w-14 h-auto" />
+//               <span className="text-6xl font-bold text-yellow-400">
+//                 +{getStreakReward(currentStreakValue)}
+//               </span>
+//             </div>
+//             <button
+//               className="py-2 px-4 border-none text-white rounded-lg cursor-pointer text-2xl w-full"
+//               style={{ background: "#c0392b" }}
+//               onClick={closeModal}
+//             >
+//               Close
+//             </button>
+//           </div>
+//         </div>
+//       )}
+//     </>
+//   );
+// }
+
 export default function ProgressTracker({ student }) {
   // Recursively sanitize any object with a 'default' key
   const sanitizeObjectRecursive = (data) => {
@@ -228,7 +411,7 @@ export default function ProgressTracker({ student }) {
   return (
     <>
       <div className="tracker">
-        <StreakButton />
+        {/* <StreakButton /> */}
         {/* CSS: .position-lb converted to Tailwind */}
         <div
           className="flex justify-start items-center text-white rounded-3xl h-[10vh] w-[18vw] fixed right-12 top-20 gap-1"

@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import fire from "../../assets/fire.png";  // adjust the path as needed
 import medal from "../../assets/diamond.png"; // adjust the path as needed
-import "./StreakButton.css";
+import "../StreakButton.css";
 import { ProgressContext } from "../../Pages/Dashboard/ProgressContext";
 
 /**
