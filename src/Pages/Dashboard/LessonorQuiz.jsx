@@ -191,6 +191,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Video from "../../assets/Video.png";
 import Ideas from "../../assets/Ideas.png";
 import backkpoint from "../../assets/backkpoint.png";
+import practice from "../../assets/practice.png";
 import LivesandDiamonds from "../../Components/LiveandDiamonds";
 import IntroductionModal from "../../Components/IntroductionModal";
 import { useContext } from "react";
@@ -409,7 +410,7 @@ function LectureorQuiz() {
             >
               <p>Practice</p>
               <div className="practice-inner justify-content-center">
-                <img src={Ideas} className="img-fluid" alt="Practice Icon" />
+                <img src={practice} className="img-fluid" alt="Practice Icon" />
               </div>
             </div>
           </div>
