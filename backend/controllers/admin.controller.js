@@ -1,26 +1,74 @@
-import User from "../models/user.js";
+import User from "../models/user.js"; // adjust path if needed
+import { hashedPassword } from "../middlewares/auth.js";
+import { createMagicToken } from "../src/services/magicToken.js";
+import { toPngBuffer } from "../src/services/qr.js";
+import { sendEmail } from "../src/services/mailer.js";
 
-/**
- * Create a new Student Account.
- */
 export const createStudent = async (req, res) => {
   try {
-    const { name, username, email, password, yearLevel } = req.body;
+    const { name, username, email, password: rawPassword, yearLevel } = req.body;
     const role = "user"; // force student role
 
-    const existingUser = await User.findOne({ email, role });
+    // Check by email (don't allow duplicate emails)
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "Email is already registered" });
     }
 
+    // Generate raw password if not provided
+    const rawPwd = rawPassword || Math.random().toString(36).slice(-8);
+    // hash password
+    const password = await hashedPassword(rawPwd);
+
     const student = new User({ name, username, email, password, role, yearLevel });
     await student.save();
 
+    // create magic token (short-lived + single-use)
+    const magicToken = await createMagicToken(student._id);
+
+    // form the magic URL that the QR will point to (backend endpoint)
+    const backend = process.env.BACKEND_URL || `http://localhost:5000`;
+    const magicUrl = `${backend}/api/magic-login?token=${encodeURIComponent(magicToken)}`;
+
+    // generate QR PNG buffer
+    const pngBuffer = await toPngBuffer(magicUrl);
+
+    // compose email content (embed QR via cid, and attach png)
+    const html = `
+      <h2>Welcome to WeSign, ${name}</h2>
+      <p>Your account has been created by your teacher/admin.</p>
+      <p><strong>Login Info (keep secure):</strong></p>
+      <ul>
+        <li>Email: ${email}</li>
+        <li>Password: ${rawPwd}</li>
+      </ul>
+      <p>Scan the QR code or click the link below to login (link expires in ${process.env.MAGIC_TOKEN_MIN || 15} minutes):</p>
+      <img src="cid:onboardingqr" alt="Onboarding QR" style="width:180px; height:auto;" />
+      <p><a href="${magicUrl}">Open magic login link</a></p>
+    `;
+
+    await sendEmail({
+      to: email,
+      subject: "Your WeSign account",
+      html,
+      attachments: [
+        { filename: "onboarding-qr.png", content: pngBuffer, cid: "onboardingqr" }
+      ]
+    });
+
+    // return created student data (avoid returning password)
+    const safeStudent = student.toObject();
+    delete safeStudent.password;
+
+    // return also a dataUrl for immediate admin UI display/printing
+    const dataUrl = "data:image/png;base64," + pngBuffer.toString("base64");
+
     res.status(201).json({
       message: "Student account created successfully.",
-      data: student,
+      data: { student: safeStudent, qrDataUrl: dataUrl, magicUrl }
     });
   } catch (err) {
+    console.error("createStudent error:", err);
     res.status(500).json({
       message: "Error creating student account",
       error: err.message,
@@ -86,7 +134,11 @@ export const updateStudentByEmail = async (req, res) => {
     if (newEmail) student.email = newEmail;
     if (name) student.name = name;
     if (yearLevel) student.yearLevel = yearLevel;
-    if (password) student.password = password; // pre-save hook hashes if modified
+   if (password) {
+  // hash explicitly so we don't depend on pre-save behavior
+  student.password = await hashedPassword(password);
+}
+ // pre-save hook hashes if modified
 
     await student.save();
     res.json({

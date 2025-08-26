@@ -1,5 +1,9 @@
-import bcrypt from "bcrypt";
 import User from "../models/user.js";
+import bcrypt from "bcrypt"; // Added bcrypt import
+import { hashedPassword } from "../middlewares/auth.js";
+import { createMagicToken } from "../src/services/magicToken.js";
+import { toPngBuffer } from "../src/services/qr.js";
+import { sendEmail } from "../src/services/mailer.js";
 
 /**
  * Create a Super Admin Account.
@@ -34,7 +38,7 @@ export const createSuperAdmin = async (req, res) => {
  */
 export const createAccount = async (req, res) => {
   try {
-    const { name, username, email, password, role, yearLevel } = req.body;
+    const { name, username, email, password: rawPassword, role, yearLevel } = req.body;
 
     if (!["admin", "user"].includes(role)) {
       return res.status(400).json({
@@ -42,10 +46,15 @@ export const createAccount = async (req, res) => {
       });
     }
 
-    const existingUser = await User.findOne({ email, role });
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "Email is already registered" });
     }
+
+    // Generate raw password if not provided
+    const rawPwd = rawPassword || Math.random().toString(36).slice(-8);
+    // hash password
+    const password = await hashedPassword(rawPwd);
 
     const user = new User({ name, username, email, password, role, yearLevel });
     const validationError = user.validateSync();
@@ -54,9 +63,53 @@ export const createAccount = async (req, res) => {
     }
 
     await user.save();
+
+    // For user (student) create magic token + qr/email. For admin you may still email credentials.
+    let qrDataUrl = null;
+    let magicUrl = null;
+    if (role === "user") {
+      const magicToken = await createMagicToken(user._id);
+      const backend = process.env.BACKEND_URL || `http://localhost:5000`;
+      magicUrl = `${backend}/api/magic-login?token=${encodeURIComponent(magicToken)}`;
+      const pngBuffer = await toPngBuffer(magicUrl);
+
+      const html = `
+        <h2>Welcome to WeSign, ${name}</h2>
+        <p>Your account has been created by your coordinator/admin.</p>
+        <p><strong>Login Info:</strong></p>
+        <ul>
+          <li>Email: ${email}</li>
+          <li>Password: ${rawPwd}</li>
+        </ul>
+        <p>Scan the QR or click the link to login (link expires in ${process.env.MAGIC_TOKEN_MIN || 15} minutes):</p>
+        <img src="cid:onboardingqr" alt="Onboarding QR" style="width:180px; height:auto;" />
+        <p><a href="${magicUrl}">Open magic login link</a></p>
+      `;
+
+      await sendEmail({
+        to: email,
+        subject: "Your WeSign account",
+        html,
+        attachments: [{ filename: "onboarding-qr.png", content: pngBuffer, cid: "onboardingqr" }]
+      });
+
+      qrDataUrl = "data:image/png;base64," + pngBuffer.toString("base64");
+    } else {
+      // admin account: send credentials via email (no QR required)
+      const html = `
+        <h2>Welcome, ${name}</h2>
+        <p>An admin account has been created for you.</p>
+        <ul><li>Email: ${email}</li><li>Password: ${rawPwd}</li></ul>
+      `;
+      await sendEmail({ to: email, subject: "Your WeSign admin account", html });
+    }
+
+    const safeUser = user.toObject();
+    delete safeUser.password;
+
     res.status(201).json({
       message: `${role === "admin" ? "Admin" : "Student"} account created successfully.`,
-      data: user,
+      data: { user: safeUser, qrDataUrl, magicUrl },
     });
   } catch (err) {
     console.error("Error creating account:", err);

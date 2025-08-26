@@ -6,12 +6,12 @@ import EditIcon from "../../../assets/Edit.png";
 import RemoveIcon from "../../../assets/Remove.png";
 import DashboardIcon from "../../../assets/dashboardlogo.png";
 import LeaderboardIcon from "../../../assets/leaderboardicon.png";
-import axios from "axios";
+import axios from "../../api.js";
 import toast from "react-hot-toast";
 import SidenavAdmins from "../../../Components/SidenavAdmins.jsx";
 import ProgressTracker from "../../Dashboard/ProgressTracker";
 import LbComponent from "../../Leaderboard/LbComponent";
-
+import QRModal from "../../../Components/QRCode/QRModal.jsx";
 import "../../../css/SuperAdmin.css";
 import "../../../css/ProgressModal.css";
 
@@ -77,6 +77,14 @@ const SuperAdmin = () => {
   const [showProgressTracker, setShowProgressTracker] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [formMode, setFormMode] = useState("create");
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+const [qrModalVisible, setQrModalVisible] = useState(false);
+const [qrDataUrl, setQrDataUrl] = useState(null);
+const [magicUrl, setMagicUrl] = useState(null);
+const [qrStudentEmail, setQrStudentEmail] = useState(null);
+
 
   // Prepare a sanitized student object suitable for ProgressTracker
   const sanitizeUserForTracker = (user) => {
@@ -190,41 +198,69 @@ const SuperAdmin = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-    if (formData.password !== formData.confirmPassword) {
-      return toast.error("Passwords do not match!");
+const handleFormSubmit = async (e) => {
+  e.preventDefault();
+
+  // basic client validation
+  if (formData.password !== formData.confirmPassword) {
+    return toast.error("Passwords do not match!");
+  }
+  if (!formData.name || !formData.username || !formData.email) {
+    return toast.error("All fields are required!");
+  }
+
+  setIsSubmitting(true);
+
+  try {
+    const payload = {
+      name: formData.name,
+      username: formData.username,
+      email: formData.email,
+      password: formData.password || undefined,
+      yearLevel: formData.yearLevel || undefined,
+      role: activeTab === "Teachers" ? "admin" : "user",
+    };
+
+    // Build URL depending on create/edit
+    const urlBase = formMode === "edit"
+      ? (activeTab === "Users"
+          ? `/api/superadmin/users/${encodeURIComponent(formData.email)}`
+          : `/api/superadmin/admins/${encodeURIComponent(formData.email)}`)
+      : "/api/superadmin/create-account";
+
+    const method = formMode === "edit" ? axios.put : axios.post;
+
+    // CALL backend and capture response
+    const res = await method(urlBase, payload); // uses axios baseURL from src/api.js
+    console.log("create-account response:", res?.data);
+
+    // IMPORTANT FIX: show QR modal when we just CREATED (formMode !== "edit")
+    // previously code used `if (!formMode && returned?.qrDataUrl)` which never ran
+    const returned = res?.data?.data;
+    if (formMode !== "edit" && returned?.qrDataUrl) {
+      setQrDataUrl(returned.qrDataUrl);
+      setMagicUrl(returned.magicUrl || "");
+      setQrStudentEmail(payload.email);
+      setQrModalVisible(true);
+    } else {
+      // helpful debug info
+      if (formMode !== "edit") console.log("No qrDataUrl in response:", returned);
     }
-    if (!formData.name || !formData.username || !formData.email) {
-      return toast.error("All fields are required!");
-    }
-    try {
-      const urlBase =
-        formMode === "edit"
-          ? activeTab === "Users"
-            ? `/api/superadmin/users/${encodeURIComponent(formData.email)}`
-            : `/api/superadmin/admins/${encodeURIComponent(formData.email)}`
-          : "/api/superadmin/create-account";
-      const payload = {
-        name: formData.name,
-        username: formData.username,
-        email: formData.email,
-        password: formData.password,
-        yearLevel: formData.yearLevel,
-        role: activeTab === "Teachers" ? "admin" : "user",
-      };
-      if (formMode === "edit") delete payload.email;
-      const method = formMode === "edit" ? axios.put : axios.post;
-      await method(urlBase, payload, { baseURL: "http://localhost:5000" });
-      toast.success(`${formMode === "edit" ? "Updated" : "Created"} ${activeTab}`);
-      fetchUsers(selectedGrade);
-      fetchTeachers(selectedGrade);
-      setShowForm(false);
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to submit form.");
-    }
-  };
+
+    toast.success(`${formMode === "edit" ? "Updated" : "Created"} ${activeTab}`);
+    await fetchUsers(selectedGrade);
+    await fetchTeachers(selectedGrade);
+    setShowForm(false);
+  } catch (err) {
+    console.error("handleFormSubmit error:", err?.response?.data || err);
+    const serverMsg = err?.response?.data?.message || err?.response?.data?.error || err.message;
+    toast.error(serverMsg || "Failed to submit form.");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
+
 
   const handleDelete = async (email) => {
     if (!window.confirm("Delete this account?")) return;
@@ -379,6 +415,17 @@ const SuperAdmin = () => {
             </div>
           </div>
 
+                {/* QR Modal */}
+                {qrModalVisible && (
+                  <QRModal
+                    visible={qrModalVisible}
+                    onClose={() => setQrModalVisible(false)}
+                    dataUrl={qrDataUrl}
+                    magicUrl={magicUrl}
+                    studentEmail={qrStudentEmail}
+                  />
+                )}
+
           <div className="logout-container">
             <button className="btn-logout" onClick={logout}>
               Logout
@@ -415,7 +462,9 @@ const SuperAdmin = () => {
                     <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleInputChange} className="form-control" placeholder="Confirm Password" required={formMode !== "edit"} />
                   </div>
                   <div className="form-actions">
-                    <button type="submit" className="btn-create">{formMode === "edit" ? "Save Changes" : "Create"}</button>
+                   <button type="submit" className="btn-create" disabled={isSubmitting}>
+  {isSubmitting ? (formMode === "edit" ? "Saving..." : "Creating...") : (formMode === "edit" ? "Save Changes" : "Create")}
+</button>
                     <button type="button" className="btn-cancel" onClick={() => setShowForm(false)}>Cancel</button>
                   </div>
                 </form>

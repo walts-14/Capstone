@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import helmet from "helmet";
 import commRoutes from "./src/services/route/comm.js";
+import cookieParser from "cookie-parser";
 import { verifyConnection as verifySmtp } from "./src/services/mailer.js";
 import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/authRoutes.js";
@@ -39,6 +40,7 @@ app.use(helmet());
 app.get('/health', (_req, res) => res.json({ ok: true }));
 
 app.use('/comm', commRoutes);
+app.use(cookieParser());
 
 app.use("/api", userRoutes);
 app.use("/api", authRoutes);
