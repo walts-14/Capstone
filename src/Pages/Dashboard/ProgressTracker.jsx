@@ -1,3 +1,4 @@
+// ProgressTracker.jsx
 import React, { useContext, useEffect, useState } from "react";
 import { ProgressContext } from "./ProgressContext.jsx";
 import axios from "axios";
@@ -21,6 +22,22 @@ const lessonsByLevel = {
   advanced: ["termsnine", "termsten", "termseleven", "termstwelve"],
 };
 const lessonOffsets = { basic: 0, intermediate: 4, advanced: 8 };
+
+// Utility: unwrap objects that look like module wrappers { default: ... } or nested objects
+const unwrapDefault = (val) => {
+  if (val === null || val === undefined) return "";
+  if (typeof val !== "object") return val;
+  if (Object.prototype.hasOwnProperty.call(val, "default")) return unwrapDefault(val.default);
+  for (const v of Object.values(val)) {
+    if (typeof v !== "object") return v;
+  }
+  try {
+    return JSON.stringify(val);
+  } catch {
+    return String(val);
+  }
+};
+const srcFrom = (img) => unwrapDefault(img);
 
 // New utility to calculate overall progress and current lesson
 const calculateOverallProgress = (progressData) => {
@@ -68,191 +85,24 @@ const calculateOverallProgress = (progressData) => {
   return { overallPercent, currentLesson };
 };
 
-// Integrated StreakButton Component
-function StreakButton() {
-  const { streakData, incrementStreak } = useContext(ProgressContext);
-  const [isOpen, setIsOpen] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [modalShownDate, setModalShownDate] = useState(null);
-  const MODAL_SHOWN_KEY = "streakModalShownDate";
-
-  // On mount, load last shown date from localStorage
-  useEffect(() => {
-    const stored = localStorage.getItem(MODAL_SHOWN_KEY);
-    if (stored) setModalShownDate(stored);
-  }, []);
-
-  const toggle = () => {
-    // Only open the modal for manual view, not the reward modal
-    setIsOpen((v) => !v);
-    // Do NOT set showModal here
-  };
-
-  // Fix close modal function to close both modal states
-  const closeModal = () => {
-    setShowModal(false);
-    setIsOpen(false);
-  };
-
-  // Only run reward modal logic after modalShownDate is loaded
-  useEffect(() => {
-    if (modalShownDate === null) return; // Wait until loaded from localStorage
-    const today = new Date().toDateString();
-    if (modalShownDate === today) return; // Already shown today
-    if (isOpen) return; // Don't show reward modal if info modal is open
-
-    // If streak already updated for today, show modal ONLY if this is the first load for today
-    if (
-      streakData.lastUpdated &&
-      new Date(streakData.lastUpdated).toDateString() === today
-    ) {
-      setShowModal(true);
-      setModalShownDate(today);
-      localStorage.setItem(MODAL_SHOWN_KEY, today);
-      return;
-    }
-
-    // If no lastUpdated and streak is less than 1, increment and show modal (first ever login)
-    if (!streakData.lastUpdated && streakData.currentStreak < 1) {
-      incrementStreak();
-      setShowModal(true);
-      setModalShownDate(today);
-      localStorage.setItem(MODAL_SHOWN_KEY, today);
-      return;
-    }
-
-    // If a day has passed, increment and show modal (first login of a new day)
-    if (streakData.lastUpdated) {
-      const lastDate = new Date(streakData.lastUpdated);
-      const now = new Date();
-      const diffTime = now.getTime() - lastDate.getTime();
-      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-      if (diffDays >= 1) {
-        incrementStreak();
-        setShowModal(true);
-        setModalShownDate(today);
-        localStorage.setItem(MODAL_SHOWN_KEY, today);
-      }
-    }
-    // Add modalShownDate to dependencies so effect only runs after it's loaded
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [streakData.lastUpdated, streakData.currentStreak, modalShownDate]);
-
-  const getStreakReward = (day) => {
-    if (day === 1) return 5;
-    else if (day === 2) return 10;
-    else if (day === 3) return 15;
-    else if (day === 4) return 20;
-    else if (day === 5) return 30;
-    else if (day === 6) return 40;
-    else if (day >= 7) return 50;
-    else return 0;
-  };
-
-  const currentStreakValue =
-    streakData.currentStreak == null ? 1 : streakData.currentStreak;
-
-  return (
-    <>
-      {/* Streak Button */}
-      <button
-        className="flex items-center h-[10vh] w-[6.5vw] rounded-4 px-3 py-2 cursor-pointer absolute right-[25.2rem] top-20"
-        style={{ background: "#271d3e" }}
-        onClick={toggle}
-      >
-        <img src={fire} alt="streak" className="h-auto w-12" />
-        <div className="flex flex-col">
-          <div className="text-white text-4xl mx-2 h-[45px]">
-            {currentStreakValue}
-          </div>
-          <span className="text-[#878194] self-end text-base leading-4">
-            Day <br /> Streak
-          </span>
-        </div>
-      </button>
-
-      {/* Manual Info Modal */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[9999]"
-          onClick={closeModal}
-        >
-          <div
-            className="text-white p-8 rounded-3xl w-[70%] h-[45vh] max-w-[500px] text-center border-4 gap-2 mr-40"
-            style={{ background: "#100429", borderColor: "#FF6536" }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Header with flame icon + number */}
-            <div className="flex items-center justify-center gap-2 h-[10vh]">
-              <div className="text-[6.5rem] font-bold">
-                {currentStreakValue}
-              </div>
-              <img src={fire} alt="flame" className="w-20 h-auto mb-4" />
-            </div>
-            <h2 className="text-3xl mb-4 uppercase">DAY STREAK!</h2>
-            <p className="text-2xl mb-4 opacity-80">
-              Learn new FSL to earn points and build streak
-            </p>
-            <div className="flex items-center justify-center gap-2 mb-10 h-[50px]">
-              <img src={medal} alt="medal" className="w-14 h-auto" />
-              <span className="text-6xl font-bold text-yellow-400">
-                +{getStreakReward(currentStreakValue)}
-              </span>
-            </div>
-            <button
-              className="py-2 px-4 border-none text-white rounded-lg cursor-pointer text-2xl w-full"
-              style={{ background: "#c0392b" }}
-              onClick={closeModal}
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Reward Modal */}
-      {showModal && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[9999]"
-          onClick={closeModal}
-        >
-          <div
-            className="text-white p-8 rounded-5xl w-[70%] h-[45vh] max-w-[500px] text-center border-4 gap-2 mr-40"
-            style={{ background: "#100429", borderColor: "#FF6536" }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Header with flame icon + number */}
-            <div className="flex items-center justify-center gap-2 h-[10vh]">
-              <div className="text-[6.5rem] font-bold">
-                {currentStreakValue}
-              </div>
-              <img src={fire} alt="flame" className="w-20 h-auto mb-4" />
-            </div>
-            <h2 className="text-3xl mb-4 uppercase">DAY STREAK!</h2>
-            <p className="text-2xl mb-4 opacity-80">
-              Learn new FSL to earn points and build streak
-            </p>
-            <div className="flex items-center justify-center gap-2 mb-10 h-[50px]">
-              <img src={medal} alt="medal" className="w-14 h-auto" />
-              <span className="text-6xl font-bold text-yellow-400">
-                +{getStreakReward(currentStreakValue)}
-              </span>
-            </div>
-            <button
-              className="py-2 px-4 border-none text-white rounded-lg cursor-pointer text-2xl w-full"
-              style={{ background: "#c0392b" }}
-              onClick={closeModal}
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
-    </>
-  );
-}
-
 export default function ProgressTracker({ student }) {
+  // Recursively sanitize any object with a 'default' key
+  const sanitizeObjectRecursive = (data) => {
+    if (typeof data === "object" && data !== null) {
+      if (data.default) return sanitizeObjectRecursive(data.default);
+      const sanitized = Array.isArray(data) ? [] : {};
+      for (const key in data) {
+        sanitized[key] = sanitizeObjectRecursive(data[key]);
+      }
+      return sanitized;
+    }
+    return data;
+  };
+
+  // Sanitize the student prop early (safe — uses only the prop)
+  const sanitizedStudent = sanitizeObjectRecursive(student);
+
+  // Get context (must come before state initialization that uses it)
   const {
     progressData: contextProgressData,
     streakData,
@@ -261,37 +111,68 @@ export default function ProgressTracker({ student }) {
     currentUserEmail,
   } = useContext(ProgressContext);
 
-  // Display the username: prioritize the student prop when showing someone else's progress
+  // Which email to fetch progress for
+  const studentEmail = sanitizedStudent?.email || currentUserEmail || "";
+
+  // Display username (unwrap any `.default` or module-like object)
   const [displayUsername, setDisplayUsername] = useState(
-    student?.username ||
-      currentUserUsername ||
-      localStorage.getItem("userUsername") ||
-      "UnknownStudent"
+    unwrapDefault(sanitizedStudent?.username) || currentUserUsername || localStorage.getItem("userUsername") || "UnknownStudent"
   );
 
   useEffect(() => {
-    // Always get the latest username from props/context/localStorage
     setDisplayUsername(
-      student?.username ||
-        currentUserUsername ||
-        localStorage.getItem("userUsername") ||
-        "UnknownStudent"
+      unwrapDefault(sanitizedStudent?.username) || currentUserUsername || localStorage.getItem("userUsername") || "UnknownStudent"
     );
-  }, [student, currentUserUsername]);
+  }, [sanitizedStudent, currentUserUsername]);
 
-  // Rank: still matching by the API's `name` field against currentUserName
+  // Rank
   const [userRank, setUserRank] = useState(null);
 
-  // Which email to fetch progress for
-  const studentEmail = student?.email || currentUserEmail;
-  const [progressData, setProgressData] = useState(contextProgressData);
-  const targetName = student?.name?.trim() || currentUserName?.trim() || "";
+  // Initialize progressData state using a sanitized copy of contextProgressData
+  const sanitizeProgressRecursive = (data) => {
+    if (typeof data === "object" && data !== null) {
+      if (data.default) {
+        return sanitizeProgressRecursive(data.default);
+      }
+      const sanitized = Array.isArray(data) ? [] : {};
+      for (const key in data) {
+        sanitized[key] = sanitizeProgressRecursive(data[key]);
+      }
+      return sanitized;
+    }
+    return data;
+  };
+  const [progressData, setProgressData] = useState(sanitizeProgressRecursive(contextProgressData));
+
+  const targetName = unwrapDefault(sanitizedStudent?.name)?.trim() || (currentUserName || "").trim() || "";
+
+  // Defensive logger (will not throw)
+  const logDefaultObjects = (data, path = "root") => {
+    try {
+      if (typeof data === "object" && data !== null) {
+        if (data.default) {
+          console.warn(`Found {default: ...} object at path: ${path}`, data);
+        }
+        for (const key in data) {
+          logDefaultObjects(data[key], `${path}.${key}`);
+        }
+      }
+    } catch (e) {
+      // don't let logger crash the app
+      console.warn("logDefaultObjects error:", e);
+    }
+  };
+
+  // Log sanitized copies (safe)
+  logDefaultObjects(sanitizedStudent, "prop.student");
+  logDefaultObjects(progressData, "state.progressData");
+  logDefaultObjects(contextProgressData, "context.progressData");
 
   // Calculate overall progress and current lesson
-  const { overallPercent, currentLesson } =
-    calculateOverallProgress(progressData);
+  const sanitizedProgressData = sanitizeProgressRecursive(progressData);
+  const { overallPercent, currentLesson } = calculateOverallProgress(sanitizedProgressData);
 
-  // ———— Leaderboard effect ————
+  // Leaderboard effect
   useEffect(() => {
     if (!targetName) {
       setUserRank("Unranked");
@@ -303,9 +184,8 @@ export default function ProgressTracker({ student }) {
           headers: axios.defaults.headers.common,
         });
         const sorted = [...data].sort((a, b) => b.points - a.points);
-        // match on the student's name
         const idx = sorted.findIndex(
-          (u) => u.name.trim().toLowerCase() === targetName.toLowerCase()
+          u => (unwrapDefault(u.name) || "").trim().toLowerCase() === targetName.toLowerCase()
         );
         setUserRank(idx >= 0 ? idx + 1 : "Unranked");
       } catch (err) {
@@ -315,22 +195,24 @@ export default function ProgressTracker({ student }) {
     })();
   }, [targetName]);
 
-  // ———— Progress fetch effect ————
+  // Progress fetch effect
   useEffect(() => {
     if (!studentEmail) {
-      setProgressData(contextProgressData);
+      setProgressData(sanitizeProgressRecursive(contextProgressData));
       return;
     }
     (async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/progress/email/${studentEmail}`,
+          `http://localhost:5000/api/progress/email/${encodeURIComponent(studentEmail)}`,
           { headers: axios.defaults.headers.common }
         );
-        setProgressData(res.data.progress || contextProgressData);
+        // guard against module wrappers:
+        const incoming = res?.data?.progress || contextProgressData;
+        setProgressData(sanitizeProgressRecursive(incoming));
       } catch (err) {
         console.error("Error fetching progress:", err);
-        setProgressData(contextProgressData);
+        setProgressData(sanitizeProgressRecursive(contextProgressData));
       }
     })();
   }, [studentEmail, contextProgressData]);
@@ -340,6 +222,8 @@ export default function ProgressTracker({ student }) {
     intermediate: { backgroundColor: "#947809" },
     advanced: { backgroundColor: "#86271E" },
   };
+
+  const trophySrc = srcFrom(trophy);
 
   return (
     <>
@@ -354,20 +238,14 @@ export default function ProgressTracker({ student }) {
           }}
         >
           <img
-            src={trophy}
-            className="h-auto mt-4 ml-3 mb-3 max-w-full"
+            src={trophySrc}
+            className="h-auto mt-4 ms-3 mb-3 img-fluid"
             alt="trophy"
           />
-          <p className="text-4xl text-center ml-2 pt-2 pl-1">
-            {userRank == null
-              ? "..."
-              : typeof userRank === "number"
-              ? `#${userRank}`
-              : "Unranked"}
+          <p className="fs-1 text-center ms-2">
+            {userRank == null ? "..." : (typeof userRank === "number" ? `#${userRank}` : String(userRank))}
           </p>
-          <p className="whitespace-nowrap text-3xl pt-2 pl-5">
-            {displayUsername}
-          </p>
+          <p className="text-nowrap fs-2">{unwrapDefault(displayUsername)}</p>
         </div>
       </div>
 
@@ -409,9 +287,9 @@ export default function ProgressTracker({ student }) {
             </div>
 
             {lessonsByLevel[level].map((lessonKey, idx) => {
-              const prog = progressData[level]?.[lessonKey] || {};
-              const pct = calculateProgress(prog);
-              const lbl = `Lesson ${lessonOffsets[level] + idx + 1}`;
+              const prog = sanitizedProgressData[level]?.[lessonKey] || {};
+              const pct  = calculateProgress(prog);
+              const lbl  = `Lesson ${lessonOffsets[level] + idx + 1}`;
               return (
                 <div
                   key={lessonKey}

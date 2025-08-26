@@ -19,11 +19,12 @@ function LoginForm() {
     e.preventDefault();
   
     try {
-      const response = await axios.post("http://localhost:5000/api/login", {
-        email: data.email,
-        password: data.password,
-      });
-  
+     const response = await axios.post("http://localhost:5000/api/login", {
+     email: data.email.trim(),
+     password: data.password.trim(),
+});
+
+
       console.log("📩 Login response:", response.data);
   
       if (response.status === 200 && response.data.status === "ok") {

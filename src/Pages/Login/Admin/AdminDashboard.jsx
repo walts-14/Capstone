@@ -1,4 +1,3 @@
- 
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { FaUserPlus } from "react-icons/fa";
@@ -8,11 +7,12 @@ import EditIcon from "../../../assets/Edit.png";
 import RemoveIcon from "../../../assets/Remove.png";
 import "../../../css/Admin.css";
 import "../../../css/ProgressModal.css";
-import axios from "axios";
+import axios from "../../api.js";
 import toast from "react-hot-toast";
 import LbComponent from "../../Leaderboard/LbComponent";
 import ProgressTracker from "../../Dashboard/ProgressTracker";
 import SidenavAdmins from "../../../Components/SidenavAdmins.jsx";
+import QRModal from "../../../Components/QRCode/QRModal.jsx";
 
 const DashboardAdmin = () => {
   const navigate = useNavigate();
@@ -25,8 +25,28 @@ const DashboardAdmin = () => {
   const [showProgressTracker, setShowProgressTracker] = useState(null); // store user object or null
   const [leaderboard, setLeaderboard] = useState([]);
   const [selectedUserRank, setSelectedUserRank] = useState(null);
+
+const [qrModalVisible, setQrModalVisible] = useState(false);
+const [qrDataUrl, setQrDataUrl] = useState(null);
+const [magicUrl, setMagicUrl] = useState(null);
+const [qrStudentEmail, setQrStudentEmail] = useState(null);
+const [isSubmitting, setIsSubmitting] = useState(false); // To prevent multiple submissions
+
+  // Helper to sanitize progress data if it has a 'default' key
+  const sanitizeProgress = (progress) => {
+    if (progress && typeof progress === 'object' && progress.default) {
+      return progress.default;
+    }
+    return progress;
+  };
+
   const handleClick = (user) => {
-    setShowProgressTracker(user);
+    // If user has a progress property, sanitize it
+    const sanitizedUser = {
+      ...user,
+      progress: sanitizeProgress(user.progress)
+    };
+    setShowProgressTracker(sanitizedUser);
   };
   const handleClose = () => {
     setShowProgressTracker(null);
@@ -88,59 +108,69 @@ const DashboardAdmin = () => {
     setFormData((p) => ({ ...p, [name]: value }));
   };
 
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-    if (formData.password && formData.password !== formData.confirmPassword) {
-      return toast.error("Passwords do not match!");
-    }
-    if (
-      !formData.name ||
-      !formData.username ||
-      !formData.email ||
-      !formData.yearLevel
-    ) {
-      return toast.error("All fields are required!");
-    }
+const handleFormSubmit = async (e) => {
+  e.preventDefault();
 
-    try {
-      let response;
-      if (formData.id) {
-        // Prepare update payload for editing
-        const updatePayload = {
-          username: formData.username,
-          name: formData.name,
-          yearLevel: formData.yearLevel,
-        };
-        // Only include password if set
-        if (formData.password) updatePayload.password = formData.password;
-        // Only include newEmail if email was changed
-        if (formData.email !== formData.id) updatePayload.newEmail = formData.email;
+  if (formData.password && formData.password !== formData.confirmPassword) {
+    return toast.error("Passwords do not match!");
+  }
+  if (!formData.name || !formData.username || !formData.email || !formData.yearLevel) {
+    return toast.error("All fields are required!");
+  }
 
-        response = await axios.put(
-          `/api/admin/students/${encodeURIComponent(formData.id)}`,
-          updatePayload,
-          {
-            baseURL: "http://localhost:5000",
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-      } else {
-        // Create new student
-        response = await axios.post(`/api/admin/students`, formData, {
-          baseURL: "http://localhost:5000",
-          headers: { Authorization: `Bearer ${token}` },
-        });
+  setIsSubmitting(true);
+
+  try {
+    let response;
+
+    if (formData.id) {
+      // Prepare update payload for editing
+      const updatePayload = {
+        username: formData.username,
+        name: formData.name,
+        yearLevel: formData.yearLevel,
+      };
+      // Only include password if set
+      if (formData.password) updatePayload.password = formData.password;
+      // Only include newEmail if email was changed
+      if (formData.email !== formData.id) updatePayload.newEmail = formData.email;
+
+      // Use global axios config (baseURL + auth set in src/api.js)
+      response = await axios.put(
+        `/api/admin/students/${encodeURIComponent(formData.id)}`,
+        updatePayload
+      );
+    } else {
+      // Create new student
+      response = await axios.post(`/api/admin/students`, formData);
+
+      // If backend returns qrDataUrl & magicUrl show modal for printing
+      const returned = response?.data?.data;
+      if (returned?.qrDataUrl) {
+        setQrDataUrl(returned.qrDataUrl);
+        setMagicUrl(returned.magicUrl || "");
+        setQrStudentEmail(formData.email);
+        setQrModalVisible(true);
       }
-      toast.success(response.data.message);
-      await fetchStudents(selectedGrade);
-      setShowDeleteModal(false);
-      setUserToDelete(null);
-      setShowForm(false);
-    } catch (err) {
-      console.error("Error submitting form:", err.response?.data || err);
-      toast.error("Failed to submit form.");
+
+      // Clear sensitive fields
+      setFormData((p) => ({ ...p, password: "", confirmPassword: "" }));
     }
-  };
+
+    toast.success(response?.data?.message || "Operation successful");
+    await fetchStudents(selectedGrade);
+    setShowDeleteModal(false);
+    setUserToDelete(null);
+    setShowForm(false);
+  } catch (err) {
+    console.error("Error submitting form:", err?.response?.data || err);
+    const serverMsg = err?.response?.data?.message || err?.response?.data?.error || err.message;
+    toast.error(serverMsg || "Failed to submit form.");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   const handleEditUser = (user) => {
     setFormData({
@@ -373,6 +403,17 @@ const DashboardAdmin = () => {
             </div>
           )}
 
+{/* QR Modal */}
+{qrModalVisible && (
+  <QRModal
+    visible={qrModalVisible}
+    onClose={() => setQrModalVisible(false)}
+    dataUrl={qrDataUrl}
+    magicUrl={magicUrl}
+    studentEmail={qrStudentEmail}
+  />
+)}
+
           <div className="logout-container">
             <button className="btn-logout" onClick={logout}>
               Logout
@@ -453,9 +494,9 @@ const DashboardAdmin = () => {
                     />
                   </div>
                   <div className="form-actions">
-                    <button type="submit" className="btn-create">
-                      {formData.id ? "Save Changes" : "Create"}
-                    </button>
+                    <button type="submit" className="btn-create" disabled={isSubmitting}>
+  {isSubmitting ? (formData.id ? "Saving..." : "Creating...") : (formData.id ? "Save Changes" : "Create")}
+</button>
                     <button
                       type="button"
                       className="btn-cancel"
