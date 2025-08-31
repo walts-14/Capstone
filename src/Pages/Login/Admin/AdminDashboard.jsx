@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { FaUserPlus } from "react-icons/fa";
+import { FaUserPlus, FaBell } from "react-icons/fa";
 import DashboardIcon from "../../../assets/dashboardlogo.png";
 import LeaderboardIcon from "../../../assets/leaderboardicon.png";
 import EditIcon from "../../../assets/Edit.png";
@@ -26,15 +26,33 @@ const DashboardAdmin = () => {
   const [leaderboard, setLeaderboard] = useState([]);
   const [selectedUserRank, setSelectedUserRank] = useState(null);
 
-const [qrModalVisible, setQrModalVisible] = useState(false);
-const [qrDataUrl, setQrDataUrl] = useState(null);
-const [magicUrl, setMagicUrl] = useState(null);
-const [qrStudentEmail, setQrStudentEmail] = useState(null);
-const [isSubmitting, setIsSubmitting] = useState(false); // To prevent multiple submissions
+  const [qrModalVisible, setQrModalVisible] = useState(false);
+  const [qrDataUrl, setQrDataUrl] = useState(null);
+  const [magicUrl, setMagicUrl] = useState(null);
+  const [qrStudentEmail, setQrStudentEmail] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false); // To prevent multiple submissions
+
+  const [showNotificationModal, setShowNotificationModal] = useState(false);
+
+  // Example notifications data (replace with your actual data source)
+  const notifications = [
+    {
+      grade: "GRADE 7",
+      users: ["Stepehn curry"],
+      message:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in",
+    },
+    {
+      grade: "GRADE 8",
+      users: ["finn", "jake"],
+      message:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in",
+    },
+  ];
 
   // Helper to sanitize progress data if it has a 'default' key
   const sanitizeProgress = (progress) => {
-    if (progress && typeof progress === 'object' && progress.default) {
+    if (progress && typeof progress === "object" && progress.default) {
       return progress.default;
     }
     return progress;
@@ -44,7 +62,7 @@ const [isSubmitting, setIsSubmitting] = useState(false); // To prevent multiple 
     // If user has a progress property, sanitize it
     const sanitizedUser = {
       ...user,
-      progress: sanitizeProgress(user.progress)
+      progress: sanitizeProgress(user.progress),
     };
     setShowProgressTracker(sanitizedUser);
   };
@@ -108,69 +126,77 @@ const [isSubmitting, setIsSubmitting] = useState(false); // To prevent multiple 
     setFormData((p) => ({ ...p, [name]: value }));
   };
 
-const handleFormSubmit = async (e) => {
-  e.preventDefault();
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
 
-  if (formData.password && formData.password !== formData.confirmPassword) {
-    return toast.error("Passwords do not match!");
-  }
-  if (!formData.name || !formData.username || !formData.email || !formData.yearLevel) {
-    return toast.error("All fields are required!");
-  }
-
-  setIsSubmitting(true);
-
-  try {
-    let response;
-
-    if (formData.id) {
-      // Prepare update payload for editing
-      const updatePayload = {
-        username: formData.username,
-        name: formData.name,
-        yearLevel: formData.yearLevel,
-      };
-      // Only include password if set
-      if (formData.password) updatePayload.password = formData.password;
-      // Only include newEmail if email was changed
-      if (formData.email !== formData.id) updatePayload.newEmail = formData.email;
-
-      // Use global axios config (baseURL + auth set in src/api.js)
-      response = await axios.put(
-        `/api/admin/students/${encodeURIComponent(formData.id)}`,
-        updatePayload
-      );
-    } else {
-      // Create new student
-      response = await axios.post(`/api/admin/students`, formData);
-
-      // If backend returns qrDataUrl & magicUrl show modal for printing
-      const returned = response?.data?.data;
-      if (returned?.qrDataUrl) {
-        setQrDataUrl(returned.qrDataUrl);
-        setMagicUrl(returned.magicUrl || "");
-        setQrStudentEmail(formData.email);
-        setQrModalVisible(true);
-      }
-
-      // Clear sensitive fields
-      setFormData((p) => ({ ...p, password: "", confirmPassword: "" }));
+    if (formData.password && formData.password !== formData.confirmPassword) {
+      return toast.error("Passwords do not match!");
+    }
+    if (
+      !formData.name ||
+      !formData.username ||
+      !formData.email ||
+      !formData.yearLevel
+    ) {
+      return toast.error("All fields are required!");
     }
 
-    toast.success(response?.data?.message || "Operation successful");
-    await fetchStudents(selectedGrade);
-    setShowDeleteModal(false);
-    setUserToDelete(null);
-    setShowForm(false);
-  } catch (err) {
-    console.error("Error submitting form:", err?.response?.data || err);
-    const serverMsg = err?.response?.data?.message || err?.response?.data?.error || err.message;
-    toast.error(serverMsg || "Failed to submit form.");
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+    setIsSubmitting(true);
 
+    try {
+      let response;
+
+      if (formData.id) {
+        // Prepare update payload for editing
+        const updatePayload = {
+          username: formData.username,
+          name: formData.name,
+          yearLevel: formData.yearLevel,
+        };
+        // Only include password if set
+        if (formData.password) updatePayload.password = formData.password;
+        // Only include newEmail if email was changed
+        if (formData.email !== formData.id)
+          updatePayload.newEmail = formData.email;
+
+        // Use global axios config (baseURL + auth set in src/api.js)
+        response = await axios.put(
+          `/api/admin/students/${encodeURIComponent(formData.id)}`,
+          updatePayload
+        );
+      } else {
+        // Create new student
+        response = await axios.post(`/api/admin/students`, formData);
+
+        // If backend returns qrDataUrl & magicUrl show modal for printing
+        const returned = response?.data?.data;
+        if (returned?.qrDataUrl) {
+          setQrDataUrl(returned.qrDataUrl);
+          setMagicUrl(returned.magicUrl || "");
+          setQrStudentEmail(formData.email);
+          setQrModalVisible(true);
+        }
+
+        // Clear sensitive fields
+        setFormData((p) => ({ ...p, password: "", confirmPassword: "" }));
+      }
+
+      toast.success(response?.data?.message || "Operation successful");
+      await fetchStudents(selectedGrade);
+      setShowDeleteModal(false);
+      setUserToDelete(null);
+      setShowForm(false);
+    } catch (err) {
+      console.error("Error submitting form:", err?.response?.data || err);
+      const serverMsg =
+        err?.response?.data?.message ||
+        err?.response?.data?.error ||
+        err.message;
+      toast.error(serverMsg || "Failed to submit form.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const handleEditUser = (user) => {
     setFormData({
@@ -252,7 +278,32 @@ const handleFormSubmit = async (e) => {
           </div>
 
           <div className="table-container">
-            <div className="Create">
+            <div
+              className="Create"
+              style={{
+                display: "flex",
+                gap: "1rem",
+                justifyContent: "flex-end",
+              }}
+            >
+              {/* Notification Button */}
+              <button
+                className="btn text-light px-1 py-1"
+                style={{
+                  backgroundColor: "#4A2574",
+                  color: "#FFF",
+                  borderRadius: 10,
+                  fontWeight: "bold",
+                  fontSize: "1.5rem",
+                  padding: "30px",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+                onClick={() => setShowNotificationModal(true)}
+              >
+                <FaBell />
+              </button>
+              {/* Create Button */}
               <button
                 className="btn text-light px-1 py-1"
                 style={{
@@ -282,7 +333,7 @@ const handleFormSubmit = async (e) => {
               </button>
             </div>
 
-          {/* Updated table with wrapper for scrolling */}
+            {/* Updated table with wrapper for scrolling */}
             <div className="contentdiv">
               <div className="table-wrapper">
                 <table className="dashboard-table text-light">
@@ -334,9 +385,9 @@ const handleFormSubmit = async (e) => {
                                 setShowDeleteModal(true);
                               }}
                             />
-      </div>
-    </td>
-  </tr>
+                          </div>
+                        </td>
+                      </tr>
                     ))}
                   </tbody>
                 </table>
@@ -349,36 +400,44 @@ const handleFormSubmit = async (e) => {
             <div
               className="modal-overlay"
               style={{
-                position: 'fixed',
+                position: "fixed",
                 top: 0,
                 left: 0,
-                width: '100vw',
-                height: '100vh',
+                width: "100vw",
+                height: "100vh",
                 zIndex: 4000,
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                background: 'rgba(0,0,0,0.3)',
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                background: "rgba(0,0,0,0.3)",
               }}
             >
               <div
                 className="modal-content"
                 style={{
-                  width: '440px',
-                  maxWidth: '95vw',
-                  padding: '1.5rem 1.5rem',
-                  borderRadius: '16px',
-                  boxShadow: '0 8px 32px rgba(0,0,0,0.2)',
-                  background: '#fff',
-                  color: '#222',
-                  textAlign: 'center',
-                  position: 'relative',
-                  marginRight: '10%',
+                  width: "440px",
+                  maxWidth: "95vw",
+                  padding: "1.5rem 1.5rem",
+                  borderRadius: "16px",
+                  boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
+                  background: "#fff",
+                  color: "#222",
+                  textAlign: "center",
+                  position: "relative",
+                  marginRight: "10%",
                 }}
               >
                 <h3>Confirm Deletion</h3>
                 <p>Are you sure you want to delete this user?</p>
-                <div className="modal-actions" style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '1.5rem' }}>
+                <div
+                  className="modal-actions"
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    gap: "1rem",
+                    marginTop: "1.5rem",
+                  }}
+                >
                   <button
                     className="btn btn-danger"
                     onClick={async () => {
@@ -403,16 +462,16 @@ const handleFormSubmit = async (e) => {
             </div>
           )}
 
-{/* QR Modal */}
-{qrModalVisible && (
-  <QRModal
-    visible={qrModalVisible}
-    onClose={() => setQrModalVisible(false)}
-    dataUrl={qrDataUrl}
-    magicUrl={magicUrl}
-    studentEmail={qrStudentEmail}
-  />
-)}
+          {/* QR Modal */}
+          {qrModalVisible && (
+            <QRModal
+              visible={qrModalVisible}
+              onClose={() => setQrModalVisible(false)}
+              dataUrl={qrDataUrl}
+              magicUrl={magicUrl}
+              studentEmail={qrStudentEmail}
+            />
+          )}
 
           <div className="logout-container">
             <button className="btn-logout" onClick={logout}>
@@ -494,9 +553,19 @@ const handleFormSubmit = async (e) => {
                     />
                   </div>
                   <div className="form-actions">
-                    <button type="submit" className="btn-create" disabled={isSubmitting}>
-  {isSubmitting ? (formData.id ? "Saving..." : "Creating...") : (formData.id ? "Save Changes" : "Create")}
-</button>
+                    <button
+                      type="submit"
+                      className="btn-create"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting
+                        ? formData.id
+                          ? "Saving..."
+                          : "Creating..."
+                        : formData.id
+                        ? "Save Changes"
+                        : "Create"}
+                    </button>
                     <button
                       type="button"
                       className="btn-cancel"
@@ -553,6 +622,109 @@ const handleFormSubmit = async (e) => {
               </div>
 
               <ProgressTracker student={showProgressTracker} />
+            </div>
+          )}
+
+          {/* Notification Modal */}
+          {showNotificationModal && (
+            <div
+              style={{
+                position: "fixed",
+                top: "16%",
+                left: "25%",
+                width: "50vw",
+                minWidth: "350px",
+                zIndex: 5000,
+                background: "#1a1230",
+                borderRadius: "20px",
+                border: "2px solid #7338a0",
+                boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
+                color: "#fff",
+                padding: "2rem",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start",
+              }}
+            >
+              <h1
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "2.5rem",
+                  marginBottom: "2rem",
+                }}
+              >
+                Notification
+              </h1>
+              <div style={{ width: "100%" }}>
+                {notifications.map((notif, idx) => (
+                  <div
+                    key={idx}
+                    style={{
+                      background: "#2d2544",
+                      borderRadius: "10px",
+                      marginBottom: "1rem",
+                      padding: "1rem",
+                      color: "#fff",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "0.5rem",
+                        marginBottom: "0.5rem",
+                      }}
+                    >
+                      <span
+                        style={{
+                          background: "#7338a0",
+                          color: "#fff",
+                          borderRadius: "8px",
+                          padding: "0.2rem 0.8rem",
+                          fontWeight: "bold",
+                          fontSize: "1rem",
+                        }}
+                      >
+                        {notif.grade}
+                      </span>
+                      {notif.users.map((user, i) => (
+                        <span
+                          key={i}
+                          style={{
+                            background: "#b9b6c9",
+                            color: "#222",
+                            borderRadius: "8px",
+                            padding: "0.2rem 0.8rem",
+                            fontWeight: "bold",
+                            fontSize: "1rem",
+                          }}
+                        >
+                          {user}
+                        </span>
+                      ))}
+                    </div>
+                    <div style={{ color: "#fff", fontSize: "1rem" }}>
+                      {notif.message}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <button
+                style={{
+                  alignSelf: "flex-end",
+                  marginTop: "1rem",
+                  background: "#7338a0",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: "10px",
+                  padding: "0.5rem 2rem",
+                  fontWeight: "bold",
+                  fontSize: "1.2rem",
+                  cursor: "pointer",
+                }}
+                onClick={() => setShowNotificationModal(false)}
+              >
+                Close
+              </button>
             </div>
           )}
         </>

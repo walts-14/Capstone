@@ -19,7 +19,8 @@ import "../../../css/ProgressModal.css";
 const unwrapDefault = (val) => {
   if (val === null || val === undefined) return "";
   if (typeof val !== "object") return val;
-  if (Object.prototype.hasOwnProperty.call(val, "default")) return unwrapDefault(val.default);
+  if (Object.prototype.hasOwnProperty.call(val, "default"))
+    return unwrapDefault(val.default);
   for (const v of Object.values(val)) {
     if (typeof v !== "object") return v;
   }
@@ -38,11 +39,16 @@ const sanitizeProgress = (progress) => {
   for (const k in progress) {
     if (Object.prototype.hasOwnProperty.call(progress, k)) {
       const v = progress[k];
-      if (v && typeof v === "object" && v.default) sanitized[k] = sanitizeProgress(v.default);
+      if (v && typeof v === "object" && v.default)
+        sanitized[k] = sanitizeProgress(v.default);
       else if (v && typeof v === "object") {
         // shallow sanitize lesson parts
         const sub = Array.isArray(v) ? [] : {};
-        for (const sk in v) sub[sk] = (v[sk] && typeof v[sk] === "object" && v[sk].default) ? sanitizeProgress(v[sk].default) : v[sk];
+        for (const sk in v)
+          sub[sk] =
+            v[sk] && typeof v[sk] === "object" && v[sk].default
+              ? sanitizeProgress(v[sk].default)
+              : v[sk];
         sanitized[k] = sub;
       } else sanitized[k] = v;
     }
@@ -73,6 +79,7 @@ const SuperAdmin = () => {
     student: "",
     content: "",
   });
+  const [editingMessage, setEditingMessage] = useState(null);
 
   // Handler for plus button
   const handlePlusClick = () => {
@@ -81,6 +88,7 @@ const SuperAdmin = () => {
   const handleMessageFormClose = () => {
     setShowMessageForm(false);
     setNewMessage({ teacher: "", grade: "", student: "", content: "" });
+    setEditingMessage(null);
   };
   // Handler for form input
   const handleMessageInputChange = (e) => {
@@ -99,18 +107,37 @@ const SuperAdmin = () => {
       toast.error("Please fill out all fields.");
       return;
     }
-    setMessages((prev) => [
-      ...prev,
-      {
-        id: prev.length + 1,
-        sender: newMessage.teacher,
-        grade: newMessage.grade,
-        recipient: newMessage.student,
-        content: newMessage.content,
-      },
-    ]);
+    if (editingMessage) {
+      // Edit existing message
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === editingMessage.id
+            ? {
+                ...msg,
+                sender: newMessage.teacher,
+                grade: newMessage.grade,
+                recipient: newMessage.student,
+                content: newMessage.content,
+              }
+            : msg
+        )
+      );
+      toast.success("Message updated!");
+    } else {
+      // Create new message
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: prev.length + 1,
+          sender: newMessage.teacher,
+          grade: newMessage.grade,
+          recipient: newMessage.student,
+          content: newMessage.content,
+        },
+      ]);
+      toast.success("Message sent!");
+    }
     handleMessageFormClose();
-    toast.success("Message sent!");
   };
   // Message popup state
   const [showMessagesPopup, setShowMessagesPopup] = useState(false);
@@ -151,11 +178,10 @@ const SuperAdmin = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-const [qrModalVisible, setQrModalVisible] = useState(false);
-const [qrDataUrl, setQrDataUrl] = useState(null);
-const [magicUrl, setMagicUrl] = useState(null);
-const [qrStudentEmail, setQrStudentEmail] = useState(null);
-
+  const [qrModalVisible, setQrModalVisible] = useState(false);
+  const [qrDataUrl, setQrDataUrl] = useState(null);
+  const [magicUrl, setMagicUrl] = useState(null);
+  const [qrStudentEmail, setQrStudentEmail] = useState(null);
 
   // Prepare a sanitized student object suitable for ProgressTracker
   const sanitizeUserForTracker = (user) => {
@@ -166,7 +192,9 @@ const [qrStudentEmail, setQrStudentEmail] = useState(null);
     const email = unwrapDefault(user.email);
     const yearLevel = unwrapDefault(user.yearLevel);
     // Only sanitize progress shape — ProgressTracker expects progress grouped by level/lesson
-    const progress = sanitizeProgress(user.progress || user.progress === null ? user.progress : null);
+    const progress = sanitizeProgress(
+      user.progress || user.progress === null ? user.progress : null
+    );
 
     return {
       ...user,
@@ -180,8 +208,12 @@ const [qrStudentEmail, setQrStudentEmail] = useState(null);
 
   const handleClick = (user) => {
     // Sanitize minimal fields and progress, then open tracker
-    const sanitizedUser = sanitizeUserForTracker(user) || sanitizeObjectRecursive(user);
-    console.log("SuperAdmin: opening ProgressTracker for", sanitizedUser?.email || sanitizedUser?.username || sanitizedUser);
+    const sanitizedUser =
+      sanitizeUserForTracker(user) || sanitizeObjectRecursive(user);
+    console.log(
+      "SuperAdmin: opening ProgressTracker for",
+      sanitizedUser?.email || sanitizedUser?.username || sanitizedUser
+    );
     setShowProgressTracker(sanitizedUser);
   };
 
@@ -199,7 +231,8 @@ const [qrStudentEmail, setQrStudentEmail] = useState(null);
   });
 
   useEffect(() => {
-    if (token) axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    if (token)
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     fetchUsers();
     fetchTeachers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -213,7 +246,7 @@ const [qrStudentEmail, setQrStudentEmail] = useState(null);
       const res = await axios.get(url, { baseURL: "http://localhost:5000" });
       const raw = res.data.data || [];
       // Keep raw list but sanitize each user shallowly so UI renders safely
-      setUsers(raw.map(u => sanitizeObjectRecursive(u)));
+      setUsers(raw.map((u) => sanitizeObjectRecursive(u)));
     } catch (err) {
       console.error(err);
       toast.error("Failed to load users.");
@@ -227,7 +260,7 @@ const [qrStudentEmail, setQrStudentEmail] = useState(null);
         : `/api/superadmin/admins`;
       const res = await axios.get(url, { baseURL: "http://localhost:5000" });
       const raw = res.data.data || [];
-      setTeachers(raw.map(t => sanitizeObjectRecursive(t)));
+      setTeachers(raw.map((t) => sanitizeObjectRecursive(t)));
     } catch (err) {
       console.error(err);
       toast.error("Failed to load teachers.");
@@ -269,69 +302,74 @@ const [qrStudentEmail, setQrStudentEmail] = useState(null);
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-const handleFormSubmit = async (e) => {
-  e.preventDefault();
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
 
-  // basic client validation
-  if (formData.password !== formData.confirmPassword) {
-    return toast.error("Passwords do not match!");
-  }
-  if (!formData.name || !formData.username || !formData.email) {
-    return toast.error("All fields are required!");
-  }
-
-  setIsSubmitting(true);
-
-  try {
-    const payload = {
-      name: formData.name,
-      username: formData.username,
-      email: formData.email,
-      password: formData.password || undefined,
-      yearLevel: formData.yearLevel || undefined,
-      role: activeTab === "Teachers" ? "admin" : "user",
-    };
-
-    // Build URL depending on create/edit
-    const urlBase = formMode === "edit"
-      ? (activeTab === "Users"
-          ? `/api/superadmin/users/${encodeURIComponent(formData.email)}`
-          : `/api/superadmin/admins/${encodeURIComponent(formData.email)}`)
-      : "/api/superadmin/create-account";
-
-    const method = formMode === "edit" ? axios.put : axios.post;
-
-    // CALL backend and capture response
-    const res = await method(urlBase, payload); // uses axios baseURL from src/api.js
-    console.log("create-account response:", res?.data);
-
-    // IMPORTANT FIX: show QR modal when we just CREATED (formMode !== "edit")
-    // previously code used `if (!formMode && returned?.qrDataUrl)` which never ran
-    const returned = res?.data?.data;
-    if (formMode !== "edit" && returned?.qrDataUrl) {
-      setQrDataUrl(returned.qrDataUrl);
-      setMagicUrl(returned.magicUrl || "");
-      setQrStudentEmail(payload.email);
-      setQrModalVisible(true);
-    } else {
-      // helpful debug info
-      if (formMode !== "edit") console.log("No qrDataUrl in response:", returned);
+    // basic client validation
+    if (formData.password !== formData.confirmPassword) {
+      return toast.error("Passwords do not match!");
+    }
+    if (!formData.name || !formData.username || !formData.email) {
+      return toast.error("All fields are required!");
     }
 
-    toast.success(`${formMode === "edit" ? "Updated" : "Created"} ${activeTab}`);
-    await fetchUsers(selectedGrade);
-    await fetchTeachers(selectedGrade);
-    setShowForm(false);
-  } catch (err) {
-    console.error("handleFormSubmit error:", err?.response?.data || err);
-    const serverMsg = err?.response?.data?.message || err?.response?.data?.error || err.message;
-    toast.error(serverMsg || "Failed to submit form.");
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+    setIsSubmitting(true);
 
+    try {
+      const payload = {
+        name: formData.name,
+        username: formData.username,
+        email: formData.email,
+        password: formData.password || undefined,
+        yearLevel: formData.yearLevel || undefined,
+        role: activeTab === "Teachers" ? "admin" : "user",
+      };
 
+      // Build URL depending on create/edit
+      const urlBase =
+        formMode === "edit"
+          ? activeTab === "Users"
+            ? `/api/superadmin/users/${encodeURIComponent(formData.email)}`
+            : `/api/superadmin/admins/${encodeURIComponent(formData.email)}`
+          : "/api/superadmin/create-account";
+
+      const method = formMode === "edit" ? axios.put : axios.post;
+
+      // CALL backend and capture response
+      const res = await method(urlBase, payload); // uses axios baseURL from src/api.js
+      console.log("create-account response:", res?.data);
+
+      // IMPORTANT FIX: show QR modal when we just CREATED (formMode !== "edit")
+      // previously code used `if (!formMode && returned?.qrDataUrl)` which never ran
+      const returned = res?.data?.data;
+      if (formMode !== "edit" && returned?.qrDataUrl) {
+        setQrDataUrl(returned.qrDataUrl);
+        setMagicUrl(returned.magicUrl || "");
+        setQrStudentEmail(payload.email);
+        setQrModalVisible(true);
+      } else {
+        // helpful debug info
+        if (formMode !== "edit")
+          console.log("No qrDataUrl in response:", returned);
+      }
+
+      toast.success(
+        `${formMode === "edit" ? "Updated" : "Created"} ${activeTab}`
+      );
+      await fetchUsers(selectedGrade);
+      await fetchTeachers(selectedGrade);
+      setShowForm(false);
+    } catch (err) {
+      console.error("handleFormSubmit error:", err?.response?.data || err);
+      const serverMsg =
+        err?.response?.data?.message ||
+        err?.response?.data?.error ||
+        err.message;
+      toast.error(serverMsg || "Failed to submit form.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const handleDelete = async (email) => {
     if (!window.confirm("Delete this account?")) return;
@@ -369,7 +407,10 @@ const handleFormSubmit = async (e) => {
       </div>
 
       {showLeaderboard ? (
-        <div className="wrapper-lb" style={{ maxHeight: "100vh", overflowY: "auto" }}>
+        <div
+          className="wrapper-lb"
+          style={{ maxHeight: "100vh", overflowY: "auto" }}
+        >
           <LbComponent />
         </div>
       ) : (
@@ -380,7 +421,9 @@ const handleFormSubmit = async (e) => {
               return (
                 <div
                   key={grade}
-                  className={`level-item ${gradeClass} ${selectedGrade === grade ? "active" : ""}`}
+                  className={`level-item ${gradeClass} ${
+                    selectedGrade === grade ? "active" : ""
+                  }`}
                   onClick={() => handleGradeSelection(grade)}
                 >
                   {grade.toUpperCase()}
@@ -389,7 +432,10 @@ const handleFormSubmit = async (e) => {
             })}
           </div>
 
-          <div className="divtabs d-flex justify-content-center" style={{ zIndex: showProgressTracker ? 1 : 10 }}>
+          <div
+            className="divtabs d-flex justify-content-center"
+            style={{ zIndex: showProgressTracker ? 1 : 10 }}
+          >
             <div className="tabs position-absolute">
               <button
                 className={`tabss ${activeTab === "Users" ? "active" : ""}`}
@@ -704,7 +750,7 @@ const handleFormSubmit = async (e) => {
                             cursor: "pointer",
                           }}
                         >
-                          Send
+                          {editingMessage ? "Update" : "Send"}
                         </button>
                       </form>
                     </div>
@@ -731,7 +777,9 @@ const handleFormSubmit = async (e) => {
                             padding: "1rem",
                             marginBottom: "1rem",
                             color: "#fff",
+                            cursor: "pointer", // Make it look clickable
                           }}
+                          onClick={() => handleEditMessage(msg)}
                         >
                           <div style={{ marginBottom: "0.5rem" }}>
                             <span
@@ -779,6 +827,7 @@ const handleFormSubmit = async (e) => {
                   </div>
                 </div>
               )}
+
               <div>
                 <button
                   className="btn text-light px-1 py-1"
@@ -814,18 +863,30 @@ const handleFormSubmit = async (e) => {
                   </thead>
                   <tbody>
                     {dataToDisplay.map((u, idx) => (
-                      <tr key={unwrapDefault(u.email) || unwrapDefault(u.username) || idx}>
+                      <tr
+                        key={
+                          unwrapDefault(u.email) ||
+                          unwrapDefault(u.username) ||
+                          idx
+                        }
+                      >
                         <td>{unwrapDefault(u.name) || "N/A"}</td>
                         <td>{unwrapDefault(u.username) || "N/A"}</td>
                         <td>{unwrapDefault(u.email) || "N/A"}</td>
-                        {activeTab === "Users" && <td>{unwrapDefault(u.yearLevel) || "N/A"}</td>}
+                        {activeTab === "Users" && (
+                          <td>{unwrapDefault(u.yearLevel) || "N/A"}</td>
+                        )}
                         <td>
                           <div className="action-admin">
                             {activeTab === "Users" && (
                               <button
                                 onClick={() => handleClick(u)}
                                 className="btn text-white fs-5 px-3 py-2 rounded-4"
-                                style={{ backgroundColor: "#2e86c1", border: "none", marginLeft: "2rem" }}
+                                style={{
+                                  backgroundColor: "#2e86c1",
+                                  border: "none",
+                                  marginLeft: "2rem",
+                                }}
                               >
                                 Progress
                               </button>
@@ -842,7 +903,9 @@ const handleFormSubmit = async (e) => {
                               alt="Remove"
                               className="img-action"
                               style={{ marginRight: "50px", cursor: "pointer" }}
-                              onClick={() => handleDelete(unwrapDefault(u.email))}
+                              onClick={() =>
+                                handleDelete(unwrapDefault(u.email))
+                              }
                             />
                           </div>
                         </td>
@@ -854,16 +917,16 @@ const handleFormSubmit = async (e) => {
             </div>
           </div>
 
-                {/* QR Modal */}
-                {qrModalVisible && (
-                  <QRModal
-                    visible={qrModalVisible}
-                    onClose={() => setQrModalVisible(false)}
-                    dataUrl={qrDataUrl}
-                    magicUrl={magicUrl}
-                    studentEmail={qrStudentEmail}
-                  />
-                )}
+          {/* QR Modal */}
+          {qrModalVisible && (
+            <QRModal
+              visible={qrModalVisible}
+              onClose={() => setQrModalVisible(false)}
+              dataUrl={qrDataUrl}
+              magicUrl={magicUrl}
+              studentEmail={qrStudentEmail}
+            />
+          )}
 
           <div className="logout-container">
             <button className="btn-logout" onClick={logout}>
@@ -874,16 +937,39 @@ const handleFormSubmit = async (e) => {
           {showForm && (
             <div className="popup-form">
               <div className="popup-content">
-                <h3>{formMode === "edit" ? "Edit" : "Add"} {activeTab.slice(0, -1)}</h3>
+                <h3>
+                  {formMode === "edit" ? "Edit" : "Add"}{" "}
+                  {activeTab.slice(0, -1)}
+                </h3>
                 <form onSubmit={handleFormSubmit}>
                   <div className="form-group">
-                    <input name="name" value={formData.name} onChange={handleInputChange} className="form-control" placeholder="Name" required />
+                    <input
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      className="form-control"
+                      placeholder="Name"
+                      required
+                    />
                   </div>
                   <div className="form-group">
-                    <input name="username" value={formData.username} onChange={handleInputChange} className="form-control" placeholder="Username" required />
+                    <input
+                      name="username"
+                      value={formData.username}
+                      onChange={handleInputChange}
+                      className="form-control"
+                      placeholder="Username"
+                      required
+                    />
                   </div>
                   <div className="form-group">
-                    <select name="yearLevel" value={formData.yearLevel} onChange={handleInputChange} className="form-control" required>
+                    <select
+                      name="yearLevel"
+                      value={formData.yearLevel}
+                      onChange={handleInputChange}
+                      className="form-control"
+                      required
+                    >
                       <option value="">-- Select Year Level --</option>
                       <option value="Grade 7">Grade 7</option>
                       <option value="Grade 8">Grade 8</option>
@@ -892,19 +978,59 @@ const handleFormSubmit = async (e) => {
                     </select>
                   </div>
                   <div className="form-group">
-                    <input type="email" name="email" value={formData.email} onChange={handleInputChange} className="form-control" placeholder="Email" required />
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      className="form-control"
+                      placeholder="Email"
+                      required
+                    />
                   </div>
                   <div className="form-group">
-                    <input type="password" name="password" value={formData.password} onChange={handleInputChange} className="form-control" placeholder="Password" required={formMode !== "edit"} />
+                    <input
+                      type="password"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleInputChange}
+                      className="form-control"
+                      placeholder="Password"
+                      required={formMode !== "edit"}
+                    />
                   </div>
                   <div className="form-group">
-                    <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleInputChange} className="form-control" placeholder="Confirm Password" required={formMode !== "edit"} />
+                    <input
+                      type="password"
+                      name="confirmPassword"
+                      value={formData.confirmPassword}
+                      onChange={handleInputChange}
+                      className="form-control"
+                      placeholder="Confirm Password"
+                      required={formMode !== "edit"}
+                    />
                   </div>
                   <div className="form-actions">
-                   <button type="submit" className="btn-create" disabled={isSubmitting}>
-  {isSubmitting ? (formMode === "edit" ? "Saving..." : "Creating...") : (formMode === "edit" ? "Save Changes" : "Create")}
-</button>
-                    <button type="button" className="btn-cancel" onClick={() => setShowForm(false)}>Cancel</button>
+                    <button
+                      type="submit"
+                      className="btn-create"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting
+                        ? formMode === "edit"
+                          ? "Saving..."
+                          : "Creating..."
+                        : formMode === "edit"
+                        ? "Save Changes"
+                        : "Create"}
+                    </button>
+                    <button
+                      type="button"
+                      className="btn-cancel"
+                      onClick={() => setShowForm(false)}
+                    >
+                      Cancel
+                    </button>
                   </div>
                 </form>
               </div>
@@ -932,12 +1058,36 @@ const handleFormSubmit = async (e) => {
                 right: "20%",
               }}
             >
-              <div style={{ position: "fixed", top: "15px", right: "92%", zIndex: 2 }}>
-                <button type="button" className="btn-close" onClick={handleClose} aria-label="Close" style={{ backgroundColor: "red", borderRadius: "20%", padding: "4px" }}></button>
+              <div
+                style={{
+                  position: "fixed",
+                  top: "15px",
+                  right: "92%",
+                  zIndex: 2,
+                }}
+              >
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={handleClose}
+                  aria-label="Close"
+                  style={{
+                    backgroundColor: "red",
+                    borderRadius: "20%",
+                    padding: "4px",
+                  }}
+                ></button>
               </div>
 
               {/* key ensures remount when different student is opened */}
-              <ProgressTracker key={unwrapDefault(showProgressTracker.email) || unwrapDefault(showProgressTracker.username) || Date.now()} student={showProgressTracker} />
+              <ProgressTracker
+                key={
+                  unwrapDefault(showProgressTracker.email) ||
+                  unwrapDefault(showProgressTracker.username) ||
+                  Date.now()
+                }
+                student={showProgressTracker}
+              />
             </div>
           )}
         </>
