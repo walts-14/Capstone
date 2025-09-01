@@ -79,7 +79,6 @@ const SuperAdmin = () => {
     student: "",
     content: "",
   });
-  const [editingMessage, setEditingMessage] = useState(null);
 
   // Handler for plus button
   const handlePlusClick = () => {
@@ -88,7 +87,6 @@ const SuperAdmin = () => {
   const handleMessageFormClose = () => {
     setShowMessageForm(false);
     setNewMessage({ teacher: "", grade: "", student: "", content: "" });
-    setEditingMessage(null);
   };
   // Handler for form input
   const handleMessageInputChange = (e) => {
@@ -107,37 +105,18 @@ const SuperAdmin = () => {
       toast.error("Please fill out all fields.");
       return;
     }
-    if (editingMessage) {
-      // Edit existing message
-      setMessages((prev) =>
-        prev.map((msg) =>
-          msg.id === editingMessage.id
-            ? {
-                ...msg,
-                sender: newMessage.teacher,
-                grade: newMessage.grade,
-                recipient: newMessage.student,
-                content: newMessage.content,
-              }
-            : msg
-        )
-      );
-      toast.success("Message updated!");
-    } else {
-      // Create new message
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: prev.length + 1,
-          sender: newMessage.teacher,
-          grade: newMessage.grade,
-          recipient: newMessage.student,
-          content: newMessage.content,
-        },
-      ]);
-      toast.success("Message sent!");
-    }
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: prev.length + 1,
+        sender: newMessage.teacher,
+        grade: newMessage.grade,
+        recipient: newMessage.student,
+        content: newMessage.content,
+      },
+    ]);
     handleMessageFormClose();
+    toast.success("Message sent!");
   };
   // Message popup state
   const [showMessagesPopup, setShowMessagesPopup] = useState(false);
@@ -182,6 +161,15 @@ const SuperAdmin = () => {
   const [qrDataUrl, setQrDataUrl] = useState(null);
   const [magicUrl, setMagicUrl] = useState(null);
   const [qrStudentEmail, setQrStudentEmail] = useState(null);
+
+  // Add state for editing message
+  const [editingMsgId, setEditingMsgId] = useState(null);
+  const [editMsgForm, setEditMsgForm] = useState({
+    teacher: "",
+    grade: "",
+    student: "",
+    content: "",
+  });
 
   // Prepare a sanitized student object suitable for ProgressTracker
   const sanitizeUserForTracker = (user) => {
@@ -391,6 +379,48 @@ const SuperAdmin = () => {
   const logout = () => {
     localStorage.removeItem("token");
     navigate("/login");
+  };
+
+  // Handler for clicking a message to edit
+  const handleEditMsg = (msg) => {
+    setEditingMsgId(msg.id);
+    setEditMsgForm({
+      teacher: msg.sender,
+      grade: msg.grade,
+      student: msg.recipient,
+      content: msg.content,
+    });
+  };
+
+  // Handler for edit form changes
+  const handleEditMsgFormChange = (e) => {
+    const { name, value } = e.target;
+    setEditMsgForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Handler for apply changes
+  const handleApplyMsgEdit = (e) => {
+    e.preventDefault();
+    setMessages((prev) =>
+      prev.map((msg) =>
+        msg.id === editingMsgId
+          ? {
+              ...msg,
+              sender: editMsgForm.teacher,
+              grade: editMsgForm.grade,
+              recipient: editMsgForm.student,
+              content: editMsgForm.content,
+            }
+          : msg
+      )
+    );
+    setEditingMsgId(null);
+  };
+
+  // Handler for delete message
+  const handleDeleteMsg = () => {
+    setMessages((prev) => prev.filter((msg) => msg.id !== editingMsgId));
+    setEditingMsgId(null);
   };
 
   const dataToDisplay = activeTab === "Users" ? users : teachers;
@@ -750,7 +780,7 @@ const SuperAdmin = () => {
                             cursor: "pointer",
                           }}
                         >
-                          {editingMessage ? "Update" : "Send"}
+                          Send
                         </button>
                       </form>
                     </div>
@@ -763,66 +793,259 @@ const SuperAdmin = () => {
                       overflowY: "auto",
                     }}
                   >
-                    {messages.length === 0 ? (
-                      <div style={{ color: "#fff", textAlign: "center" }}>
-                        No messages found.
-                      </div>
-                    ) : (
-                      messages.map((msg) => (
-                        <div
-                          key={msg.id}
-                          style={{
-                            background: "#2d2342",
-                            borderRadius: "15px",
-                            padding: "1rem",
-                            marginBottom: "1rem",
-                            color: "#fff",
-                            cursor: "pointer", // Make it look clickable
-                          }}
-                          onClick={() => handleEditMessage(msg)}
-                        >
-                          <div style={{ marginBottom: "0.5rem" }}>
-                            <span
-                              style={{
-                                background: "#f7c948",
-                                color: "#222",
-                                borderRadius: "7px",
-                                padding: "0.2rem 0.7rem",
-                                fontWeight: "bold",
-                                marginRight: "0.5rem",
-                              }}
-                            >
-                              {msg.sender}
-                            </span>
-                            <span
-                              style={{
-                                background: "#7c6ae3",
-                                color: "#fff",
-                                borderRadius: "7px",
-                                padding: "0.2rem 0.7rem",
-                                fontWeight: "bold",
-                                marginRight: "0.5rem",
-                              }}
-                            >
-                              {msg.grade}
-                            </span>
-                            <span
-                              style={{
-                                background: "#bdbdbd",
-                                color: "#222",
-                                borderRadius: "7px",
-                                padding: "0.2rem 0.7rem",
-                                fontWeight: "bold",
-                              }}
-                            >
-                              {msg.recipient}
-                            </span>
-                          </div>
-                          <div style={{ color: "#fff", fontSize: "1rem" }}>
-                            {msg.content}
-                          </div>
+                    {editingMsgId === null ? (
+                      messages.length === 0 ? (
+                        <div style={{ color: "#fff", textAlign: "center" }}>
+                          No messages found.
                         </div>
-                      ))
+                      ) : (
+                        messages.map((msg) => (
+                          <div
+                            key={msg.id}
+                            style={{
+                              background: "#2d2342",
+                              borderRadius: "15px",
+                              padding: "1rem",
+                              marginBottom: "1rem",
+                              color: "#fff",
+                              cursor: "pointer",
+                            }}
+                            onClick={() => handleEditMsg(msg)}
+                          >
+                            <div style={{ marginBottom: "0.5rem" }}>
+                              <span
+                                style={{
+                                  background: "#f7c948",
+                                  color: "#222",
+                                  borderRadius: "7px",
+                                  padding: "0.2rem 0.7rem",
+                                  fontWeight: "bold",
+                                  marginRight: "0.5rem",
+                                }}
+                              >
+                                {msg.sender}
+                              </span>
+                              <span
+                                style={{
+                                  background: "#7c6ae3",
+                                  color: "#fff",
+                                  borderRadius: "7px",
+                                  padding: "0.2rem 0.7rem",
+                                  fontWeight: "bold",
+                                  marginRight: "0.5rem",
+                                }}
+                              >
+                                {msg.grade}
+                              </span>
+                              <span
+                                style={{
+                                  background: "#bdbdbd",
+                                  color: "#222",
+                                  borderRadius: "7px",
+                                  padding: "0.2rem 0.7rem",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                {msg.recipient}
+                              </span>
+                            </div>
+                            <div style={{ color: "#fff", fontSize: "1rem" }}>
+                              {msg.content}
+                            </div>
+                          </div>
+                        ))
+                      )
+                    ) : (
+                      // Edit Message Form
+                      <div
+                        style={{
+                          position: "fixed",
+                          top: "50%",
+                          left: "50%",
+                          transform: "translate(-50%, -50%)",
+                          background: "#2d2342",
+                          borderRadius: "20px",
+                          border: "2px solid #7338a0",
+                          zIndex: 3000,
+                          width: "400px",
+                          boxShadow: "0 0 20px #000",
+                          padding: "2rem 2rem 1.5rem 2rem",
+                          display: "flex",
+                          flexDirection: "column",
+                        }}
+                      >
+                        <button
+                          type="button"
+                          onClick={() => setEditingMsgId(null)}
+                          aria-label="Close"
+                          style={{
+                            position: "absolute",
+                            top: "18px",
+                            right: "18px",
+                            backgroundColor: "#e74c3c",
+                            color: "#fff",
+                            border: "none",
+                            borderRadius: "8px",
+                            width: "32px",
+                            height: "32px",
+                            fontWeight: "bold",
+                            fontSize: "1.5rem",
+                            cursor: "pointer",
+                            zIndex: 2,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            padding: 0,
+                          }}
+                        >
+                          <span
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              width: "100%",
+                              height: "100%",
+                            }}
+                          >
+                            ×
+                          </span>
+                        </button>
+                        <h2
+                          style={{
+                            color: "#fff",
+                            fontWeight: "bold",
+                            fontSize: "2rem",
+                            marginBottom: "1.5rem",
+                            textAlign: "center",
+                          }}
+                        >
+                          Message
+                        </h2>
+                        <form onSubmit={handleApplyMsgEdit}>
+                          <div style={{ marginBottom: "1rem" }}>
+                            <select
+                              name="teacher"
+                              value={editMsgForm.teacher}
+                              onChange={handleEditMsgFormChange}
+                              style={{
+                                width: "100%",
+                                padding: "0.8rem",
+                                borderRadius: "10px",
+                                background: "#3c2e5e",
+                                color: "#fff",
+                                border: "none",
+                                fontSize: "1.1rem",
+                                marginBottom: "0.7rem",
+                              }}
+                              required
+                            >
+                              <option value="">Teacher</option>
+                              <option value="Ma'am Charm">Ma'am Charm</option>
+                              <option value="Sir John">Sir John</option>
+                            </select>
+                            <select
+                              name="grade"
+                              value={editMsgForm.grade}
+                              onChange={handleEditMsgFormChange}
+                              style={{
+                                width: "100%",
+                                padding: "0.8rem",
+                                borderRadius: "10px",
+                                background: "#3c2e5e",
+                                color: "#fff",
+                                border: "none",
+                                fontSize: "1.1rem",
+                                marginBottom: "0.7rem",
+                              }}
+                              required
+                            >
+                              <option value="">Grade</option>
+                              <option value="GRADE 7">GRADE 7</option>
+                              <option value="GRADE 8">GRADE 8</option>
+                              <option value="GRADE 9">GRADE 9</option>
+                              <option value="GRADE 10">GRADE 10</option>
+                            </select>
+                            <select
+                              name="student"
+                              value={editMsgForm.student}
+                              onChange={handleEditMsgFormChange}
+                              style={{
+                                width: "100%",
+                                padding: "0.8rem",
+                                borderRadius: "10px",
+                                background: "#3c2e5e",
+                                color: "#fff",
+                                border: "none",
+                                fontSize: "1.1rem",
+                                marginBottom: "0.7rem",
+                              }}
+                              required
+                            >
+                              <option value="">Student Name</option>
+                              <option value="Stepehn curry">
+                                Stepehn curry
+                              </option>
+                              <option value="Jane Doe">Jane Doe</option>
+                            </select>
+                            <textarea
+                              name="content"
+                              value={editMsgForm.content}
+                              onChange={handleEditMsgFormChange}
+                              placeholder="Message"
+                              style={{
+                                width: "100%",
+                                minHeight: "120px",
+                                borderRadius: "10px",
+                                background: "#3c2e5e",
+                                color: "#fff",
+                                border: "2px solid #bdbdbd",
+                                fontSize: "1.1rem",
+                                padding: "0.8rem",
+                              }}
+                              required
+                            />
+                          </div>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              marginTop: "1rem",
+                            }}
+                          >
+                            <button
+                              type="submit"
+                              style={{
+                                background: "#7338a0",
+                                color: "#fff",
+                                border: "none",
+                                borderRadius: "10px",
+                                fontWeight: "bold",
+                                fontSize: "1.5rem",
+                                padding: "0.7rem 2rem",
+                                cursor: "pointer",
+                              }}
+                            >
+                              Apply
+                            </button>
+                            <button
+                              type="button"
+                              style={{
+                                background: "#e74c3c",
+                                color: "#fff",
+                                border: "none",
+                                borderRadius: "10px",
+                                fontWeight: "bold",
+                                fontSize: "1.5rem",
+                                padding: "0.7rem 2rem",
+                                cursor: "pointer",
+                              }}
+                              onClick={handleDeleteMsg}
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </form>
+                      </div>
                     )}
                   </div>
                 </div>
