@@ -17,8 +17,8 @@ import quizRoutes from "./routes/quizRoutes.js";
 import progressRoutes from "./routes/progressRoutes.js";
 import streakRoutes from "./routes/streakRoutes.js";
 import pointsRoutes from "./routes/pointsRoutes.js";
+import messageRoutes from "./routes/messageRoute.js"; // Import message feature
 
-// ...other imports
 //configuring dotenv
 dotenv.config();
 //console.log('ENV: SMTP_HOST=%s SMTP_PORT=%s', process.env.SMTP_HOST, process.env.SMTP_PORT);
@@ -56,6 +56,7 @@ app.use("/api/quizzes", quizRoutes);
 app.use("/api/progress", progressRoutes);
 app.use("/api/streak", streakRoutes);
 app.use("/api/points", pointsRoutes);
+app.use("/api/messages", messageRoutes); // Message feature API
 
 app.listen(5000, () => {
   connectDB();

@@ -1,3 +1,9 @@
+// Placeholder function to prevent ReferenceError
+const fetchNotifications = async () => {
+  // TODO: Implement actual notification fetch logic
+  // Example: const res = await axios.get('/api/notifications');
+  // For now, do nothing
+};
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { FaUserPlus, FaBell } from "react-icons/fa";
@@ -33,22 +39,39 @@ const DashboardAdmin = () => {
   const [isSubmitting, setIsSubmitting] = useState(false); // To prevent multiple submissions
 
   const [showNotificationModal, setShowNotificationModal] = useState(false);
+  const [messages, setMessages] = useState([]); // fetched from /api/messages/for-admin
+const [loadingMessages, setLoadingMessages] = useState(false);
 
-  // Example notifications data (replace with your actual data source)
-  const notifications = [
-    {
-      grade: "GRADE 7",
-      users: ["Stepehn curry"],
-      message:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in",
-    },
-    {
-      grade: "GRADE 8",
-      users: ["finn", "jake"],
-      message:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in",
-    },
-  ];
+  // Fetch messages for admin
+const fetchAdminMessages = async () => {
+  try {
+    setLoadingMessages(true);
+    const res = await axios.get("/api/messages/for-admin"); // uses src/api.js baseURL + token
+    // backend returns array of messages (populated: senderId, plus teacherName/studentName fields)
+    setMessages(res.data || []);
+  } catch (err) {
+    console.error("Error fetching admin messages:", err?.response?.data || err);
+    toast.error("Failed to load notifications.");
+  } finally {
+    setLoadingMessages(false);
+  }
+};
+
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
+
+  const markMessageAsRead = async (messageId) => {
+  try {
+    await axios.put(`/api/messages/${messageId}/read`);
+    // mark locally so UI updates immediately
+    setMessages((prev) => prev.map(m => m._id === messageId ? { ...m, isRead: true } : m));
+  } catch (err) {
+    console.error("Failed to mark as read", err?.response?.data || err);
+    toast.error("Failed to mark message as read.");
+  }
+};
 
   // Helper to sanitize progress data if it has a 'default' key
   const sanitizeProgress = (progress) => {
@@ -299,7 +322,10 @@ const DashboardAdmin = () => {
                   display: "flex",
                   alignItems: "center",
                 }}
-                onClick={() => setShowNotificationModal(true)}
+               onClick={async () => {
+  await fetchAdminMessages();
+  setShowNotificationModal(true);
+}}
               >
                 <FaBell />
               </button>
@@ -626,107 +652,156 @@ const DashboardAdmin = () => {
           )}
 
           {/* Notification Modal */}
-          {showNotificationModal && (
-            <div
-              style={{
-                position: "fixed",
-                top: "16%",
-                left: "25%",
-                width: "50vw",
-                minWidth: "350px",
-                zIndex: 5000,
-                background: "#1a1230",
-                borderRadius: "20px",
-                border: "2px solid #7338a0",
-                boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
-                color: "#fff",
-                padding: "2rem",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "flex-start",
-              }}
-            >
-              <h1
+          {/* Notification Modal */}
+{showNotificationModal && (
+  <div
+    style={{
+      position: "fixed",
+      top: "16%",
+      left: "25%",
+      width: "50vw",
+      minWidth: "350px",
+      zIndex: 5000,
+      background: "#1a1230",
+      borderRadius: "20px",
+      border: "2px solid #7338a0",
+      boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
+      color: "#fff",
+      padding: "2rem",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "flex-start",
+    }}
+  >
+    <h1
+      style={{
+        fontWeight: "bold",
+        fontSize: "2.5rem",
+        marginBottom: "2rem",
+      }}
+    >
+      Notification
+    </h1>
+
+    <div style={{ width: "100%" }}>
+      {loadingMessages ? (
+        <div style={{ color: "#fff", textAlign: "center" }}>Loading...</div>
+      ) : messages.length === 0 ? (
+        <div style={{ color: "#fff", textAlign: "center" }}>No notifications.</div>
+      ) : (
+        messages.map((msg) => (
+          <div
+            key={msg._id}
+            style={{
+              background: "#2d2544",
+              borderRadius: "10px",
+              marginBottom: "1rem",
+              padding: "1rem",
+              color: "#fff",
+              opacity: msg.isRead ? 0.6 : 1,
+              display: "flex",
+              justifyContent: "space-between",
+              gap: "1rem",
+            }}
+          >
+            <div style={{ flex: 1 }}>
+              <div
                 style={{
-                  fontWeight: "bold",
-                  fontSize: "2.5rem",
-                  marginBottom: "2rem",
+                  display: "flex",
+                  gap: "0.5rem",
+                  marginBottom: "0.5rem",
+                  alignItems: "center",
                 }}
               >
-                Notification
-              </h1>
-              <div style={{ width: "100%" }}>
-                {notifications.map((notif, idx) => (
-                  <div
-                    key={idx}
+                <span
+                  style={{
+                    background: "#7338a0",
+                    color: "#fff",
+                    borderRadius: "8px",
+                    padding: "0.2rem 0.8rem",
+                    fontWeight: "bold",
+                    fontSize: "1rem",
+                  }}
+                >
+                  {msg.grade || "All Grades"}
+                </span>
+
+                <span
+                  style={{
+                    background: "#b9b6c9",
+                    color: "#222",
+                    borderRadius: "8px",
+                    padding: "0.2rem 0.8rem",
+                    fontWeight: "bold",
+                    fontSize: "1rem",
+                  }}
+                >
+                  {msg.teacherName || msg.senderId?.name || "Teacher"}
+                </span>
+
+                {msg.studentName && (
+                  <span
                     style={{
-                      background: "#2d2544",
-                      borderRadius: "10px",
-                      marginBottom: "1rem",
-                      padding: "1rem",
-                      color: "#fff",
+                      background: "#bdbdbd",
+                      color: "#222",
+                      borderRadius: "8px",
+                      padding: "0.2rem 0.8rem",
+                      fontWeight: "bold",
                     }}
                   >
-                    <div
-                      style={{
-                        display: "flex",
-                        gap: "0.5rem",
-                        marginBottom: "0.5rem",
-                      }}
-                    >
-                      <span
-                        style={{
-                          background: "#7338a0",
-                          color: "#fff",
-                          borderRadius: "8px",
-                          padding: "0.2rem 0.8rem",
-                          fontWeight: "bold",
-                          fontSize: "1rem",
-                        }}
-                      >
-                        {notif.grade}
-                      </span>
-                      {notif.users.map((user, i) => (
-                        <span
-                          key={i}
-                          style={{
-                            background: "#b9b6c9",
-                            color: "#222",
-                            borderRadius: "8px",
-                            padding: "0.2rem 0.8rem",
-                            fontWeight: "bold",
-                            fontSize: "1rem",
-                          }}
-                        >
-                          {user}
-                        </span>
-                      ))}
-                    </div>
-                    <div style={{ color: "#fff", fontSize: "1rem" }}>
-                      {notif.message}
-                    </div>
-                  </div>
-                ))}
+                    {msg.studentName}
+                  </span>
+                )}
               </div>
-              <button
-                style={{
-                  alignSelf: "flex-end",
-                  marginTop: "1rem",
-                  background: "#7338a0",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: "10px",
-                  padding: "0.5rem 2rem",
-                  fontWeight: "bold",
-                  fontSize: "1.2rem",
-                  cursor: "pointer",
-                }}
-                onClick={() => setShowNotificationModal(false)}
-              >
-                Close
-              </button>
+
+              <div style={{ color: "#fff", fontSize: "1rem" }}>{msg.body}</div>
+
+              <div style={{ marginTop: "0.5rem", color: "#bbb", fontSize: "0.85rem" }}>
+                {msg.createdAt ? new Date(msg.createdAt).toLocaleString() : ""}
+              </div>
             </div>
-          )}
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", marginLeft: "1rem" }}>
+              {!msg.isRead && (
+                <button
+                  onClick={() => markMessageAsRead(msg._id)}
+                  style={{
+                    background: "#37b24d",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "8px",
+                    padding: "0.4rem 0.8rem",
+                    cursor: "pointer",
+                  }}
+                >
+                  Mark read
+                </button>
+              )}
+            </div>
+          </div>
+        ))
+      )}
+    </div>
+
+    <button
+      style={{
+        alignSelf: "flex-end",
+        marginTop: "1rem",
+        background: "#7338a0",
+        color: "#fff",
+        border: "none",
+        borderRadius: "10px",
+        padding: "0.5rem 2rem",
+        fontWeight: "bold",
+        fontSize: "1.2rem",
+        cursor: "pointer",
+      }}
+      onClick={() => setShowNotificationModal(false)}
+    >
+      Close
+    </button>
+  </div>
+)}
         </>
       )}
     </div>

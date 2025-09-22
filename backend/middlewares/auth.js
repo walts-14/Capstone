@@ -30,6 +30,8 @@ export const verifyToken = (req, res, next) => {
   }
 };
 
+export const authMiddleware = verifyToken;
+
 export const checkRole = (allowedRoles) => {
   return (req, res, next) => {
     const userRole = req.user?.role;

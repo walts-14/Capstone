@@ -80,57 +80,131 @@ const SuperAdmin = () => {
     content: "",
   });
 
+    // State for sending to all admins
+    const [sendToAllAdmins, setSendToAllAdmins] = useState(false);
+
   // Handler for plus button
-  const handlePlusClick = () => {
-    setShowMessageForm(true);
-  };
+ const handlePlusClick = () => {
+  fetchUsers();
+  fetchTeachers();
+  // Do NOT fetch students until a grade is selected
+  setShowMessageForm(true);
+};
   const handleMessageFormClose = () => {
     setShowMessageForm(false);
     setNewMessage({ teacher: "", grade: "", student: "", content: "" });
   };
   // Handler for form input
-  const handleMessageInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewMessage((prev) => ({ ...prev, [name]: value }));
-  };
-  // Handler for sending message
-  const handleSendMessage = (e) => {
-    e.preventDefault();
-    if (
-      !newMessage.teacher ||
-      !newMessage.grade ||
-      !newMessage.student ||
-      !newMessage.content
-    ) {
-      toast.error("Please fill out all fields.");
-      return;
-    }
-    setMessages((prev) => [
-      ...prev,
-      {
-        id: prev.length + 1,
-        sender: newMessage.teacher,
-        grade: newMessage.grade,
-        recipient: newMessage.student,
-        content: newMessage.content,
-      },
-    ]);
-    handleMessageFormClose();
-    toast.success("Message sent!");
-  };
+const handleMessageInputChange = (e) => {
+  const { name, value } = e.target;
+  setNewMessage((prev) => ({ ...prev, [name]: value }));
+
+  if (name === "grade") {
+    // fetch students for that grade (these students are for monitoring / selection only)
+    fetchStudentsForMessage(value);
+    // optionally keep the modal's teacher list in sync:
+    // fetchTeachers(value);
+  }
+};
+  // ...removed duplicate handleSendMessage...
   // Message popup state
   const [showMessagesPopup, setShowMessagesPopup] = useState(false);
-  // Example messages data (replace with API call if needed)
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      sender: "Ma'am Charm",
-      grade: "GRADE 7",
-      recipient: "Stepehn curry",
-      content:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in",
-    },
-  ]);
+  // Actual messages from backend
+  const [messages, setMessages] = useState([]);
+
+  const [messageStudents, setMessageStudents] = useState([]);
+
+  const fetchStudentsForMessage = async (grade = "") => {
+  if (!grade) return; // Do not call API if grade is not selected
+  try {
+    const url = `/api/messages/users/year/${encodeURIComponent(grade)}`;
+    const res = await axios.get(url, { baseURL: "http://localhost:5000" });
+    const raw = res.data.data || [];
+  setMessageStudents(raw.map((u) => sanitizeObjectRecursive(u)));
+  } catch (err) {
+    console.error("fetchStudentsForMessage error", err);
+    toast.error("Failed to load students for selected grade.");
+  }
+};
+
+  // Fetch all messages sent by superadmin
+  const fetchMessages = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/api/messages/for-admin", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setMessages(data);
+      }
+    } catch (err) {
+      console.error("Failed to fetch messages", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchMessages();
+  }, []);
+
+  // Send a new message
+const handleSendMessage = async (e) => {
+  e.preventDefault();
+  if (!newMessage.content || (!sendToAllAdmins && !newMessage.teacher && !newMessage.student)) {
+    toast.error("Please select teacher/student or choose 'Send to All Admins' and enter message.");
+    return;
+  }
+  setIsSubmitting(true);
+
+  try {
+    // If sending to all admins, collect all teacher IDs
+    let recipientIds = [];
+    let teacherName = "";
+    let teacherId = null;
+    if (sendToAllAdmins) {
+      recipientIds = teachers.map((t) => t._id);
+      teacherName = "All Admins";
+    } else {
+      teacherId = newMessage.teacher || null;
+      const teacherObj = teachers.find((t) => String(t._id) === String(teacherId));
+      teacherName = teacherObj ? (teacherObj.name || teacherObj.username || teacherObj.email) : "";
+      if (teacherId) recipientIds = [teacherId];
+    }
+
+    // studentId from the users select (we set value to u._id)
+   // existing studentId retrieval
+const studentId = newMessage.student || null;
+// find it in messageStudents (these are the grade-filtered students)
+const studentObj = messageStudents.find((u) => String(u._id) === String(studentId));
+const studentName = studentObj ? (studentObj.name || studentObj.username || studentObj.email) : "";
+
+
+    const payload = {
+      title: `${teacherName || "Teacher"} → ${studentName || "Student"}`,
+      body: newMessage.content,
+      grade: newMessage.grade,
+      recipientIds,
+      isBroadcast: sendToAllAdmins,
+      teacherId: teacherId || null,
+      teacherName,
+      studentId: studentId || null,
+      studentName,
+    };
+
+    const res = await axios.post("/api/messages", payload);
+    toast.success(sendToAllAdmins ? "Message sent to all admins" : "Message sent");
+    setShowMessageForm(false);
+    setNewMessage({ teacher: "", grade: "", student: "", content: "" });
+    setSendToAllAdmins(false);
+    await fetchMessages(); // refresh superadmin's sent list
+  } catch (err) {
+    console.error("Failed to send message:", err?.response?.data || err);
+    const msg = err?.response?.data?.message || "Failed to send message";
+    toast.error(msg);
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   // Handler for message button
   const handleMessageButtonClick = () => {
@@ -689,6 +763,17 @@ const SuperAdmin = () => {
                       </h2>
                       <form onSubmit={handleSendMessage}>
                         <div style={{ marginBottom: "1rem" }}>
+                          <div style={{ marginBottom: "0.7rem" }}>
+                            <label style={{ color: "#fff", fontWeight: "bold", fontSize: "1.1rem" }}>
+                              <input
+                                type="checkbox"
+                                checked={sendToAllAdmins}
+                                onChange={(e) => setSendToAllAdmins(e.target.checked)}
+                                style={{ marginRight: "0.5rem" }}
+                              />
+                              Send to All Admins
+                            </label>
+                          </div>
                           <select
                             name="teacher"
                             value={newMessage.teacher}
@@ -703,10 +788,14 @@ const SuperAdmin = () => {
                               fontSize: "1.1rem",
                               marginBottom: "0.7rem",
                             }}
+                            disabled={sendToAllAdmins}
                           >
-                            <option value="">Teacher</option>
-                            <option value="Ma'am Charm">Ma'am Charm</option>
-                            <option value="Sir John">Sir John</option>
+                            <option value="">Select Teacher</option>
+                            {teachers.map((t) => (
+                              <option key={t._id} value={t._id}>
+                                {t.name || t.username || t.email}
+                              </option>
+                            ))}
                           </select>
                           <select
                             name="grade"
@@ -744,9 +833,12 @@ const SuperAdmin = () => {
                               marginBottom: "0.7rem",
                             }}
                           >
-                            <option value="">Student Name</option>
-                            <option value="Stepehn curry">Stepehn curry</option>
-                            <option value="Jane Doe">Jane Doe</option>
+                            <option value="">Select Student</option>
+                            {messageStudents.map((u) => (
+                              <option key={u._id || u.email} value={u._id || u.email}>
+                                {u.name || u.username || u.email}
+                              </option>
+                            ))}
                           </select>
                           <textarea
                             name="content"
