@@ -43,12 +43,25 @@ const DashboardAdmin = () => {
 const [loadingMessages, setLoadingMessages] = useState(false);
 
   // Fetch messages for admin
-const fetchAdminMessages = async () => {
+
+  useEffect(() => {
+  if (token) {
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  } else {
+    delete axios.defaults.headers.common["Authorization"];
+  }
+}, [token]);
+
+const fetchAdminMessages = async (grade = "") => {
   try {
     setLoadingMessages(true);
-    const res = await axios.get("/api/messages/for-admin"); // uses src/api.js baseURL + token
-    // backend returns array of messages (populated: senderId, plus teacherName/studentName fields)
-    setMessages(res.data || []);
+    // axios instance has baseURL and Authorization defaults
+    const res = await axios.get("/api/messages/for-admin", {
+      params: grade ? { grade } : {},
+    });
+    // your backend returns an array (controller returns res.json(data))
+    // so res.data should be array
+    setMessages(Array.isArray(res.data) ? res.data : res.data || []);
   } catch (err) {
     console.error("Error fetching admin messages:", err?.response?.data || err);
     toast.error("Failed to load notifications.");
