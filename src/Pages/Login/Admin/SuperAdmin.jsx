@@ -2,10 +2,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { FaUserPlus } from "react-icons/fa";
-import EditIcon from "../../../assets/Edit.png";
-import RemoveIcon from "../../../assets/Remove.png";
-import DashboardIcon from "../../../assets/dashboardlogo.png";
-import LeaderboardIcon from "../../../assets/leaderboardicon.png";
+import EditIconImport from "../../../assets/Edit.png";
+import RemoveIconImport from "../../../assets/Remove.png";
+import DashboardIconImport from "../../../assets/dashboardlogo.png";
+import LeaderboardIconImport from "../../../assets/leaderboardicon.png";
 import axios from "../../api.js";
 import toast from "react-hot-toast";
 import SidenavAdmins from "../../../Components/SidenavAdmins.jsx";
@@ -1207,14 +1207,14 @@ const studentName = studentObj ? (studentObj.name || studentObj.username || stud
                               </button>
                             )}
                             <img
-                              src={unwrapDefault(EditIcon)}
+                              src={typeof EditIconImport === "object" && EditIconImport !== null && EditIconImport.default ? EditIconImport.default : EditIconImport}
                               alt="Edit"
                               className="img-action"
                               style={{ cursor: "pointer" }}
                               onClick={() => openForm("edit", u)}
                             />
                             <img
-                              src={unwrapDefault(RemoveIcon)}
+                              src={typeof RemoveIconImport === "object" && RemoveIconImport !== null && RemoveIconImport.default ? RemoveIconImport.default : RemoveIconImport}
                               alt="Remove"
                               className="img-action"
                               style={{ marginRight: "50px", cursor: "pointer" }}

@@ -1,60 +1,130 @@
 // src/Components/Streak/StreakButton.jsx
 import React, { useState, useEffect, useContext } from "react";
-import fire from "../../assets/fire.png";  // adjust the path as needed
-import medal from "../../assets/diamond.png"; // adjust the path as needed
+import fireImport from "../../assets/fire.png";
+import medalImport from "../../assets/diamond.png";
 import "../StreakButton.css";
 import { ProgressContext } from "../../Pages/Dashboard/ProgressContext";
 
-/**
- * unwrapDefault(val)
- * - resolves module-wrapped objects like { default: ... }
- * - returns primitives where possible
- * - stringifies complex objects as a last resort
- */
-const unwrapDefault = (val) => {
-  if (val === null || val === undefined) return "";
-  if (typeof val !== "object") return val;
-  if (Object.prototype.hasOwnProperty.call(val, "default")) return unwrapDefault(val.default);
-  // prefer any primitive value inside object
-  for (const v of Object.values(val)) {
-    if (typeof v !== "object") return v;
-  }
-  try {
-    return JSON.stringify(val);
-  } catch {
-    return String(val);
-  }
+/* small helpers */
+
+// Recursively search an object for any node that is an object with a `default` key.
+// Returns array of { path, value } found; path is like "streakData.currentStreak" or "fireImport"
+const deepFindDefault = (obj, base = "") => {
+  const found = [];
+  const seen = new WeakSet();
+  const walk = (val, path) => {
+    if (val && typeof val === "object") {
+      if (seen.has(val)) return;
+      seen.add(val);
+      if (Object.prototype.hasOwnProperty.call(val, "default")) {
+        found.push({ path, value: val });
+        // still continue into default to find nested ones
+        walk(val.default, path + ".default");
+      } else {
+        for (const k of Object.keys(val)) {
+          try {
+            walk(val[k], path ? `${path}.${k}` : k);
+          } catch (e) {
+            // defensive
+          }
+        }
+      }
+    }
+  };
+  walk(obj, base);
+  return found;
 };
+
+// If a possible JSX child is an object, return a safe representation (string or <pre>).
+// Also logs a console.error so upstream can be fixed.
+const sanitizeForJSX = (name, val) => {
+  if (val === null || val === undefined) return "";
+  if (typeof val === "string" || typeof val === "number" || typeof val === "boolean") return val;
+  if (React.isValidElement(val)) return val;
+  if (Array.isArray(val)) return val.map((v, i) => sanitizeForJSX(`${name}[${i}]`, v));
+  // if object, try unwrap default, then stringify
+  if (typeof val === "object") {
+    if (Object.prototype.hasOwnProperty.call(val, "default")) {
+      const unwrapped = val.default;
+      console.warn(`StreakButton: "${name}" contained a module-like object with .default — unwrapping for render. Path: ${name}`, val);
+      return sanitizeForJSX(`${name}.default`, unwrapped);
+    }
+    console.error(`StreakButton: "${name}" is an object and would cause React to throw — converting to JSON for safe render. Fix upstream source.`, val);
+    try {
+      return <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{JSON.stringify(val, null, 2)}</pre>;
+    } catch (e) {
+      return String(val);
+    }
+  }
+  // fallback
+  return String(val);
+};
+
+// normalize asset imports like { default: '/path' } -> '/path'
+const normalizeAsset = (imp) =>
+  imp && typeof imp === "object" && Object.prototype.hasOwnProperty.call(imp, "default") ? imp.default : imp;
 
 export default function StreakButton() {
   const { streakData = {}, incrementStreak } = useContext(ProgressContext) || {};
+
   const [isOpen, setIsOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalShownDate, setModalShownDate] = useState(null);
   const MODAL_SHOWN_KEY = "streakModalShownDate";
 
-  // safe primitive values derived from possibly-wrapped streakData
+  // Convert the shapes your ProgressContext promises into local safe primitives.
+  // But keep the original raw shapes for diagnostic scanning.
+  const rawCurrentStreak = streakData?.currentStreak;
+  const rawLastUpdated = streakData?.lastUpdated;
+
   const safeCurrentStreak = (() => {
-    const s = unwrapDefault(streakData?.currentStreak);
-    const n = Number(s);
+    const n = Number(rawCurrentStreak);
     return Number.isFinite(n) ? n : 0;
   })();
-  const safeLastUpdatedStr = (() => {
-    const lu = unwrapDefault(streakData?.lastUpdated);
-    // If it's a date-like string, leave it; else try to parse if it's numeric
-    if (!lu) return "";
-    if (typeof lu === "string") return lu;
-    if (typeof lu === "number") return new Date(lu).toString();
-    try {
-      return String(lu);
-    } catch {
-      return "";
-    }
+
+  const safeLastUpdatedDate = (() => {
+    if (!rawLastUpdated) return null;
+    const d = new Date(rawLastUpdated);
+    return isNaN(d.getTime()) ? null : d;
   })();
 
-  // normalize image src
-  const fireSrc = unwrapDefault(fire);
-  const medalSrc = unwrapDefault(medal);
+  const safeLastUpdatedStr = safeLastUpdatedDate ? safeLastUpdatedDate.toString() : "";
+
+  // normalize image src (ensure primitive string)
+  const fireSrcRaw = normalizeAsset(fireImport);
+  const medalSrcRaw = normalizeAsset(medalImport);
+
+  // --- DIAGNOSTICS: find any .default shapes in the important locals ---
+  useEffect(() => {
+    const toScan = {
+      streakData,
+      rawCurrentStreak,
+      rawLastUpdated,
+      fireImport,
+      medalImport,
+      fireSrcRaw,
+      medalSrcRaw,
+    };
+    const found = deepFindDefault(toScan, "root");
+    if (found.length) {
+      console.error("StreakButton: found module-wrapped objects (contain 'default') inside these paths — these can cause 'Objects are not valid as a React child' errors. Fix upstream exports / API responses. Listing found items:", found);
+      // print a readable summary for each
+      found.forEach((f) => {
+        console.groupCollapsed(`[StreakButton] .default found at ${f.path}`);
+        console.log(f.value);
+        console.groupEnd();
+      });
+    } else {
+      // helpful debug - comment out if noisy
+      // console.debug("StreakButton: no module-wrapped (.default) shapes detected in scanned locals.");
+    }
+  }, [streakData, rawCurrentStreak, rawLastUpdated, fireSrcRaw, medalSrcRaw]);
+
+  // Defensive: create sanitized values for render-time usage
+  const fireSrc = sanitizeForJSX("fireSrc", fireSrcRaw);
+  const medalSrc = sanitizeForJSX("medalSrc", medalSrcRaw);
+  const displayStreakNum = sanitizeForJSX("displayStreakNum", safeCurrentStreak);
+  const lastUpdatedStrSafe = sanitizeForJSX("lastUpdatedStr", safeLastUpdatedStr);
 
   // On mount, load last shown date from localStorage
   useEffect(() => {
@@ -69,33 +139,23 @@ export default function StreakButton() {
   }, []);
 
   const toggle = () => {
-    // toggle manual modal (info)
     setIsOpen((v) => !v);
-    // Do not touch showModal (reward) here
   };
 
-  // Fix close modal function to close both modal states
   const closeModal = () => {
     setShowModal(false);
     setIsOpen(false);
   };
 
-  // Reward modal logic — runs after modalShownDate is loaded
+  // Reward modal logic — same as before
   useEffect(() => {
-    // Wait until modalShownDate is known (null on initial until read)
     if (modalShownDate === null) return;
-
     const today = new Date().toDateString();
-
-    // already shown today
     if (modalShownDate === today) return;
-
-    // if user opened manual modal, don't show reward modal
     if (isOpen) return;
 
-    // if lastUpdated equals today -> show reward modal
-    if (safeLastUpdatedStr) {
-      const lastDate = new Date(safeLastUpdatedStr);
+    if (lastUpdatedStrSafe) {
+      const lastDate = new Date(String(lastUpdatedStrSafe));
       if (!isNaN(lastDate.getTime()) && lastDate.toDateString() === today) {
         setShowModal(true);
         setModalShownDate(today);
@@ -104,14 +164,10 @@ export default function StreakButton() {
       }
     }
 
-    // if no lastUpdated and currentStreak < 1 -> increment then show reward
-    if ((!safeLastUpdatedStr || safeLastUpdatedStr === "") && safeCurrentStreak < 1) {
+    if ((!lastUpdatedStrSafe || lastUpdatedStrSafe === "") && Number(displayStreakNum) < 1) {
       try {
-        if (typeof incrementStreak === "function") {
-          incrementStreak();
-        } else {
-          console.warn("StreakButton: incrementStreak not available from context; skipping server call and updating UI only.");
-        }
+        if (typeof incrementStreak === "function") incrementStreak();
+        else console.warn("StreakButton: incrementStreak not available from context; skipping server call.");
       } catch (e) {
         console.error("StreakButton: incrementStreak failed", e);
       }
@@ -121,20 +177,16 @@ export default function StreakButton() {
       return;
     }
 
-    // if a day has passed since lastUpdated -> increment and show modal
-    if (safeLastUpdatedStr) {
-      const lastDate = new Date(safeLastUpdatedStr);
+    if (lastUpdatedStrSafe) {
+      const lastDate = new Date(String(lastUpdatedStrSafe));
       if (!isNaN(lastDate.getTime())) {
         const now = new Date();
         const diffTime = now.getTime() - lastDate.getTime();
         const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
         if (diffDays >= 1) {
           try {
-            if (typeof incrementStreak === "function") {
-              incrementStreak();
-            } else {
-              console.warn("StreakButton: incrementStreak not available from context; skipping server call and updating UI only.");
-            }
+            if (typeof incrementStreak === "function") incrementStreak();
+            else console.warn("StreakButton: incrementStreak not available from context; skipping server call.");
           } catch (e) {
             console.error("StreakButton: incrementStreak failed", e);
           }
@@ -144,11 +196,9 @@ export default function StreakButton() {
         }
       }
     }
-    // run when streak-related values change or when modalShownDate is loaded
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [safeLastUpdatedStr, safeCurrentStreak, modalShownDate, isOpen]);
+  }, [lastUpdatedStrSafe, displayStreakNum, modalShownDate, isOpen]);
 
-  // helper to compute reward based on day number (same logic you had)
   const calcReward = (day) => {
     const d = Number(day) || 1;
     if (d === 1) return 5;
@@ -161,15 +211,16 @@ export default function StreakButton() {
     return 0;
   };
 
-  // Render primitive-safe values only
-  const displayStreakNum = safeCurrentStreak;
+  // Ensure displayStreakNumber is a number for calcReward
+  const displayStreakNumber = Number(displayStreakNum) || 0;
 
+  // Render — using sanitized values (sanitizeForJSX already returns safe renderable types)
   return (
     <>
       <button className="streak-btn" onClick={toggle} type="button">
-        <img src={fireSrc} alt="streak" className="streak-icon" />
+        {typeof fireSrc === "string" ? <img src={fireSrc} alt="streak" className="streak-icon" /> : fireSrc}
         <div className="streak-info">
-          <div className="streak-num">{String(displayStreakNum)}</div>
+          <div className="streak-num">{String(displayStreakNumber)}</div>
           <span className="streak-label">Day <br /> Streak</span>
         </div>
       </button>
@@ -177,24 +228,17 @@ export default function StreakButton() {
       {isOpen && (
         <div className="streak-modal-backdrop" onClick={closeModal}>
           <div className="streak-modal-content" onClick={(e) => e.stopPropagation()}>
-            {/* Header with flame icon + number */}
             <div className="streak-modal-header">
-              <div className="streak-header-number">{String(displayStreakNum)}</div>
-              <img src={fireSrc} alt="flame" className="streak-header-flame" />
+              <div className="streak-header-number">{String(displayStreakNumber)}</div>
+              {typeof fireSrc === "string" ? <img src={fireSrc} alt="flame" className="streak-header-flame" /> : fireSrc}
             </div>
             <h2 className="streak-modal-title">DAY STREAK!</h2>
-            <p className="streak-modal-subtitle">
-              Learn new FSL to earn points and build streak
-            </p>
+            <p className="streak-modal-subtitle">Learn new FSL to earn points and build streak</p>
             <div className="streak-modal-reward">
-              <img src={medalSrc} alt="medal" className="streak-reward-icon" />
-              <span className="streak-reward-text">
-                +{String(calcReward(displayStreakNum))}
-              </span>
+              {typeof medalSrc === "string" ? <img src={medalSrc} alt="medal" className="streak-reward-icon" /> : medalSrc}
+              <span className="streak-reward-text">+{String(calcReward(displayStreakNumber))}</span>
             </div>
-            <button className="streak-close-btn" onClick={closeModal}>
-              Close
-            </button>
+            <button className="streak-close-btn" onClick={closeModal}>Close</button>
           </div>
         </div>
       )}
@@ -202,24 +246,17 @@ export default function StreakButton() {
       {showModal && (
         <div className="streak-modal-backdrop" onClick={closeModal}>
           <div className="streak-modal-content" onClick={(e) => e.stopPropagation()}>
-            {/* Header with flame icon + number */}
             <div className="streak-modal-header">
-              <div className="streak-header-number">{String(displayStreakNum)}</div>
-              <img src={fireSrc} alt="flame" className="streak-header-flame" />
+              <div className="streak-header-number">{String(displayStreakNumber)}</div>
+              {typeof fireSrc === "string" ? <img src={fireSrc} alt="flame" className="streak-header-flame" /> : fireSrc}
             </div>
             <h2 className="streak-modal-title">DAY STREAK!</h2>
-            <p className="streak-modal-subtitle">
-              Learn new FSL to earn points and build streak
-            </p>
+            <p className="streak-modal-subtitle">Learn new FSL to earn points and build streak</p>
             <div className="streak-modal-reward">
-              <img src={medalSrc} alt="medal" className="streak-reward-icon" />
-              <span className="streak-reward-text">
-                +{String(calcReward(displayStreakNum))}
-              </span>
+              {typeof medalSrc === "string" ? <img src={medalSrc} alt="medal" className="streak-reward-icon" /> : medalSrc}
+              <span className="streak-reward-text">+{String(calcReward(displayStreakNumber))}</span>
             </div>
-            <button className="streak-close-btn" onClick={closeModal}>
-              Close
-            </button>
+            <button className="streak-close-btn" onClick={closeModal}>Close</button>
           </div>
         </div>
       )}

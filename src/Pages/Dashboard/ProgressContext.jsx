@@ -1,10 +1,24 @@
+// Recursively sanitize any object, unwrapping .default and converting to primitives where possible
+const sanitizeDeep = (val) => {
+  if (val === null || val === undefined) return val;
+  if (typeof val !== "object") return val;
+  if (Object.prototype.hasOwnProperty.call(val, "default")) return sanitizeDeep(val.default);
+  if (Array.isArray(val)) return val.map(sanitizeDeep);
+  const out = {};
+  for (const k in val) {
+    if (Object.prototype.hasOwnProperty.call(val, k)) {
+      out[k] = sanitizeDeep(val[k]);
+    }
+  }
+  return out;
+};
+// src/Pages/Dashboard/ProgressContext.jsx
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 
 export const ProgressContext = createContext();
 export const useProgress = () => useContext(ProgressContext);
 
-// Must exactly match your backend’s shape:
 const initialProgress = {
   basic: {
     termsone:   { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false },
@@ -26,8 +40,15 @@ const initialProgress = {
   }
 };
 
+// helper to unwrap { default: ... } and also return primitive-friendly values
+const unwrap = (v) => {
+  if (v === null || v === undefined) return v;
+  if (typeof v !== "object") return v;
+  if (Object.prototype.hasOwnProperty.call(v, "default")) return unwrap(v.default);
+  return v;
+};
+
 export const ProgressProvider = ({ children, initialUserEmail = "", initialUserName = "" }) => {
-  // Use initialUserEmail and initialUserName props if provided, else fallback to localStorage
   const storedEmail = initialUserEmail || localStorage.getItem("userEmail") || "";
   const storedName  = initialUserName  || localStorage.getItem("userName")  || "";
   const storedUsername = localStorage.getItem("userUsername") || "";
@@ -36,46 +57,35 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
   const [currentUserName, setCurrentUserName]   = useState(storedName);
   const [currentUserUsername, setCurrentUserUsername] = useState(storedUsername);
 
-  // Sync currentUserUsername state with localStorage changes
   useEffect(() => {
     const handleStorageChange = () => {
       const username = localStorage.getItem("userUsername") || "";
       console.log("ProgressContext: localStorage userUsername =", username);
       setCurrentUserUsername(username);
     };
-
     window.addEventListener("storage", handleStorageChange);
-
-    // Also call once on mount to sync initial value
     handleStorageChange();
-
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-    };
+    return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
   const [progressData, setProgressData] = useState(() => {
-    const saved = storedEmail
-      ? localStorage.getItem(`progress_${storedEmail}`)
-      : null;
+    const saved = storedEmail ? localStorage.getItem(`progress_${storedEmail}`) : null;
     if (saved) {
       console.log("Loaded progress from localStorage for", storedEmail, ":", saved);
     }
     return saved ? JSON.parse(saved) : initialProgress;
   });
 
-  const [streakData, setStreakData] = useState(() => {
-    // Try to use value from localStorage if available (optional), else fallback to backend fetch
-    return {
-      currentStreak: null,
-      lastUpdated: null,
-      streakFreeze: false,
-    };
-  });
+  // ensure streakData has safe, primitive-friendly values
+  const [streakData, setStreakData] = useState(() => ({
+    currentStreak: null,
+    lastUpdated: null,
+    streakFreeze: false,
+  }));
 
   const STORAGE_KEY = (email) => `progress_${email}`;
 
-  // 1) Fetch progress & streak when email changes
+  // Fetch progress & streak when email changes
   useEffect(() => {
     if (!currentUserEmail) {
       setProgressData(initialProgress);
@@ -93,24 +103,30 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
         }
 
         const [prgRes, strRes] = await Promise.all([
-        axios.get(`/api/progress/email/${encodeURIComponent(currentUserEmail)}`),
-        axios.get(`/api/streak/email/${encodeURIComponent(currentUserEmail)}`)
+          axios.get(`/api/progress/email/${encodeURIComponent(currentUserEmail)}`),
+          axios.get(`/api/streak/email/${encodeURIComponent(currentUserEmail)}`)
         ]);
 
-        if (prgRes.data.progress) {
-          console.log("Fetched progress from backend for", currentUserEmail, ":", prgRes.data.progress);
-          if (typeof prgRes.data.progress === "object" && prgRes.data.progress.default) {
-            console.warn("⚠️ Backend returned an object with a 'default' key. This will cause React errors. Fix backend response shape.", prgRes.data.progress);
-          }
-          setProgressData(prgRes.data.progress);
-          localStorage.setItem(
-            STORAGE_KEY(currentUserEmail),
-            JSON.stringify(prgRes.data.progress)
-          );
+        if (prgRes?.data?.progress) {
+          console.log("Fetched progress from backend for", currentUserEmail, "raw:", prgRes.data.progress);
+          const progress = unwrap(prgRes.data.progress);
+          console.log("Fetched progress unwrapped:", progress);
+          setProgressData(progress);
+          localStorage.setItem(STORAGE_KEY(currentUserEmail), JSON.stringify(progress));
         }
 
-        if (strRes.data.streak) {
-          setStreakData(strRes.data.streak);
+        if (strRes?.data?.streak) {
+          console.log("Fetched streak raw:", strRes.data.streak);
+          const s = sanitizeDeep(strRes.data.streak) || {};
+          // Normalize streak fields to safe types
+          const normalized = {
+            currentStreak: s.currentStreak == null ? null : Number(s.currentStreak),
+            lastUpdated: s.lastUpdated ? String(s.lastUpdated) : null,
+            streakFreeze: !!s.streakFreeze,
+            ...s, // keep any extras but primitives preferred
+          };
+          console.log("Fetched streak normalized:", normalized);
+          setStreakData(normalized);
         }
       } catch (err) {
         console.error("Error fetching progress/streak:", err);
@@ -118,36 +134,30 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
     })();
   }, [currentUserEmail]);
 
-  // 2) Sync progress to backend & localStorage
+  // Sync progress to backend & localStorage
   useEffect(() => {
     if (!currentUserEmail) return;
-    localStorage.setItem(
-      STORAGE_KEY(currentUserEmail),
-      JSON.stringify(progressData)
-    );
+    try {
+      localStorage.setItem(STORAGE_KEY(currentUserEmail), JSON.stringify(progressData));
+    } catch (e) {
+      console.warn("Failed to set progress in localStorage", e);
+    }
     (async () => {
       try {
-        await axios.put(
-          `/api/progress/email/${encodeURIComponent(currentUserEmail)}`,
-          { progress: progressData }
-        );
+        await axios.put(`/api/progress/email/${encodeURIComponent(currentUserEmail)}`, { progress: progressData });
       } catch (err) {
         console.error("Error syncing progress:", err);
       }
     })();
   }, [progressData, currentUserEmail]);
 
-  // 3) Sync streak to backend
+  // Sync streak to backend (avoid superadmin)
   useEffect(() => {
     if (!currentUserEmail) return;
-    // Skip streak syncing for superadmin accounts
     if (currentUserEmail.toLowerCase().includes('superadmin')) return;
     (async () => {
       try {
-        await axios.put(
-          `/api/streak/email/${encodeURIComponent(currentUserEmail)}`,
-          { streak: streakData }
-        );
+        await axios.put(`/api/streak/email/${encodeURIComponent(currentUserEmail)}`, { streak: streakData });
       } catch (err) {
         console.error("Error syncing streak:", err);
       }
@@ -168,24 +178,34 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
   };
 
   const incrementStreak = async () => {
-  if (!currentUserEmail) return;
-  // Skip streak increment for superadmin accounts
-  if (currentUserEmail.toLowerCase().includes('superadmin')) return;
+    if (!currentUserEmail) return;
+    if (currentUserEmail.toLowerCase().includes('superadmin')) return;
     try {
-      // Prepare new streak object
       const newStreak = {
         ...streakData,
-        currentStreak: (streakData.currentStreak || 0) + 1,
-        lastUpdated: new Date(),
+        currentStreak: (Number(streakData.currentStreak) || 0) + 1,
+        lastUpdated: new Date().toISOString(),
       };
-      // Call backend to update streak and points, and use backend's streak in state
+
       const res = await axios.put(`/api/streak/email/${currentUserEmail}`, { streak: newStreak });
-      if (res.data && res.data.streak) {
-        setStreakData(res.data.streak); // Always use backend's streak
+
+      // Always unwrap backend response
+      const backendStreak = sanitizeDeep(res?.data?.streak) || res?.data?.streak || null;
+      if (backendStreak) {
+        const normalized = {
+          currentStreak: backendStreak.currentStreak == null ? Number(newStreak.currentStreak) : Number(backendStreak.currentStreak),
+          lastUpdated: backendStreak.lastUpdated ? String(backendStreak.lastUpdated) : String(newStreak.lastUpdated),
+          streakFreeze: !!backendStreak.streakFreeze,
+          ...backendStreak,
+        };
+        console.log("incrementStreak: using backend normalized streak:", normalized);
+        setStreakData(normalized);
       } else {
-        setStreakData(newStreak); // fallback
+        console.log("incrementStreak: backend did not return streak — using optimistic newStreak:", newStreak);
+        setStreakData(sanitizeDeep(newStreak));
       }
-      if (res.data && res.data.pointsAdded) {
+
+      if (res?.data?.pointsAdded) {
         console.log(`Points added: ${res.data.pointsAdded}`);
       }
     } catch (err) {

@@ -78,13 +78,39 @@ const router = createBrowserRouter([
       { path: "maintenance", element: <Maintenance /> },
       { path: "livesrunout", element: <LivesRunOut /> },
       { path: "practice/:lessonKey", element: <Practice /> },
-
     ],
   },
 
   // ✅ Catch-all redirect to prevent broken links
   { path: "*", element: <Navigate to="/login" replace /> },
 ]);
+
+const findBadRouteElements = (routes, base = "") => {
+  for (const r of routes) {
+    const path = (base + (r.path || "")).replace(/\/+/g, "/");
+    if (r.element && r.element.type) {
+      const t = r.element.type;
+      // If the element's type is an object with a `default` key,
+      // it likely came from a bad import like `import Foo from './Foo'`
+      // when Foo was exported as a named export (or vice versa).
+      if (typeof t === "object" && t !== null && Object.prototype.hasOwnProperty.call(t, "default")) {
+        console.error("🛑 Bad route element found at path:", path || "/", {
+          routePath: path || "/",
+          elementType: t,
+        });
+      }
+    }
+    if (r.children) findBadRouteElements(r.children, path + "/");
+  }
+};
+
+// run validator and print a helpful message
+try {
+  findBadRouteElements(router.routes || []);
+  console.info("Route validation complete — check console for any 'Bad route element' errors.");
+} catch (e) {
+  console.error("Route validation failed:", e);
+}
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
