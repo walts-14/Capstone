@@ -235,16 +235,43 @@ export const markAsRead = async (req, res) => {
  * Get messages created by the logged-in sender (useful for SuperAdmin view)
  * GET /api/messages/sent
  */
+// tolerant getMessagesSentBySender
 export const getMessagesSentBySender = async (req, res) => {
   try {
     const user = req.user;
     if (!user) return res.status(401).json({ message: "Unauthorized" });
-    if (user.role !== "superadmin") return res.status(403).json({ message: "Forbidden" });
 
-    const messages = await Message.find({ senderId: user._id })
+    const role = String(user.role || "").toLowerCase();
+    if (!["superadmin", "super_admin"].includes(role))
+      return res.status(403).json({ message: "Forbidden" });
+
+    // ✅ Instead of user._id, use user.email
+    if (!user.email) {
+      console.warn("getMessagesSentBySender: req.user.email missing", user);
+      return res.status(400).json({ message: "Bad request: user email missing in token" });
+    }
+
+    const emailStr = String(user.email).trim();
+    if (!emailStr) {
+      console.warn("getMessagesSentBySender: empty email string");
+      return res.status(400).json({ message: "Bad request: empty email" });
+    }
+
+    // ✅ Build query conditions
+    const orConditions = [
+      { senderEmail: emailStr }, // main match
+      { senderRole: { $regex: new RegExp(`^${escapeRegExp(role)}$`, "i") } } // also match by role
+    ];
+
+    const messages = await Message.find({ $or: orConditions })
       .sort({ createdAt: -1 })
-      .populate("senderId", "name email role")
       .lean();
+
+    console.log(
+      "getMessagesSentBySender - found:",
+      Array.isArray(messages) ? messages.length : 0,
+      messages.map((m) => String(m._id))
+    );
 
     return res.json(messages);
   } catch (err) {
@@ -252,6 +279,8 @@ export const getMessagesSentBySender = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
+
+
 
 export const getUsersByGradeLevel = async (req, res) => {
   try {
@@ -284,6 +313,90 @@ export const getUsersByGradeLevel = async (req, res) => {
     return res.json({ data: users });
   } catch (err) {
     console.error("getUsersByGradeLevel error", err);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const editMessage = async (req, res) => {
+  try {
+    const user = req.user;
+    const { id } = req.params;
+    // accept both `text` and `body` to be flexible
+    const { text, body, grade, teacherId, teacherName, studentId, studentName } = req.body;
+
+    if (!user) return res.status(401).json({ message: "Unauthorized" });
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid message ID" });
+    }
+
+    // require some content to update
+    const newBody = (body || text || "").trim();
+    if (!newBody) return res.status(400).json({ message: "Message body cannot be empty" });
+
+    const message = await Message.findById(id);
+    if (!message) return res.status(404).json({ message: "Message not found" });
+
+    const role = String(user.role || "").toLowerCase();
+    const userEmail = String(user.email || "").trim();
+    const userIdStr = user._id || user.id || user.userId || null;
+
+    const isSenderById =
+      userIdStr && message.senderId && String(message.senderId) === String(userIdStr);
+    const isSenderByEmail = userEmail && message.senderEmail && String(message.senderEmail) === String(userEmail);
+    const isSuperAdmin = ["superadmin", "super_admin"].includes(role);
+
+    if (!isSenderById && !isSenderByEmail && !isSuperAdmin) {
+      return res.status(403).json({ message: "Forbidden: You can't edit this message" });
+    }
+
+    // apply updates
+    message.body = newBody;
+    if (typeof grade === "string") message.grade = grade;
+    if (teacherId && mongoose.Types.ObjectId.isValid(teacherId)) message.teacherId = teacherId;
+    if (typeof teacherName === "string") message.teacherName = teacherName;
+    if (studentId && mongoose.Types.ObjectId.isValid(studentId)) message.studentId = studentId;
+    if (typeof studentName === "string") message.studentName = studentName;
+    message.updatedAt = new Date();
+
+    await message.save();
+
+    return res.json({ message: "Message updated successfully", updatedMessage: message });
+  } catch (err) {
+    console.error("editMessage error", err);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const deleteMessage = async (req, res) => {
+  try {
+    const user = req.user;
+    const { id } = req.params;
+
+    if (!user) return res.status(401).json({ message: "Unauthorized" });
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid message ID" });
+    }
+
+    const message = await Message.findById(id);
+    if (!message) return res.status(404).json({ message: "Message not found" });
+
+    const role = String(user.role || "").toLowerCase();
+    const userEmail = String(user.email || "").trim();
+    const userIdStr = user._id || user.id || user.userId || null;
+
+    const isSenderById =
+      userIdStr && message.senderId && String(message.senderId) === String(userIdStr);
+    const isSenderByEmail = userEmail && message.senderEmail && String(message.senderEmail) === String(userEmail);
+    const isSuperAdmin = ["superadmin", "super_admin"].includes(role);
+
+    if (!isSenderById && !isSenderByEmail && !isSuperAdmin) {
+      return res.status(403).json({ message: "Forbidden: You can't delete this message" });
+    }
+
+    await Message.findByIdAndDelete(id);
+    return res.json({ message: "Message deleted" });
+  } catch (err) {
+    console.error("deleteMessage error", err);
     return res.status(500).json({ message: "Server error" });
   }
 };
