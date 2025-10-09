@@ -44,11 +44,17 @@ function Quiz() {
 
   const minPointsRequired = {
     basic: 70,
-    intermediate: 105,
-    advanced: 140,
+    intermediate: 70,
+    advanced: 70,
   };
 
   const pointsPerCorrectAnswer = 10;
+
+  const pointsTable = {
+    basic: { 1: 10, 2: 10, 3: 5, 4: 2 },
+    intermediate: { 1: 15, 2: 15, 3: 8, 4: 3 },
+    advanced: { 1: 20, 2: 20, 3: 10, 4: 5 },
+  };
 
   const [quizQuestions, setQuizQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -63,7 +69,6 @@ function Quiz() {
   const [hasUpdatedQuiz, setHasUpdatedQuiz] = useState(false);
   const [failedPointsRequirement, setFailedPointsRequirement] = useState(false);
 
-  
   const [lives, setLives] = useState(5);
   const [streak, setStreak] = useState(0);
 
@@ -105,16 +110,13 @@ function Quiz() {
           termstwelve: 12,
         };
         const lessonNumber = lessonNumberMapping[lessonKey] || 1;
-        const response = await axios.get(
-          `${backendURL}/api/quizzes/stored`,
-          {
-            params: { level, lessonNumber, quizPart },
-          }
-        );
+        const response = await axios.get(`${backendURL}/api/quizzes/stored`, {
+          params: { level, lessonNumber, quizPart },
+        });
         setQuizQuestions(response.data);
         setCurrentQuestionIndex(0);
         setSelectedAnswerIndex(null);
-        setAttempts( {});
+        setAttempts({});
         setCorrectAnswers(0);
         setWrongAnswers(0);
         setShowResult(false);
@@ -128,18 +130,18 @@ function Quiz() {
     };
     fetchQuizQuestions();
   }, [level, lessonKey, quizPart, backendURL]);
-  
-    // after your fetchQuizQuestions useEffect
+
+  // after your fetchQuizQuestions useEffect
   useEffect(() => {
     if (!quizQuestions.length) return;
 
     // for each choice across all questions, insert a <link preload> into <head>
-    const links = quizQuestions.flatMap(q =>
+    const links = quizQuestions.flatMap((q) =>
       q.choices.map(({ videoUrl }) => {
         const link = document.createElement("link");
-        link.rel   = "preload";
-        link.as    = "video";
-        link.href  = videoUrl;
+        link.rel = "preload";
+        link.as = "video";
+        link.href = videoUrl;
         document.head.appendChild(link);
         return link;
       })
@@ -147,11 +149,10 @@ function Quiz() {
 
     // cleanup on unmount or when questions change
     return () => {
-      links.forEach(link => document.head.removeChild(link));
+      links.forEach((link) => document.head.removeChild(link));
     };
   }, [quizQuestions]);
 
-  
   const currentQuestion = quizQuestions[currentQuestionIndex];
 
   const handleChoiceClick = (index) => {
@@ -173,46 +174,55 @@ function Quiz() {
     }
     if (!showResult) {
       setShowResult(true);
-          try {
-            if (!isCorrect) {
-              // Do not add points if answer is incorrect
-              await axios.post(`${backendURL}/api/lives/email/${userEmail}/lose-life`);
-              setLives((prev) => Math.max(0, prev - 1));
-              setStreak(0);
-              setWrongAnswers((prev) => prev + 1);
-              return; // Early return to prevent points awarding
-            }
-            setCorrectAnswers((prev) => prev + 1);
-            setStreak((prev) => prev + 1);
-            if ((streak + 1) % 3 === 0) {
-              await axios.post(`${backendURL}/api/lives/email/${userEmail}/gain-life`);
-              setLives((prev) => prev + 1);
-              toast.success("Streak bonus! +1 life");
-            }
-            // Calculate points based on attempt number and level
-            const questionId = currentQuestion._id || currentQuestion.question; // fallback to question text if no id
+      try {
+        if (!isCorrect) {
+          // Do not add points if answer is incorrect
+          await axios.post(
+            `${backendURL}/api/lives/email/${userEmail}/lose-life`
+          );
+          setLives((prev) => Math.max(0, prev - 1));
+          setStreak(0);
+          setWrongAnswers((prev) => prev + 1);
+          return; // Early return to prevent points awarding
+        }
+        setCorrectAnswers((prev) => prev + 1);
+        setStreak((prev) => prev + 1);
+        if ((streak + 1) % 3 === 0) {
+          await axios.post(
+            `${backendURL}/api/lives/email/${userEmail}/gain-life`
+          );
+          setLives((prev) => prev + 1);
+          toast.success("Streak bonus! +1 life");
+        }
+        // Calculate points based on attempt number and level
+        const questionId = currentQuestion._id || currentQuestion.question; // fallback to question text if no id
 
-            // Increment attempt count for current question before awarding points
-            const newAttemptCount = attempts[questionId] ? attempts[questionId] + 1 : 1;
-            setAttempts((prev) => ({
-              ...prev,
-              [questionId]: newAttemptCount,
-            }));
+        // Increment attempt count for current question before awarding points
+        const newAttemptCount = attempts[questionId]
+          ? attempts[questionId] + 1
+          : 1;
+        setAttempts((prev) => ({
+          ...prev,
+          [questionId]: newAttemptCount,
+        }));
 
-            const pointsTable = {
-              basic: { 1: 10, 2: 10, 3: 5, 4: 2 },
-              intermediate: { 1: 15, 2: 15, 3: 8, 4: 3 },
-              advanced: { 1: 20, 2: 20, 3: 10, 4: 5 },
-            };
+        const pointsTable = {
+          basic: { 1: 10, 2: 10, 3: 5, 4: 2 },
+          intermediate: { 1: 15, 2: 15, 3: 8, 4: 3 },
+          advanced: { 1: 20, 2: 20, 3: 10, 4: 5 },
+        };
 
-            // Use 4th+ try points for attempts >= 4
-            const attemptKey = newAttemptCount >= 4 ? 4 : newAttemptCount;
-            const pointsToAward = pointsTable[level][attemptKey] || 0;
+        // Use 4th+ try points for attempts >= 4
+        const attemptKey = newAttemptCount >= 4 ? 4 : newAttemptCount;
+        const pointsToAward = pointsTable[level][attemptKey] || 0;
 
-            await axios.post(`${backendURL}/api/points/email/${userEmail}/gain-points`, { points: pointsToAward });
-          } catch (error) {
-            toast.error("Failed to update lives/points. Please try again.");
-          }
+        await axios.post(
+          `${backendURL}/api/points/email/${userEmail}/gain-points`,
+          { points: pointsToAward }
+        );
+      } catch (error) {
+        toast.error("Failed to update lives/points. Please try again.");
+      }
       return;
     }
     // Increment attempt count for current question
@@ -223,9 +233,10 @@ function Quiz() {
     }));
 
     // Calculate total attempts so far (sum of all question attempts)
-    const totalAttempts = Object.values(attempts).reduce((a, b) => a + b, 0) + 1;
+    const totalAttempts =
+      Object.values(attempts).reduce((a, b) => a + b, 0) + 1;
 
-    if ((currentQuestionIndex + 1) >= totalQuestions || lives <= 0) {
+    if (currentQuestionIndex + 1 >= totalQuestions || lives <= 0) {
       setQuizFinished(true);
       toast.success("Quiz completed!");
       return;
@@ -258,7 +269,7 @@ function Quiz() {
     setHasUpdatedQuiz(false);
   };
 
-   const failMessages = [
+  const failMessages = [
     "You've almost got it!",
     "Keep going—you’re close!",
     "Don’t give up now!",
@@ -272,7 +283,7 @@ function Quiz() {
   useEffect(() => {
     if (quizFinished && !hasUpdatedQuiz) {
       // Only show failed result if all questions are answered
-      if ((currentQuestionIndex + 1) < totalQuestions) {
+      if (currentQuestionIndex + 1 < totalQuestions) {
         // Not finished all questions yet, do not show failed result
         return;
       }
@@ -280,7 +291,9 @@ function Quiz() {
       const requiredPoints = minPointsRequired[level] || 70;
       if (userPoints < requiredPoints) {
         setFailedPointsRequirement(true);
-        toast.error(`You need at least ${requiredPoints} points to proceed. Your score: ${userPoints}`);
+        toast.error(
+          `You need at least ${requiredPoints} points to proceed. Your score: ${userPoints}`
+        );
         return;
       }
       const progressKey = currentStep === 1 ? "step1Quiz" : "step2Quiz";
@@ -302,7 +315,7 @@ function Quiz() {
     wrongAnswers,
   ]);
 
-    // if they ever run out of lives, immediately show the “Out of Lives” screen:
+  // if they ever run out of lives, immediately show the “Out of Lives” screen:
   if (lives <= 0 && !failedPointsRequirement) {
     return <LivesRunOut />;
   }
@@ -315,19 +328,21 @@ function Quiz() {
     return (
       <div className="d-flex flex-column align-items-center justify-content-center gap-2">
         <img src={failed} alt="" />
-         <div className="dia-reward d-flex pt-1">
+        <div className="dia-reward d-flex pt-1">
           <img src={diamond} className="img-fluid p-1 ms-5" alt="diamond img" />
           <p className="dia-number ms-3 me-5  fs-1">{correctAnswers * 10}</p>
         </div>
         <div className="stats-quiz d-flex flex-row gap-1 text-center">
-                  <img src={check} className="tama img-fluid p-1" alt="check img" />
-                  <p className="check-number ms-1 fs-1">{correctAnswers}</p>
-                  <img src={ekis} className="mali img-fluid p-1 ms-5" alt="ekis img" />
-                  <p className="ekis-number ms-1 fs-1" >{wrongAnswers}</p>
-                </div>
+          <img src={check} className="tama img-fluid p-1" alt="check img" />
+          <p className="check-number ms-1 fs-1">{correctAnswers}</p>
+          <img src={ekis} className="mali img-fluid p-1 ms-5" alt="ekis img" />
+          <p className="ekis-number ms-1 fs-1">{wrongAnswers}</p>
+        </div>
         <div className="d-flex flex-column align-items-center justify-content-center  ">
-          <h1 >{failHeading}</h1>
-           <h2 style={{ color: 'gray' }}>You need at least 7 correct answers to pass the quiz</h2>
+          <h1>{failHeading}</h1>
+          <h2 style={{ color: "gray" }}>
+            You need at least 7 correct answers to pass the quiz
+          </h2>
         </div>
         <div className="finishbuttons rounded-4 d-flex align-items-center justify-content-center gap-4">
           <button
@@ -343,17 +358,15 @@ function Quiz() {
             Dashboard
           </button>
 
-          <button className="retry-button d-flex flex-direction-row justify-content-center align-items-center" onClick={handleRetry}>
-            <img
-              src={retry}
-              className="img-fluid "
-              alt="dashboard img"
-            />
+          <button
+            className="retry-button d-flex flex-direction-row justify-content-center align-items-center"
+            onClick={handleRetry}
+          >
+            <img src={retry} className="img-fluid " alt="dashboard img" />
             <p>Try again</p>
           </button>
         </div>
       </div>
-     
     );
   }
 
@@ -370,14 +383,16 @@ function Quiz() {
         <div
           className="progress"
           role="progressbar"
-      aria-valuenow={(currentQuestionIndex / totalQuestions) * 100}
-      aria-valuemin="0"
-      aria-valuemax="100"
-    >
-      <div
-        className="progress-bar"
-        style={{ width: `${(currentQuestionIndex / totalQuestions) * 100}%` }}
-      ></div>
+          aria-valuenow={(currentQuestionIndex / totalQuestions) * 100}
+          aria-valuemin="0"
+          aria-valuemax="100"
+        >
+          <div
+            className="progress-bar"
+            style={{
+              width: `${(currentQuestionIndex / totalQuestions) * 100}%`,
+            }}
+          ></div>
         </div>
       )}
       {quizFinished ? null : (
@@ -413,17 +428,19 @@ function Quiz() {
                   style={{ pointerEvents: showResult ? "none" : "auto" }}
                 >
                   <div
-                    className={`choice-${
-                      ["A", "B", "C", "D"][index].toLowerCase()
-                    } rounded-4 m-4${isSelected ? " selected" : ""}`}
+                    className={`choice-${["A", "B", "C", "D"][
+                      index
+                    ].toLowerCase()} rounded-4 m-4${
+                      isSelected ? " selected" : ""
+                    }`}
                   >
                     <strong>{["A", "B", "C", "D"][index]}</strong>
-                     <LazyVideo
-   src={option.videoUrl}
-   poster="path/to/placeholder.jpg" 
-   width={200}
-   height={150}
- />
+                    <LazyVideo
+                      src={option.videoUrl}
+                      poster="path/to/placeholder.jpg"
+                      width={200}
+                      height={150}
+                    />
                   </div>
                 </div>
               );
