@@ -92,32 +92,32 @@ const SuperAdmin = () => {
     content: "",
   });
 
-    // State for sending to all admins
-    const [sendToAllAdmins, setSendToAllAdmins] = useState(false);
+  // State for sending to all admins
+  const [sendToAllAdmins, setSendToAllAdmins] = useState(false);
 
   // Handler for plus button
- const handlePlusClick = () => {
-  fetchUsers();
-  fetchTeachers();
-  // Do NOT fetch students until a grade is selected
-  setShowMessageForm(true);
-};
+  const handlePlusClick = () => {
+    fetchUsers();
+    fetchTeachers();
+    // Do NOT fetch students until a grade is selected
+    setShowMessageForm(true);
+  };
   const handleMessageFormClose = () => {
     setShowMessageForm(false);
     setNewMessage({ teacher: "", grade: "", student: "", content: "" });
   };
   // Handler for form input
-const handleMessageInputChange = (e) => {
-  const { name, value } = e.target;
-  setNewMessage((prev) => ({ ...prev, [name]: value }));
+  const handleMessageInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewMessage((prev) => ({ ...prev, [name]: value }));
 
-  if (name === "grade") {
-    // fetch students for that grade (these students are for monitoring / selection only)
-    fetchStudentsForMessage(value);
-    // optionally keep the modal's teacher list in sync:
-    // fetchTeachers(value);
-  }
-};
+    if (name === "grade") {
+      // fetch students for that grade (these students are for monitoring / selection only)
+      fetchStudentsForMessage(value);
+      // optionally keep the modal's teacher list in sync:
+      // fetchTeachers(value);
+    }
+  };
   // ...removed duplicate handleSendMessage...
   // Message popup state
   const [showMessagesPopup, setShowMessagesPopup] = useState(false);
@@ -127,98 +127,69 @@ const handleMessageInputChange = (e) => {
   const [messageStudents, setMessageStudents] = useState([]);
 
   const fetchStudentsForMessage = async (grade = "") => {
-  if (!grade) return; // Do not call API if grade is not selected
-  try {
-    const url = `/api/messages/users/year/${encodeURIComponent(grade)}`;
-    const res = await axios.get(url, { baseURL: "http://localhost:5000" });
-    const raw = res.data.data || [];
-  setMessageStudents(raw.map((u) => sanitizeObjectRecursive(u)));
-  } catch (err) {
-    console.error("fetchStudentsForMessage error", err);
-    toast.error("Failed to load students for selected grade.");
-  }
-};
+    if (!grade) return; // Do not call API if grade is not selected
+    try {
+      const url = `/api/messages/users/year/${encodeURIComponent(grade)}`;
+      const res = await axios.get(url, { baseURL: "http://localhost:5000" });
+      const raw = res.data.data || [];
+      setMessageStudents(raw.map((u) => sanitizeObjectRecursive(u)));
+    } catch (err) {
+      console.error("fetchStudentsForMessage error", err);
+      toast.error("Failed to load students for selected grade.");
+    }
+  };
 
   // Fetch all messages sent by superadmin
- // Fetch all messages sent by superadmin
-// robust fetchMessages with debug + normalization
-// TEMP: fetch-based fetchMessages to isolate axios issues
-const fetchMessages = async () => {
-  try {
-const token = localStorage.getItem("token");
-console.log("Token being sent:", token);  
-
-
-    const response = await fetch("http://localhost:5000/api/messages/sent", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
-      },
-    });
-
-    console.log("[fetchMessages:fetch] http status", response.status);
-
-    const text = await response.text();
-    let payload;
+  const fetchMessages = async () => {
     try {
-      payload = JSON.parse(text);
-    } catch (e) {
-      console.warn("[fetchMessages:fetch] response not json:", text);
-      payload = text;
+      const res = await fetch("http://localhost:5000/api/messages/for-admin", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setMessages(data);
+      }
+    } catch (err) {
+      console.error("Failed to fetch messages", err);
     }
-    console.log("[fetchMessages:fetch] raw payload:", payload);
-
-    // ✅ Normalize the messages array no matter what shape it comes in
-    let arr = [];
-    if (Array.isArray(payload)) arr = payload;
-    else if (payload && Array.isArray(payload.data)) arr = payload.data;
-    else if (payload && Array.isArray(payload.messages)) arr = payload.messages;
-    else if (payload && payload._id) arr = [payload];
-    else {
-      const found = payload && Object.values(payload).find((v) => Array.isArray(v));
-      arr = found || [];
-    }
-
-    console.log("[fetchMessages:fetch] normalized count:", arr.length, arr.map(m => m._id));
-    setMessages((arr || []).map((m) => {
-  return { ...mapMessage(m), raw: m };
-}));
-
-  } catch (err) {
-    console.error("[fetchMessages:fetch] error", err);
-    setMessages([]);
-  }
-};
-
+  };
 
 useEffect(() => {
   if (showMessagesPopup) fetchMessages();
 }, [showMessagesPopup]);
 
   // Send a new message
-const handleSendMessage = async (e) => {
-  e.preventDefault();
-  if (!newMessage.content || (!sendToAllAdmins && !newMessage.teacher && !newMessage.student)) {
-    toast.error("Please select teacher/student or choose 'Send to All Admins' and enter message.");
-    return;
-  }
-  setIsSubmitting(true);
-
-  try {
-    // If sending to all admins, collect all teacher IDs
-    let recipientIds = [];
-    let teacherName = "";
-    let teacherId = null;
-    if (sendToAllAdmins) {
-      recipientIds = teachers.map((t) => t._id);
-      teacherName = "All Admins";
-    } else {
-      teacherId = newMessage.teacher || null;
-      const teacherObj = teachers.find((t) => String(t._id) === String(teacherId));
-      teacherName = teacherObj ? (teacherObj.name || teacherObj.username || teacherObj.email) : "";
-      if (teacherId) recipientIds = [teacherId];
+  const handleSendMessage = async (e) => {
+    e.preventDefault();
+    if (
+      !newMessage.content ||
+      (!sendToAllAdmins && !newMessage.teacher && !newMessage.student)
+    ) {
+      toast.error(
+        "Please select teacher/student or choose 'Send to All Admins' and enter message."
+      );
+      return;
     }
+    setIsSubmitting(true);
+
+    try {
+      // If sending to all admins, collect all teacher IDs
+      let recipientIds = [];
+      let teacherName = "";
+      let teacherId = null;
+      if (sendToAllAdmins) {
+        recipientIds = teachers.map((t) => t._id);
+        teacherName = "All Admins";
+      } else {
+        teacherId = newMessage.teacher || null;
+        const teacherObj = teachers.find(
+          (t) => String(t._id) === String(teacherId)
+        );
+        teacherName = teacherObj
+          ? teacherObj.name || teacherObj.username || teacherObj.email
+          : "";
+        if (teacherId) recipientIds = [teacherId];
+      }
 
     // studentId from the users select (we set value to u._id)
    // existing studentId retrieval
@@ -227,34 +198,20 @@ const studentId = newMessage.student || null;
 const studentObj = messageStudents.find((u) => String(u._id) === String(studentId));
 const studentName = studentObj ? (studentObj.name || studentObj.username || studentObj.email) : "";
 
-    const payload = {
-      title: `${teacherName || "Teacher"} → ${studentName || "Student"}`,
-      body: newMessage.content,
-      grade: newMessage.grade,
-      recipientIds,
-      isBroadcast: sendToAllAdmins,
-      teacherId: teacherId || null,
-      teacherName,
-      studentId: studentId || null,
-      studentName,
-    };
 
-    const res = await axios.post("/api/messages", payload, { baseURL: "http://localhost:5000" });
+      const payload = {
+        title: `${teacherName || "Teacher"} → ${studentName || "Student"}`,
+        body: newMessage.content,
+        grade: newMessage.grade,
+        recipientIds,
+        isBroadcast: sendToAllAdmins,
+        teacherId: teacherId || null,
+        teacherName,
+        studentId: studentId || null,
+        studentName,
+      };
 
-    const created = res?.data;
-if (created && created._id) {
-  const mapped = mapMessage(created);
-  const item = { ...mapped, raw: created };
-  setMessages((prev) => {
-    if (prev.some((m) => m.id === item.id)) return prev;
-    return [item, ...prev];
-  });
-}
- else {
-  // fallback: refresh full list
-  await fetchMessages();
-}
-
+    const res = await axios.post("/api/messages", payload);
     toast.success(sendToAllAdmins ? "Message sent to all admins" : "Message sent");
     setShowMessageForm(false);
     setNewMessage({ teacher: "", grade: "", student: "", content: "" });
@@ -933,6 +890,7 @@ const handleDeleteMsg = async () => {
                         padding: "2rem 2rem 1.5rem 2rem",
                         display: "flex",
                         flexDirection: "column",
+                        justifyContent: "flex-start",
                       }}
                     >
                       <button
@@ -985,11 +943,19 @@ const handleDeleteMsg = async () => {
                       <form onSubmit={handleSendMessage}>
                         <div style={{ marginBottom: "1rem" }}>
                           <div style={{ marginBottom: "0.7rem" }}>
-                            <label style={{ color: "#fff", fontWeight: "bold", fontSize: "1.1rem" }}>
+                            <label
+                              style={{
+                                color: "#fff",
+                                fontWeight: "bold",
+                                fontSize: "1.1rem",
+                              }}
+                            >
                               <input
                                 type="checkbox"
                                 checked={sendToAllAdmins}
-                                onChange={(e) => setSendToAllAdmins(e.target.checked)}
+                                onChange={(e) =>
+                                  setSendToAllAdmins(e.target.checked)
+                                }
                                 style={{ marginRight: "0.5rem" }}
                               />
                               Send to All Admins
@@ -1056,7 +1022,10 @@ const handleDeleteMsg = async () => {
                           >
                             <option value="">Select Student</option>
                             {messageStudents.map((u) => (
-                              <option key={u._id || u.email} value={u._id || u.email}>
+                              <option
+                                key={u._id || u.email}
+                                value={u._id || u.email}
+                              >
                                 {u.name || u.username || u.email}
                               </option>
                             ))}
@@ -1432,14 +1401,26 @@ const handleDeleteMsg = async () => {
                               </button>
                             )}
                             <img
-                              src={typeof EditIconImport === "object" && EditIconImport !== null && EditIconImport.default ? EditIconImport.default : EditIconImport}
+                              src={
+                                typeof EditIconImport === "object" &&
+                                EditIconImport !== null &&
+                                EditIconImport.default
+                                  ? EditIconImport.default
+                                  : EditIconImport
+                              }
                               alt="Edit"
                               className="img-action"
                               style={{ cursor: "pointer" }}
                               onClick={() => openForm("edit", u)}
                             />
                             <img
-                              src={typeof RemoveIconImport === "object" && RemoveIconImport !== null && RemoveIconImport.default ? RemoveIconImport.default : RemoveIconImport}
+                              src={
+                                typeof RemoveIconImport === "object" &&
+                                RemoveIconImport !== null &&
+                                RemoveIconImport.default
+                                  ? RemoveIconImport.default
+                                  : RemoveIconImport
+                              }
                               alt="Remove"
                               className="img-action"
                               style={{ marginRight: "50px", cursor: "pointer" }}
