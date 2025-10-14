@@ -67,13 +67,15 @@ export const createAccount = async (req, res) => {
     // For user (student) create magic token + qr/email. For admin you may still email credentials.
     let qrDataUrl = null;
     let magicUrl = null;
-    if (role === "user") {
-      const magicToken = await createMagicToken(user._id);
-      const backend = process.env.BACKEND_URL || `http://localhost:5000`;
-      magicUrl = `${backend}/api/magic-login?token=${encodeURIComponent(magicToken)}`;
-      const pngBuffer = await toPngBuffer(magicUrl);
+    // Always generate QR and magic link for both admin and user
+    const magicToken = await createMagicToken(user._id);
+    const backend = process.env.BACKEND_URL || `http://localhost:5000`;
+    magicUrl = `${backend}/api/magic-login?token=${encodeURIComponent(magicToken)}`;
+    const pngBuffer = await toPngBuffer(magicUrl);
 
-      const html = `
+    let html;
+    if (role === "user") {
+      html = `
         <h2>Welcome to WeSign, ${name}</h2>
         <p>Your account has been created by your coordinator/admin.</p>
         <p><strong>Login Info:</strong></p>
@@ -85,24 +87,25 @@ export const createAccount = async (req, res) => {
         <img src="cid:onboardingqr" alt="Onboarding QR" style="width:180px; height:auto;" />
         <p><a href="${magicUrl}">Open magic login link</a></p>
       `;
-
-      await sendEmail({
-        to: email,
-        subject: "Your WeSign account",
-        html,
-        attachments: [{ filename: "onboarding-qr.png", content: pngBuffer, cid: "onboardingqr" }]
-      });
-
-      qrDataUrl = "data:image/png;base64," + pngBuffer.toString("base64");
     } else {
-      // admin account: send credentials via email (no QR required)
-      const html = `
+      html = `
         <h2>Welcome, ${name}</h2>
         <p>An admin account has been created for you.</p>
         <ul><li>Email: ${email}</li><li>Password: ${rawPwd}</li></ul>
+        <p>Scan the QR or click the link to login (link expires in ${process.env.MAGIC_TOKEN_MIN || 15} minutes):</p>
+        <img src="cid:onboardingqr" alt="Onboarding QR" style="width:180px; height:auto;" />
+        <p><a href="${magicUrl}">Open magic login link</a></p>
       `;
-      await sendEmail({ to: email, subject: "Your WeSign admin account", html });
     }
+
+    await sendEmail({
+      to: email,
+      subject: `Your WeSign ${role === "admin" ? "admin" : "account"}`,
+      html,
+      attachments: [{ filename: "onboarding-qr.png", content: pngBuffer, cid: "onboardingqr" }]
+    });
+
+    qrDataUrl = "data:image/png;base64," + pngBuffer.toString("base64");
 
     const safeUser = user.toObject();
     delete safeUser.password;

@@ -69,6 +69,18 @@ const sanitizeObjectRecursive = (data) => {
   return data;
 };
 
+const mapMessage = (msg) => ({
+  id: msg._id,
+  sender: msg.senderId?.name || msg.senderId?.email || msg.senderRole || "SuperAdmin",
+  grade: msg.grade || "",
+  recipient:
+    msg.studentName ||
+    msg.teacherName ||
+    (msg.recipientIds && msg.recipientIds.length ? "Admin" : ""),
+  content: msg.body,
+  createdAt: msg.createdAt,
+});
+
 const SuperAdmin = () => {
   // State for showing message form
   const [showMessageForm, setShowMessageForm] = useState(false);
@@ -80,32 +92,32 @@ const SuperAdmin = () => {
     content: "",
   });
 
-    // State for sending to all admins
-    const [sendToAllAdmins, setSendToAllAdmins] = useState(false);
+  // State for sending to all admins
+  const [sendToAllAdmins, setSendToAllAdmins] = useState(false);
 
   // Handler for plus button
- const handlePlusClick = () => {
-  fetchUsers();
-  fetchTeachers();
-  // Do NOT fetch students until a grade is selected
-  setShowMessageForm(true);
-};
+  const handlePlusClick = () => {
+    fetchUsers();
+    fetchTeachers();
+    // Do NOT fetch students until a grade is selected
+    setShowMessageForm(true);
+  };
   const handleMessageFormClose = () => {
     setShowMessageForm(false);
     setNewMessage({ teacher: "", grade: "", student: "", content: "" });
   };
   // Handler for form input
-const handleMessageInputChange = (e) => {
-  const { name, value } = e.target;
-  setNewMessage((prev) => ({ ...prev, [name]: value }));
+  const handleMessageInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewMessage((prev) => ({ ...prev, [name]: value }));
 
-  if (name === "grade") {
-    // fetch students for that grade (these students are for monitoring / selection only)
-    fetchStudentsForMessage(value);
-    // optionally keep the modal's teacher list in sync:
-    // fetchTeachers(value);
-  }
-};
+    if (name === "grade") {
+      // fetch students for that grade (these students are for monitoring / selection only)
+      fetchStudentsForMessage(value);
+      // optionally keep the modal's teacher list in sync:
+      // fetchTeachers(value);
+    }
+  };
   // ...removed duplicate handleSendMessage...
   // Message popup state
   const [showMessagesPopup, setShowMessagesPopup] = useState(false);
@@ -115,17 +127,17 @@ const handleMessageInputChange = (e) => {
   const [messageStudents, setMessageStudents] = useState([]);
 
   const fetchStudentsForMessage = async (grade = "") => {
-  if (!grade) return; // Do not call API if grade is not selected
-  try {
-    const url = `/api/messages/users/year/${encodeURIComponent(grade)}`;
-    const res = await axios.get(url, { baseURL: "http://localhost:5000" });
-    const raw = res.data.data || [];
-  setMessageStudents(raw.map((u) => sanitizeObjectRecursive(u)));
-  } catch (err) {
-    console.error("fetchStudentsForMessage error", err);
-    toast.error("Failed to load students for selected grade.");
-  }
-};
+    if (!grade) return; // Do not call API if grade is not selected
+    try {
+      const url = `/api/messages/users/year/${encodeURIComponent(grade)}`;
+      const res = await axios.get(url, { baseURL: "http://localhost:5000" });
+      const raw = res.data.data || [];
+      setMessageStudents(raw.map((u) => sanitizeObjectRecursive(u)));
+    } catch (err) {
+      console.error("fetchStudentsForMessage error", err);
+      toast.error("Failed to load students for selected grade.");
+    }
+  };
 
   // Fetch all messages sent by superadmin
   const fetchMessages = async () => {
@@ -142,33 +154,42 @@ const handleMessageInputChange = (e) => {
     }
   };
 
-  useEffect(() => {
-    fetchMessages();
-  }, []);
+useEffect(() => {
+  if (showMessagesPopup) fetchMessages();
+}, [showMessagesPopup]);
 
   // Send a new message
-const handleSendMessage = async (e) => {
-  e.preventDefault();
-  if (!newMessage.content || (!sendToAllAdmins && !newMessage.teacher && !newMessage.student)) {
-    toast.error("Please select teacher/student or choose 'Send to All Admins' and enter message.");
-    return;
-  }
-  setIsSubmitting(true);
-
-  try {
-    // If sending to all admins, collect all teacher IDs
-    let recipientIds = [];
-    let teacherName = "";
-    let teacherId = null;
-    if (sendToAllAdmins) {
-      recipientIds = teachers.map((t) => t._id);
-      teacherName = "All Admins";
-    } else {
-      teacherId = newMessage.teacher || null;
-      const teacherObj = teachers.find((t) => String(t._id) === String(teacherId));
-      teacherName = teacherObj ? (teacherObj.name || teacherObj.username || teacherObj.email) : "";
-      if (teacherId) recipientIds = [teacherId];
+  const handleSendMessage = async (e) => {
+    e.preventDefault();
+    if (
+      !newMessage.content ||
+      (!sendToAllAdmins && !newMessage.teacher && !newMessage.student)
+    ) {
+      toast.error(
+        "Please select teacher/student or choose 'Send to All Admins' and enter message."
+      );
+      return;
     }
+    setIsSubmitting(true);
+
+    try {
+      // If sending to all admins, collect all teacher IDs
+      let recipientIds = [];
+      let teacherName = "";
+      let teacherId = null;
+      if (sendToAllAdmins) {
+        recipientIds = teachers.map((t) => t._id);
+        teacherName = "All Admins";
+      } else {
+        teacherId = newMessage.teacher || null;
+        const teacherObj = teachers.find(
+          (t) => String(t._id) === String(teacherId)
+        );
+        teacherName = teacherObj
+          ? teacherObj.name || teacherObj.username || teacherObj.email
+          : "";
+        if (teacherId) recipientIds = [teacherId];
+      }
 
     // studentId from the users select (we set value to u._id)
    // existing studentId retrieval
@@ -178,17 +199,17 @@ const studentObj = messageStudents.find((u) => String(u._id) === String(studentI
 const studentName = studentObj ? (studentObj.name || studentObj.username || studentObj.email) : "";
 
 
-    const payload = {
-      title: `${teacherName || "Teacher"} → ${studentName || "Student"}`,
-      body: newMessage.content,
-      grade: newMessage.grade,
-      recipientIds,
-      isBroadcast: sendToAllAdmins,
-      teacherId: teacherId || null,
-      teacherName,
-      studentId: studentId || null,
-      studentName,
-    };
+      const payload = {
+        title: `${teacherName || "Teacher"} → ${studentName || "Student"}`,
+        body: newMessage.content,
+        grade: newMessage.grade,
+        recipientIds,
+        isBroadcast: sendToAllAdmins,
+        teacherId: teacherId || null,
+        teacherName,
+        studentId: studentId || null,
+        studentName,
+      };
 
     const res = await axios.post("/api/messages", payload);
     toast.success(sendToAllAdmins ? "Message sent to all admins" : "Message sent");
@@ -388,44 +409,51 @@ const studentName = studentObj ? (studentObj.name || studentObj.username || stud
       };
 
       // Build URL depending on create/edit
-      const urlBase =
-        formMode === "edit"
-          ? activeTab === "Users"
-            ? `/api/superadmin/users/${encodeURIComponent(formData.email)}`
-            : `/api/superadmin/admins/${encodeURIComponent(formData.email)}`
-          : "/api/superadmin/create-account";
-
-      const method = formMode === "edit" ? axios.put : axios.post;
-
-      // CALL backend and capture response
-      const res = await method(urlBase, payload); // uses axios baseURL from src/api.js
-      console.log("create-account response:", res?.data);
-
-      // IMPORTANT FIX: show QR modal when we just CREATED (formMode !== "edit")
-      // previously code used `if (!formMode && returned?.qrDataUrl)` which never ran
-      const returned = res?.data?.data;
-      if (formMode !== "edit" && returned?.qrDataUrl) {
-        setQrDataUrl(returned.qrDataUrl);
-        setMagicUrl(returned.magicUrl || "");
-        setQrStudentEmail(payload.email);
-        setQrModalVisible(true);
-      } else {
-        // helpful debug info
-        if (formMode !== "edit")
-          console.log("No qrDataUrl in response:", returned);
+      try {
+        const payload = {
+          name: formData.name,
+          username: formData.username,
+          email: formData.email,
+          password: formData.password || undefined,
+          yearLevel: formData.yearLevel || undefined,
+          role: activeTab === "Teachers" ? "admin" : "user",
+        };
+        // Build URL depending on create/edit
+        const urlBase =
+          formMode === "edit"
+            ? activeTab === "Users"
+              ? `/api/superadmin/users/${encodeURIComponent(formData.email)}`
+              : `/api/superadmin/admins/${encodeURIComponent(formData.email)}`
+            : "/api/superadmin/create-account";
+        const method = formMode === "edit" ? axios.put : axios.post;
+        const res = await method(urlBase, payload);
+        const returned = res?.data?.data;
+        // Show QR modal for both admin and user after creation (backend now sends QR for both)
+        if (formMode !== "edit" && (returned?.qrDataUrl || returned?.magicUrl)) {
+          setQrDataUrl(returned.qrDataUrl || null);
+          setMagicUrl(returned.magicUrl || null);
+          setQrStudentEmail(returned.user?.email || payload.email);
+          setQrModalVisible(true);
+        } else {
+          if (formMode !== "edit")
+            console.log("No qrDataUrl or magicUrl in response:", returned);
+        }
+        toast.success(
+          `${formMode === "edit" ? "Updated" : "Created"} ${activeTab}`
+        );
+        await fetchUsers(selectedGrade);
+        await fetchTeachers(selectedGrade);
+        setShowForm(false);
+      } catch (error) {
+        console.error("handleFormSubmit error:", error?.response?.data || error);
+        const serverMsg =
+          error?.response?.data?.message ||
+          error?.response?.data?.error ||
+          error.message;
+        toast.error(serverMsg || "Failed to submit form.");
+      } finally {
+        setIsSubmitting(false);
       }
-
-      toast.success(
-        `${formMode === "edit" ? "Updated" : "Created"} ${activeTab}`
-      );
-      await fetchUsers(selectedGrade);
-      await fetchTeachers(selectedGrade);
-      setShowForm(false);
-    } catch (err) {
-      console.error("handleFormSubmit error:", err?.response?.data || err);
-      const serverMsg =
-        err?.response?.data?.message ||
-        err?.response?.data?.error ||
         err.message;
       toast.error(serverMsg || "Failed to submit form.");
     } finally {
@@ -456,46 +484,196 @@ const studentName = studentObj ? (studentObj.name || studentObj.username || stud
   };
 
   // Handler for clicking a message to edit
-  const handleEditMsg = (msg) => {
-    setEditingMsgId(msg.id);
-    setEditMsgForm({
-      teacher: msg.sender,
-      grade: msg.grade,
-      student: msg.recipient,
-      content: msg.content,
-    });
-  };
+ // Handler for clicking a message to edit — uses real data
+const handleEditMsg = (msg) => {
+  // msg is the mapped object with msg.raw === original server message
+  const raw = msg.raw || {};
+
+  // Prefer canonical ids when available (teacherId/studentId), otherwise fallback to names
+  const teacherId = raw.teacherId || raw.teacher || "";
+  const teacherName = raw.teacherName || (raw.senderId && (raw.senderId.name || raw.senderId.email)) || msg.sender || "";
+  const studentId = raw.studentId || raw.student || "";
+  const studentName = raw.studentName || msg.recipient || "";
+  const grade = raw.grade || msg.grade || "";
+
+  setEditingMsgId(msg.id);
+
+  setEditMsgForm({
+    teacher: teacherId || teacherName, // value may be an id or name depending on available data
+    grade,
+    student: studentId || studentName,
+    content: msg.content || raw.body || raw.text || "",
+  });
+
+  // Preload students for this grade so edit dropdown is populated
+  if (grade) fetchStudentsForMessage(grade);
+};
+
 
   // Handler for edit form changes
-  const handleEditMsgFormChange = (e) => {
-    const { name, value } = e.target;
-    setEditMsgForm((prev) => ({ ...prev, [name]: value }));
-  };
+ const handleEditMsgFormChange = (e) => {
+  const { name, value } = e.target;
+  setEditMsgForm((prev) => ({ ...prev, [name]: value }));
+
+  // if grade changed in edit modal, fetch students for that grade
+  if (name === "grade") {
+    // normalize grade value to the same format used elsewhere, if necessary
+    fetchStudentsForMessage(value);
+  }
+};
+
 
   // Handler for apply changes
-  const handleApplyMsgEdit = (e) => {
-    e.preventDefault();
-    setMessages((prev) =>
-      prev.map((msg) =>
-        msg.id === editingMsgId
-          ? {
-              ...msg,
-              sender: editMsgForm.teacher,
-              grade: editMsgForm.grade,
-              recipient: editMsgForm.student,
-              content: editMsgForm.content,
-            }
-          : msg
-      )
-    );
+
+// Apply edited message to backend and update UI (robust + debug)
+const handleApplyMsgEdit = async (e) => {
+  e.preventDefault();
+  if (!editingMsgId) return toast.error("No message selected to edit.");
+  if (!editMsgForm.content || !editMsgForm.content.trim())
+    return toast.error("Message content cannot be empty.");
+
+  setIsSubmitting(true);
+
+  try {
+    // --- Debug: show token and editing id ---
+    const token = localStorage.getItem("token");
+    console.log("handleApplyMsgEdit: token:", token);
+    if (!token) {
+      toast.error("Not authenticated. Please login.");
+      setIsSubmitting(false);
+      return;
+    }
+
+    const url = `http://localhost:5000/api/messages/edit/${encodeURIComponent(editingMsgId)}`;
+
+    // Resolve teacher/student objects where possible
+    const teacherObj = teachers.find((t) => String(t._id) === String(editMsgForm.teacher));
+    const studentObj =
+      messageStudents.find((s) => String(s._id) === String(editMsgForm.student)) ||
+      messageStudents.find((s) => (s.email && s.email === editMsgForm.student));
+
+    const payload = {
+      body: editMsgForm.content.trim(),
+      grade: editMsgForm.grade,
+      teacherId: teacherObj ? teacherObj._id : undefined,
+      teacherName: teacherObj ? (teacherObj.name || teacherObj.email || teacherObj.username) : editMsgForm.teacher,
+      studentId: studentObj ? studentObj._id : undefined,
+      studentName: studentObj ? (studentObj.name || studentObj.email || studentObj.username) : editMsgForm.student,
+    };
+
+    // Build headers explicitly
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
+    console.log("handleApplyMsgEdit: PUT", url, "payload:", payload, "headers:", headers);
+
+    const res = await axios.put(url, payload, {
+      baseURL: "http://localhost:5000",
+      headers,
+    });
+
+    const updated = res?.data?.updatedMessage || res?.data || null;
+    console.log("handleApplyMsgEdit: response:", res?.status, res?.data);
+
+    if (updated && (updated._id || updated.id)) {
+      const mapped = mapMessage(updated);
+      const newItem = { ...mapped, raw: updated };
+      setMessages((prev) => prev.map((m) => (m.id === mapped.id ? newItem : m)));
+      toast.success("Message updated");
+    } else {
+      // fallback local update
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.id === editingMsgId
+            ? {
+                ...m,
+                sender: teacherObj ? (teacherObj.name || teacherObj.email) : m.sender,
+                grade: editMsgForm.grade,
+                recipient: studentObj ? (studentObj.name || studentObj.email) : m.recipient,
+                content: editMsgForm.content,
+              }
+            : m
+        )
+      );
+      toast.success("Message updated (local)");
+    }
+
     setEditingMsgId(null);
-  };
+  } catch (err) {
+    console.error("handleApplyMsgEdit error:", err?.response?.data || err);
+
+    // If axios error and backend returned 401
+    if (err?.response?.status === 401 || (err?.response?.data && err.response.data.message === "Unauthorized")) {
+      toast.error("Session expired or unauthorized. Please login again.");
+      // optional: redirect to login
+      // navigate('/login');
+      setEditingMsgId(null);
+      setIsSubmitting(false);
+      return;
+    }
+
+    const msg = err?.response?.data?.message || "Failed to update message";
+    toast.error(msg);
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   // Handler for delete message
-  const handleDeleteMsg = () => {
-    setMessages((prev) => prev.filter((msg) => msg.id !== editingMsgId));
+  // Delete message both in DB and UI
+// Delete message both in DB and UI (robust + debug)
+const handleDeleteMsg = async () => {
+  if (!editingMsgId) {
+    toast.error("No message selected to delete.");
+    return;
+  }
+  if (!window.confirm("Delete this message? This cannot be undone.")) return;
+
+  setIsSubmitting(true);
+
+  try {
+    const token = localStorage.getItem("token");
+    console.log("handleDeleteMsg: token:", token);
+    if (!token) {
+      toast.error("Not authenticated. Please login.");
+      setIsSubmitting(false);
+      return;
+    }
+
+    const url = `http://localhost:5000/api/messages/${encodeURIComponent(editingMsgId)}`;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
+
+    console.log("handleDeleteMsg: DELETE", url, "headers:", headers);
+
+    const res = await axios.delete(url, {
+      baseURL: "http://localhost:5000",
+      headers,
+    });
+
+    console.log("handleDeleteMsg: response:", res?.status, res?.data);
+
+    // remove from UI
+    setMessages((prev) => prev.filter((m) => m.id !== editingMsgId));
     setEditingMsgId(null);
-  };
+    toast.success("Message deleted");
+  } catch (err) {
+    console.error("handleDeleteMsg error:", err?.response?.data || err);
+    if (err?.response?.status === 401) {
+      toast.error("Unauthorized. Please login again.");
+      // navigate('/login'); // optional redirect
+      setIsSubmitting(false);
+      return;
+    }
+    const msg = err?.response?.data?.message || "Failed to delete message";
+    toast.error(msg);
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   const dataToDisplay = activeTab === "Users" ? users : teachers;
 
@@ -712,6 +890,7 @@ const studentName = studentObj ? (studentObj.name || studentObj.username || stud
                         padding: "2rem 2rem 1.5rem 2rem",
                         display: "flex",
                         flexDirection: "column",
+                        justifyContent: "flex-start",
                       }}
                     >
                       <button
@@ -764,11 +943,19 @@ const studentName = studentObj ? (studentObj.name || studentObj.username || stud
                       <form onSubmit={handleSendMessage}>
                         <div style={{ marginBottom: "1rem" }}>
                           <div style={{ marginBottom: "0.7rem" }}>
-                            <label style={{ color: "#fff", fontWeight: "bold", fontSize: "1.1rem" }}>
+                            <label
+                              style={{
+                                color: "#fff",
+                                fontWeight: "bold",
+                                fontSize: "1.1rem",
+                              }}
+                            >
                               <input
                                 type="checkbox"
                                 checked={sendToAllAdmins}
-                                onChange={(e) => setSendToAllAdmins(e.target.checked)}
+                                onChange={(e) =>
+                                  setSendToAllAdmins(e.target.checked)
+                                }
                                 style={{ marginRight: "0.5rem" }}
                               />
                               Send to All Admins
@@ -835,7 +1022,10 @@ const studentName = studentObj ? (studentObj.name || studentObj.username || stud
                           >
                             <option value="">Select Student</option>
                             {messageStudents.map((u) => (
-                              <option key={u._id || u.email} value={u._id || u.email}>
+                              <option
+                                key={u._id || u.email}
+                                value={u._id || u.email}
+                              >
                                 {u.name || u.username || u.email}
                               </option>
                             ))}
@@ -1015,26 +1205,29 @@ const studentName = studentObj ? (studentObj.name || studentObj.username || stud
                         </h2>
                         <form onSubmit={handleApplyMsgEdit}>
                           <div style={{ marginBottom: "1rem" }}>
-                            <select
-                              name="teacher"
-                              value={editMsgForm.teacher}
-                              onChange={handleEditMsgFormChange}
-                              style={{
-                                width: "100%",
-                                padding: "0.8rem",
-                                borderRadius: "10px",
-                                background: "#3c2e5e",
-                                color: "#fff",
-                                border: "none",
-                                fontSize: "1.1rem",
-                                marginBottom: "0.7rem",
-                              }}
-                              required
-                            >
-                              <option value="">Teacher</option>
-                              <option value="Ma'am Charm">Ma'am Charm</option>
-                              <option value="Sir John">Sir John</option>
-                            </select>
+                           <select
+  name="teacher"
+  value={editMsgForm.teacher}
+  onChange={handleEditMsgFormChange}
+  style={{
+    width: "100%",
+    padding: "0.8rem",
+    borderRadius: "10px",
+    background: "#3c2e5e",
+    color: "#fff",
+    border: "none",
+    fontSize: "1.1rem",
+    marginBottom: "0.7rem",
+  }}
+  required
+>
+  <option value="">Select Teacher</option>
+  {teachers.map((t) => (
+    <option key={t._id} value={t._id}>
+      {t.name || t.username || t.email}
+    </option>
+  ))}
+</select>
                             <select
                               name="grade"
                               value={editMsgForm.grade}
@@ -1073,11 +1266,12 @@ const studentName = studentObj ? (studentObj.name || studentObj.username || stud
                               }}
                               required
                             >
-                              <option value="">Student Name</option>
-                              <option value="Stepehn curry">
-                                Stepehn curry
-                              </option>
-                              <option value="Jane Doe">Jane Doe</option>
+                                <option value="">Select Student</option>
+  {messageStudents.map((u) => (
+    <option key={u._id || u.email} value={u._id || u.email}>
+      {u.name || u.username || u.email}
+    </option>
+  ))}
                             </select>
                             <textarea
                               name="content"
@@ -1207,14 +1401,26 @@ const studentName = studentObj ? (studentObj.name || studentObj.username || stud
                               </button>
                             )}
                             <img
-                              src={typeof EditIconImport === "object" && EditIconImport !== null && EditIconImport.default ? EditIconImport.default : EditIconImport}
+                              src={
+                                typeof EditIconImport === "object" &&
+                                EditIconImport !== null &&
+                                EditIconImport.default
+                                  ? EditIconImport.default
+                                  : EditIconImport
+                              }
                               alt="Edit"
                               className="img-action"
                               style={{ cursor: "pointer" }}
                               onClick={() => openForm("edit", u)}
                             />
                             <img
-                              src={typeof RemoveIconImport === "object" && RemoveIconImport !== null && RemoveIconImport.default ? RemoveIconImport.default : RemoveIconImport}
+                              src={
+                                typeof RemoveIconImport === "object" &&
+                                RemoveIconImport !== null &&
+                                RemoveIconImport.default
+                                  ? RemoveIconImport.default
+                                  : RemoveIconImport
+                              }
                               alt="Remove"
                               className="img-action"
                               style={{ marginRight: "50px", cursor: "pointer" }}
@@ -1233,15 +1439,23 @@ const studentName = studentObj ? (studentObj.name || studentObj.username || stud
           </div>
 
           {/* QR Modal */}
-          {qrModalVisible && (
-            <QRModal
-              visible={qrModalVisible}
-              onClose={() => setQrModalVisible(false)}
-              dataUrl={qrDataUrl}
-              magicUrl={magicUrl}
-              studentEmail={qrStudentEmail}
-            />
-          )}
+          {(() => {
+            console.log("SuperAdmin QR modal state:", {
+              qrModalVisible,
+              qrDataUrl,
+              magicUrl,
+              qrStudentEmail
+            });
+            return qrModalVisible ? (
+              <QRModal
+                visible={qrModalVisible}
+                onClose={() => setQrModalVisible(false)}
+                dataUrl={qrDataUrl}
+                magicUrl={magicUrl}
+                studentEmail={qrStudentEmail}
+              />
+            ) : null;
+          })()}
 
           <div className="logout-container">
             <button className="btn-logout" onClick={logout}>
