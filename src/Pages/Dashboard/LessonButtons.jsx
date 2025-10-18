@@ -35,6 +35,12 @@ function LessonButtons() {
     ADVANCED: "#cc6055",
   };
 
+  const strokeColors = {
+    BASIC: "#A6DCFF",
+    INTERMEDIATE: "#FFFEA6",
+    ADVANCED: "#FF7D6F",
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       if (!buttonContainerRef.current) return;
@@ -377,7 +383,10 @@ function LessonButtons() {
       <div className="flex items-center justify-center gap-5 sticky top-3 z-10 mb-15 text-white header-container">
         <div
           className="text-center px-5 py-2 rounded-2xl font-bold text-white text-[2.5rem] w-[24vw] difficulty-button"
-          style={{ backgroundColor: difficultyColors[difficulty] }}
+          style={{
+            backgroundColor: difficultyColors[difficulty],
+            boxShadow: `0 0 0 5px ${strokeColors[difficulty] || '#A6DCFF'}`,
+          }}
         >
           {difficulty}
         </div>

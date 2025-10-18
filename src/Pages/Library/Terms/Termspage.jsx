@@ -22,10 +22,10 @@ function Termspage() {
     termssix:   { level: "intermediate", lessonNumber: 2 },
     termsseven: { level: "intermediate", lessonNumber: 3 },
     termseight:  { level: "intermediate", lessonNumber: 4 },
-    termsnine:   { level: "advance", lessonNumber: 1 },
-    termsten:   { level: "advance", lessonNumber: 2 },
-    termseleven: { level: "advance", lessonNumber: 3 },
-    termstwelve:  { level: "advance", lessonNumber: 4 },
+  termsnine:   { level: "advanced", lessonNumber: 1 },
+  termsten:   { level: "advanced", lessonNumber: 2 },
+  termseleven: { level: "advanced", lessonNumber: 3 },
+  termstwelve:  { level: "advanced", lessonNumber: 4 },
     // add more mappings if you have intermediate/advanced...
   };
 
