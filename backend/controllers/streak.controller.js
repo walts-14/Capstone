@@ -28,6 +28,15 @@ function isToday(date) {
          d.getDate() === now.getDate();
 }
 
+// Helper to compute difference in whole days between two dates (a - b)
+function diffDaysBetween(a, b) {
+  if (!a || !b) return Infinity;
+  const A = new Date(a).setHours(0,0,0,0);
+  const B = new Date(b).setHours(0,0,0,0);
+  const diffTime = A - B;
+  return Math.floor(diffTime / (1000 * 60 * 60 * 24));
+}
+
 export const updateStreak = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -39,34 +48,40 @@ export const updateStreak = async (req, res) => {
 
 
     let pointsToAdd = 0;
-    // Only add points if:
-    // - lastUpdated is today
-    // - previous lastUpdated is not today
-    // - currentStreak is exactly previousStreak + 1
     const prevStreak = user.streak?.currentStreak || 0;
-    // Only add points if:
-    // - lastUpdated is today
-    // - previous lastUpdated is not today
-    // - currentStreak is exactly previousStreak + 1
-    // - lastUpdated is different from previous lastUpdated (prevents double add on refresh)
-    if (
-      isToday(streak.lastUpdated) &&
-      (!user.streak || !isToday(user.streak.lastUpdated)) &&
-      streak.currentStreak === prevStreak + 1 &&
-      (!user.streak.lastUpdated || new Date(streak.lastUpdated).getTime() !== new Date(user.streak.lastUpdated).getTime())
-    ) {
-      const day = streak.currentStreak;
-      if (day === 1) pointsToAdd = 5;
-      else if (day === 2) pointsToAdd = 10;
-      else if (day === 3) pointsToAdd = 15;
-      else if (day === 4) pointsToAdd = 20;
-      else if (day === 5) pointsToAdd = 30;
-      else if (day === 6) pointsToAdd = 40;
-      else if (day >= 7) pointsToAdd = 50;
-      user.points += pointsToAdd;
-    } else {
-      // Prevent double points: do not add points again for the same day or if not a valid increment
-      pointsToAdd = 0;
+    const prevLast = user.streak?.lastUpdated ? String(user.streak.lastUpdated) : null;
+
+    // Only consider awarding points when incoming lastUpdated is today and we haven't awarded for today yet
+    if (isToday(streak.lastUpdated) && (!prevLast || !isToday(prevLast))) {
+      const incomingDay = Number(streak.currentStreak) || 0;
+
+      // Consecutive increment: incomingDay === prevStreak + 1
+      if (incomingDay === prevStreak + 1) {
+        const day = incomingDay;
+        if (day === 1) pointsToAdd = 5;
+        else if (day === 2) pointsToAdd = 10;
+        else if (day === 3) pointsToAdd = 15;
+        else if (day === 4) pointsToAdd = 20;
+        else if (day === 5) pointsToAdd = 30;
+        else if (day === 6) pointsToAdd = 40;
+        else if (day >= 7) pointsToAdd = 50;
+        user.points += pointsToAdd;
+      }
+
+      // Reset to 1 after missing days: award day 1 points
+      else if (incomingDay === 1) {
+        // If there was no previous lastUpdated or previous was more than 1 day ago, award day1 points
+        if (!prevLast) {
+          pointsToAdd = 5;
+          user.points += pointsToAdd;
+        } else {
+          const daysDiff = diffDaysBetween(new Date().toISOString(), prevLast);
+          if (daysDiff > 1) {
+            pointsToAdd = 5;
+            user.points += pointsToAdd;
+          }
+        }
+      }
     }
 
     user.streak = streak;
@@ -105,25 +120,34 @@ export const updateStreakByEmail = async (req, res) => {
 
 
     let pointsToAdd = 0;
-    // Only add points if:
-    // - lastUpdated is today
-    // - previous lastUpdated is not today
-    // - currentStreak is exactly previousStreak + 1
     const prevStreak = user.streak?.currentStreak || 0;
-    if (
-      isToday(streak.lastUpdated) &&
-      (!user.streak || !isToday(user.streak.lastUpdated)) &&
-      streak.currentStreak === prevStreak + 1
-    ) {
-      const day = streak.currentStreak;
-      if (day === 1) pointsToAdd = 5;
-      else if (day === 2) pointsToAdd = 10;
-      else if (day === 3) pointsToAdd = 15;
-      else if (day === 4) pointsToAdd = 20;
-      else if (day === 5) pointsToAdd = 30;
-      else if (day === 6) pointsToAdd = 40;
-      else if (day >= 7) pointsToAdd = 50;
-      user.points += pointsToAdd;
+    const prevLast = user.streak?.lastUpdated ? String(user.streak.lastUpdated) : null;
+
+    if (isToday(streak.lastUpdated) && (!prevLast || !isToday(prevLast))) {
+      const incomingDay = Number(streak.currentStreak) || 0;
+
+      if (incomingDay === prevStreak + 1) {
+        const day = incomingDay;
+        if (day === 1) pointsToAdd = 5;
+        else if (day === 2) pointsToAdd = 10;
+        else if (day === 3) pointsToAdd = 15;
+        else if (day === 4) pointsToAdd = 20;
+        else if (day === 5) pointsToAdd = 30;
+        else if (day === 6) pointsToAdd = 40;
+        else if (day >= 7) pointsToAdd = 50;
+        user.points += pointsToAdd;
+      } else if (incomingDay === 1) {
+        if (!prevLast) {
+          pointsToAdd = 5;
+          user.points += pointsToAdd;
+        } else {
+          const daysDiff = diffDaysBetween(new Date().toISOString(), prevLast);
+          if (daysDiff > 1) {
+            pointsToAdd = 5;
+            user.points += pointsToAdd;
+          }
+        }
+      }
     }
 
     user.streak = streak;
