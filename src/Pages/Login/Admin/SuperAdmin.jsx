@@ -143,11 +143,19 @@ const SuperAdmin = () => {
   const fetchMessages = async () => {
     try {
       const res = await fetch("http://localhost:5000/api/messages/for-admin", {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
         const data = await res.json();
-        setMessages(data);
+        // Map backend fields to frontend expected fields
+        const mapped = (Array.isArray(data) ? data : []).map((msg) => ({
+          id: msg._id || msg.id,
+          sender: msg.teacherName || msg.teacherName || msg.sender || "Admin",
+          grade: msg.grade || "",
+          recipient: msg.studentName || msg.studentName || msg.recipient || "",
+          content: msg.body || msg.content || msg.title || "",
+        }));
+        setMessages(mapped);
       }
     } catch (err) {
       console.error("Failed to fetch messages", err);
@@ -191,13 +199,35 @@ useEffect(() => {
         if (teacherId) recipientIds = [teacherId];
       }
 
-    // studentId from the users select (we set value to u._id)
-   // existing studentId retrieval
-const studentId = newMessage.student || null;
-// find it in messageStudents (these are the grade-filtered students)
-const studentObj = messageStudents.find((u) => String(u._id) === String(studentId));
-const studentName = studentObj ? (studentObj.name || studentObj.username || studentObj.email) : "";
+    try {
+      // If sending to all admins, collect all teacher IDs
+      let recipientIds = [];
+      let teacherName = "";
+      let teacherId = null;
+      if (sendToAllAdmins) {
+        recipientIds = teachers.map((t) => t._id);
+        teacherName = "All Admins";
+      } else {
+        teacherId = newMessage.teacher || null;
+        const teacherObj = teachers.find(
+          (t) => String(t._id) === String(teacherId)
+        );
+        teacherName = teacherObj
+          ? teacherObj.name || teacherObj.username || teacherObj.email
+          : "";
+        if (teacherId) recipientIds = [teacherId];
+      }
 
+      // studentId from the users select (we set value to u._id)
+      // existing studentId retrieval
+      const studentId = newMessage.student || null;
+      // find it in messageStudents (these are the grade-filtered students)
+      const studentObj = messageStudents.find(
+        (u) => String(u._id) === String(studentId)
+      );
+      const studentName = studentObj
+        ? studentObj.name || studentObj.username || studentObj.email
+        : "";
 
       const payload = {
         title: `${teacherName || "Teacher"} → ${studentName || "Student"}`,
@@ -224,8 +254,34 @@ const studentName = studentObj ? (studentObj.name || studentObj.username || stud
   } finally {
     setIsSubmitting(false);
   }
-};
+;
 
+      const res = await axios.post("/api/messages", payload);
+      toast.success(
+        sendToAllAdmins ? "Message sent to all admins" : "Message sent"
+      );
+      setMessages((prev) => [
+        {
+          id: Math.random().toString(36).substr(2, 9), // temporary id
+          sender: teacherName,
+          grade: newMessage.grade,
+          recipient: studentName,
+          content: newMessage.content,
+        },
+        ...prev,
+      ]);
+      setShowMessageForm(false);
+      setNewMessage({ teacher: "", grade: "", student: "", content: "" });
+      setSendToAllAdmins(false);
+      await fetchMessages(); // refresh superadmin's sent list
+    } catch (err) {
+      console.error("Failed to send message:", err?.response?.data || err);
+      const msg = err?.response?.data?.message || "Failed to send message";
+      toast.error(msg);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   // Handler for message button
   const handleMessageButtonClick = () => {
