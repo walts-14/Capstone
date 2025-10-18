@@ -104,10 +104,10 @@ function Quiz() {
           termssix: 6,
           termsseven: 7,
           termseight: 8,
-          termsnine: 9,
-          termsten: 10,
-          termseleven: 11,
-          termstwelve: 12,
+          termsnine: 1,
+          termsten: 2,
+          termseleven: 3,
+          termstwelve: 4,
         };
         const lessonNumber = lessonNumberMapping[lessonKey] || 1;
         const response = await axios.get(`${backendURL}/api/quizzes/stored`, {
