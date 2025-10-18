@@ -40,51 +40,55 @@ const DashboardAdmin = () => {
 
   const [showNotificationModal, setShowNotificationModal] = useState(false);
   const [messages, setMessages] = useState([]); // fetched from /api/messages/for-admin
-const [loadingMessages, setLoadingMessages] = useState(false);
+  const [loadingMessages, setLoadingMessages] = useState(false);
 
   // Fetch messages for admin
 
   useEffect(() => {
-  if (token) {
-    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-  } else {
-    delete axios.defaults.headers.common["Authorization"];
-  }
-}, [token]);
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    } else {
+      delete axios.defaults.headers.common["Authorization"];
+    }
+  }, [token]);
 
-const fetchAdminMessages = async (grade = "") => {
-  try {
-    setLoadingMessages(true);
-    // axios instance has baseURL and Authorization defaults
-    const res = await axios.get("/api/messages/for-admin", {
-      params: grade ? { grade } : {},
-    });
-    // your backend returns an array (controller returns res.json(data))
-    // so res.data should be array
-    setMessages(Array.isArray(res.data) ? res.data : res.data || []);
-  } catch (err) {
-    console.error("Error fetching admin messages:", err?.response?.data || err);
-    toast.error("Failed to load notifications.");
-  } finally {
-    setLoadingMessages(false);
-  }
-};
-
+  const fetchAdminMessages = async (grade = "") => {
+    try {
+      setLoadingMessages(true);
+      // axios instance has baseURL and Authorization defaults
+      const res = await axios.get("/api/messages/for-admin", {
+        params: grade ? { grade } : {},
+      });
+      // your backend returns an array (controller returns res.json(data))
+      // so res.data should be array
+      setMessages(Array.isArray(res.data) ? res.data : res.data || []);
+    } catch (err) {
+      console.error(
+        "Error fetching admin messages:",
+        err?.response?.data || err
+      );
+      toast.error("Failed to load notifications.");
+    } finally {
+      setLoadingMessages(false);
+    }
+  };
 
   useEffect(() => {
     fetchNotifications();
   }, []);
 
   const markMessageAsRead = async (messageId) => {
-  try {
-    await axios.put(`/api/messages/${messageId}/read`);
-    // mark locally so UI updates immediately
-    setMessages((prev) => prev.map(m => m._id === messageId ? { ...m, isRead: true } : m));
-  } catch (err) {
-    console.error("Failed to mark as read", err?.response?.data || err);
-    toast.error("Failed to mark message as read.");
-  }
-};
+    try {
+      await axios.put(`/api/messages/${messageId}/read`);
+      // mark locally so UI updates immediately
+      setMessages((prev) =>
+        prev.map((m) => (m._id === messageId ? { ...m, isRead: true } : m))
+      );
+    } catch (err) {
+      console.error("Failed to mark as read", err?.response?.data || err);
+      toast.error("Failed to mark message as read.");
+    }
+  };
 
   // Helper to sanitize progress data if it has a 'default' key
   const sanitizeProgress = (progress) => {
@@ -335,10 +339,10 @@ const fetchAdminMessages = async (grade = "") => {
                   display: "flex",
                   alignItems: "center",
                 }}
-               onClick={async () => {
-  await fetchAdminMessages();
-  setShowNotificationModal(true);
-}}
+                onClick={async () => {
+                  await fetchAdminMessages();
+                  setShowNotificationModal(true);
+                }}
               >
                 <FaBell />
               </button>
@@ -665,156 +669,188 @@ const fetchAdminMessages = async (grade = "") => {
           )}
 
           {/* Notification Modal */}
-          {/* Notification Modal */}
-{showNotificationModal && (
-  <div
-    style={{
-      position: "fixed",
-      top: "16%",
-      left: "25%",
-      width: "50vw",
-      minWidth: "350px",
-      zIndex: 5000,
-      background: "#1a1230",
-      borderRadius: "20px",
-      border: "2px solid #7338a0",
-      boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
-      color: "#fff",
-      padding: "2rem",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "flex-start",
-    }}
-  >
-    <h1
-      style={{
-        fontWeight: "bold",
-        fontSize: "2.5rem",
-        marginBottom: "2rem",
-      }}
-    >
-      Notification
-    </h1>
-
-    <div style={{ width: "100%" }}>
-      {loadingMessages ? (
-        <div style={{ color: "#fff", textAlign: "center" }}>Loading...</div>
-      ) : messages.length === 0 ? (
-        <div style={{ color: "#fff", textAlign: "center" }}>No notifications.</div>
-      ) : (
-        messages.map((msg) => (
-          <div
-            key={msg._id}
-            style={{
-              background: "#2d2544",
-              borderRadius: "10px",
-              marginBottom: "1rem",
-              padding: "1rem",
-              color: "#fff",
-              opacity: msg.isRead ? 0.6 : 1,
-              display: "flex",
-              justifyContent: "space-between",
-              gap: "1rem",
-            }}
-          >
-            <div style={{ flex: 1 }}>
-              <div
+          {showNotificationModal && (
+            <div
+              style={{
+                position: "fixed",
+                top: "12%",
+                left: "50%",
+                transform: "translateX(-50%)",
+                width: "70vw", // wider modal like second image
+                minWidth: "700px",
+                maxWidth: "1100px",
+                zIndex: 5000,
+                background: "#1a1230",
+                borderRadius: "18px",
+                border: "2px solid #7338a0",
+                boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
+                color: "#fff",
+                padding: "2.5rem 2.5rem 2rem 2.5rem",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start",
+                maxHeight: "80vh",
+                overflowY: "auto",
+              }}
+            >
+              {/* Close button in top right */}
+              <button
                 style={{
+                  position: "absolute",
+                  top: "18px",
+                  right: "28px",
+                  background: "#7338a0",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: "15%",
+                  width: "38px",
+                  height: "38px",
+                  fontSize: "1.5rem",
+                  fontWeight: "bold",
+                  cursor: "pointer",
                   display: "flex",
-                  gap: "0.5rem",
-                  marginBottom: "0.5rem",
                   alignItems: "center",
+                  justifyContent: "center",
+                  zIndex: 10,
+                }}
+                onClick={() => setShowNotificationModal(false)}
+                aria-label="Close"
+              >
+                &times;
+              </button>
+
+              <h1
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "2.5rem",
+                  marginBottom: "2rem",
                 }}
               >
-                <span
-                  style={{
-                    background: "#7338a0",
-                    color: "#fff",
-                    borderRadius: "8px",
-                    padding: "0.2rem 0.8rem",
-                    fontWeight: "bold",
-                    fontSize: "1rem",
-                  }}
-                >
-                  {msg.grade || "All Grades"}
-                </span>
+                Notification
+              </h1>
 
-                <span
-                  style={{
-                    background: "#b9b6c9",
-                    color: "#222",
-                    borderRadius: "8px",
-                    padding: "0.2rem 0.8rem",
-                    fontWeight: "bold",
-                    fontSize: "1rem",
-                  }}
-                >
-                  {msg.teacherName || msg.senderId?.name || "Teacher"}
-                </span>
+              <div style={{ width: "100%" }}>
+                {loadingMessages ? (
+                  <div style={{ color: "#fff", textAlign: "center" }}>
+                    Loading...
+                  </div>
+                ) : messages.length === 0 ? (
+                  <div style={{ color: "#fff", textAlign: "center" }}>
+                    No notifications.
+                  </div>
+                ) : (
+                  messages.map((msg) => (
+                    <div
+                      key={msg._id}
+                      style={{
+                        background: "#2d2544",
+                        borderRadius: "10px",
+                        marginBottom: "1rem",
+                        padding: "1rem",
+                        color: "#fff",
+                        opacity: msg.isRead ? 0.6 : 1,
+                        display: "flex",
+                        justifyContent: "space-between",
+                        gap: "1rem",
+                      }}
+                    >
+                      <div style={{ flex: 1 }}>
+                        <div
+                          style={{
+                            display: "flex",
+                            gap: "0.5rem",
+                            marginBottom: "0.5rem",
+                            alignItems: "center",
+                          }}
+                        >
+                          <span
+                            style={{
+                              background: "#7338a0",
+                              color: "#fff",
+                              borderRadius: "8px",
+                              padding: "0.2rem 0.8rem",
+                              fontWeight: "bold",
+                              fontSize: "1rem",
+                            }}
+                          >
+                            {msg.grade || "All Grades"}
+                          </span>
 
-                {msg.studentName && (
-                  <span
-                    style={{
-                      background: "#bdbdbd",
-                      color: "#222",
-                      borderRadius: "8px",
-                      padding: "0.2rem 0.8rem",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {msg.studentName}
-                  </span>
+                          <span
+                            style={{
+                              background: "#b9b6c9",
+                              color: "#222",
+                              borderRadius: "8px",
+                              padding: "0.2rem 0.8rem",
+                              fontWeight: "bold",
+                              fontSize: "1rem",
+                            }}
+                          >
+                            {msg.teacherName || msg.senderId?.name || "Teacher"}
+                          </span>
+
+                          {msg.studentName && (
+                            <span
+                              style={{
+                                background: "#bdbdbd",
+                                color: "#222",
+                                borderRadius: "8px",
+                                padding: "0.2rem 0.8rem",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              {msg.studentName}
+                            </span>
+                          )}
+                        </div>
+
+                        <div style={{ color: "#fff", fontSize: "1rem" }}>
+                          {msg.body}
+                        </div>
+
+                        <div
+                          style={{
+                            marginTop: "0.5rem",
+                            color: "#bbb",
+                            fontSize: "0.85rem",
+                          }}
+                        >
+                          {msg.createdAt
+                            ? new Date(msg.createdAt).toLocaleString()
+                            : ""}
+                        </div>
+                      </div>
+
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "0.5rem",
+                          marginLeft: "1rem",
+                        }}
+                      >
+                        {!msg.isRead && (
+                          <button
+                            onClick={() => markMessageAsRead(msg._id)}
+                            style={{
+                              background: "#37b24d",
+                              color: "#fff",
+                              border: "none",
+                              borderRadius: "8px",
+                              padding: "0.4rem 0.8rem",
+                              cursor: "pointer",
+                            }}
+                          >
+                            Mark read
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))
                 )}
               </div>
-
-              <div style={{ color: "#fff", fontSize: "1rem" }}>{msg.body}</div>
-
-              <div style={{ marginTop: "0.5rem", color: "#bbb", fontSize: "0.85rem" }}>
-                {msg.createdAt ? new Date(msg.createdAt).toLocaleString() : ""}
-              </div>
             </div>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", marginLeft: "1rem" }}>
-              {!msg.isRead && (
-                <button
-                  onClick={() => markMessageAsRead(msg._id)}
-                  style={{
-                    background: "#37b24d",
-                    color: "#fff",
-                    border: "none",
-                    borderRadius: "8px",
-                    padding: "0.4rem 0.8rem",
-                    cursor: "pointer",
-                  }}
-                >
-                  Mark read
-                </button>
-              )}
-            </div>
-          </div>
-        ))
-      )}
-    </div>
-
-    <button
-      style={{
-        alignSelf: "flex-end",
-        marginTop: "1rem",
-        background: "#7338a0",
-        color: "#fff",
-        border: "none",
-        borderRadius: "10px",
-        padding: "0.5rem 2rem",
-        fontWeight: "bold",
-        fontSize: "1.2rem",
-        cursor: "pointer",
-      }}
-      onClick={() => setShowNotificationModal(false)}
-    >
-      Close
-    </button>
-  </div>
-)}
+          )}
         </>
       )}
     </div>
