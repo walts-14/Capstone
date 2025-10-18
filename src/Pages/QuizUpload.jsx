@@ -52,7 +52,7 @@ function QuizUpload() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-4 p-4 bg-gray-800 rounded max-w-md mx-auto"
+      className="space-y-4 p-4 bg-gray-600 rounded max-w-md mx-auto"
     >
       <h2 className="text-xl font-semibold text-white">Create New Quiz</h2>
 
@@ -64,7 +64,7 @@ function QuizUpload() {
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
           required
-          className="mt-1 w-full p-2 rounded border-2 border-white"
+          className="mt-1 w-full p-2 rounded border-2 border-white text-white bg-gray-700"
         />
       </div>
 
@@ -74,7 +74,7 @@ function QuizUpload() {
         <select
           value={level}
           onChange={(e) => setLevel(e.target.value)}
-          className="mt-1 p-2 rounded w-full border-2 border-white"
+          className="mt-1 p-2 rounded w-full border-2 border-white text-white bg-gray-700"
         >
           <option value="basic">Basic</option>
           <option value="intermediate">Intermediate</option>
@@ -91,7 +91,7 @@ function QuizUpload() {
           max="4"
           value={lessonNumber}
           onChange={(e) => setLessonNumber(e.target.value)}
-          className="mt-1 p-2 rounded w-full border-2 border-white"
+          className="mt-1 p-2 rounded w-full border-2 border-white text-white bg-gray-700"
         />
       </div>
 
@@ -101,7 +101,7 @@ function QuizUpload() {
         <select
           value={quizPart}
           onChange={(e) => setQuizPart(Number(e.target.value))}
-          className="mt-1 p-2 rounded w-full border-2 border-white"
+          className="mt-1 p-2 rounded bg-gray-700 w-full border-2 border-white text-white"
         >
           <option value={1}>Part 1 (Terms 1–15)</option>
           <option value={2}>Part 2 (Terms 16–30)</option>
@@ -115,7 +115,7 @@ function QuizUpload() {
           value={correctAnswer}
           onChange={(e) => setCorrectAnswer(e.target.value)}
           required
-          className="mt-1 p-2 rounded w-full border-2 border-white"
+          className="mt-1 p-2 rounded w-full border-2 border-white text-white bg-gray-700"
         >
           <option value="">-- Select Video --</option>
           {filteredVideos.map((v) => (
