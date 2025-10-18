@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import heart from "../assets/heart.png";
 import diamond from "../assets/diamond.png";
 
-function LivesandDiamonds({ showDiamonds = true }) {
+function LivesandDiamonds({ showDiamonds = true, showLives = true }) {
   const [lives, setLives] = useState(5);
   const [points, setPoints] = useState(0);
 
@@ -53,14 +53,16 @@ function LivesandDiamonds({ showDiamonds = true }) {
 
   return (
     <>
-      <div className="flex items-center gap-1">
-        <img
-          src={heart}
-          className="w-12 h-12 object-contain"
-          alt="lives logo"
-        />
-        <p className="m-0 text-red-500 font-bold text-3xl ml-1">{lives}</p>
-      </div>
+      {showLives && (
+        <div className="flex items-center gap-1">
+          <img
+            src={heart}
+            className="w-12 h-12 object-contain"
+            alt="lives logo"
+          />
+          <p className="m-0 text-red-500 font-bold text-3xl ml-1">{lives}</p>
+        </div>
+      )}
       {showDiamonds && (
         <div className="flex items-center gap-1 text-white">
           <img

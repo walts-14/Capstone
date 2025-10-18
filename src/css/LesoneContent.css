@@ -35,9 +35,11 @@
 body {
   overflow-y: hidden;
 }
+
 .container-lecture {
   margin: 0 auto;
 }
+
 .tryone-container {
   display: flex;
   flex-direction: column;
@@ -46,14 +48,21 @@ body {
 }
 
 .tryone-container video {
-  width: 100%;          /* fill container width */
-  max-width: 1080px;     /* optional: cap the width */
-  height: 620px;        /* fixed height for uniformity */
-  object-fit: contain;  /* scale each video to fit without cropping */
-  border: 15px solid #271d3e; /* Adds a white border */
-  border-radius: 50px; /* Rounds the corners */
-  
+  width: 100%;
+  /* fill container width */
+  max-width: 1080px;
+  /* optional: cap the width */
+  height: 620px;
+  /* fixed height for uniformity */
+  object-fit: contain;
+  /* scale each video to fit without cropping */
+  border: 15px solid #271d3e;
+  /* Adds a white border */
+  border-radius: 50px;
+  /* Rounds the corners */
+
 }
+
 .back {
   color: var(--purple);
   font-size: 2rem;
@@ -63,17 +72,21 @@ body {
   cursor: pointer;
   font-family: "Baloo", sans-serif;
 }
+
 .text-container {
   display: flex;
   justify-content: center;
   width: 100%;
 }
+
 .letter-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 40px; /* Space between arrows and the letter */
+  gap: 40px;
+  /* Space between arrows and the letter */
 }
+
 .text-container {
   display: flex;
   flex-direction: column;
@@ -92,6 +105,7 @@ body {
   font-weight: bold;
   color: white;
 }
+
 .letter-container button {
   background: #271D3E;
   border-radius: 22px;
@@ -101,16 +115,17 @@ body {
   width: fit-content;
   font-weight: bold;
   color: white;
-  transition: 
-  transform 0.2s ease, 
-  box-shadow 0.2s ease, 
-  background-color 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
 }
+
 .arrow {
   width: 70px;
   height: auto;
   cursor: pointer;
- 
+
 }
 
 .letter-container button:hover {

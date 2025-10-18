@@ -153,13 +153,13 @@ function Practice() {
   }
 
   return (
-    <>
+    <div className="practice-mode">
       <div className="back fs-1 fw-bold d-flex" onClick={handleBack}>
         <img src={backkpoint} className="img-fluid p-1 mt-1" alt="Back" />
         <p>Back</p>
       </div>
       <div className="lives-quizz d-flex position-absolute gap-4">
-        <LivesandDiamonds showDiamonds={false} />
+        <LivesandDiamonds showDiamonds={false} showLives={false} />
       </div>
       {!quizFinished && (
         <div className="progress" role="progressbar" aria-valuenow={(currentQuestionIndex / totalQuestions) * 100} aria-valuemin="0" aria-valuemax="100">
@@ -171,7 +171,7 @@ function Practice() {
           <div className="quiz-container fw-bold d-flex">
             <p className="quiz-question">{currentQuestion.question}</p>
           </div>
-          <div className="grid text-center fw-bold rounded-4">
+          <div className="grid text-center fw-bold rounded-4 ">
             {currentQuestion.choices.map((option, index) => {
               const correctIndex = currentQuestion.choices.findIndex((c) => c.videoId === currentQuestion.correctAnswer);
               const isSelected = selectedAnswerIndex === index;
@@ -206,7 +206,7 @@ function Practice() {
           </button>
         </>
       )}
-    </>
+    </div>
   );
 }
 

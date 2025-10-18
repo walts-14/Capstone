@@ -48,9 +48,9 @@ export default function IntroductionModal() {
       {/* Trigger Button */}
       <button
         onClick={openModal}
-        className="question-button w-20 h-17 flex justify-center items-center absolute -top-1  -left-25 rounded-5 z-10"
+        className="question-button w-28 h-18 flex justify-center items-center absolute -top-1  -left-25 rounded-5 z-10 bg-transparent "
       >
-        <img src={question} alt="Help" className="w-19" />
+        <img src={question} alt="Help" className="w-21" />
       </button>
 
       {/* Modal Overlay */}

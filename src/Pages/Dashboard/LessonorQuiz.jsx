@@ -241,6 +241,13 @@ function LectureorQuiz() {
     ADVANCED: "#cc6055",
   };
 
+  // stroke colors to match Dashboard outline style
+  const strokeColors = {
+    BASIC: "#A6DCFF",
+    INTERMEDIATE: "#FFFEA6",
+    ADVANCED: "#FF7D6F",
+  };
+
   // FETCHED level/lessonNumber still comes from your slug
   const level = levelMapping[lessonKey] || "basic";
   const lessonNumber = lessonNumberMapping[lessonKey] || 1;
@@ -325,7 +332,7 @@ function LectureorQuiz() {
         <p>Back</p>
       </div>
 
-      <div className="container d-flex flex-column justify-content-center align-items-center">
+      <div className="container d-flex flex-column justify-content-center align-items-center mb-25">
         <div className="status-bar">
           {/* This badge uses the dynamic difficulty */}
           <div>
@@ -333,7 +340,10 @@ function LectureorQuiz() {
           </div>
           <div
             className="difficulty text-center"
-            style={{ backgroundColor: difficultyColors[difficulty] }}
+            style={{
+              backgroundColor: difficultyColors[difficulty],
+              boxShadow: `0 0 0 5px ${strokeColors[difficulty] || '#A6DCFF'}`,
+            }}
           >
             {difficulty}
           </div>
@@ -371,7 +381,7 @@ function LectureorQuiz() {
             </div>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "3rem" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
             <div
               className={`quiz-outer justify-content-center rounded-5${!canQuiz ? " disabled" : ""}`}
               onClick={() => {
