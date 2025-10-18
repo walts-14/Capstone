@@ -172,18 +172,21 @@ const calculateOverallProgress = (progressData) => {
       <>
         {/* Streak Button */}
         <button
-          className="flex items-center h-[10vh] w-[6.5vw] rounded-4 px-3 py-2 cursor-pointer absolute right-[25.2rem] top-20"
-          style={{ background: "#271d3e" }}
+          className="h-[10vh] w-[5.5vw] rounded-4 px-3 py-2 cursor-pointer absolute right-[26.2rem] top-20 flex items-center justify-center"
+          style={{ background: "#271d3e", boxShadow: "0 0 0 5px #F44336" }}
           onClick={toggle}
         >
-          <img src={fire} alt="streak" className="h-auto w-12" />
-          <div className="flex flex-col">
-            <div className="text-white text-4xl mx-2 h-[45px]">
+          <div className="flex flex-row items-center justify-center">
+            <img src={fire} alt="streak" className="h-auto w-12 mb-1" />
+            <div className="flex flex-col ">
+               <div className="text-white text-4xl mx-0 h-[45px] flex items-center justify-center">
               {currentStreakValue}
             </div>
-            <span className="text-[#878194] self-end text-base leading-4">
+            <span className="text-[#878194] text-center text-base leading-4 mt-1">
               Day <br /> Streak
             </span>
+            </div>
+           
           </div>
         </button>
 
@@ -418,6 +421,7 @@ export default function ProgressTracker({ student }) {
           style={{
             backgroundColor: "var(--dark-purple)",
             fontFamily: '"Baloo", sans-serif',
+            boxShadow: "0 0 0 5px #DCBC3D",
           }}
         >
           <img
@@ -425,31 +429,32 @@ export default function ProgressTracker({ student }) {
             className="h-auto mt-4 ms-3 mb-3 img-fluid"
             alt="trophy"
           />
-          <p className="fs-1 text-center ms-2">
+          <p className="fs-1 text-center ms-2" style={{ marginBottom: 0 }}>
             {userRank == null ? "..." : (typeof userRank === "number" ? `#${userRank}` : String(userRank))}
           </p>
-          <p className="text-nowrap fs-2">{unwrapDefault(displayUsername)}</p>
+          <p className="text-nowrap fs-2" style={{ marginBottom: 0 }}>{unwrapDefault(displayUsername)}</p>
         </div>
       </div>
 
       {/* CSS: .lessonTracker converted to Tailwind */}
       <div
-        className="absolute top-48 right-12 text-white rounded-2xl p-3 max-h-[45rem] h-auto w-[25vw] overflow-y-scroll"
+        className="absolute top-48 right-12 text-white rounded-4xl p-3 max-h-[43rem] h-auto w-[25vw] overflow-y-scroll"
         style={{
           backgroundColor: "var(--dark-purple)",
           fontFamily: '"Baloo", sans-serif',
-          scrollbarWidth: "thin",
-          scrollbarColor: "var(--input-gray) transparent",
+           boxShadow: "0 0 0 5px #C0C0C0",
+         
         }}
       >
         {Object.keys(lessonsByLevel).map((level) => (
           <div
             key={level}
-            className={`rounded-2xl mt-4 m-0`}
+            className={`rounded-4xl mt-2 mb-3 m-0`}
             style={{
               backgroundColor: "var(--input-gray)",
               border: "0px solid var(--input-gray)",
               height: "42vh",
+             
             }}
           >
             {/* CSS: .basicTitle (and similar) converted to Tailwind */}
@@ -462,7 +467,7 @@ export default function ProgressTracker({ student }) {
                     : level === "intermediate"
                     ? "#947809"
                     : "#86271E",
-                borderRadius: "20px 10px 70px 0",
+                borderRadius: "40px 10px 70px 0",
                 fontFamily: '"Baloo", sans-serif',
               }}
             >
