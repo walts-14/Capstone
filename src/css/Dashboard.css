@@ -7,7 +7,7 @@
 :root {
   --background: #100429;
   --semidark-purple: #271d3e;
-  --dark-purple: #271d3e;
+  --dark-purple: #ffffff;
   --mid-purple: #7338a0;
   --grey-purple: #6f687e;
   --purple: #4a2574;
@@ -35,7 +35,7 @@ body {
   padding: 0;
   width: 100%;
   height: 100%;
-
+  z-index: -5;
 }
 
 /* Smooth transitions for responsive elements */

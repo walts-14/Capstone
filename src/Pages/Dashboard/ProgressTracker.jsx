@@ -413,32 +413,40 @@ export default function ProgressTracker({ student }) {
 
   return (
     <>
-      <div className="tracker">
+      <div className="tracker flex flex-row items-center justify-center">
+        {/* Streak button (fixed) */}
         { <StreakButton /> }
-        {/* CSS: .position-lb converted to Tailwind */}
+
+        {/* Leaderboard box - align with streak button */}
         <div
-          className="flex justify-start items-center text-white rounded-3xl h-[10vh] w-[18vw] fixed right-12 top-20 gap-1"
+          className="flex items-center text-white rounded-3xl h-[10vh] w-[18vw] fixed right-12 top-20 gap-3 px-3"
           style={{
             backgroundColor: "var(--dark-purple)",
             fontFamily: '"Baloo", sans-serif',
             boxShadow: "0 0 0 5px #DCBC3D",
+            alignItems: 'center'
           }}
         >
           <img
             src={trophySrc}
-            className="h-auto mt-4 ms-3 mb-3 img-fluid"
+            className="h-10 w-auto me-2"
             alt="trophy"
+            style={{ display: 'block' }}
           />
-          <p className="fs-1 text-center ms-2" style={{ marginBottom: 0 }}>
-            {userRank == null ? "..." : (typeof userRank === "number" ? `#${userRank}` : String(userRank))}
-          </p>
-          <p className="text-nowrap fs-2" style={{ marginBottom: 0 }}>{unwrapDefault(displayUsername)}</p>
+          <div className="flex flex-col justify-center">
+            <p className="fs-1 text-left ms-1" style={{ margin: 0, lineHeight: 1 }}>
+              {userRank == null ? "..." : (typeof userRank === "number" ? `#${userRank}` : String(userRank))}
+            </p>
+            <p className="text-nowrap fs-2 ms-1" style={{ margin: 0, lineHeight: 1 }}>
+              {unwrapDefault(displayUsername)}
+            </p>
+          </div>
         </div>
       </div>
 
       {/* CSS: .lessonTracker converted to Tailwind */}
       <div
-        className="absolute top-48 right-12 text-white rounded-4xl p-3 max-h-[43rem] h-auto w-[25vw] overflow-y-scroll"
+        className="absolute top-52 right-12 text-white rounded-4xl p-3 max-h-[43rem] h-auto w-[25vw] overflow-y-scroll"
         style={{
           backgroundColor: "var(--dark-purple)",
           fontFamily: '"Baloo", sans-serif',

@@ -186,7 +186,7 @@ function LessonButtons() {
 
   const getLessonButtonClass = (lesson) => {
     const baseClasses =
-      "h-40 w-57 text-7xl flex justify-center items-center text-white rounded-xl font-bold transition-all duration-200 ease-in-out";
+      "h-40 w-57 text-8xl flex justify-center items-center text-white rounded-3xl font-bold transition-all duration-200 ease-in-out";
 
     let colorClasses = "";
     if (lesson.id >= 1 && lesson.id <= 4) {
@@ -201,7 +201,7 @@ function LessonButtons() {
     }
 
     const interactionClasses = lesson.unlocked
-      ? "cursor-pointer opacity-100 hover:-translate-y-1 hover:scale-105 active:translate-y-0 active:scale-95"
+      ? "cursor-pointer opacity-100 hover:-translate-y-1 hover:scale-110 active:translate-y-0 active:scale-95"
       : "cursor-not-allowed opacity-50";
 
     return `${baseClasses} ${colorClasses} ${interactionClasses}`;
@@ -230,12 +230,25 @@ function LessonButtons() {
           display: none;
         }
         
+          /* Glow on hover for unlocked basic lesson buttons */
+            .lesson-button.basic:not(.cursor-not-allowed):hover {
+              box-shadow: 0 12px 0 #246b9a, 0 0 24px 6px rgba(166,220,255,0.28); /* drop + cyan glow on hover */
+            }
+
+            .lesson-button.intermediate:not(.cursor-not-allowed):hover {
+              box-shadow: 0 12px 0 #a9890a, 0 0 24px 6px rgba(255,254,166,0.28); /* yellow glow */
+            }
+
+            .lesson-button.advanced:not(.cursor-not-allowed):hover {
+              box-shadow: 0 12px 0 #992d22, 0 0 24px 6px rgba(255,125,111,0.28); /* red glow */
+            }
+        
         /* Large tablet responsive styles - ONLY activate at breakpoint */
         @media (max-width: 1200px) {
           .lesson-button {
             height: 9rem !important;
             width: 11rem !important;
-            font-size: 4rem !important;
+            font-size: 4.5rem !important;
           }
           
           .lesson-button-shadow {
@@ -272,7 +285,7 @@ function LessonButtons() {
           .lesson-button {
             height: 8rem !important;
             width: 10rem !important;
-            font-size: 3.75rem !important;
+            font-size: 4rem !important;
           }
           
           .lesson-button-shadow {
@@ -309,7 +322,7 @@ function LessonButtons() {
           .lesson-button {
             height: 7rem !important;
             width: 9rem !important;
-            font-size: 3.5rem !important;
+            font-size: 3.75rem !important;
           }
           
           .lesson-button-shadow {
@@ -346,7 +359,7 @@ function LessonButtons() {
           .lesson-button {
             height: 6rem !important;
             width: 8rem !important;
-            font-size: 3rem !important;
+            font-size: 3.25rem !important;
           }
           
           .lesson-button-shadow {

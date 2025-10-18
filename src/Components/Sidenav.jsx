@@ -68,7 +68,7 @@ function Sidenav() {
     <>
       {/* Logo - desktop/laptop */}
       <div
-        className="fixed top-7 left-12 text-white font-bold text-6xl z-20 hidden lg:block"
+        className="fixed top-7 left-22 text-white font-bold text-7xl z-20 hidden lg:block"
         style={{ fontFamily: '"Baloo", sans-serif' }}
       >
         <p className="m-0">WeSign</p>
@@ -84,7 +84,7 @@ function Sidenav() {
 
       {/* Sidebar container - desktop/laptop (only visible above 1024px) */}
       <div
-        className="fixed top-28 left-0 bottom-28 w-auto rounded-r-2xl flex text-center p-5 bg-[var(--purple)] h-[80vh] hidden lg:flex"
+        className="fixed top-28 left-0 bottom-28 w-auto rounded-r-4xl flex text-center p-5 bg-[var(--purple)] h-[80vh] hidden lg:flex"
         style={{ fontFamily: '"Baloo", sans-serif' }}
       >
         <nav className="text-white flex flex-col w-full z-10 gap-4">
@@ -99,26 +99,27 @@ function Sidenav() {
                   style={{ textDecoration: "none" }}
                 >
                   <div
-                    className={`flex items-center justify-start relative rounded-2xl transition-all duration-200 cursor-pointer overflow-hidden h-16 sm:h-18 md:h-20 lg:h-24 px-4 sm:px-6 ${
-                      isActive ? "border-4" : ""
+                    className={`sidenav-item flex items-center justify-start relative rounded-3xl transition-all duration-200 cursor-pointer overflow-hidden h-16 sm:h-18 md:h-20 lg:h-24 px-4 sm:px-6 ${
+                      isActive ? "border-4 active" : ""
                     }`}
                     style={{
                       backgroundColor: isActive
-                        ? "var(--semidark-purple)"
+                        ? "var(--background)"
                         : "var(--purple)",
                       borderColor: isActive
                         ? "var(--mid-purple)"
                         : "transparent",
                       marginLeft: "-2rem",
                       width: "clamp(15vw, 18vw, 20vw)",
+                      transition: 'background-color 280ms ease, border-color 280ms ease, transform 280ms ease, box-shadow 280ms ease, margin-left 280ms ease',
                     }}
                   >
                     <img
                       src={item.icon}
                       alt={`${item.label.toLowerCase()} logo`}
-                      className="flex-shrink-0 object-contain w-8 h-8 min-w-[32px] min-h-[32px] sm:w-10 sm:h-10 sm:min-w-[40px] sm:min-h-[40px] md:w-12 md:h-12 md:min-w-[48px] md:min-h-[48px]"
+                      className="flex-shrink-0 object-contain w-12 h-12 min-w-[40px] min-h-[40px] sm:w-14 sm:h-14 sm:min-w-[56px] sm:min-h-[56px] md:w-16 md:h-16 md:min-w-[64px] md:min-h-[64px]"
                     />
-                    <span className="text-white truncate flex-1 text-center text-xl sm:text-2xl md:text-3xl lg:text-4xl ml-3 sm:ml-4">
+                    <span className="text-white truncate flex-1 text-center text-xl sm:text-2xl md:text-3xl lg:text-4xl ml-4 sm:ml-5">
                       {item.label}
                     </span>
                   </div>
@@ -243,6 +244,19 @@ function Sidenav() {
           .sidenav-mobile {
             display: none !important;
           }
+        }
+
+        /* Smooth transitions for sidenav selection */
+        .sidenav-item {
+          will-change: transform, background-color, border-color, box-shadow;
+        }
+
+        .sidenav-item:hover {
+          transform: translateX(6px);
+        }
+
+        .sidenav-item.active {
+          box-shadow: 0 10px 30px rgba(0,0,0,0.12);
         }
       `}</style>
     </>
