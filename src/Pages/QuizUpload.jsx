@@ -64,7 +64,7 @@ function QuizUpload() {
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
           required
-          className="mt-1 w-full p-2 rounded"
+          className="mt-1 w-full p-2 rounded border-2 border-white"
         />
       </div>
 
@@ -74,7 +74,7 @@ function QuizUpload() {
         <select
           value={level}
           onChange={(e) => setLevel(e.target.value)}
-          className="mt-1 p-2 rounded w-full"
+          className="mt-1 p-2 rounded w-full border-2 border-white"
         >
           <option value="basic">Basic</option>
           <option value="intermediate">Intermediate</option>
@@ -91,7 +91,7 @@ function QuizUpload() {
           max="4"
           value={lessonNumber}
           onChange={(e) => setLessonNumber(e.target.value)}
-          className="mt-1 p-2 rounded w-full"
+          className="mt-1 p-2 rounded w-full border-2 border-white"
         />
       </div>
 
@@ -101,7 +101,7 @@ function QuizUpload() {
         <select
           value={quizPart}
           onChange={(e) => setQuizPart(Number(e.target.value))}
-          className="mt-1 p-2 rounded w-full"
+          className="mt-1 p-2 rounded w-full border-2 border-white"
         >
           <option value={1}>Part 1 (Terms 1–15)</option>
           <option value={2}>Part 2 (Terms 16–30)</option>
@@ -115,7 +115,7 @@ function QuizUpload() {
           value={correctAnswer}
           onChange={(e) => setCorrectAnswer(e.target.value)}
           required
-          className="mt-1 p-2 rounded w-full"
+          className="mt-1 p-2 rounded w-full border-2 border-white"
         >
           <option value="">-- Select Video --</option>
           {filteredVideos.map((v) => (
@@ -133,7 +133,7 @@ function QuizUpload() {
 
       <button
         type="submit"
-        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded w-full"
+        className="mt-4 px-4 py-2 text-white rounded w-full border-white bg-blue-500"
       >
         Create Quiz
       </button>

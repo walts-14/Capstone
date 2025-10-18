@@ -177,15 +177,13 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
     }));
   };
 
-  const incrementStreak = async () => {
+  const incrementStreak = async (reset = false) => {
     if (!currentUserEmail) return;
     if (currentUserEmail.toLowerCase().includes('superadmin')) return;
     try {
-      const newStreak = {
-        ...streakData,
-        currentStreak: (Number(streakData.currentStreak) || 0) + 1,
-        lastUpdated: new Date().toISOString(),
-      };
+      const newStreak = reset
+        ? { ...streakData, currentStreak: 1, lastUpdated: new Date().toISOString() }
+        : { ...streakData, currentStreak: (Number(streakData.currentStreak) || 0) + 1, lastUpdated: new Date().toISOString() };
 
       const res = await axios.put(`/api/streak/email/${currentUserEmail}`, { streak: newStreak });
 

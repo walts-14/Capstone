@@ -21,7 +21,7 @@ const deepFindDefault = (obj, base = "") => {
         // still continue into default to find nested ones
         walk(val.default, path + ".default");
       } else {
-        for (const k of Object.keys(val)) {
+        for (const k of Object.keys(val)) {       
           try {
             walk(val[k], path ? `${path}.${k}` : k);
           } catch (e) {
@@ -147,56 +147,59 @@ export default function StreakButton() {
     setIsOpen(false);
   };
 
-  // Reward modal logic — same as before
+  // Reward modal logic — fixed for streak reset and increment
   useEffect(() => {
     if (modalShownDate === null) return;
-    const today = new Date().toDateString();
-    if (modalShownDate === today) return;
+    const today = new Date();
+    const todayStr = today.toDateString();
+    if (modalShownDate === todayStr) return;
     if (isOpen) return;
 
-    if (lastUpdatedStrSafe) {
-      const lastDate = new Date(String(lastUpdatedStrSafe));
-      if (!isNaN(lastDate.getTime()) && lastDate.toDateString() === today) {
-        setShowModal(true);
-        setModalShownDate(today);
-        try { localStorage.setItem(MODAL_SHOWN_KEY, today); } catch (e) {}
-        return;
-      }
-    }
-
-    if ((!lastUpdatedStrSafe || lastUpdatedStrSafe === "") && Number(displayStreakNum) < 1) {
+    // Helper to call backend for streak update
+    const updateStreak = (reset = false) => {
       try {
-        if (typeof incrementStreak === "function") incrementStreak();
+        if (typeof incrementStreak === "function") incrementStreak(reset);
         else console.warn("StreakButton: incrementStreak not available from context; skipping server call.");
       } catch (e) {
         console.error("StreakButton: incrementStreak failed", e);
       }
+    };
+
+    if (!lastUpdatedStrSafe || lastUpdatedStrSafe === "") {
+      // First time or streak is 0
+      updateStreak(false); // start streak
       setShowModal(true);
-      setModalShownDate(today);
-      try { localStorage.setItem(MODAL_SHOWN_KEY, today); } catch (e) {}
+      setModalShownDate(todayStr);
+      try { localStorage.setItem(MODAL_SHOWN_KEY, todayStr); } catch (e) {}
       return;
     }
 
-    if (lastUpdatedStrSafe) {
-      const lastDate = new Date(String(lastUpdatedStrSafe));
-      if (!isNaN(lastDate.getTime())) {
-        const now = new Date();
-        const diffTime = now.getTime() - lastDate.getTime();
-        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-        if (diffDays >= 1) {
-          try {
-            if (typeof incrementStreak === "function") incrementStreak();
-            else console.warn("StreakButton: incrementStreak not available from context; skipping server call.");
-          } catch (e) {
-            console.error("StreakButton: incrementStreak failed", e);
-          }
-          setShowModal(true);
-          setModalShownDate(today);
-          try { localStorage.setItem(MODAL_SHOWN_KEY, today); } catch (e) {}
-        }
+    const lastDate = new Date(String(lastUpdatedStrSafe));
+    if (!isNaN(lastDate.getTime())) {
+      const diffTime = today.getTime() - lastDate.getTime();
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      if (diffDays === 1) {
+        // Consecutive day, increment streak
+        updateStreak(false);
+        setShowModal(true);
+        setModalShownDate(todayStr);
+        try { localStorage.setItem(MODAL_SHOWN_KEY, todayStr); } catch (e) {}
+        return;
+      } else if (diffDays > 1) {
+        // Missed a day, reset streak
+        updateStreak(true);
+        setShowModal(true);
+        setModalShownDate(todayStr);
+        try { localStorage.setItem(MODAL_SHOWN_KEY, todayStr); } catch (e) {}
+        return;
+      } else if (diffDays === 0) {
+        // Already claimed today, just show modal if needed
+        setShowModal(true);
+        setModalShownDate(todayStr);
+        try { localStorage.setItem(MODAL_SHOWN_KEY, todayStr); } catch (e) {}
+        return;
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastUpdatedStrSafe, displayStreakNum, modalShownDate, isOpen]);
 
   const calcReward = (day) => {
