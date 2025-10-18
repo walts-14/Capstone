@@ -60,9 +60,28 @@ export const getRandomQuiz = async (req, res) => {
     const startTerm = part === 1 ? 1 : 16;
     const endTerm   = part === 1 ? 15 : 30;
 
-    const videos = await Video.find({ level, lessonNumber: lessonNum, termNumber: { $gte: startTerm, $lte: endTerm } });
+    // Try to get videos scoped to the exact lessonNumber + term range
+    let videos = await Video.find({ level, lessonNumber: lessonNum, termNumber: { $gte: startTerm, $lte: endTerm } });
+
+    // If there aren't enough videos in that exact lesson, expand the pool to the whole level within the same term range
     if (videos.length < 10) {
-      return res.status(400).json({ error: "Not enough videos for quiz generation (need ≥10)" });
+      console.warn(`Not enough videos for level=${level}, lessonNumber=${lessonNum}, termRange=[${startTerm},${endTerm}]. Expanding pool.`);
+      const broader = await Video.find({ level, termNumber: { $gte: startTerm, $lte: endTerm } });
+      if (broader.length >= 10) {
+        videos = broader;
+      }
+    }
+
+    // If still not enough, expand to any video within the same level
+    if (videos.length < 10) {
+      const levelWide = await Video.find({ level });
+      if (levelWide.length >= 10) {
+        videos = levelWide;
+      }
+    }
+
+    if (videos.length < 10) {
+      return res.status(400).json({ error: "Not enough videos for quiz generation (need ≥10). Please add more videos for this level/lesson." });
     }
 
     const selected = randomSelect(videos, 10);

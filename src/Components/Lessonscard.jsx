@@ -8,8 +8,8 @@ function LessonsCard({ item }) {
         return "#174360";      // Color for basic
       case "Intermediate":
         return "#6A5606";      // Color for intermediate
-      case "Advance":
-        return "#601C15";      // Color for advance
+      case "Advanced":
+        return "#601C15";      // Color for advanced
       default:
         return "#ffffff";      // Fallback background color
     }

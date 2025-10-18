@@ -7,10 +7,10 @@ const Lessons = {
     termssix: [{id: 6, difficulty: "Intermediate", num: "Lesson 2", title: "Casual Conversations"}], 
     termsseven: [{id: 7, difficulty: "Intermediate", num: "Lesson 3", title: "Expressing Emotions & Feelings"}], 
     termseight: [{id: 8, difficulty: "Intermediate", num: "Lesson 4", title: "Making Requests & Offers"}], 
-    termsnine: [{id: 9, difficulty: "Advance", num: "Lesson 1", title: "Advanced Vocabulary - School, Work, and Hobbies"}], 
-    termsten: [{id: 10, difficulty: "Advance", num: "Lesson 2", title: "Storytelling Basics"}], 
-    termseleven: [{id: 11, difficulty: "Advance", num: "Lesson 3", title: "Cultural Insights and Idioms"}], 
-    termstwelve: [{id: 12, difficulty: "Advance", num: "Lesson 4", title: "Expressing Opinions and Debate"}], 
+    termsnine: [{id: 9, difficulty: "Advanced", num: "Lesson 1", title: "Advanced Vocabulary - School, Work, and Hobbies"}], 
+    termsten: [{id: 10, difficulty: "Advanced", num: "Lesson 2", title: "Storytelling Basics"}], 
+    termseleven: [{id: 11, difficulty: "Advanced", num: "Lesson 3", title: "Cultural Insights and Idioms"}], 
+    termstwelve: [{id: 12, difficulty: "Advanced", num: "Lesson 4", title: "Expressing Opinions and Debate"}], 
     };
 
 export default Lessons

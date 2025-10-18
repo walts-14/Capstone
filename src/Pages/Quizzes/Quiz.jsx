@@ -110,21 +110,62 @@ function Quiz() {
           termstwelve: 12,
         };
         const lessonNumber = lessonNumberMapping[lessonKey] || 1;
-        const response = await axios.get(`${backendURL}/api/quizzes/stored`, {
-          params: { level, lessonNumber, quizPart },
-        });
-        setQuizQuestions(response.data);
-        setCurrentQuestionIndex(0);
-        setSelectedAnswerIndex(null);
-        setAttempts({});
-        setCorrectAnswers(0);
-        setWrongAnswers(0);
-        setShowResult(false);
-        setIsCorrect(false);
-        setQuizFinished(false);
-        setFailedPointsRequirement(false);
-        setHasUpdatedQuiz(false);
+
+        // First try to load stored (author-uploaded) quizzes
+        try {
+          const storedResp = await axios.get(`${backendURL}/api/quizzes/stored`, {
+            params: { level, lessonNumber, quizPart },
+          });
+          if (Array.isArray(storedResp.data) && storedResp.data.length > 0) {
+            setQuizQuestions(storedResp.data);
+            // reset quiz state
+            setCurrentQuestionIndex(0);
+            setSelectedAnswerIndex(null);
+            setAttempts({});
+            setCorrectAnswers(0);
+            setWrongAnswers(0);
+            setShowResult(false);
+            setIsCorrect(false);
+            setQuizFinished(false);
+            setFailedPointsRequirement(false);
+            setHasUpdatedQuiz(false);
+            return;
+          }
+          // If storedResp succeeded but returned empty, fall through to random generator
+          console.warn("Stored quizzes returned empty for", { level, lessonNumber, quizPart });
+        } catch (err) {
+          // Stored quizzes endpoint returned an error (e.g. 404 or other). We'll fallback to random generator.
+          console.warn("Error fetching stored quizzes, will try random generation:", err?.response?.status || err.message);
+        }
+
+        // Fallback: generate a random quiz from available videos
+        try {
+          const randResp = await axios.get(`${backendURL}/api/quizzes/random`, {
+            params: { level, lessonNumber, quizPart },
+          });
+          if (Array.isArray(randResp.data) && randResp.data.length > 0) {
+            setQuizQuestions(randResp.data);
+            setCurrentQuestionIndex(0);
+            setSelectedAnswerIndex(null);
+            setAttempts({});
+            setCorrectAnswers(0);
+            setWrongAnswers(0);
+            setShowResult(false);
+            setIsCorrect(false);
+            setQuizFinished(false);
+            setFailedPointsRequirement(false);
+            setHasUpdatedQuiz(false);
+            return;
+          }
+          console.warn("Random quiz generator returned no questions", { level, lessonNumber, quizPart });
+        } catch (err) {
+          console.error("Random quiz generation failed:", err?.response?.data || err.message);
+        }
+
+        // If both attempts failed, show an error to the user
+        toast.error("Failed to load quiz questions. Please try again.");
       } catch (error) {
+        console.error("Unexpected error while preparing quizzes:", error);
         toast.error("Failed to load quiz questions. Please try again.");
       }
     };
