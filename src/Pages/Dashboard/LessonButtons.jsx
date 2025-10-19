@@ -32,7 +32,7 @@ function LessonButtons() {
   const difficultyColors = {
     BASIC: "#579ecd",
     INTERMEDIATE: "#dcbc3d",
-    ADVANCED: "#cc6055",
+    ADVANCED: "#C0392B",
   };
 
   const strokeColors = {

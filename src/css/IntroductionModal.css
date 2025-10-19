@@ -11,7 +11,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999; /* sit above everything */
+  z-index: 9999;
+  /* sit above everything */
 }
 
 /* Centered modal box */
@@ -36,6 +37,7 @@
   font-size: 3rem;
   cursor: pointer;
 }
+
 .slideshow-container {
   background-color: #7338a0;
   display: flex;
@@ -46,9 +48,11 @@
   height: 65vh;
   padding: 0px 55px 0px 55px;
 }
+
 .slideshow-controls {
   gap: 51rem;
 }
+
 .slideshow-controls .btn {
   background-color: #4a2574;
   width: 15vw;

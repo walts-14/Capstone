@@ -16,7 +16,7 @@ function AdvancedLibrary() {
             <span className="text-3xl">Lesson 1</span>
             <span className="text-2xl pt-2">30 items</span>
             <p className="text-5xl">
-              Advanced Vocabulary - School, Work, and Hobbies
+            Daily Life and Routines
             </p>
           </div>
         </Link>
@@ -24,21 +24,23 @@ function AdvancedLibrary() {
           <div className="level-content rounded-xl">
             <span className="text-3xl">Lesson 2</span>
             <span className="text-2xl pt-2">30 items</span>
-            <p className="text-5xl">Storytelling Basics</p>
+            <p className="text-5xl">Social Conversations and Relationships
+            </p>
           </div>
         </Link>
         <Link to="/terms/termseleven">
           <div className="level-content rounded-xl">
             <span className="text-3xl">Lesson 3</span>
             <span className="text-2xl pt-2">30 items</span>
-            <p className="text-5xl">Cultural Insights and Idioms</p>
+            <p className="text-5xl">Practical Situations and Public Places
+            </p>
           </div>
         </Link>
         <Link to="/terms/termstwelve">
           <div className="level-content rounded-xl">
             <span className="text-3xl">Lesson 4</span>
             <span className="text-2xl pt-2">30 items</span>
-            <p className="text-5xl">Expressing Opinions and Debate</p>
+            <p className="text-5xl">Advanced Conversations & Opinions</p>
           </div>
         </Link>
       </div>

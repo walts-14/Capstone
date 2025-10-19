@@ -238,7 +238,7 @@ function LectureorQuiz() {
   const difficultyColors = {
     BASIC: "#3498db",
     INTERMEDIATE: "#dcbc3d",
-    ADVANCED: "#cc6055",
+    ADVANCED: "#C0392B",
   };
 
   // stroke colors to match Dashboard outline style

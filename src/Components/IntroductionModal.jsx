@@ -17,10 +17,22 @@ export default function IntroductionModal() {
 
   // Determine which component to show based on path
   const libPaths = [
-    "/Library",
+    "/library",
     "/BasicLibrary",
     "/IntermediateLibrary",
     "/AdvancedLibrary",
+    "/terms/termsone",
+    "/terms/termstwo",
+    "/terms/termsthree",
+    "/terms/termsfour",
+    "/terms/termsfive",
+    "/terms/termssix",
+    "/terms/termsseven",
+    "/terms/termseight",
+    "/terms/termsnine",
+    "/terms/termsten",
+    "/terms/termseleven",
+    "/terms/termstwelve",
   ];
   const showInterpreter = libPaths.includes(location.pathname);
   const howImages = [how1, how5, how2, how3, how4, how6];
@@ -46,12 +58,16 @@ export default function IntroductionModal() {
   return (
     <>
       {/* Trigger Button */}
-      <button
-        onClick={openModal}
-        className="question-button w-28 h-18 flex justify-center items-center absolute -top-1  -left-25 rounded-5 z-10 bg-transparent "
+      <a
+        href="#"
+        onClick={(e) => {
+          e.preventDefault();
+          openModal();
+        }}
+        className="question-button w-18 h-8 flex justify-center items-center -left-20 rounded-5 z-10 bg-transparent "
       >
         <img src={question} alt="Help" className="w-21" />
-      </button>
+      </a>
 
       {/* Modal Overlay */}
       {showModal && (
