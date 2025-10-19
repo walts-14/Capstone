@@ -13,7 +13,7 @@ const sanitizeDeep = (val) => {
   return out;
 };
 // src/Pages/Dashboard/ProgressContext.jsx
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useRef } from "react";
 import axios from "axios";
 
 export const ProgressContext = createContext();
@@ -83,6 +83,17 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
     streakFreeze: false,
   }));
 
+  // Central points state so UI can display authoritative points from backend
+  const [points, setPoints] = useState(null);
+
+  // Ref to avoid sending identical streak repeatedly (helps prevent duplicate server calls from refreshing)
+  const lastSentStreakRef = useRef(null);
+  // Ref to prevent concurrent/in-flight claim calls from calling incrementStreak multiple times
+  const claimInProgressRef = useRef(false);
+  // Refs to indicate we've completed the initial server load; guard sync effects until set
+  const progressInitializedRef = useRef(false);
+  const streakInitializedRef = useRef(false);
+
   const STORAGE_KEY = (email) => `progress_${email}`;
 
   // Fetch progress & streak when email changes
@@ -91,6 +102,15 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
       setProgressData(initialProgress);
       return;
     }
+    // Clear any previously-sent streak payload when switching users
+    try { lastSentStreakRef.current = null; } catch (e) {}
+    // Reset points while new user data loads to avoid flashing previous user's points
+    try { setPoints(null); } catch (e) {}
+    // Try to restore cached points for this user to avoid UI flash while backend responds
+    try {
+      const cachedPts = localStorage.getItem(`points_${currentUserEmail}`);
+      if (cachedPts != null) setPoints(Number(cachedPts));
+    } catch (e) {}
     (async () => {
       try {
         const saved = localStorage.getItem(STORAGE_KEY(currentUserEmail));
@@ -128,15 +148,40 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
           console.log("Fetched streak normalized:", normalized);
           setStreakData(normalized);
         }
+  // Try to get the user's points from the backend as part of the initial load
+        try {
+          const ts = Date.now();
+          const ptsRes = await axios.get(`/api/points/email/${encodeURIComponent(currentUserEmail)}?_=${ts}`);
+          if (ptsRes?.data?.points != null) {
+            setPoints(Number(ptsRes.data.points));
+            try { localStorage.setItem(`points_${currentUserEmail}`, String(ptsRes.data.points)); } catch (e) {}
+          }
+        } catch (e) {
+          // ignore points fetch failure for now
+        }
+        // Mark initial load complete so sync effects can start operating
+        try { progressInitializedRef.current = true; } catch (e) {}
+        try { streakInitializedRef.current = true; } catch (e) {}
       } catch (err) {
         console.error("Error fetching progress/streak:", err);
       }
     })();
   }, [currentUserEmail]);
 
+  // Persist points to localStorage whenever they change for this user
+  useEffect(() => {
+    if (!currentUserEmail) return;
+    try { if (points != null) localStorage.setItem(`points_${currentUserEmail}`, String(points)); } catch (e) {}
+  }, [points, currentUserEmail]);
+
   // Sync progress to backend & localStorage
   useEffect(() => {
     if (!currentUserEmail) return;
+    // Don't sync to backend until we've finished the initial fetch (prevents accidental updates on reload)
+    if (!progressInitializedRef.current) {
+      try { localStorage.setItem(STORAGE_KEY(currentUserEmail), JSON.stringify(progressData)); } catch (e) {}
+      return;
+    }
     try {
       localStorage.setItem(STORAGE_KEY(currentUserEmail), JSON.stringify(progressData));
     } catch (e) {
@@ -155,9 +200,14 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
   useEffect(() => {
     if (!currentUserEmail) return;
     if (currentUserEmail.toLowerCase().includes('superadmin')) return;
+    const serialized = JSON.stringify(streakData || {});
+    // Avoid syncing streak until initial server load completes
+    if (!streakInitializedRef.current) return;
+    if (lastSentStreakRef.current === serialized) return; // avoid redundant PUTs
     (async () => {
       try {
         await axios.put(`/api/streak/email/${encodeURIComponent(currentUserEmail)}`, { streak: streakData });
+        lastSentStreakRef.current = serialized;
       } catch (err) {
         console.error("Error syncing streak:", err);
       }
@@ -180,12 +230,25 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
   const incrementStreak = async (reset = false) => {
     if (!currentUserEmail) return;
     if (currentUserEmail.toLowerCase().includes('superadmin')) return;
+    if (claimInProgressRef.current) return; // already in progress
+    claimInProgressRef.current = true;
     try {
       const newStreak = reset
         ? { ...streakData, currentStreak: 1, lastUpdated: new Date().toISOString() }
         : { ...streakData, currentStreak: (Number(streakData.currentStreak) || 0) + 1, lastUpdated: new Date().toISOString() };
 
-      const res = await axios.put(`/api/streak/email/${currentUserEmail}`, { streak: newStreak });
+      // Mark this streak as "last sent" to avoid the sync effect re-sending the same payload
+      try {
+        lastSentStreakRef.current = JSON.stringify(newStreak);
+      } catch (e) {
+        /* ignore */
+      }
+
+      // Debug: print payload before sending
+      try { console.debug("incrementStreak: PUT payload ->", { email: currentUserEmail, streak: newStreak }); } catch (e) {}
+  const res = await axios.put(`/api/streak/email/${currentUserEmail}`, { streak: newStreak });
+      // Debug: print backend response for diagnosis
+      try { console.debug("incrementStreak: backend response ->", res?.data); } catch (e) {}
 
       // Always unwrap backend response
       const backendStreak = sanitizeDeep(res?.data?.streak) || res?.data?.streak || null;
@@ -198,16 +261,25 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
         };
         console.log("incrementStreak: using backend normalized streak:", normalized);
         setStreakData(normalized);
+        // update lastSentStreakRef so the sync effect doesn't immediately re-send identical streak
+        try { lastSentStreakRef.current = JSON.stringify(normalized); } catch (e) {}
       } else {
         console.log("incrementStreak: backend did not return streak — using optimistic newStreak:", newStreak);
         setStreakData(sanitizeDeep(newStreak));
       }
 
+      // Use authoritative points value returned by backend (if present)
+      if (res?.data?.points != null) {
+        setPoints(Number(res.data.points));
+      }
       if (res?.data?.pointsAdded) {
         console.log(`Points added: ${res.data.pointsAdded}`);
       }
     } catch (err) {
       console.error("Error updating streak:", err);
+    }
+    finally {
+      claimInProgressRef.current = false;
     }
   };
 
@@ -224,9 +296,18 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
         updateProgress,
         streakData,
         incrementStreak,
+        points,
+        setPoints,
       }}
     >
       {children}
     </ProgressContext.Provider>
   );
 };
+
+// Persist points to localStorage whenever they change for the current user
+// (this runs outside the provider component but uses localStorage directly)
+// Note: components should still prefer context `points` when available.
+try {
+  // no-op placeholder; actual persistence occurs inside the provider via setPoints usage
+} catch (e) {}

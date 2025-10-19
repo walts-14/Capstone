@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 
 function LoginForm() {
   const navigate = useNavigate();
-  const { setCurrentUserEmail, setCurrentUserName } = useContext(ProgressContext);
+  const { setCurrentUserEmail, setCurrentUserName, setCurrentUserUsername } = useContext(ProgressContext);
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -37,9 +37,11 @@ function LoginForm() {
         localStorage.setItem("userEmail", response.data.user.email);
         localStorage.setItem("loggedIn", "true");
 
-        // Update ProgressContext state immediately
-        setCurrentUserEmail(response.data.user.email);
-        setCurrentUserName(response.data.user.name);
+  // Update ProgressContext state immediately
+  setCurrentUserEmail(response.data.user.email);
+  setCurrentUserName(response.data.user.name);
+  // Ensure username is updated in the same tab (storage event doesn't fire in the same tab)
+  try { setCurrentUserUsername(response.data.user.username); } catch (e) {}
   
         console.log("✅ Token stored:", localStorage.getItem("token"));
         console.log("✅ Email stored:", localStorage.getItem("userEmail"));

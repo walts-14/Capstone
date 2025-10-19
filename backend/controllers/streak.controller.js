@@ -51,8 +51,14 @@ export const updateStreak = async (req, res) => {
     const prevStreak = user.streak?.currentStreak || 0;
     const prevLast = user.streak?.lastUpdated ? String(user.streak.lastUpdated) : null;
 
+    // New account: if there's no previous lastUpdated and incoming is Day 1, award immediately
+    if (!prevLast && Number(streak.currentStreak) === 1) {
+      pointsToAdd = 5;
+      user.points += pointsToAdd;
+    }
+
     // Only consider awarding points when incoming lastUpdated is today and we haven't awarded for today yet
-    if (isToday(streak.lastUpdated) && (!prevLast || !isToday(prevLast))) {
+    if (pointsToAdd === 0 && isToday(streak.lastUpdated) && (!prevLast || !isToday(prevLast))) {
       const incomingDay = Number(streak.currentStreak) || 0;
 
       // Consecutive increment: incomingDay === prevStreak + 1
@@ -82,8 +88,34 @@ export const updateStreak = async (req, res) => {
           }
         }
       }
+  }
+
+    // If we determined points should be added, perform an atomic conditional update
+    if (pointsToAdd > 0) {
+      // Build a per-day guard to ensure only one award per calendar day
+      const todayKey = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+      const query = {
+        _id: user._id,
+        "streak.lastUpdated": prevLast,
+        $or: [ { lastPointsAwarded: { $exists: false } }, { lastPointsAwarded: { $ne: todayKey } } ]
+      };
+
+      const update = { $set: { streak, lastPointsAwarded: todayKey }, $inc: { points: pointsToAdd } };
+
+      const updated = await User.findOneAndUpdate(query, update, { new: true });
+
+      if (updated) {
+        return res.json({ message: "Streak and points updated", streak: updated.streak, points: updated.points, pointsAdded: pointsToAdd });
+      }
+
+      // If we reach here, a concurrent request already modified the streak or already awarded today — don't double-award.
+      const fresh = await User.findById(user._id);
+      fresh.streak = streak;
+      await fresh.save();
+      return res.json({ message: "Streak updated (concurrent update prevented double-award)", streak: fresh.streak, points: fresh.points, pointsAdded: 0 });
     }
 
+    // No points to add — just save the incoming streak
     user.streak = streak;
     await user.save();
 
@@ -123,7 +155,13 @@ export const updateStreakByEmail = async (req, res) => {
     const prevStreak = user.streak?.currentStreak || 0;
     const prevLast = user.streak?.lastUpdated ? String(user.streak.lastUpdated) : null;
 
-    if (isToday(streak.lastUpdated) && (!prevLast || !isToday(prevLast))) {
+    // New account: if there's no previous lastUpdated and incoming is Day 1, award immediately
+    if (!prevLast && Number(streak.currentStreak) === 1) {
+      pointsToAdd = 5;
+      user.points += pointsToAdd;
+    }
+
+    if (pointsToAdd === 0 && isToday(streak.lastUpdated) && (!prevLast || !isToday(prevLast))) {
       const incomingDay = Number(streak.currentStreak) || 0;
 
       if (incomingDay === prevStreak + 1) {
@@ -148,6 +186,27 @@ export const updateStreakByEmail = async (req, res) => {
           }
         }
       }
+    }
+
+    // If we determined points should be added, perform an atomic conditional update
+    if (pointsToAdd > 0) {
+      const todayKey = new Date().toISOString().slice(0, 10);
+      const query = {
+        _id: user._id,
+        "streak.lastUpdated": prevLast,
+        $or: [ { lastPointsAwarded: { $exists: false } }, { lastPointsAwarded: { $ne: todayKey } } ]
+      };
+      const update = { $set: { streak, lastPointsAwarded: todayKey }, $inc: { points: pointsToAdd } };
+      const updated = await User.findOneAndUpdate(query, update, { new: true });
+
+      if (updated) {
+        return res.json({ message: "Streak and points updated", streak: updated.streak, points: updated.points, pointsAdded: pointsToAdd });
+      }
+
+      const fresh = await User.findById(user._id);
+      fresh.streak = streak;
+      await fresh.save();
+      return res.json({ message: "Streak updated (concurrent update prevented double-award)", streak: fresh.streak, points: fresh.points, pointsAdded: 0 });
     }
 
     user.streak = streak;

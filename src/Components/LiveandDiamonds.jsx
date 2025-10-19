@@ -1,11 +1,13 @@
 import axios from "axios";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
+import { ProgressContext } from "../Pages/Dashboard/ProgressContext.jsx";
 import heart from "../assets/heart.png";
 import diamond from "../assets/diamond.png";
 
 function LivesandDiamonds({ showDiamonds = true }) {
   const [lives, setLives] = useState(5);
   const [points, setPoints] = useState(0);
+  const { points: ctxPoints } = useContext(ProgressContext) || {};
 
   useEffect(() => {
     const fetchLives = async () => {
@@ -37,8 +39,10 @@ function LivesandDiamonds({ showDiamonds = true }) {
           console.error("User email not found in localStorage.");
           return;
         }
+        // Add a short cache-busting timestamp to avoid 304 / cached responses
+        const ts = Date.now();
         const response = await axios.get(
-          `http://localhost:5000/api/points/email/${userEmail}`
+          `http://localhost:5000/api/points/email/${userEmail}?_=${ts}`
         );
         setPoints(response.data.points);
       } catch (error) {
@@ -46,10 +50,25 @@ function LivesandDiamonds({ showDiamonds = true }) {
       }
     };
 
-    fetchPoints();
+    // If ProgressContext already has authoritative points, use that value
+    if (typeof ctxPoints === 'number') {
+      console.debug("LiveandDiamonds: using context points", ctxPoints);
+      setPoints(ctxPoints);
+    } else {
+      console.debug("LiveandDiamonds: context points not available, fetching from backend");
+      fetchPoints();
+    }
     const pointsInterval = setInterval(fetchPoints, 5000);
     return () => clearInterval(pointsInterval);
   }, []);
+
+  // react to context points changes as well
+  useEffect(() => {
+    if (typeof ctxPoints === 'number') {
+      console.debug("LiveandDiamonds: ctxPoints updated ->", ctxPoints);
+      setPoints(ctxPoints);
+    }
+  }, [ctxPoints]);
 
   return (
     <>

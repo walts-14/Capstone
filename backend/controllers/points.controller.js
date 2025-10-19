@@ -7,7 +7,11 @@ export const getPoints = async (req, res) => {
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
-      res.json({ points: user.points });
+      // Prevent client/browser caching for points - always return fresh value
+      res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+      res.set('Pragma', 'no-cache');
+      res.set('Expires', '0');
+      return res.json({ points: user.points });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
