@@ -406,7 +406,7 @@ export default function ProgressTracker({ student }) {
   const styles = {
     basic: { backgroundColor: "#205D87" },
     intermediate: { backgroundColor: "#947809" },
-    advanced: { backgroundColor: "#86271E" },
+    advanced: { backgroundColor: "#AA362A" },
   };
 
   const trophySrc = srcFrom(trophy);
@@ -461,7 +461,7 @@ export default function ProgressTracker({ student }) {
             style={{
               backgroundColor: "var(--input-gray)",
               border: "0px solid var(--input-gray)",
-              height: "42vh",
+              height: "47vh",
              
             }}
           >
@@ -473,8 +473,8 @@ export default function ProgressTracker({ student }) {
                   level === "basic"
                     ? "var(--basic-blue)"
                     : level === "intermediate"
-                    ? "#947809"
-                    : "#86271E",
+                    ? "#D4AC0D "
+                    : "#C0392B",
                 borderRadius: "40px 10px 70px 0",
                 fontFamily: '"Baloo", sans-serif',
               }}
@@ -494,13 +494,13 @@ export default function ProgressTracker({ student }) {
                 >
                   {/* CSS: .lessonTracker span converted to Tailwind */}
                   <span
-                    className="text-white text-2xl p-2"
+                    className="text-white text-4xl p-2"
                     style={{ fontFamily: '"Baloo", sans-serif' }}
                   >
                     {lbl}
                   </span>
                   <span
-                    className="text-2xl p-2"
+                    className="text-4xl p-2"
                     style={{
                       color: "#160A2E",
                       fontFamily: '"Baloo", sans-serif',
