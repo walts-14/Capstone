@@ -87,39 +87,44 @@ export const getRandomQuiz = async (req, res) => {
 
 /**
  * Update user points and progress for a quiz attempt.
- * Expects: userId, level, lessonNumber, quizPart, attempt
+ * Expects: userId, level, lessonNumber, quizPart, attempt, correctCount
+ * Returns: { pointsEarned, totalPoints, passed }
  */
-export const updateUserPointsForQuiz = async (userId, level, attempt, isSuccess) => {
+export const updateUserPointsForQuiz = async (userEmail, level, lessonNumber, quizPart, attempt, correctCount) => {
   const pointsArr = quizPointsMap[level] || [0,0,0];
-  const pointsToAdd = attempt === 1 ? pointsArr[0] : attempt === 2 ? pointsArr[1] : pointsArr[2];
+  // 1st-2nd try use pointsArr[0], 3rd try uses pointsArr[1], 4th+ uses pointsArr[2]
+  const perAnswer = (Number(attempt) <= 2) ? pointsArr[0] : (Number(attempt) === 3 ? pointsArr[1] : pointsArr[2]);
+  const correct = Number(correctCount) || 0;
+  const pointsToAdd = perAnswer * correct;
 
-  const user = await User.findById(userId);
+  const user = await User.findOne({ email: userEmail });
   if (!user) throw new Error('User not found');
 
+  // Determine success based on passing threshold (7 correct answers)
+  const passed = correct >= 7;
+
   // If attempt failed and lives are 0, do not add points
-  if (!isSuccess && user.lives === 0) {
-    return 0;
+  if (!passed && user.lives === 0) {
+    return { pointsEarned: 0, totalPoints: user.points || 0, passed };
   }
 
-  // 1) Add quiz points
+  // 1) Add quiz points (per correct answer)
   user.points = (user.points || 0) + pointsToAdd;
 
   // 2) Mark quiz progress step
-  // Determine term key
   const levelOffset = lessonOffsets[level] || 0;
-  const termIndex = levelOffset + (Number(lessonNumber) - 1);
   const termKeys = lessonsByLevel[level] || [];
   const termKey = termKeys[Number(lessonNumber) - 1];
   if (termKey) {
     user.progress = user.progress || {};
     user.progress[level] = user.progress[level] || {};
     user.progress[level][termKey] = user.progress[level][termKey] || { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false };
-    // Set appropriate quiz step true
+    // Set appropriate quiz step true (quizPart expected to be 1 or 2)
     user.progress[level][termKey][`step${quizPart}Quiz`] = true;
   }
 
   await user.save();
-  return pointsToAdd;
+  return { pointsEarned: pointsToAdd, totalPoints: user.points, passed };
 };
 
 /**
