@@ -305,11 +305,58 @@ function Quiz() {
       // Show success toast only when they actually pass
       toast.success("Quiz completed!");
       const progressKey = currentStep === 1 ? "step1Quiz" : "step2Quiz";
-      updateProgress(level, lessonKey, progressKey);
-      setHasUpdatedQuiz(true);
-      navigate("/finish", {
-        state: { correctAnswers, wrongAnswers, lessonKey, level, currentStep },
-      });
+
+      // Prepare data to send to backend to update points and progress
+      (async () => {
+        try {
+          const userEmail = localStorage.getItem("userEmail");
+          const lessonNumberMapping = {
+            termsone: 1,
+            termstwo: 2,
+            termsthree: 3,
+            termsfour: 4,
+            termsfive: 5,
+            termssix: 6,
+            termsseven: 7,
+            termseight: 8,
+            termsnine: 1,
+            termsten: 2,
+            termseleven: 3,
+            termstwelve: 4,
+          };
+          const lessonNumber = lessonNumberMapping[lessonKey] || 1;
+
+          // overall attempt for the quiz — frontend currently doesn't track per-quiz attempts, use 1
+          const attempt = 1;
+
+          const resp = await axios.post(`${backendURL}/api/quizzes/update-points`, {
+            email: userEmail,
+            level,
+            lessonNumber,
+            quizPart: currentStep,
+            attempt,
+            correctCount: correctAnswers,
+          });
+
+          // backend returns pointsEarned, totalPoints, passed
+          const { pointsEarned, totalPoints, passed } = resp.data || {};
+          // you can store totalPoints locally if needed (e.g., in context)
+          // update progress only if backend recorded it
+          updateProgress(level, lessonKey, progressKey);
+          setHasUpdatedQuiz(true);
+          navigate("/finish", {
+            state: { correctAnswers, wrongAnswers, lessonKey, level, currentStep, pointsEarned, totalPoints, passed },
+          });
+        } catch (err) {
+          console.error("Failed to update backend points:", err);
+          // Still proceed locally
+          updateProgress(level, lessonKey, progressKey);
+          setHasUpdatedQuiz(true);
+          navigate("/finish", {
+            state: { correctAnswers, wrongAnswers, lessonKey, level, currentStep },
+          });
+        }
+      })();
     }
   }, [
     quizFinished,
