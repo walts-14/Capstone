@@ -24,7 +24,8 @@ function LessonButtons() {
   const navigate = useNavigate();
   const [difficulty, setDifficulty] = useState("BASIC");
   const [lives, setLives] = useState(0);
-  const [points, setPoints] = useState(0);
+  const { points: ctxPoints } = useContext(ProgressContext);
+  const points = typeof ctxPoints === 'number' ? ctxPoints : 0;
   const [unlockedLessons, setUnlockedLessons] = useState([1]);
   const buttonContainerRef = useRef(null);
   const { progressData } = useContext(ProgressContext);
@@ -155,18 +156,16 @@ function LessonButtons() {
           console.error("User email not found in localStorage.");
           return;
         }
+        const ts = Date.now();
         const response = await axios.get(
-          `http://localhost:5000/api/points/email/${userEmail}`
+          `http://localhost:5000/api/points/email/${userEmail}?_=${ts}`
         );
-        setPoints(response.data.points);
       } catch (error) {
         console.error("Error fetching points:", error);
       }
     };
 
-    fetchPoints();
-    const pointsInterval = setInterval(fetchPoints, 5000);
-    return () => clearInterval(pointsInterval);
+    // Points are provided by ProgressContext; no local fetching necessary
   }, []);
 
   const lessonRoutes = [

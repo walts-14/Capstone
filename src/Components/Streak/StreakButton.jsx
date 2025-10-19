@@ -70,7 +70,7 @@ export default function StreakButton() {
   const [isOpen, setIsOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalShownDate, setModalShownDate] = useState(null);
-  const MODAL_SHOWN_KEY = "streakModalShownDate";
+  const MODAL_SHOWN_KEY = (email) => `streakModalShownDate_${email}`;
 
   // Convert the shapes your ProgressContext promises into local safe primitives.
   // But keep the original raw shapes for diagnostic scanning.
@@ -126,17 +126,18 @@ export default function StreakButton() {
   const displayStreakNum = sanitizeForJSX("displayStreakNum", safeCurrentStreak);
   const lastUpdatedStrSafe = sanitizeForJSX("lastUpdatedStr", safeLastUpdatedStr);
 
-  // On mount, load last shown date from localStorage
+  // Load last shown date for current user from localStorage when user changes
   useEffect(() => {
+    if (!currentUserEmail) { setModalShownDate(null); return; }
     try {
-      const stored = localStorage.getItem(MODAL_SHOWN_KEY);
+      const stored = localStorage.getItem(MODAL_SHOWN_KEY(currentUserEmail));
       if (stored) setModalShownDate(stored);
       else setModalShownDate(null);
     } catch (e) {
       console.warn("StreakButton: failed to read modalShownDate", e);
       setModalShownDate(null);
     }
-  }, []);
+  }, [currentUserEmail]);
 
   const toggle = () => {
     setIsOpen((v) => !v);
@@ -166,8 +167,9 @@ export default function StreakButton() {
     };
 
     if (!lastUpdatedStrSafe || lastUpdatedStrSafe === "") {
-      // First time or streak is 0
-      updateStreak(false); // start streak
+      // First time or streak is 0. Call with reset=true so backend treats this as Day 1 reset
+      // (prevents client-side increment + backend reset mismatch which can look like a duplicate award)
+      updateStreak(true); // reset/start streak as Day 1
       setShowModal(true);
       setModalShownDate(todayStr);
       try { localStorage.setItem(MODAL_SHOWN_KEY, todayStr); } catch (e) {}
@@ -201,6 +203,53 @@ export default function StreakButton() {
       }
     }
   }, [lastUpdatedStrSafe, displayStreakNum, modalShownDate, isOpen]);
+
+  // Auto-show streak modal on first login of the day for the current user
+  useEffect(() => {
+    if (!currentUserEmail) return;
+    const key = MODAL_SHOWN_KEY(currentUserEmail);
+    const today = new Date();
+    const todayStr = today.toDateString();
+    // If we've already shown modal for this user today, skip
+    try {
+      const stored = localStorage.getItem(key);
+      if (stored === todayStr) return;
+    } catch (e) {}
+
+    // Decide whether to claim/increment streak now — use safeLastUpdatedDate computed above
+    const lastDate = safeLastUpdatedDate;
+    const now = new Date();
+    // If lastUpdated is missing -> first ever claim: reset to Day 1
+    if (!lastDate) {
+      try {
+        updateStreak(true);
+      } catch (e) {}
+      setShowModal(true);
+      setModalShownDate(todayStr);
+      try { localStorage.setItem(key, todayStr); } catch (e) {}
+      return;
+    }
+
+    const diffTime = now.getTime() - lastDate.getTime();
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    if (diffDays === 1) {
+      // Consecutive day, increment streak
+      updateStreak(false);
+      setShowModal(true);
+      setModalShownDate(todayStr);
+      try { localStorage.setItem(key, todayStr); } catch (e) {}
+      return;
+    }
+    if (diffDays > 1) {
+      // Missed a day, reset streak
+      updateStreak(true);
+      setShowModal(true);
+      setModalShownDate(todayStr);
+      try { localStorage.setItem(key, todayStr); } catch (e) {}
+      return;
+    }
+    // diffDays === 0 -> already claimed today; do not auto-show
+  }, [currentUserEmail, safeLastUpdatedDate]);
 
   const calcReward = (day) => {
     const d = Number(day) || 1;
