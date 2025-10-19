@@ -330,7 +330,7 @@ const DashboardAdmin = () => {
               <button
                 className="btn text-light px-1 py-1"
                 style={{
-                  backgroundColor: "#4A2574",
+                  backgroundColor: "#6C7294",
                   color: "#FFF",
                   borderRadius: 10,
                   fontWeight: "bold",
@@ -350,7 +350,7 @@ const DashboardAdmin = () => {
               <button
                 className="btn text-light px-1 py-1"
                 style={{
-                  backgroundColor: "#4A2574",
+                  backgroundColor: "#6C7294",
                   color: "#FFF",
                   borderRadius: 10,
                   fontWeight: "bold",
