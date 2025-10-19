@@ -238,7 +238,6 @@ function Quiz() {
 
     if (currentQuestionIndex + 1 >= totalQuestions || lives <= 0) {
       setQuizFinished(true);
-      toast.success("Quiz completed!");
       return;
     }
     setCurrentQuestionIndex((prev) => prev + 1);
@@ -270,9 +269,16 @@ function Quiz() {
   };
 
   const failMessages = [
+    "ALMOST THERE! YOU'RE LEARNING FAST",
+    "DON'T WORRY — EVERY PRO WAS ONCE A BEGINNER",
+    "YOU DIDN'T FAIL, YOU JUST FOUND ONE MORE WAY TO IMPROVE",
+    "TRY AGAIN! YOU'VE GOT THIS",
+    "MISTAKES ARE PROOF YOU'RE TRYING",
+    "YOU'RE ONE STEP CLOSER TO MASTERING THIS",
+    "KEEP GOING, YOU'RE DOING GREAT",
     "You've almost got it!",
-    "Keep going—you’re close!",
-    "Don’t give up now!",
+    "Keep going—you're close!",
+    "Don't give up now!",
     "You can do this!",
     "Almost there—try again!",
   ];
@@ -296,11 +302,13 @@ function Quiz() {
         );
         return;
       }
+      // Show success toast only when they actually pass
+      toast.success("Quiz completed!");
       const progressKey = currentStep === 1 ? "step1Quiz" : "step2Quiz";
       updateProgress(level, lessonKey, progressKey);
       setHasUpdatedQuiz(true);
       navigate("/finish", {
-        state: { correctAnswers, wrongAnswers, lessonKey, level },
+        state: { correctAnswers, wrongAnswers, lessonKey, level, currentStep },
       });
     }
   }, [
@@ -326,24 +334,23 @@ function Quiz() {
 
   if (failedPointsRequirement) {
     return (
-      <div className="d-flex flex-column align-items-center justify-content-center gap-2">
-        <img src={failed} alt="" />
-        <div className="dia-reward d-flex pt-1">
-          <img src={diamond} className="img-fluid p-1 ms-5" alt="diamond img" />
-          <p className="dia-number ms-3 me-5  fs-1">{correctAnswers * 10}</p>
-        </div>
-        <div className="stats-quiz d-flex flex-row gap-1 text-center">
+      <div className="d-flex flex-column align-items-center justify-content-center gap-2" style={{ minHeight: "100vh", backgroundColor: "var(--background)" }}>
+        <img src={failed} alt="" className="mb-4" />
+
+        <div className="stats-quiz d-flex flex-row gap-2 text-center fs-1 ">
           <img src={check} className="tama img-fluid p-1" alt="check img" />
-          <p className="check-number ms-1 fs-1">{correctAnswers}</p>
+          <p className="check-number " style={{ color: "#20BF55" }}>{correctAnswers}</p>
           <img src={ekis} className="mali img-fluid p-1 ms-5" alt="ekis img" />
-          <p className="ekis-number ms-1 fs-1">{wrongAnswers}</p>
+          <p className="ekis-number " style={{ color: "#F44336" }}>{wrongAnswers}</p>
         </div>
-        <div className="d-flex flex-column align-items-center justify-content-center  ">
-          <h1>{failHeading}</h1>
-          <h2 style={{ color: "gray" }}>
+
+        <div className="d-flex flex-column align-items-center justify-content-center mb-4">
+          <h1 className="text-white fw-bold text-uppercase mt-0" style={{ fontSize: "3rem", fontFamily: "Baloo, sans-serif" }}>{failHeading}</h1>
+          <h2 style={{ fontSize: "2rem", fontFamily: "Baloo, sans-serif", color: "#878194" }}>
             You need at least 7 correct answers to pass the quiz
           </h2>
         </div>
+
         <div className="finishbuttons rounded-4 d-flex align-items-center justify-content-center gap-4">
           <button
             type="button"
@@ -362,8 +369,8 @@ function Quiz() {
             className="retry-button d-flex flex-direction-row justify-content-center align-items-center"
             onClick={handleRetry}
           >
-            <img src={retry} className="img-fluid " alt="dashboard img" />
-            <p>Try again</p>
+            <img src={retry} className="img-fluid " alt="retry img" />
+            <p style={{ color: "white" }}>Try again</p>
           </button>
         </div>
       </div>
@@ -430,9 +437,8 @@ function Quiz() {
                   <div
                     className={`choice-${["A", "B", "C", "D"][
                       index
-                    ].toLowerCase()} rounded-4 m-4${
-                      isSelected ? " selected" : ""
-                    }`}
+                    ].toLowerCase()} rounded-4 m-4${isSelected ? " selected" : ""
+                      }`}
                   >
                     <strong>{["A", "B", "C", "D"][index]}</strong>
                     <LazyVideo
@@ -445,14 +451,15 @@ function Quiz() {
                 </div>
               );
             })}
+            {showResult && (
+              <ResultBanner
+                isCorrect={isCorrect}
+                checkIcon={check}
+                wrongIcon={ekis}
+              />
+            )}
           </div>
-          {showResult && (
-            <ResultBanner
-              isCorrect={isCorrect}
-              checkIcon={check}
-              wrongIcon={ekis}
-            />
-          )}
+
           <button
             type="button"
             className="continue d-flex rounded-4 p-3 pt-2 ms-auto"

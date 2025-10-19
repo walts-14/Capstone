@@ -57,9 +57,9 @@
 .finishbuttons {
   background-color: var(--semidark-purple);
   height: 15vh;
-  width: 37vw;
+  width: 35vw;
   margin: 0%;
-  gap: 10px;
+  gap: 25px;
 }
 .finishbuttons .dashboard-button {
   background-color: var(--mid-purple);
@@ -101,7 +101,7 @@
   gap: 20rem;
 }
 .Quiz {
-  width: 15vw;
+  width: 16vw;
   height: 10vh;
   font-family: "Baloo", sans-serif;
   background-color: var(--mid-purple);
@@ -114,6 +114,6 @@
 
 .Quiz img {
   height: auto;
-  width: 33%;
-  margin-left: -55px;
+  width: 30%;
+  margin-left: -65px;
 }

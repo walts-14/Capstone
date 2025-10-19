@@ -129,7 +129,7 @@ function Practice() {
       setQuizFinished(true);
       toast.success("Practice completed!");
       navigate("/finish", {
-        state: { correctAnswers, wrongAnswers, lessonKey, level, mode: "practice" },
+        state: { correctAnswers, wrongAnswers, lessonKey, level, mode: "practice", currentStep },
       });
       return;
     }

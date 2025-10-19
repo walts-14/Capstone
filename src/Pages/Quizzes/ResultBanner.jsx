@@ -32,16 +32,18 @@ export default function ResultBanner({ isCorrect }) {
 
   // uppercase + dynamic color
   const phrase = rawPhrase.toUpperCase();
-  const phraseColor = isCorrect ? "#ACFFC7" : "#FFACAC";
+  const phraseColor = isCorrect ? "#ECFFF2" : "#FFE9E9";
 
   return (
     <div
-      className={`result-ans d-flex flex-column align-items-center justify-content-center  ${
-        isCorrect ? "correct-ans" : "wrong-ans"
-      }`}
+      className={`result-ans flex flex-col items-center justify-center absolute top-35.5   ${isCorrect ? "correct-ans" : "wrong-ans"
+        }`}
     >
-      <div className="d-flex justify-content-between w-100">
-        <span className="banner-label me-auto mb-0 text-nowrap ">
+      <div className="flex justify-between w-full">
+        <span
+          className="banner-label mr-auto mb-0 whitespace-nowrap"
+          style={{ color: isCorrect ? "#0F311A" : "#300D0D" }}
+        >
           {isCorrect ? "Correct answer!" : "Wrong answer"}
         </span>
 
@@ -62,10 +64,11 @@ export default function ResultBanner({ isCorrect }) {
 
       {/* the random encouragement line, upper-cased + colored */}
       <span
-        
-        style={{ 
+
+        style={{
           color: phraseColor,
-          fontSize: "2.2rem",}}
+          fontSize: "2.2rem",
+        }}
       >
         {phrase}
       </span>

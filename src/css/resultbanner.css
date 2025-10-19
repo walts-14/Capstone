@@ -83,11 +83,10 @@
     #992222 100%
   );
   color: #100429;
-  position: absolute;
-  top: 10.5rem;
+  
   height: 13vh;
   width: 30rem;
-  border-radius: 0 1rem 1rem 0;
+  border-radius: 1rem 1rem 1rem 0;
 }
 .correct-ans {
   /* abrupt cut at 50% */
@@ -99,11 +98,10 @@
     #22994A 100%
   );
   color: #100429;
-  position: absolute;
-  top: 10.5rem;  
+  
   height: 13vh;
   width: 30rem;
-  border-radius: 0 1rem 1rem 0;
+  border-radius: 1rem 0.5rem 1rem 0;
 }
 
 .choicesss {

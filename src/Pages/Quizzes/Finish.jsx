@@ -8,6 +8,7 @@ import ekis from "../../assets/ekis.png";
 import repeatLogo from "../../assets/repeat logo.png";
 import arrow from "../../assets/arrow.png";
 import dashboardlogo from "../../assets/dashboardlogo.png";
+import quiz from "../../assets/quiz.png";
 import { ProgressContext } from "../../../src/Pages/Dashboard/ProgressContext";
 
 const levelMapping = {
@@ -45,7 +46,7 @@ function Finish() {
   const location = useLocation();
 
   // Expecting lessonKey and level to be passed along with answers info
-  const { correctAnswers = 0, wrongAnswers = 0, lessonKey, level, mode } = location.state || {};
+  const { correctAnswers = 0, wrongAnswers = 0, lessonKey, level, mode, currentStep } = location.state || {};
 
 
   // Define styles (same as in ProgressTracker)
@@ -100,18 +101,19 @@ function Finish() {
     <>
       <div className="finishtext d-flex flex-column align-items-center position-relative fw-bold fs-1">
         <img src={Applause} className="img-fluid p-1 mb-3" alt="applause img" />
-        <p> You've Finished the Quiz </p>
-        {mode === "practice" ? null : (
-          <div className="dia-reward d-flex pt-1">
-            <img src={diamond} className="img-fluid p-1 ms-5" alt="diamond img" />
-            <p className="dia-number ms-3 me-5">{correctAnswers * 10}</p>
-          </div>
-        )}
-        <div className="stats-quiz d-flex flex-row gap-1 text-center">
+        <p> {mode === "practice" ? "You've Finished the Practice Quiz" : "You've Finished the Quiz"} </p>
+
+        <div className="stats-quiz d-flex flex-row gap-1 text-center ">
+          {mode === "practice" ? null : (
+            <div className="dia-reward d-flex ">
+              <img src={diamond} className="img-fluid p-1 " alt="diamond img" />
+              <p className="dia-number ms-3  me-5">{correctAnswers * 10}</p>
+            </div>
+          )}
           <img src={check} className="tama img-fluid p-1" alt="check img" />
-          <p className="check-number ms-2">{correctAnswers}</p>
+          <p className="check-number ms-2" style={{ color: "#20BF55" }}>{correctAnswers}</p>
           <img src={ekis} className="mali img-fluid p-1 ms-5" alt="ekis img" />
-          <p className="ekis-number ms-2">{wrongAnswers}</p>
+          <p className="ekis-number ms-2" style={{ color: "#F44336" }}>{wrongAnswers}</p>
         </div>
         {/* Render dynamic progress tracker line for the finished lesson */}
         <div
@@ -126,36 +128,62 @@ function Finish() {
       <div className="finishbuttons rounded-4 d-flex align-items-center justify-content-center">
         <button
           type="button"
-          className="dashboard-button d-flex justify-content-center align-items-center mt-2 ms-5 rounded-4 fs-1"
+          className="dashboard-button d-flex justify-content-center align-items-center mt-2 ms-3 rounded-4 fs-1"
           onClick={() => navigate("/dashboard")}
         >
           <img
             src={dashboardlogo}
-            className="img-fluid d-flex p-1 mt-1"
-            alt="dashboard img"
+            className="img-fluid d-flex"
+            alt="dashboard"
           />
           Dashboard
         </button>
-        <button
-          type="button"
-          className="continue d-flex justify-content-center align-items-center rounded-4 pt-4 mb-4 ms-auto me-5 fs-1"
-          onClick={() =>
-            navigate(`/page/${lessonKey}`, {
-              state: {
-                lessonKey,
-                difficulty: location.state?.difficulty ?? levelMapping[lessonKey],
-                step: 2,
-                fromLecture: true,
-              }
-            })}
-        >
-          Continue
-          <img
-            src={arrow}
-            className="img-fluid d-flex ms-3 mt- 1"
-            alt="arrow img"
-          />
-        </button>
+
+        {/* Show different buttons based on mode and step */}
+        {mode === "practice" ? (
+          /* Practice mode: Show Quiz button */
+          <button
+            type="button"
+            className="Quiz d-flex justify-content-center align-items-center rounded-4 pt-3 mt-1 ms-auto me-3 fs-1"
+            style={{ border: "5px solid var(--background)" }}
+            onClick={() =>
+              navigate(`/quiz/${lessonKey}`, {
+                state: { currentStep: currentStep }
+              })}
+          >
+            <img
+              src={quiz}
+              className="img-fluid d-flex p-2 mb-1"
+              alt="quiz"
+            />
+            {currentStep === 1 ? "1 Quiz" : "2 Quiz"}
+          </button>
+        ) : (
+          /* Regular mode: Show Continue button only for step 1 */
+          currentStep === 1 && (
+            <button
+              type="button"
+              className="continue d-flex justify-content-center align-items-center rounded-4 pt-4  mb-4 ms-auto me-3 fs-1"
+              style={{ border: "5px solid var(--background)" }}
+              onClick={() =>
+                navigate(`/page/${lessonKey}`, {
+                  state: {
+                    lessonKey,
+                    difficulty: location.state?.difficulty ?? levelMapping[lessonKey],
+                    step: 2,
+                    fromLecture: true,
+                  }
+                })}
+            >
+              <img
+                src={arrow}
+                className="img-fluid d-flex mr-5"
+                alt="arrow"
+              />
+              Continue
+            </button>
+          )
+        )}
       </div>
     </>
   );
