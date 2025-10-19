@@ -1,6 +1,6 @@
- import Video from "../models/videoLesson.js";
-import Quiz from "../models/quiz.js";
-import User from "../models/user.js";
+ import Video from "../models/videoLesson.js"
+import Quiz from "../models/quiz.js"
+import User from "../models/user.js"
 
 /**
  * Utility: Randomly shuffle an array in-place.
@@ -134,18 +134,64 @@ export const getStoredQuizQuestions = async (req, res) => {
       return res.status(400).json({ error: "Missing/invalid level, lessonNumber or quizPart" });
     }
 
+    // populate correctAnswer and nested videoId inside choices
     const quizzes = await Quiz.find({ level, lessonNumber: lessonNum, quizPart: part })
       .populate("correctAnswer choices.videoId");
-    if (!quizzes.length) {
+
+    if (!quizzes || quizzes.length === 0) {
       return res.status(404).json({ error: "No stored quizzes found" });
     }
 
-    const formatted = shuffleArray(quizzes).slice(0,10).map(q => ({
-      questionId: q._id,
-      question: q.question,
-      correctAnswer: q.correctAnswer._id,
-      choices: shuffleArray(q.choices.map(c => ({ videoId: c.videoId._id, word: c.videoId.word, videoUrl: c.videoId.videoUrl, label: c.label })))
-    }));
+    const shuffled = shuffleArray([...quizzes]); // copy then shuffle
+    const formatted = [];
+
+    for (let i = 0; i < shuffled.length && formatted.length < 10; i++) {
+      const q = shuffled[i];
+      // skip if quiz or required populated fields are missing
+      if (!q) {
+        //console.warn(`Skipping null quiz at index ${i}`);
+        continue;
+      }
+      if (!q.correctAnswer) {
+        //console.warn(`Skipping quiz ${q._id} because correctAnswer is null (maybe deleted).`);
+        continue;
+      }
+      if (!Array.isArray(q.choices)) {
+        //console.warn(`Skipping quiz ${q._id} because choices is not an array.`);
+        continue;
+      }
+
+      // Build choices and filter out any invalid ones (e.g. videoId === null)
+      const choices = q.choices
+        .map(c => {
+          const vid = c && c.videoId;
+          if (!vid) return null; // populated reference missing
+          return {
+            videoId: vid._id,
+            word: vid.word || "",
+            videoUrl: vid.videoUrl || "",
+            label: c.label
+          };
+        })
+        .filter(Boolean);
+
+      // require at least 4 valid choices; otherwise skip the quiz
+      if (choices.length < 4) {
+        console.warn(`Skipping quiz ${q._id} because it has <4 valid choices after populate.`);
+        continue;
+      }
+
+      formatted.push({
+        questionId: q._id,
+        question: q.question || "",
+        correctAnswer: q.correctAnswer._id,
+        choices: shuffleArray(choices)
+      });
+    }
+
+    if (formatted.length === 0) {
+      return res.status(404).json({ error: "No valid stored quizzes found (populated refs missing?)" });
+    }
 
     res.json(formatted);
   } catch (err) {
@@ -153,6 +199,7 @@ export const getStoredQuizQuestions = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
 
 export const createQuiz = async (req, res) => {
   try {
