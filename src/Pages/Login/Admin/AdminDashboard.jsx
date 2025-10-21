@@ -523,102 +523,184 @@ const DashboardAdmin = () => {
           </div>
 
           {showForm && (
-            <div className="popup-form">
-              <div className="popup-content">
-                <h3>{formData.id ? "Edit Student" : "Add Student"}</h3>
-                <form onSubmit={handleFormSubmit}>
-                  <div className="form-group">
-                    <input
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      className="form-control"
-                      placeholder="Name"
-                      required
-                    />
-                  </div>
-                  <div className="form-group">
-                    <input
-                      name="username"
-                      value={formData.username}
-                      onChange={handleInputChange}
-                      className="form-control"
-                      placeholder="Username"
-                      required
-                    />
-                  </div>
-                  <div className="form-group">
-                    <select
-                      name="yearLevel"
-                      value={formData.yearLevel}
-                      onChange={handleInputChange}
-                      className="form-control"
-                      required
-                    >
-                      <option value="">-- Select Year Level --</option>
-                      <option value="Grade 7">Grade 7</option>
-                      <option value="Grade 8">Grade 8</option>
-                      <option value="Grade 9">Grade 9</option>
-                      <option value="Grade 10">Grade 10</option>
-                    </select>
-                  </div>
-                  <div className="form-group">
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className="form-control"
-                      placeholder="Email"
-                      required
-                    />
-                  </div>
-                  <div className="form-group">
-                    <input
-                      type="password"
-                      name="password"
-                      value={formData.password}
-                      onChange={handleInputChange}
-                      className="form-control"
-                      placeholder="Password"
-                      required={!formData.id}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <input
-                      type="password"
-                      name="confirmPassword"
-                      value={formData.confirmPassword}
-                      onChange={handleInputChange}
-                      className="form-control"
-                      placeholder="Confirm Password"
-                      required={!formData.id}
-                    />
-                  </div>
-                  <div className="form-actions">
-                    <button
-                      type="submit"
-                      className="btn-create"
-                      disabled={isSubmitting}
-                    >
-                      {isSubmitting
-                        ? formData.id
-                          ? "Saving..."
-                          : "Creating..."
-                        : formData.id
-                        ? "Save Changes"
-                        : "Create"}
-                    </button>
-                    <button
-                      type="button"
-                      className="btn-cancel"
-                      onClick={() => setShowForm(false)}
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </form>
-              </div>
+            <div style={{
+              position: "fixed",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              background: "#fff",
+              borderRadius: "18px",
+              boxShadow: "0 8px 32px rgba(0,0,0,0.15)",
+              border: "2px solid #b9b6c9",
+              width: "400px",
+              minWidth: "320px",
+              maxWidth: "95vw",
+              padding: "2rem 2rem 1.5rem 2rem",
+              zIndex: 6000,
+            }}>
+              <h2 style={{
+                textAlign: "center",
+                color: "#6C7294",
+                fontWeight: "bold",
+                marginBottom: "1.5rem",
+                fontSize: "2rem"
+              }}>{formData.id ? "Edit Student" : "Add User"}</h2>
+              <form onSubmit={handleFormSubmit}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                  <input
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    style={{
+                      background: "#6C7294",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "10px",
+                      padding: "0.7rem 1rem",
+                      fontSize: "1rem",
+                      fontWeight: "500",
+                      outline: "none"
+                    }}
+                    placeholder="Name"
+                    required
+                  />
+                  <input
+                    name="username"
+                    value={formData.username}
+                    onChange={handleInputChange}
+                    style={{
+                      background: "#6C7294",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "10px",
+                      padding: "0.7rem 1rem",
+                      fontSize: "1rem",
+                      fontWeight: "500",
+                      outline: "none"
+                    }}
+                    placeholder="Username"
+                    required
+                  />
+                  <select
+                    name="yearLevel"
+                    value={formData.yearLevel}
+                    onChange={handleInputChange}
+                    style={{
+                      background: "#6C7294",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "10px",
+                      padding: "0.7rem 1rem",
+                      fontSize: "1rem",
+                      fontWeight: "500",
+                      outline: "none"
+                    }}
+                    required
+                  >
+                    <option value="">-- Select Year Level --</option>
+                    <option value="Grade 7">Grade 7</option>
+                    <option value="Grade 8">Grade 8</option>
+                    <option value="Grade 9">Grade 9</option>
+                    <option value="Grade 10">Grade 10</option>
+                  </select>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    style={{
+                      background: "#6C7294",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "10px",
+                      padding: "0.7rem 1rem",
+                      fontSize: "1rem",
+                      fontWeight: "500",
+                      outline: "none"
+                    }}
+                    placeholder="Email"
+                    required
+                  />
+                  <input
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleInputChange}
+                    style={{
+                      background: "#6C7294",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "10px",
+                      padding: "0.7rem 1rem",
+                      fontSize: "1rem",
+                      fontWeight: "500",
+                      outline: "none"
+                    }}
+                    placeholder="Your password"
+                    required={!formData.id}
+                  />
+                  <input
+                    type="password"
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleInputChange}
+                    style={{
+                      background: "#6C7294",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "10px",
+                      padding: "0.7rem 1rem",
+                      fontSize: "1rem",
+                      fontWeight: "500",
+                      outline: "none"
+                    }}
+                    placeholder="Repeat password"
+                    required={!formData.id}
+                  />
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", marginTop: "1.5rem" }}>
+                  <button
+                    type="submit"
+                    style={{
+                      background: "#2e86c1",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "10px",
+                      fontWeight: "bold",
+                      fontSize: "1.1rem",
+                      padding: "0.7rem 0",
+                      width: "100%",
+                      cursor: "pointer"
+                    }}
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting
+                      ? formData.id
+                        ? "Saving..."
+                        : "Creating..."
+                      : formData.id
+                      ? "Save Changes"
+                      : "Create"}
+                  </button>
+                  <button
+                    type="button"
+                    style={{
+                      background: "#e53935",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "10px",
+                      fontWeight: "bold",
+                      fontSize: "1.1rem",
+                      padding: "0.7rem 0",
+                      width: "100%",
+                      cursor: "pointer"
+                    }}
+                    onClick={() => setShowForm(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
             </div>
           )}
 
@@ -680,11 +762,11 @@ const DashboardAdmin = () => {
                 minWidth: "700px",
                 maxWidth: "1100px",
                 zIndex: 5000,
-                background: "#1a1230",
+                background: "#fff",
                 borderRadius: "18px",
                 border: "2px solid #7338a0",
                 boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
-                color: "#fff",
+                color: "#222",
                 padding: "2.5rem 2.5rem 2rem 2.5rem",
                 display: "flex",
                 flexDirection: "column",
@@ -699,7 +781,7 @@ const DashboardAdmin = () => {
                   position: "absolute",
                   top: "18px",
                   right: "28px",
-                  background: "#7338a0",
+                  background: "#e53935",
                   color: "#fff",
                   border: "none",
                   borderRadius: "15%",
@@ -724,6 +806,7 @@ const DashboardAdmin = () => {
                   fontWeight: "bold",
                   fontSize: "2.5rem",
                   marginBottom: "2rem",
+                  color: "#222",
                 }}
               >
                 Notification
@@ -731,11 +814,11 @@ const DashboardAdmin = () => {
 
               <div style={{ width: "100%" }}>
                 {loadingMessages ? (
-                  <div style={{ color: "#fff", textAlign: "center" }}>
+                  <div style={{ color: "#222", textAlign: "center" }}>
                     Loading...
                   </div>
                 ) : messages.length === 0 ? (
-                  <div style={{ color: "#fff", textAlign: "center" }}>
+                  <div style={{ color: "#222", textAlign: "center" }}>
                     No notifications.
                   </div>
                 ) : (
@@ -743,15 +826,17 @@ const DashboardAdmin = () => {
                     <div
                       key={msg._id}
                       style={{
-                        background: "#2d2544",
+                        background: "#6C7294",
+                        border: "1px solid #e0e0e0",
                         borderRadius: "10px",
                         marginBottom: "1rem",
                         padding: "1rem",
                         color: "#fff",
-                        opacity: msg.isRead ? 0.6 : 1,
+                        opacity: msg.isRead ? 0.7 : 1,
                         display: "flex",
                         justifyContent: "space-between",
                         gap: "1rem",
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
                       }}
                     >
                       <div style={{ flex: 1 }}>
@@ -765,8 +850,8 @@ const DashboardAdmin = () => {
                         >
                           <span
                             style={{
-                              background: "#7338a0",
-                              color: "#fff",
+                              background: "#fff",
+                              color: "#6C7294",
                               borderRadius: "8px",
                               padding: "0.2rem 0.8rem",
                               fontWeight: "bold",
@@ -778,8 +863,8 @@ const DashboardAdmin = () => {
 
                           <span
                             style={{
-                              background: "#b9b6c9",
-                              color: "#222",
+                              background: "#e0e0e0",
+                              color: "#6C7294",
                               borderRadius: "8px",
                               padding: "0.2rem 0.8rem",
                               fontWeight: "bold",
@@ -793,7 +878,7 @@ const DashboardAdmin = () => {
                             <span
                               style={{
                                 background: "#bdbdbd",
-                                color: "#222",
+                                color: "#6C7294",
                                 borderRadius: "8px",
                                 padding: "0.2rem 0.8rem",
                                 fontWeight: "bold",
@@ -811,7 +896,7 @@ const DashboardAdmin = () => {
                         <div
                           style={{
                             marginTop: "0.5rem",
-                            color: "#bbb",
+                            color: "#e0e0e0",
                             fontSize: "0.85rem",
                           }}
                         >
@@ -833,12 +918,13 @@ const DashboardAdmin = () => {
                           <button
                             onClick={() => markMessageAsRead(msg._id)}
                             style={{
-                              background: "#37b24d",
+                              background: "#4f46e5",
                               color: "#fff",
                               border: "none",
                               borderRadius: "8px",
                               padding: "0.4rem 0.8rem",
                               cursor: "pointer",
+                              fontWeight: "bold",
                             }}
                           >
                             Mark read

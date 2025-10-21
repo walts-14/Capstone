@@ -51,11 +51,11 @@ function LbComponent() {
                 className="max-w-full h-auto user-avatar"
                 alt="profile img"
               />
-              <p className="text-white text-4xl">
+              <p className="text-gray-500 text-4xl">
                 {sortedLeaderboard[1]?.name || "TBD"}
               </p>
             </div>
-            <div className="flex items-center text-white">
+            <div className="flex items-center text-gray-500">
               <img
                 src={diamond}
                 className="max-w-full h-auto mr-2"
@@ -81,11 +81,11 @@ function LbComponent() {
                 className="max-w-full h-auto user-avatar"
                 alt="profile img"
               />
-              <p className="text-white text-4xl">
+              <p className="text-gray-500 text-4xl">
                 {sortedLeaderboard[0]?.name || "TBD"}
               </p>
             </div>
-            <div className="flex items-center text-white">
+            <div className="flex items-center text-gray-500">
               <img
                 src={diamond}
                 className="max-w-full h-auto mr-2"
@@ -108,11 +108,11 @@ function LbComponent() {
                 className="max-w-full h-auto user-avatar"
                 alt="profile img"
               />
-              <p className="text-white text-4xl">
+              <p className="text-gray-500 text-4xl">
                 {sortedLeaderboard[2]?.name || "TBD"}
               </p>
             </div>
-            <div className="flex items-center text-white">
+            <div className="flex items-center text-gray-500">
               <img
                 src={diamond}
                 className="max-w-full h-auto mr-2"
@@ -128,9 +128,9 @@ function LbComponent() {
 
       {/* Table Header */}
       <div className="user-points rounded-3xl flex text-center justify-between items-center pt-2 ml-8  sm:w-[90%] pl-3 text-sm  md:w-[80%] lg:w-[70%] xl:w-[60%]">
-        <span className="text-white text-2xl mr-auto ml-5">Users</span>
-        <span className="text-white text-2xl">Grade Level</span>
-        <span className="text-white text-2xl ml-auto mr-5">Points</span>
+        <span className="text-gray-500 text-2xl mr-auto ml-5">Users</span>
+        <span className="text-gray-500 text-2xl">Grade Level</span>
+        <span className="text-gray-500 text-2xl ml-auto mr-5">Points</span>
       </div>
 
       {/* User List */}

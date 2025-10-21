@@ -1558,7 +1558,7 @@ const SuperAdmin = () => {
                         background: "#6C7294",
                         color: "#fff",
                         fontSize: "1rem",
-                        '::placeholder': { color: '#bfc3d1', opacity: 1 },
+                        "::placeholder": { color: "#bfc3d1", opacity: 1 },
                       }}
                       placeholderTextColor="#bfc3d1"
                     />
@@ -1580,7 +1580,7 @@ const SuperAdmin = () => {
                         background: "#6C7294",
                         color: "#fff",
                         fontSize: "1rem",
-                        '::placeholder': { color: '#bfc3d1', opacity: 1 },
+                        "::placeholder": { color: "#bfc3d1", opacity: 1 },
                       }}
                       placeholderTextColor="#bfc3d1"
                     />
@@ -1603,7 +1603,9 @@ const SuperAdmin = () => {
                         fontSize: "1rem",
                       }}
                     >
-                      <option value="" style={{ color: '#bfc3d1' }}>-- Select Year Level --</option>
+                      <option value="" style={{ color: "#bfc3d1" }}>
+                        -- Select Year Level --
+                      </option>
                       <option value="Grade 7">Grade 7</option>
                       <option value="Grade 8">Grade 8</option>
                       <option value="Grade 9">Grade 9</option>
@@ -1628,7 +1630,7 @@ const SuperAdmin = () => {
                         background: "#6C7294",
                         color: "#fff",
                         fontSize: "1rem",
-                        '::placeholder': { color: '#bfc3d1', opacity: 1 },
+                        "::placeholder": { color: "#bfc3d1", opacity: 1 },
                       }}
                       placeholderTextColor="#bfc3d1"
                     />
@@ -1651,7 +1653,7 @@ const SuperAdmin = () => {
                         background: "#6C7294",
                         color: "#fff",
                         fontSize: "1rem",
-                        '::placeholder': { color: '#bfc3d1', opacity: 1 },
+                        "::placeholder": { color: "#bfc3d1", opacity: 1 },
                       }}
                       placeholderTextColor="#bfc3d1"
                     />
@@ -1674,7 +1676,7 @@ const SuperAdmin = () => {
                         background: "#6C7294",
                         color: "#fff",
                         fontSize: "1rem",
-                        '::placeholder': { color: '#bfc3d1', opacity: 1 },
+                        "::placeholder": { color: "#bfc3d1", opacity: 1 },
                       }}
                       placeholderTextColor="#bfc3d1"
                     />
