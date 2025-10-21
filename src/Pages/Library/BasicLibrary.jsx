@@ -15,14 +15,14 @@ function BasicLibrary() {
           <div className="level-content rounded-xl">
             <span className="text-3xl">Lesson 1</span>
             <span className="text-2xl pt-2">30 items</span>
-            <p className="text-5xl">Introduction to Sign Language</p>
+            <p className="text-5xl">Introduction to Sign Language A-Z</p>
           </div>
         </Link>
         <Link to="/terms/termstwo">
           <div className="level-content rounded-xl">
             <span className="text-3xl">Lesson 2</span>
             <span className="text-2xl pt-2">30 items</span>
-            <p className="text-5xl">Common Everyday Signs</p>
+            <p className="text-5xl">Common Expressions and Polite Greetings</p>
           </div>
         </Link>
         <Link to="/terms/termsthree">
@@ -36,7 +36,7 @@ function BasicLibrary() {
           <div className="level-content rounded-xl">
             <span className="text-3xl">Lesson 4</span>
             <span className="text-2xl pt-2">30 items</span>
-            <p className="text-5xl">Basic Classroom Vocabulary</p>
+            <p className="text-5xl">Classroom and School Map Interpretation</p>
           </div>
         </Link>
       </div>

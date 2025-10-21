@@ -15,28 +15,28 @@ function IntermediateLibrary() {
           <div className="level-content rounded-xl">
             <span className="text-3xl">Lesson 1</span>
             <span className="text-2xl pt-2">30 items</span>
-            <p className="text-5xl">Basic Greetings & Introductions</p>
+            <p className="text-5xl">Active Participation in Story Reading</p>
           </div>
         </Link>
         <Link to="/terms/termssix">
           <div className="level-content rounded-3">
             <span className="text-3xl">Lesson 2</span>
             <span className="text-2xl pt-2">30 items</span>
-            <p className="text-5xl">Casual Conversations</p>
+            <p className="text-5xl">Listening and Responding in Conversations</p>
           </div>
         </Link>
         <Link to="/terms/termsseven">
           <div className="level-content rounded-3">
             <span className="text-3xl">Lesson 3</span>
             <span className="text-2xl pt-2">30 items</span>
-            <p className="text-5xl">Expressing Emotions & Feelings</p>
+            <p className="text-5xl">Expressing Ideas Through Words and Spelling</p>
           </div>
         </Link>
         <Link to="/terms/termseight">
           <div className="level-content rounded-3">
             <span className="text-3xl">Lesson 4</span>
             <span className="text-2xl pt-2">30 items</span>
-            <p className="text-5xl">Making Requests & Offers</p>
+            <p className="text-5xl">Constructing Sentences</p>
           </div>
         </Link>
       </div>

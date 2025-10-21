@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import question from "../assets/question.png";
+import Hand from "../assets/introhand.png";
 import Interpreter from "../Pages/Introduction/Interpreter";
 import how1 from "../assets/how1.png";
 import how2 from "../assets/how2.png";
@@ -66,7 +67,7 @@ export default function IntroductionModal() {
         }}
         className="question-button w-18 h-8 flex justify-center items-center -left-20 rounded-5 z-10 bg-transparent "
       >
-        <img src={question} alt="Help" className="w-21" />
+        <img src={showInterpreter ? Hand : question} alt={showInterpreter ? "Hand" : "Help"} className="w-21" />
       </a>
 
       {/* Modal Overlay */}
