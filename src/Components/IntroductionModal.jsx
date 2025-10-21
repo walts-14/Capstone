@@ -96,7 +96,7 @@ export default function IntroductionModal() {
                     <button
                       onClick={prevSlide}
                       disabled={totalSlides <= 1}
-                      className="btn rounded-xl"
+                      className="btn rounded-xl text-white"
                     >
                       PREVIOUS
                     </button>
@@ -104,7 +104,7 @@ export default function IntroductionModal() {
                     <button
                       onClick={nextSlide}
                       disabled={totalSlides <= 1}
-                      className="btn rounded-xl"
+                      className="btn rounded-xl text-white"
                     >
                       {slideIndex === totalSlides - 1 ? "CLOSE" : "KEEP GOING"}
                     </button>

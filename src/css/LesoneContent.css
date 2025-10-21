@@ -56,7 +56,7 @@ body {
   /* fixed height for uniformity */
   object-fit: contain;
   /* scale each video to fit without cropping */
-  border: 15px solid #271d3e;
+  border: 15px solid #9f9aa9;
   /* Adds a white border */
   border-radius: 50px;
   /* Rounds the corners */
