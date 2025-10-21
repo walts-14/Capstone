@@ -523,30 +523,42 @@ const DashboardAdmin = () => {
           </div>
 
           {showForm && (
-            <div style={{
-              position: "fixed",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              background: "#fff",
-              borderRadius: "18px",
-              boxShadow: "0 8px 32px rgba(0,0,0,0.15)",
-              border: "2px solid #b9b6c9",
-              width: "400px",
-              minWidth: "320px",
-              maxWidth: "95vw",
-              padding: "2rem 2rem 1.5rem 2rem",
-              zIndex: 6000,
-            }}>
-              <h2 style={{
-                textAlign: "center",
-                color: "#6C7294",
-                fontWeight: "bold",
-                marginBottom: "1.5rem",
-                fontSize: "2rem"
-              }}>{formData.id ? "Edit Student" : "Add User"}</h2>
+            <div
+              style={{
+                position: "fixed",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                background: "#fff",
+                borderRadius: "18px",
+                boxShadow: "0 8px 32px rgba(0,0,0,0.15)",
+                border: "2px solid #b9b6c9",
+                width: "400px",
+                minWidth: "320px",
+                maxWidth: "95vw",
+                padding: "2rem 2rem 1.5rem 2rem",
+                zIndex: 6000,
+              }}
+            >
+              <h2
+                style={{
+                  textAlign: "center",
+                  color: "#6C7294",
+                  fontWeight: "bold",
+                  marginBottom: "1.5rem",
+                  fontSize: "2rem",
+                }}
+              >
+                {formData.id ? "Edit Student" : "Add User"}
+              </h2>
               <form onSubmit={handleFormSubmit}>
-                <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "0.75rem",
+                  }}
+                >
                   <input
                     name="name"
                     value={formData.name}
@@ -559,7 +571,7 @@ const DashboardAdmin = () => {
                       padding: "0.7rem 1rem",
                       fontSize: "1rem",
                       fontWeight: "500",
-                      outline: "none"
+                      outline: "none",
                     }}
                     placeholder="Name"
                     required
@@ -576,7 +588,7 @@ const DashboardAdmin = () => {
                       padding: "0.7rem 1rem",
                       fontSize: "1rem",
                       fontWeight: "500",
-                      outline: "none"
+                      outline: "none",
                     }}
                     placeholder="Username"
                     required
@@ -593,7 +605,7 @@ const DashboardAdmin = () => {
                       padding: "0.7rem 1rem",
                       fontSize: "1rem",
                       fontWeight: "500",
-                      outline: "none"
+                      outline: "none",
                     }}
                     required
                   >
@@ -616,7 +628,7 @@ const DashboardAdmin = () => {
                       padding: "0.7rem 1rem",
                       fontSize: "1rem",
                       fontWeight: "500",
-                      outline: "none"
+                      outline: "none",
                     }}
                     placeholder="Email"
                     required
@@ -634,7 +646,7 @@ const DashboardAdmin = () => {
                       padding: "0.7rem 1rem",
                       fontSize: "1rem",
                       fontWeight: "500",
-                      outline: "none"
+                      outline: "none",
                     }}
                     placeholder="Your password"
                     required={!formData.id}
@@ -652,13 +664,20 @@ const DashboardAdmin = () => {
                       padding: "0.7rem 1rem",
                       fontSize: "1rem",
                       fontWeight: "500",
-                      outline: "none"
+                      outline: "none",
                     }}
                     placeholder="Repeat password"
                     required={!formData.id}
                   />
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", marginTop: "1.5rem" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "0.75rem",
+                    marginTop: "1.5rem",
+                  }}
+                >
                   <button
                     type="submit"
                     style={{
@@ -670,7 +689,7 @@ const DashboardAdmin = () => {
                       fontSize: "1.1rem",
                       padding: "0.7rem 0",
                       width: "100%",
-                      cursor: "pointer"
+                      cursor: "pointer",
                     }}
                     disabled={isSubmitting}
                   >
@@ -693,7 +712,7 @@ const DashboardAdmin = () => {
                       fontSize: "1.1rem",
                       padding: "0.7rem 0",
                       width: "100%",
-                      cursor: "pointer"
+                      cursor: "pointer",
                     }}
                     onClick={() => setShowForm(false)}
                   >
