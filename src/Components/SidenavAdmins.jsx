@@ -9,6 +9,7 @@ const Sidebar = ({
   fetchStudents,
   setShowLeaderboard,
   showLeaderboard,
+  role = "admin", // new prop: "admin" or "superadmin"
 }) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -39,7 +40,9 @@ const Sidebar = ({
   return (
     <>
       <div className="DashboardAdmin">
-        <h2>Dashboard</h2>
+        <h2 style={{ color: "#2563eb", fontWeight: "bold" }}>
+          {String(role).toLowerCase() === "superadmin" ? "Super Admin" : "Admin"}
+        </h2>
       </div>
       <div className="left-sidebar">
         <div className="sidebar-box">

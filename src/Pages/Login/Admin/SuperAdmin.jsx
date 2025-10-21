@@ -399,21 +399,6 @@ const SuperAdmin = () => {
     }
     if (!formData.name || !formData.username || !formData.email) {
       return toast.error("All fields are required!");
-    }
-
-    setIsSubmitting(true);
-
-    try {
-      const payload = {
-        name: formData.name,
-        username: formData.username,
-        email: formData.email,
-        password: formData.password || undefined,
-        yearLevel: formData.yearLevel || undefined,
-        role: activeTab === "Teachers" ? "admin" : "user",
-      };
-
-      // Build URL depending on create/edit
       try {
         const payload = {
           name: formData.name,
@@ -423,7 +408,6 @@ const SuperAdmin = () => {
           yearLevel: formData.yearLevel || undefined,
           role: activeTab === "Teachers" ? "admin" : "user",
         };
-        // Build URL depending on create/edit
         const urlBase =
           formMode === "edit"
             ? activeTab === "Users"
@@ -449,8 +433,8 @@ const SuperAdmin = () => {
         toast.success(
           `${formMode === "edit" ? "Updated" : "Created"} ${activeTab}`
         );
-        await fetchUsers(selectedGrade);
-        await fetchTeachers(selectedGrade);
+        await fetchUsers(formData.yearLevel);
+        setSelectedGrade(formData.yearLevel);
         setShowForm(false);
       } catch (error) {
         console.error(
@@ -462,14 +446,13 @@ const SuperAdmin = () => {
           error?.response?.data?.error ||
           error.message;
         toast.error(serverMsg || "Failed to submit form.");
-      } finally {
-        setIsSubmitting(false);
       }
-      err.message;
-      toast.error(serverMsg || "Failed to submit form.");
-    } finally {
+      setIsSubmitting(false);
       setIsSubmitting(false);
     }
+    err.message;
+    toast.error(serverMsg || "Failed to submit form.");
+    // setIsSubmitting(false); // already called after try/catch
   };
 
   const handleDelete = async (email) => {
@@ -726,6 +709,7 @@ const SuperAdmin = () => {
           fetchStudents={activeTab === "Users" ? fetchUsers : fetchTeachers}
           setShowLeaderboard={setShowLeaderboard}
           showLeaderboard={showLeaderboard}
+          role="superadmin"
         />
       </div>
 
@@ -739,7 +723,14 @@ const SuperAdmin = () => {
       ) : (
         <>
           <div className="levels">
-            {["Grade 7", "Grade 8", "Grade 9", "Grade 10"].map((grade) => {
+            {[
+              "Grade 7",
+              "Grade 8",
+              "Grade 9",
+              "Grade 10",
+              "Grade 11",
+              "Grade 12",
+            ].map((grade) => {
               const gradeClass = grade.replace(" ", "").toLowerCase();
               return (
                 <div
@@ -748,6 +739,18 @@ const SuperAdmin = () => {
                     selectedGrade === grade ? "active" : ""
                   }`}
                   onClick={() => handleGradeSelection(grade)}
+                  style={{
+                    background: selectedGrade === grade ? "#23263a" : "#d3d3d3",
+                    color: selectedGrade === grade ? "#fff" : "#23263a",
+                    minWidth: "120px",
+                    textAlign: "center",
+                    fontWeight: "bold",
+                    fontSize: "1.1rem",
+                    borderRadius: "8px",
+                    padding: "1.1rem 0",
+                    cursor: "pointer",
+                    transition: "background 0.2s, color 0.2s",
+                  }}
                 >
                   {grade.toUpperCase()}
                 </div>
@@ -1403,7 +1406,7 @@ const SuperAdmin = () => {
             </div>
 
             <div className="contentdiv">
-              <div className="table-wrapper">
+              <div className="table-wrapper" style={{ marginTop: "-2rem" }}>
                 <table className="dashboard-table text-light">
                   <thead>
                     <tr>
@@ -1610,6 +1613,8 @@ const SuperAdmin = () => {
                       <option value="Grade 8">Grade 8</option>
                       <option value="Grade 9">Grade 9</option>
                       <option value="Grade 10">Grade 10</option>
+                      <option value="Grade 11">Grade 11</option>
+                      <option value="Grade 12">Grade 12</option>
                     </select>
                   </div>
                   <div className="form-group">

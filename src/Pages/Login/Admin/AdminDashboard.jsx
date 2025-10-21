@@ -300,30 +300,50 @@ const DashboardAdmin = () => {
         </div>
       ) : (
         <>
-          <div className="levels">
-            {["Grade 7", "Grade 8", "Grade 9", "Grade 10"].map((grade) => {
-              const gradeClass = grade.replace(" ", "").toLowerCase();
-              return (
-                <div
-                  key={grade}
-                  className={`level-item ${gradeClass} ${
-                    selectedGrade === grade ? "active" : ""
-                  }`}
-                  onClick={() => handleGradeSelection(grade)}
-                >
-                  {grade.toUpperCase()}
-                </div>
-              );
-            })}
+          <div
+            className="levels"
+            style={{ display: "flex", gap: "0.5rem", marginBottom: "1.5rem" }}
+          >
+            {[
+              "Grade 7",
+              "Grade 8",
+              "Grade 9",
+              "Grade 10",
+              "Grade 11",
+              "Grade 12",
+            ].map((grade) => (
+              <div
+                key={grade}
+                className={`level-item ${grade
+                  .replace(" ", "")
+                  .toLowerCase()} ${selectedGrade === grade ? "active" : ""}`}
+                onClick={() => handleGradeSelection(grade)}
+                style={{
+                  background: selectedGrade === grade ? "#23263a" : "#d3d3d3",
+                  color: selectedGrade === grade ? "#fff" : "#23263a",
+                  minWidth: "120px",
+                  textAlign: "center",
+                  fontWeight: "bold",
+                  fontSize: "1.1rem",
+                  borderRadius: "8px",
+                  padding: "0.7rem 0",
+                  cursor: "pointer",
+                  transition: "background 0.2s, color 0.2s",
+                }}
+              >
+                {grade.toUpperCase()}
+              </div>
+            ))}
           </div>
 
-          <div className="table-container">
+          <div className="table-container" style={{ marginTop: "-3rem" }}>
             <div
               className="Create"
               style={{
                 display: "flex",
                 gap: "1rem",
                 justifyContent: "flex-end",
+                marginBottom: "1rem",
               }}
             >
               {/* Notification Button */}
@@ -614,6 +634,8 @@ const DashboardAdmin = () => {
                     <option value="Grade 8">Grade 8</option>
                     <option value="Grade 9">Grade 9</option>
                     <option value="Grade 10">Grade 10</option>
+                    <option value="Grade 11">Grade 11</option>
+                    <option value="Grade 12">Grade 12</option>
                   </select>
                   <input
                     type="email"
