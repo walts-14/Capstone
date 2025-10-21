@@ -828,13 +828,13 @@ const SuperAdmin = () => {
                     top: "50%",
                     left: "50%",
                     transform: "translate(-50%, -50%)",
-                    background: "#1a1230",
+                    background: "#fff",
                     borderRadius: "30px",
-                    border: "3px solid #7338a0",
+                    border: "2px solid #e0e0e0",
                     zIndex: 2000,
                     width: "600px",
                     height: "550px",
-                    boxShadow: "0 0 20px #000",
+                    boxShadow: "0 4px 24px rgba(0,0,0,0.18)",
                     padding: "2rem 2.5rem 2rem 2.5rem",
                     display: "flex",
                     flexDirection: "column",
@@ -906,7 +906,7 @@ const SuperAdmin = () => {
                   </button>
                   <h2
                     style={{
-                      color: "#fff",
+                      color: "#222",
                       fontWeight: "bold",
                       fontSize: "2.2rem",
                       marginBottom: "1.5rem",
@@ -922,12 +922,12 @@ const SuperAdmin = () => {
                         top: "50%",
                         left: "50%",
                         transform: "translate(-50%, -50%)",
-                        background: "#2d2342",
+                        background: "#fff",
                         borderRadius: "20px",
-                        border: "2px solid #7338a0",
+                        border: "2px solid #e0e0e0",
                         zIndex: 3000,
                         width: "400px",
-                        boxShadow: "0 0 20px #000",
+                        boxShadow: "0 4px 24px rgba(0,0,0,0.18)",
                         padding: "2rem 2rem 1.5rem 2rem",
                         display: "flex",
                         flexDirection: "column",
@@ -972,7 +972,7 @@ const SuperAdmin = () => {
                       </button>
                       <h2
                         style={{
-                          color: "#fff",
+                          color: "#222",
                           fontWeight: "bold",
                           fontSize: "2rem",
                           marginBottom: "1.5rem",
@@ -1010,9 +1010,9 @@ const SuperAdmin = () => {
                               width: "100%",
                               padding: "0.8rem",
                               borderRadius: "10px",
-                              background: "#3c2e5e",
-                              color: "#fff",
-                              border: "none",
+                              background: "#e9e9ee",
+                              color: "#222",
+                              border: "1px solid #bdbdbd",
                               fontSize: "1.1rem",
                               marginBottom: "0.7rem",
                             }}
@@ -1033,9 +1033,9 @@ const SuperAdmin = () => {
                               width: "100%",
                               padding: "0.8rem",
                               borderRadius: "10px",
-                              background: "#3c2e5e",
-                              color: "#fff",
-                              border: "none",
+                              background: "#e9e9ee",
+                              color: "#222",
+                              border: "1px solid #bdbdbd",
                               fontSize: "1.1rem",
                               marginBottom: "0.7rem",
                             }}
@@ -1054,9 +1054,9 @@ const SuperAdmin = () => {
                               width: "100%",
                               padding: "0.8rem",
                               borderRadius: "10px",
-                              background: "#3c2e5e",
-                              color: "#fff",
-                              border: "none",
+                              background: "#e9e9ee",
+                              color: "#222",
+                              border: "1px solid #bdbdbd",
                               fontSize: "1.1rem",
                               marginBottom: "0.7rem",
                             }}
@@ -1080,9 +1080,9 @@ const SuperAdmin = () => {
                               width: "100%",
                               minHeight: "120px",
                               borderRadius: "10px",
-                              background: "#3c2e5e",
-                              color: "#fff",
-                              border: "2px solid #bdbdbd",
+                              background: "#e9e9ee",
+                              color: "#222",
+                              border: "1px solid #bdbdbd",
                               fontSize: "1.1rem",
                               padding: "0.8rem",
                             }}
@@ -1092,7 +1092,7 @@ const SuperAdmin = () => {
                           type="submit"
                           style={{
                             width: "100%",
-                            background: "#7338a0",
+                            background: "#1976d2",
                             color: "#fff",
                             border: "none",
                             borderRadius: "10px",
@@ -1118,7 +1118,7 @@ const SuperAdmin = () => {
                   >
                     {editingMsgId === null ? (
                       messages.length === 0 ? (
-                        <div style={{ color: "#fff", textAlign: "center" }}>
+                        <div style={{ color: "#222", textAlign: "center" }}>
                           No messages found.
                         </div>
                       ) : (
@@ -1508,9 +1508,35 @@ const SuperAdmin = () => {
           </div>
 
           {showForm && (
-            <div className="popup-form">
+            <div
+              className="popup-form"
+              style={{
+                position: "fixed",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                background: "#fff",
+                borderRadius: "20px",
+                border: "2px solid #e0e0e0",
+                zIndex: 3000,
+                width: "400px",
+                boxShadow: "0 4px 24px rgba(0,0,0,0.18)",
+                padding: "2rem 2rem 1.5rem 2rem",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "flex-start",
+              }}
+            >
               <div className="popup-content">
-                <h3>
+                <h3
+                  style={{
+                    color: "#2d254c",
+                    fontWeight: "bold",
+                    fontSize: "2rem",
+                    marginBottom: "1.5rem",
+                    textAlign: "center",
+                  }}
+                >
                   {formMode === "edit" ? "Edit" : "Add"}{" "}
                   {activeTab.slice(0, -1)}
                 </h3>
@@ -1523,6 +1549,18 @@ const SuperAdmin = () => {
                       className="form-control"
                       placeholder="Name"
                       required
+                      style={{
+                        width: "100%",
+                        marginBottom: "16px",
+                        padding: "12px 16px",
+                        borderRadius: "8px",
+                        border: "1px solid #d1d5db",
+                        background: "#6C7294",
+                        color: "#fff",
+                        fontSize: "1rem",
+                        '::placeholder': { color: '#bfc3d1', opacity: 1 },
+                      }}
+                      placeholderTextColor="#bfc3d1"
                     />
                   </div>
                   <div className="form-group">
@@ -1530,9 +1568,21 @@ const SuperAdmin = () => {
                       name="username"
                       value={formData.username}
                       onChange={handleInputChange}
-                      className="form-control"
+                      className="form-control text-yellow-400"
                       placeholder="Username"
                       required
+                      style={{
+                        width: "100%",
+                        marginBottom: "16px",
+                        padding: "12px 16px",
+                        borderRadius: "8px",
+                        border: "1px solid #d1d5db",
+                        background: "#6C7294",
+                        color: "#fff",
+                        fontSize: "1rem",
+                        '::placeholder': { color: '#bfc3d1', opacity: 1 },
+                      }}
+                      placeholderTextColor="#bfc3d1"
                     />
                   </div>
                   <div className="form-group">
@@ -1542,8 +1592,18 @@ const SuperAdmin = () => {
                       onChange={handleInputChange}
                       className="form-control"
                       required
+                      style={{
+                        width: "100%",
+                        marginBottom: "16px",
+                        padding: "12px 16px",
+                        borderRadius: "8px",
+                        border: "1px solid #d1d5db",
+                        background: "#6C7294",
+                        color: "#fff",
+                        fontSize: "1rem",
+                      }}
                     >
-                      <option value="">-- Select Year Level --</option>
+                      <option value="" style={{ color: '#bfc3d1' }}>-- Select Year Level --</option>
                       <option value="Grade 7">Grade 7</option>
                       <option value="Grade 8">Grade 8</option>
                       <option value="Grade 9">Grade 9</option>
@@ -1559,6 +1619,18 @@ const SuperAdmin = () => {
                       className="form-control"
                       placeholder="Email"
                       required
+                      style={{
+                        width: "100%",
+                        marginBottom: "16px",
+                        padding: "12px 16px",
+                        borderRadius: "8px",
+                        border: "1px solid #d1d5db",
+                        background: "#6C7294",
+                        color: "#fff",
+                        fontSize: "1rem",
+                        '::placeholder': { color: '#bfc3d1', opacity: 1 },
+                      }}
+                      placeholderTextColor="#bfc3d1"
                     />
                   </div>
                   <div className="form-group">
@@ -1568,8 +1640,20 @@ const SuperAdmin = () => {
                       value={formData.password}
                       onChange={handleInputChange}
                       className="form-control"
-                      placeholder="Password"
+                      placeholder="Your password"
                       required={formMode !== "edit"}
+                      style={{
+                        width: "100%",
+                        marginBottom: "16px",
+                        padding: "12px 16px",
+                        borderRadius: "8px",
+                        border: "1px solid #d1d5db",
+                        background: "#6C7294",
+                        color: "#fff",
+                        fontSize: "1rem",
+                        '::placeholder': { color: '#bfc3d1', opacity: 1 },
+                      }}
+                      placeholderTextColor="#bfc3d1"
                     />
                   </div>
                   <div className="form-group">
@@ -1579,15 +1663,46 @@ const SuperAdmin = () => {
                       value={formData.confirmPassword}
                       onChange={handleInputChange}
                       className="form-control"
-                      placeholder="Confirm Password"
+                      placeholder="Repeat password"
                       required={formMode !== "edit"}
+                      style={{
+                        width: "100%",
+                        marginBottom: "16px",
+                        padding: "12px 16px",
+                        borderRadius: "8px",
+                        border: "1px solid #d1d5db",
+                        background: "#6C7294",
+                        color: "#fff",
+                        fontSize: "1rem",
+                        '::placeholder': { color: '#bfc3d1', opacity: 1 },
+                      }}
+                      placeholderTextColor="#bfc3d1"
                     />
                   </div>
-                  <div className="form-actions">
+                  <div
+                    className="form-actions"
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "10px",
+                      marginTop: "10px",
+                    }}
+                  >
                     <button
                       type="submit"
                       className="btn-create"
                       disabled={isSubmitting}
+                      style={{
+                        width: "100%",
+                        padding: "12px 0",
+                        borderRadius: "8px",
+                        border: "none",
+                        fontSize: "1rem",
+                        fontWeight: "bold",
+                        cursor: "pointer",
+                        background: "#2563eb",
+                        color: "#fff",
+                      }}
                     >
                       {isSubmitting
                         ? formMode === "edit"
@@ -1601,6 +1716,17 @@ const SuperAdmin = () => {
                       type="button"
                       className="btn-cancel"
                       onClick={() => setShowForm(false)}
+                      style={{
+                        width: "100%",
+                        padding: "12px 0",
+                        borderRadius: "8px",
+                        border: "none",
+                        fontSize: "1rem",
+                        fontWeight: "bold",
+                        cursor: "pointer",
+                        background: "#ef4444",
+                        color: "#fff",
+                      }}
                     >
                       Cancel
                     </button>
