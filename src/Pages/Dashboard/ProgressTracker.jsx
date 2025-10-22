@@ -172,7 +172,7 @@ const calculateOverallProgress = (progressData) => {
       <>
         {/* Streak Button */}
         <button
-          className="h-[10vh] w-[5.5vw] rounded-4 px-3 py-2 cursor-pointer absolute right-[26.2rem] top-20 flex items-center justify-center"
+          className="h-[10vh] w-[5.5vw] rounded-4 px-3 py-2 cursor-pointer absolute right-[27.8rem] top-20  flex items-center justify-center"
           style={{ background: "#271d3e", boxShadow: "0 0 0 5px #F44336" }}
           onClick={toggle}
         >
@@ -197,7 +197,7 @@ const calculateOverallProgress = (progressData) => {
             onClick={closeModal}
           >
             <div
-              className="text-white p-8 rounded-3xl w-[70%] h-[45vh] max-w-[500px] text-center border-4 gap-2 mr-40"
+              className="text-white p-8 rounded-3xl w-[70%] h-[46vh] max-w-[500px] text-center border-4 gap-2 mr-40"
               style={{ background: "#100429", borderColor: "#FF6536" }}
               onClick={(e) => e.stopPropagation()}
             >
@@ -219,7 +219,7 @@ const calculateOverallProgress = (progressData) => {
                 </span>
               </div>
               <button
-                className="py-2 px-4 border-none text-white rounded-lg cursor-pointer text-2xl w-full"
+                className="py-3 px-6 rounded-full border-none text-white cursor-pointer text-4xl w-full"
                 style={{ background: "#c0392b" }}
                 onClick={closeModal}
               >
@@ -258,7 +258,7 @@ const calculateOverallProgress = (progressData) => {
                 </span>
               </div>
               <button
-                className="py-2 px-4 border-none text-white rounded-lg cursor-pointer text-2xl w-full"
+                className="py-3 px-6 border-none text-white rounded-full cursor-pointer text-3xl w-full"
                 style={{ background: "#c0392b" }}
                 onClick={closeModal}
               >

@@ -68,6 +68,8 @@ function Quiz() {
   const [quizFinished, setQuizFinished] = useState(false);
   const [hasUpdatedQuiz, setHasUpdatedQuiz] = useState(false);
   const [failedPointsRequirement, setFailedPointsRequirement] = useState(false);
+  const [backendAttemptNumber, setBackendAttemptNumber] = useState(null);
+  const [backendTotalPoints, setBackendTotalPoints] = useState(null);
 
   const [lives, setLives] = useState(5);
   const [streak, setStreak] = useState(0);
@@ -194,32 +196,10 @@ function Quiz() {
           setLives((prev) => prev + 1);
           toast.success("Streak bonus! +1 life");
         }
-        // Calculate points based on attempt number and level
+        // Track per-question attempts locally for UI (won't affect server-side persisted quizAttempts)
         const questionId = currentQuestion._id || currentQuestion.question; // fallback to question text if no id
-
-        // Increment attempt count for current question before awarding points
-        const newAttemptCount = attempts[questionId]
-          ? attempts[questionId] + 1
-          : 1;
-        setAttempts((prev) => ({
-          ...prev,
-          [questionId]: newAttemptCount,
-        }));
-
-        const pointsTable = {
-          basic: { 1: 10, 2: 10, 3: 5, 4: 2 },
-          intermediate: { 1: 15, 2: 15, 3: 8, 4: 3 },
-          advanced: { 1: 20, 2: 20, 3: 10, 4: 5 },
-        };
-
-        // Use 4th+ try points for attempts >= 4
-        const attemptKey = newAttemptCount >= 4 ? 4 : newAttemptCount;
-        const pointsToAward = pointsTable[level][attemptKey] || 0;
-
-        await axios.post(
-          `${backendURL}/api/points/email/${userEmail}/gain-points`,
-          { points: pointsToAward }
-        );
+        const newAttemptCount = attempts[questionId] ? attempts[questionId] + 1 : 1;
+        setAttempts((prev) => ({ ...prev, [questionId]: newAttemptCount }));
       } catch (error) {
         toast.error("Failed to update lives/points. Please try again.");
       }
@@ -296,10 +276,51 @@ function Quiz() {
       const userPoints = correctAnswers * pointsPerCorrectAnswer;
       const requiredPoints = minPointsRequired[level] || 70;
       if (userPoints < requiredPoints) {
-        setFailedPointsRequirement(true);
-        toast.error(
-          `You need at least ${requiredPoints} points to proceed. Your score: ${userPoints}`
-        );
+        // Persist an attempt server-side even on failure so attempt counters advance correctly
+        (async () => {
+          try {
+            const userEmail = localStorage.getItem("userEmail");
+            const lessonNumberMapping = {
+              termsone: 1,
+              termstwo: 2,
+              termsthree: 3,
+              termsfour: 4,
+              termsfive: 5,
+              termssix: 6,
+              termsseven: 7,
+              termseight: 8,
+              termsnine: 1,
+              termsten: 2,
+              termseleven: 3,
+              termstwelve: 4,
+            };
+            const lessonNumber = lessonNumberMapping[lessonKey] || 1;
+
+            const respFail = await axios.post(`${backendURL}/api/quizzes/update-points`, {
+              email: userEmail,
+              level,
+              lessonNumber,
+              quizPart: currentStep,
+              correctCount: correctAnswers,
+            });
+            const { attemptNumber: failAttemptNumber, totalPoints: failTotalPoints } = respFail.data || {};
+            setBackendAttemptNumber(failAttemptNumber || null);
+            setBackendTotalPoints(failTotalPoints || null);
+
+            // Only set the failed UI once server has persisted the attempt
+            setFailedPointsRequirement(true);
+            toast.error(
+              `You need at least ${requiredPoints} points to proceed. Your score: ${userPoints}`
+            );
+          } catch (err) {
+            console.error("Failed to persist failed attempt:", err);
+            // Even if persisting failed, still show the failed UI
+            setFailedPointsRequirement(true);
+            toast.error(
+              `You need at least ${requiredPoints} points to proceed. Your score: ${userPoints}`
+            );
+          }
+        })();
         return;
       }
       // Show success toast only when they actually pass
@@ -326,26 +347,22 @@ function Quiz() {
           };
           const lessonNumber = lessonNumberMapping[lessonKey] || 1;
 
-          // overall attempt for the quiz — frontend currently doesn't track per-quiz attempts, use 1
-          const attempt = 1;
-
           const resp = await axios.post(`${backendURL}/api/quizzes/update-points`, {
             email: userEmail,
             level,
             lessonNumber,
             quizPart: currentStep,
-            attempt,
             correctCount: correctAnswers,
           });
 
-          // backend returns pointsEarned, totalPoints, passed
-          const { pointsEarned, totalPoints, passed } = resp.data || {};
+          // backend returns pointsEarned, totalPoints, passed, attemptNumber
+          const { pointsEarned, totalPoints, passed, attemptNumber } = resp.data || {};
           // you can store totalPoints locally if needed (e.g., in context)
           // update progress only if backend recorded it
           updateProgress(level, lessonKey, progressKey);
           setHasUpdatedQuiz(true);
           navigate("/finish", {
-            state: { correctAnswers, wrongAnswers, lessonKey, level, currentStep, pointsEarned, totalPoints, passed },
+            state: { correctAnswers, wrongAnswers, lessonKey, level, currentStep, pointsEarned, totalPoints, passed, attemptNumber },
           });
         } catch (err) {
           console.error("Failed to update backend points:", err);
@@ -380,6 +397,10 @@ function Quiz() {
   }
 
   if (failedPointsRequirement) {
+  const userPoints = correctAnswers * pointsPerCorrectAnswer;
+  const totalAttempts = Object.values(attempts || {}).reduce((a, b) => a + b, 0) + 1;
+  const displayAttempt = backendAttemptNumber ?? totalAttempts;
+  const displayTotalPoints = backendTotalPoints ?? "-";
     return (
       <div className="d-flex flex-column align-items-center justify-content-center gap-2" style={{ minHeight: "100vh", backgroundColor: "var(--background)" }}>
         <img src={failed} alt="" className="mb-4" />
@@ -389,6 +410,22 @@ function Quiz() {
           <p className="check-number " style={{ color: "#20BF55" }}>{correctAnswers}</p>
           <img src={ekis} className="mali img-fluid p-1 ms-5" alt="ekis img" />
           <p className="ekis-number " style={{ color: "#F44336" }}>{wrongAnswers}</p>
+        </div>
+
+        {/* Summary row: score and attempts. Points are intentionally omitted on failed results to avoid confusion. */}
+        <div className="quiz-summary d-flex flex-row gap-4 align-items-center my-3">
+          <div className="score-box text-center">
+            <img src={check} alt="correct" style={{ width: 28, height: 28, marginBottom: 6 }} />
+            <div style={{ color: "#20BF55", fontSize: "1.2rem" }}><strong>{correctAnswers} / {totalQuestions}</strong></div>
+            <div style={{ color: "#878194" }}>{Math.round((correctAnswers / totalQuestions) * 100)}%</div>
+          </div>
+
+          <div className="attempts-box text-center">
+            {/* Use retry icon to indicate try-again/attempts */}
+            <img src={retry} alt="attempts" style={{ width: 28, height: 28, marginBottom: 6 }} />
+            <div style={{ color: "#ffffff", fontSize: "1.2rem" }}><strong>#{displayAttempt}</strong></div>
+            <div style={{ color: "#878194" }}>Attempts</div>
+          </div>
         </div>
 
         <div className="d-flex flex-column align-items-center justify-content-center mb-4">

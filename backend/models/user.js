@@ -40,7 +40,7 @@ const userSchema = new mongoose.Schema(
     yearLevel:  {
       type: String,
       required: true,
-      enum: ["Grade 7", "Grade 8", "Grade 9", "Grade 10"]
+  enum: ["Grade 7", "Grade 8", "Grade 9", "Grade 10", "Grade 11", "Grade 12"]
     },
     role:       {
       type: String,
@@ -55,6 +55,30 @@ const userSchema = new mongoose.Schema(
     progress: {
       type: Object,
       default: () => JSON.parse(JSON.stringify(progressStructure)),
+    },
+    // Track how many times a user has attempted each quiz (per level -> lesson key -> part)
+    quizAttempts: {
+      type: Object,
+      default: () => ({
+        basic: {
+          termsone: { part1Attempts: 0, part2Attempts: 0 },
+          termstwo: { part1Attempts: 0, part2Attempts: 0 },
+          termsthree: { part1Attempts: 0, part2Attempts: 0 },
+          termsfour: { part1Attempts: 0, part2Attempts: 0 },
+        },
+        intermediate: {
+          termsfive: { part1Attempts: 0, part2Attempts: 0 },
+          termssix: { part1Attempts: 0, part2Attempts: 0 },
+          termsseven: { part1Attempts: 0, part2Attempts: 0 },
+          termseight: { part1Attempts: 0, part2Attempts: 0 },
+        },
+        advanced: {
+          termsnine: { part1Attempts: 0, part2Attempts: 0 },
+          termsten: { part1Attempts: 0, part2Attempts: 0 },
+          termseleven: { part1Attempts: 0, part2Attempts: 0 },
+          termstwelve: { part1Attempts: 0, part2Attempts: 0 },
+        }
+      }),
     },
     streak: {
       type: Object,

@@ -1,6 +1,7 @@
 // routes/quizRoutes.js
 import express from "express";
 import { getRandomQuiz, createQuiz, getStoredQuizQuestions, updateUserPointsForQuiz } from "../controllers/quiz.controller.js";
+import { getUserQuizAttempt } from "../controllers/quiz.controller.js";
 
 const router = express.Router();
 
@@ -16,10 +17,11 @@ router.post("/uploadquiz", createQuiz );
 router.post("/update-points", async (req, res) => {
   try {
     const { email, level, lessonNumber, quizPart, attempt, correctCount } = req.body;
-    if (!email || !level || !lessonNumber || !quizPart || !attempt || typeof correctCount === 'undefined') {
-      return res.status(400).json({ error: "email, level, lessonNumber, quizPart, attempt, and correctCount are required" });
+    if (!email || !level || !lessonNumber || !quizPart || typeof correctCount === 'undefined') {
+      return res.status(400).json({ error: "email, level, lessonNumber, quizPart, and correctCount are required" });
     }
 
+    // attempt is optional - server will increment/persist stored attempt count if omitted
     const result = await updateUserPointsForQuiz(email, level, lessonNumber, quizPart, attempt, correctCount);
     res.json({ message: "User points updated for quiz", ...result });
   } catch (error) {
@@ -27,5 +29,8 @@ router.post("/update-points", async (req, res) => {
     res.status(500).json({ error: "Failed to update user points" });
   }
 });
+
+// Debug route: GET /api/quizzes/attempts?email=...&level=...&lessonNumber=...&quizPart=1
+router.get('/attempts', getUserQuizAttempt);
 
 export default router;

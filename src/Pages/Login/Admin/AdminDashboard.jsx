@@ -300,40 +300,21 @@ const DashboardAdmin = () => {
         </div>
       ) : (
         <>
-          <div
-            className="levels"
-            style={{ display: "flex", gap: "0.5rem", marginBottom: "1.5rem" }}
-          >
-            {[
-              "Grade 7",
-              "Grade 8",
-              "Grade 9",
-              "Grade 10",
-              "Grade 11",
-              "Grade 12",
-            ].map((grade) => (
-              <div
-                key={grade}
-                className={`level-item ${grade
-                  .replace(" ", "")
-                  .toLowerCase()} ${selectedGrade === grade ? "active" : ""}`}
-                onClick={() => handleGradeSelection(grade)}
-                style={{
-                  background: selectedGrade === grade ? "#23263a" : "#d3d3d3",
-                  color: selectedGrade === grade ? "#fff" : "#23263a",
-                  minWidth: "120px",
-                  textAlign: "center",
-                  fontWeight: "bold",
-                  fontSize: "1.1rem",
-                  borderRadius: "8px",
-                  padding: "0.7rem 0",
-                  cursor: "pointer",
-                  transition: "background 0.2s, color 0.2s",
-                }}
-              >
-                {grade.toUpperCase()}
-              </div>
-            ))}
+          <div className="levels">
+            {["Grade 7", "Grade 8", "Grade 9", "Grade 10", "Grade 11", "Grade 12"].map((grade) => {
+              const gradeClass = grade.replace(" ", "").toLowerCase();
+              return (
+                <div
+                  key={grade}
+                  className={`level-item ${gradeClass} ${
+                    selectedGrade === grade ? "active" : ""
+                  }`}
+                  onClick={() => handleGradeSelection(grade)}
+                >
+                  {grade.toUpperCase()}
+                </div>
+              );
+            })}
           </div>
 
           <div className="table-container" style={{ marginTop: "-3rem" }}>
@@ -543,205 +524,104 @@ const DashboardAdmin = () => {
           </div>
 
           {showForm && (
-            <div
-              style={{
-                position: "fixed",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                background: "#fff",
-                borderRadius: "18px",
-                boxShadow: "0 8px 32px rgba(0,0,0,0.15)",
-                border: "2px solid #b9b6c9",
-                width: "400px",
-                minWidth: "320px",
-                maxWidth: "95vw",
-                padding: "2rem 2rem 1.5rem 2rem",
-                zIndex: 6000,
-              }}
-            >
-              <h2
-                style={{
-                  textAlign: "center",
-                  color: "#6C7294",
-                  fontWeight: "bold",
-                  marginBottom: "1.5rem",
-                  fontSize: "2rem",
-                }}
-              >
-                {formData.id ? "Edit Student" : "Add User"}
-              </h2>
-              <form onSubmit={handleFormSubmit}>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "0.75rem",
-                  }}
-                >
-                  <input
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    style={{
-                      background: "#6C7294",
-                      color: "#fff",
-                      border: "none",
-                      borderRadius: "10px",
-                      padding: "0.7rem 1rem",
-                      fontSize: "1rem",
-                      fontWeight: "500",
-                      outline: "none",
-                    }}
-                    placeholder="Name"
-                    required
-                  />
-                  <input
-                    name="username"
-                    value={formData.username}
-                    onChange={handleInputChange}
-                    style={{
-                      background: "#6C7294",
-                      color: "#fff",
-                      border: "none",
-                      borderRadius: "10px",
-                      padding: "0.7rem 1rem",
-                      fontSize: "1rem",
-                      fontWeight: "500",
-                      outline: "none",
-                    }}
-                    placeholder="Username"
-                    required
-                  />
-                  <select
-                    name="yearLevel"
-                    value={formData.yearLevel}
-                    onChange={handleInputChange}
-                    style={{
-                      background: "#6C7294",
-                      color: "#fff",
-                      border: "none",
-                      borderRadius: "10px",
-                      padding: "0.7rem 1rem",
-                      fontSize: "1rem",
-                      fontWeight: "500",
-                      outline: "none",
-                    }}
-                    required
-                  >
-                    <option value="">-- Select Year Level --</option>
-                    <option value="Grade 7">Grade 7</option>
-                    <option value="Grade 8">Grade 8</option>
-                    <option value="Grade 9">Grade 9</option>
-                    <option value="Grade 10">Grade 10</option>
-                    <option value="Grade 11">Grade 11</option>
-                    <option value="Grade 12">Grade 12</option>
-                  </select>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    style={{
-                      background: "#6C7294",
-                      color: "#fff",
-                      border: "none",
-                      borderRadius: "10px",
-                      padding: "0.7rem 1rem",
-                      fontSize: "1rem",
-                      fontWeight: "500",
-                      outline: "none",
-                    }}
-                    placeholder="Email"
-                    required
-                  />
-                  <input
-                    type="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleInputChange}
-                    style={{
-                      background: "#6C7294",
-                      color: "#fff",
-                      border: "none",
-                      borderRadius: "10px",
-                      padding: "0.7rem 1rem",
-                      fontSize: "1rem",
-                      fontWeight: "500",
-                      outline: "none",
-                    }}
-                    placeholder="Your password"
-                    required={!formData.id}
-                  />
-                  <input
-                    type="password"
-                    name="confirmPassword"
-                    value={formData.confirmPassword}
-                    onChange={handleInputChange}
-                    style={{
-                      background: "#6C7294",
-                      color: "#fff",
-                      border: "none",
-                      borderRadius: "10px",
-                      padding: "0.7rem 1rem",
-                      fontSize: "1rem",
-                      fontWeight: "500",
-                      outline: "none",
-                    }}
-                    placeholder="Repeat password"
-                    required={!formData.id}
-                  />
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "0.75rem",
-                    marginTop: "1.5rem",
-                  }}
-                >
-                  <button
-                    type="submit"
-                    style={{
-                      background: "#2e86c1",
-                      color: "#fff",
-                      border: "none",
-                      borderRadius: "10px",
-                      fontWeight: "bold",
-                      fontSize: "1.1rem",
-                      padding: "0.7rem 0",
-                      width: "100%",
-                      cursor: "pointer",
-                    }}
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting
-                      ? formData.id
-                        ? "Saving..."
-                        : "Creating..."
-                      : formData.id
-                      ? "Save Changes"
-                      : "Create"}
-                  </button>
-                  <button
-                    type="button"
-                    style={{
-                      background: "#e53935",
-                      color: "#fff",
-                      border: "none",
-                      borderRadius: "10px",
-                      fontWeight: "bold",
-                      fontSize: "1.1rem",
-                      padding: "0.7rem 0",
-                      width: "100%",
-                      cursor: "pointer",
-                    }}
-                    onClick={() => setShowForm(false)}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </form>
+            <div className="popup-form">
+              <div className="popup-content">
+                <h3>{formData.id ? "Edit Student" : "Add Student"}</h3>
+                <form onSubmit={handleFormSubmit}>
+                  <div className="form-group">
+                    <input
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      className="form-control"
+                      placeholder="Name"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <input
+                      name="username"
+                      value={formData.username}
+                      onChange={handleInputChange}
+                      className="form-control"
+                      placeholder="Username"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <select
+                      name="yearLevel"
+                      value={formData.yearLevel}
+                      onChange={handleInputChange}
+                      className="form-control"
+                      required
+                    >
+                      <option value="">-- Select Year Level --</option>
+                      <option value="Grade 7">Grade 7</option>
+                      <option value="Grade 8">Grade 8</option>
+                      <option value="Grade 9">Grade 9</option>
+                      <option value="Grade 10">Grade 10</option>
+                      <option value="Grade 11">Grade 11</option>
+                      <option value="Grade 12">Grade 12</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      className="form-control"
+                      placeholder="Email"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <input
+                      type="password"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleInputChange}
+                      className="form-control"
+                      placeholder="Password"
+                      required={!formData.id}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <input
+                      type="password"
+                      name="confirmPassword"
+                      value={formData.confirmPassword}
+                      onChange={handleInputChange}
+                      className="form-control"
+                      placeholder="Confirm Password"
+                      required={!formData.id}
+                    />
+                  </div>
+                  <div className="form-actions">
+                    <button
+                      type="submit"
+                      className="btn-create"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting
+                        ? formData.id
+                          ? "Saving..."
+                          : "Creating..."
+                        : formData.id
+                        ? "Save Changes"
+                        : "Create"}
+                    </button>
+                    <button
+                      type="button"
+                      className="btn-cancel"
+                      onClick={() => setShowForm(false)}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
           )}
 
