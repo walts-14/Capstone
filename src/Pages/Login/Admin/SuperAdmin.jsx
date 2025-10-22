@@ -698,7 +698,7 @@ const handleDeleteMsg = async () => {
       ) : (
         <>
           <div className="levels">
-            {["Grade 7", "Grade 8", "Grade 9", "Grade 10"].map((grade) => {
+            {["Grade 7", "Grade 8", "Grade 9", "Grade 10", "Grade 11", "Grade 12"].map((grade) => {
               const gradeClass = grade.replace(" ", "").toLowerCase();
               return (
                 <div
@@ -1004,6 +1004,8 @@ const handleDeleteMsg = async () => {
                             <option value="GRADE 8">GRADE 8</option>
                             <option value="GRADE 9">GRADE 9</option>
                             <option value="GRADE 10">GRADE 10</option>
+                            <option value="GRADE 11">GRADE 11</option>
+                            <option value="GRADE 12">GRADE 12</option>
                           </select>
                           <select
                             name="student"
@@ -1249,6 +1251,8 @@ const handleDeleteMsg = async () => {
                               <option value="GRADE 8">GRADE 8</option>
                               <option value="GRADE 9">GRADE 9</option>
                               <option value="GRADE 10">GRADE 10</option>
+                              <option value="GRADE 11">GRADE 11</option>
+                              <option value="GRADE 12">GRADE 12</option>
                             </select>
                             <select
                               name="student"
@@ -1504,6 +1508,8 @@ const handleDeleteMsg = async () => {
                       <option value="Grade 8">Grade 8</option>
                       <option value="Grade 9">Grade 9</option>
                       <option value="Grade 10">Grade 10</option>
+                      <option value="Grade 11">Grade 11</option>
+                      <option value="Grade 12">Grade 12</option>
                     </select>
                   </div>
                   <div className="form-group">

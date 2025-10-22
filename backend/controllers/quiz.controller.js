@@ -30,10 +30,11 @@ const randomSelect = (arr, n) => {
 /**
  * Map quiz attempts to points for each level.
  */
+// Points tiers as specified by the user. Indexing: 1st/2nd, 3rd, 4th+
 const quizPointsMap = {
-  basic: [10, 5, 2],
-  intermediate: [15, 8, 3],
-  advanced: [20, 10, 5]
+  basic:        { firstTwo: 10, third: 5, fourthPlus: 2 },
+  intermediate: { firstTwo: 15, third: 8, fourthPlus: 3 },
+  advanced:     { firstTwo: 20, third: 10, fourthPlus: 5 }
 };
 
 // Helper term keys by level
@@ -91,40 +92,75 @@ export const getRandomQuiz = async (req, res) => {
  * Returns: { pointsEarned, totalPoints, passed }
  */
 export const updateUserPointsForQuiz = async (userEmail, level, lessonNumber, quizPart, attempt, correctCount) => {
-  const pointsArr = quizPointsMap[level] || [0,0,0];
-  // 1st-2nd try use pointsArr[0], 3rd try uses pointsArr[1], 4th+ uses pointsArr[2]
-  const perAnswer = (Number(attempt) <= 2) ? pointsArr[0] : (Number(attempt) === 3 ? pointsArr[1] : pointsArr[2]);
   const correct = Number(correctCount) || 0;
-  const pointsToAdd = perAnswer * correct;
-
   const user = await User.findOne({ email: userEmail });
   if (!user) throw new Error('User not found');
 
-  // Determine success based on passing threshold (7 correct answers)
+  // Normalize inputs
+  const lvl = String(level);
+  const lessonIdx = Number(lessonNumber) - 1; // 0-based index into lessonsByLevel[level]
+  const part = Number(quizPart) === 2 ? 2 : 1;
+
+  // Resolve term key used in progress and quizAttempts
+  const termKeys = lessonsByLevel[lvl] || [];
+  const termKey = termKeys[lessonIdx];
+  if (!termKey) throw new Error('Invalid level/lessonNumber');
+
+  // Ensure structures exist
+  // Use an atomic increment on the nested quizAttempts field to avoid race conditions
+  const attemptPath = `quizAttempts.${lvl}.${termKey}.part${part}Attempts`;
+
+  // Ensure the nested path exists by initializing with default object before atomic update if necessary
+  // Use findOneAndUpdate with $setOnInsert logic if the full structure doesn't exist. Simpler: ensure top-level containers exist then $inc.
+  await User.updateOne(
+    { email: userEmail },
+    { $set: { [`quizAttempts.${lvl}.${termKey}`]: user.quizAttempts?.[lvl]?.[termKey] || { part1Attempts: 0, part2Attempts: 0 } } },
+    { upsert: false }
+  );
+
+  // Atomically increment the attempt counter and return the updated document
+  const updatedUser = await User.findOneAndUpdate(
+    { email: userEmail },
+    { $inc: { [attemptPath]: 1 } },
+    { new: true }
+  );
+
+  if (!updatedUser) throw new Error('User not found after increment');
+
+  const newAttemptNumber = updatedUser.quizAttempts?.[lvl]?.[termKey]?.[`part${part}Attempts`] || 0;
+  const storedAttempts = newAttemptNumber - 1;
+
+  // Debug logging: show previous storedAttempts and newAttemptNumber (server logs)
+  try {
+    console.log(`quizAttempts debug for ${userEmail}: level=${lvl}, term=${termKey}, part=${part}, previous=${storedAttempts}, new=${newAttemptNumber}`);
+  } catch (e) {}
+
+  // Determine per-answer points according to the tiered rules
+  const tiers = quizPointsMap[lvl] || { firstTwo: 0, third: 0, fourthPlus: 0 };
+  let perAnswer = 0;
+  if (newAttemptNumber === 1 || newAttemptNumber === 2) perAnswer = tiers.firstTwo;
+  else if (newAttemptNumber === 3) perAnswer = tiers.third;
+  else perAnswer = tiers.fourthPlus;
+
+  const pointsToAdd = perAnswer * correct;
   const passed = correct >= 7;
 
-  // If attempt failed and lives are 0, do not add points
-  if (!passed && user.lives === 0) {
-    return { pointsEarned: 0, totalPoints: user.points || 0, passed };
+  let pointsEarned = 0;
+  let finalTotalPoints = updatedUser.points || 0;
+
+  if (passed) {
+    pointsEarned = pointsToAdd;
+    // Atomically add points and set progress flag
+    const progressPath = `progress.${lvl}.${termKey}.step${part}Quiz`;
+    const afterPointsUser = await User.findOneAndUpdate(
+      { email: userEmail },
+      { $inc: { points: pointsEarned }, $set: { [progressPath]: true } },
+      { new: true }
+    );
+    finalTotalPoints = afterPointsUser.points || 0;
   }
 
-  // 1) Add quiz points (per correct answer)
-  user.points = (user.points || 0) + pointsToAdd;
-
-  // 2) Mark quiz progress step
-  const levelOffset = lessonOffsets[level] || 0;
-  const termKeys = lessonsByLevel[level] || [];
-  const termKey = termKeys[Number(lessonNumber) - 1];
-  if (termKey) {
-    user.progress = user.progress || {};
-    user.progress[level] = user.progress[level] || {};
-    user.progress[level][termKey] = user.progress[level][termKey] || { step1Lecture: false, step1Quiz: false, step2Lecture: false, step2Quiz: false };
-    // Set appropriate quiz step true (quizPart expected to be 1 or 2)
-    user.progress[level][termKey][`step${quizPart}Quiz`] = true;
-  }
-
-  await user.save();
-  return { pointsEarned: pointsToAdd, totalPoints: user.points, passed };
+  return { pointsEarned, totalPoints: finalTotalPoints, passed, attemptNumber: newAttemptNumber };
 };
 
 /**
@@ -202,6 +238,31 @@ export const getStoredQuizQuestions = async (req, res) => {
   } catch (err) {
     console.error("Error fetching stored quizzes:", err);
     res.status(500).json({ error: err.message });
+  }
+};
+
+// Debug: return the stored attempt count for a given user/level/lesson/part
+export const getUserQuizAttempt = async (req, res) => {
+  try {
+    const { email, level, lessonNumber, quizPart } = req.query;
+    if (!email || !level || !lessonNumber || !quizPart) {
+      return res.status(400).json({ error: 'email, level, lessonNumber and quizPart are required' });
+    }
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    const lvl = String(level);
+    const lessonIdx = Number(lessonNumber) - 1;
+    const part = Number(quizPart) === 2 ? 2 : 1;
+    const termKeys = lessonsByLevel[lvl] || [];
+    const termKey = termKeys[lessonIdx];
+    if (!termKey) return res.status(400).json({ error: 'Invalid level/lessonNumber' });
+
+    const storedAttempts = (user.quizAttempts && user.quizAttempts[lvl] && user.quizAttempts[lvl][termKey] && user.quizAttempts[lvl][termKey][`part${part}Attempts`]) || 0;
+    return res.json({ storedAttempts });
+  } catch (err) {
+    console.error('Error in getUserQuizAttempt:', err);
+    return res.status(500).json({ error: err.message });
   }
 };
 
