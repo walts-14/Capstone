@@ -415,7 +415,7 @@ const DashboardAdmin = () => {
                             <img
                               src={EditIcon}
                               alt="Edit"
-                              className="img-action"
+                              className="img-action img-edit"
                               style={{ cursor: "pointer" }}
                               onClick={() => handleEditUser(u)}
                             />
