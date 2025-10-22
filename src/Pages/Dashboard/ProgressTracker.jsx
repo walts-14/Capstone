@@ -172,7 +172,7 @@ const calculateOverallProgress = (progressData) => {
       <>
         {/* Streak Button */}
         <button
-          className="h-[10vh] w-[5.5vw] rounded-4 px-3 py-2 cursor-pointer absolute right-[26.2rem] top-20 flex items-center justify-center"
+          className="h-[10vh] w-[5.5vw] rounded-4 px-3 py-2 cursor-pointer absolute right-[27.8rem] top-20 flex items-center justify-center"
           style={{ background: "#271d3e", boxShadow: "0 0 0 5px #F44336" }}
           onClick={toggle}
         >
