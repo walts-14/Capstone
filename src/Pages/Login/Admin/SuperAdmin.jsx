@@ -723,7 +723,14 @@ const SuperAdmin = () => {
       ) : (
         <>
           <div className="levels">
-            {["Grade 7", "Grade 8", "Grade 9", "Grade 10", "Grade 11", "Grade 12"].map((grade) => {
+            {[
+              "Grade 7",
+              "Grade 8",
+              "Grade 9",
+              "Grade 10",
+              "Grade 11",
+              "Grade 12",
+            ].map((grade) => {
               const gradeClass = grade.replace(" ", "").toLowerCase();
               return (
                 <div
@@ -1403,7 +1410,7 @@ const SuperAdmin = () => {
             </div>
 
             <div className="contentdiv">
-              <div className="table-wrapper" style={{ marginTop: "-2rem" }}>
+              <div className="table-wrapper" style={{ marginTop: "4rem" }}>
                 <table className="dashboard-table text-light">
                   <thead>
                     <tr>

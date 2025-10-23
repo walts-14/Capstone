@@ -40,7 +40,7 @@ const Sidebar = ({
   return (
     <>
       <div className="left-sidebar">
-         <h2
+        <h2
           style={{
             color: "#3A86D1",
             fontWeight: "bold",
@@ -50,7 +50,9 @@ const Sidebar = ({
             margin: "0 0 50px 0",
           }}
         >
-          {String(role).toLowerCase() === "superadmin" ? "Super Admin" : "Admin"}
+          {String(role).toLowerCase() === "superadmin"
+            ? "Super Admin"
+            : "Admin"}
         </h2>
         <div className="sidebar-box">
           <div
