@@ -14,7 +14,7 @@ const sanitizeDeep = (val) => {
 };
 // src/Pages/Dashboard/ProgressContext.jsx
 import React, { createContext, useContext, useState, useEffect, useRef } from "react";
-import axios from "axios";
+import axios from "../api.js";
 
 export const ProgressContext = createContext();
 export const useProgress = () => useContext(ProgressContext);
