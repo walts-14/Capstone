@@ -415,6 +415,7 @@ const DashboardAdmin = () => {
                                 border: "none",
                                 marginLeft: "2rem",
                               }}
+
                             >
                               Progress
                             </button>
@@ -639,7 +640,7 @@ const DashboardAdmin = () => {
                 top: "50%",
                 transform: "translate(-40%, -50%)",
                 width: "65vh",
-                height: "90vh",
+                height: "95vh",
                 borderRadius: "30px",
                 zIndex: 1000,
                 backgroundColor: "#1a1230",

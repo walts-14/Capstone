@@ -269,24 +269,12 @@
   position: relative;
   z-index: 11;
 }
-.level-item.grade7 {
-  background-color: #d6d6d6;
-}
-.level-item.grade8 {
-  background-color: #bfbfbf;
-}
-.level-item.grade9 {
-  background-color: #9a9a9a;
-}
-.level-item.grade10 {
-  background-color: #6f6f6f;
-}
-.level-item.grade11 {
-  background-color: #3f3f45;
-}
-.level-item.grade12 {
-  background-color: #1f1f21;
-}
+.level-item.grade7 { background-color: #A9A7A7; }
+.level-item.grade8 { background-color: #868686; }
+.level-item.grade9 { background-color: #6B6B6B; }
+.level-item.grade10 { background-color: #555555; }
+.level-item.grade11 { background-color: #3B3B3B; }
+.level-item.grade12 { background-color: #303030; }
 
 /* Ensure grade buttons have consistent white bold text and subtle shadow */
 .level-item {
@@ -305,6 +293,12 @@
 .level-item.active {
   box-shadow: 0 6px 0 rgba(0,0,0,0.12) inset;
   transform: none;
+}
+
+/* Make selected grade clearly stand out (applies across Admin & SuperAdmin) */
+.level-item.active {
+  background-color: #23263a;
+  color: #ffffff !important;
 }
 .level-item:hover {
   opacity: 0.9; /* Slight hover effect */
@@ -562,6 +556,22 @@
 }
 /* Progress Section Container */
 .progress-section-container {
+/* Hide visible scrollbars in the progress modal but keep scrolling functional */
+.progress-modal-container,
+.progress-modal-container > * {
+  /* allow scrolling when content overflows */
+  overflow: auto;
+  /* Firefox */
+  scrollbar-width: none;
+  /* IE 10+ */
+  -ms-overflow-style: none;
+}
+.progress-modal-container::-webkit-scrollbar,
+.progress-modal-container > *::-webkit-scrollbar {
+  display: none; /* Safari/Chrome */
+  width: 0;
+  height: 0;
+}
   background-color: #271d3e; /* Dark purple background for each section */
   padding: 15px;
 }
