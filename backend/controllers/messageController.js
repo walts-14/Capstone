@@ -130,6 +130,22 @@ export const createMessage = async (req, res) => {
 
     await msg.populate("senderId", "name email role");
 
+    // Debug log: created message summary
+    try {
+      console.log("createMessage: created message", {
+        id: String(msg._id),
+        senderId: String(msg.senderId?._id || msg.senderId),
+        senderRole: msg.senderRole,
+        isBroadcast: msg.isBroadcast,
+        recipientRole: msg.recipientRole,
+        recipientIds: msg.recipientIds,
+        grade: msg.grade,
+        title: msg.title,
+      });
+    } catch (e) {
+      /* ignore logging errors */
+    }
+
     // Socket emit (optional) - emits to 'admins' room for broadcast or admin_<id> for specific
     try {
       const io = req.app.get("io");
@@ -163,11 +179,35 @@ export const getMessagesForAdmin = async (req, res) => {
   try {
     const user = req.user;
     if (!user) return res.status(401).json({ message: "Unauthorized" });
-    if (user.role !== "admin") return res.status(403).json({ message: "Forbidden" });
+    // tolerate role casing/variants (e.g. 'Admin', 'administrator')
+    const role = String(user.role || "").toLowerCase();
+    if (!role.includes("admin")) return res.status(403).json({ message: "Forbidden" });
 
-    const query = {
-      $or: [{ isBroadcast: true, recipientRole: "admin" }, { recipientIds: user._id }],
-    };
+    // Build query: broadcasts targeted at admins OR messages that include this user as recipient
+    const orConditions = [{ isBroadcast: true, recipientRole: "admin" }];
+    try {
+      if (user._id && mongoose.Types.ObjectId.isValid(String(user._id))) {
+        orConditions.push({ recipientIds: mongoose.Types.ObjectId(String(user._id)) });
+      } else if (user._id) {
+        // fallback to direct match with whatever the token provides
+        orConditions.push({ recipientIds: user._id });
+      }
+    } catch (e) {
+      orConditions.push({ recipientIds: user._id });
+    }
+
+    const query = { $or: orConditions };
+
+    // exclude messages the user has soft-deleted for themselves
+    try {
+      if (user._id && mongoose.Types.ObjectId.isValid(String(user._id))) {
+        query.$nor = [{ deletedFor: mongoose.Types.ObjectId(String(user._id)) }];
+      } else if (user._id) {
+        query.$nor = [{ deletedFor: user._id }];
+      }
+    } catch (e) {
+      // ignore
+    }
 
     if (req.query.grade) {
       query.$and = [{ grade: req.query.grade }];
@@ -177,6 +217,19 @@ export const getMessagesForAdmin = async (req, res) => {
       .sort({ createdAt: -1 })
       .populate("senderId", "name email role")
       .lean();
+
+    // Debug: log the query and number of messages returned
+    try {
+      console.log("getMessagesForAdmin - user:", {
+        id: user._id || user.id || null,
+        role: user.role,
+        email: user.email || null,
+      });
+      console.log("getMessagesForAdmin - query:", JSON.stringify(query));
+      console.log("getMessagesForAdmin - found:", Array.isArray(messages) ? messages.length : 0);
+    } catch (e) {
+      /* ignore */
+    }
 
     const data = messages.map((m) => {
       const isRead = (m.readBy || []).some((r) => String(r.userId) === String(user._id));
@@ -206,8 +259,9 @@ export const markAsRead = async (req, res) => {
     const msg = await Message.findById(id);
     if (!msg) return res.status(404).json({ message: "Message not found" });
 
+    const role = String(user.role || "").toLowerCase();
     const isRecipient =
-      (msg.isBroadcast && user.role === "admin") ||
+      (msg.isBroadcast && role.includes("admin")) ||
       (msg.recipientIds || []).some((rid) => String(rid) === String(user._id));
 
     if (!isRecipient) return res.status(403).json({ message: "Not authorized" });
@@ -245,23 +299,25 @@ export const getMessagesSentBySender = async (req, res) => {
     if (!["superadmin", "super_admin"].includes(role))
       return res.status(403).json({ message: "Forbidden" });
 
-    // ✅ Instead of user._id, use user.email
-    if (!user.email) {
-      console.warn("getMessagesSentBySender: req.user.email missing", user);
-      return res.status(400).json({ message: "Bad request: user email missing in token" });
+    // Build query conditions: prefer matching by senderId (token id), fallback to senderEmail and senderRole
+    const orConditions = [];
+
+    // If token contains a usable _id, use it to match senderId exactly
+    try {
+      if (user._id && mongoose.Types.ObjectId.isValid(String(user._id))) {
+        orConditions.push({ senderId: mongoose.Types.ObjectId(String(user._id)) });
+      }
+    } catch (e) {
+      // ignore coercion issues
     }
 
-    const emailStr = String(user.email).trim();
-    if (!emailStr) {
-      console.warn("getMessagesSentBySender: empty email string");
-      return res.status(400).json({ message: "Bad request: empty email" });
+    // If token contains an email, include it as a match
+    if (user.email && String(user.email).trim()) {
+      orConditions.push({ senderEmail: String(user.email).trim() });
     }
 
-    // ✅ Build query conditions
-    const orConditions = [
-      { senderEmail: emailStr }, // main match
-      { senderRole: { $regex: new RegExp(`^${escapeRegExp(role)}$`, "i") } } // also match by role
-    ];
+    // Also allow matching by sender role (case-insensitive)
+    orConditions.push({ senderRole: { $regex: new RegExp(`^${escapeRegExp(role)}$`, "i") } });
 
     const messages = await Message.find({ $or: orConditions })
       .sort({ createdAt: -1 })
@@ -389,12 +445,29 @@ export const deleteMessage = async (req, res) => {
     const isSenderByEmail = userEmail && message.senderEmail && String(message.senderEmail) === String(userEmail);
     const isSuperAdmin = ["superadmin", "super_admin"].includes(role);
 
-    if (!isSenderById && !isSenderByEmail && !isSuperAdmin) {
-      return res.status(403).json({ message: "Forbidden: You can't delete this message" });
+    // If sender or superadmin -> delete message globally
+    if (isSenderById || isSenderByEmail || isSuperAdmin) {
+      await Message.findByIdAndDelete(id);
+      return res.json({ message: "Message deleted" });
     }
 
-    await Message.findByIdAndDelete(id);
-    return res.json({ message: "Message deleted" });
+    // Otherwise, if the requester is a recipient, soft-delete for that user only
+    const isRecipientForThis =
+      (message.isBroadcast && role.includes("admin")) ||
+      (message.recipientIds || []).some((rid) => String(rid) === String(user._id));
+
+    if (isRecipientForThis) {
+      // add to deletedFor if not present
+      const already = (message.deletedFor || []).some((d) => String(d) === String(user._id));
+      if (!already) {
+        message.deletedFor = message.deletedFor || [];
+        message.deletedFor.push(user._id);
+        await message.save();
+      }
+      return res.json({ message: "Message removed for user" });
+    }
+
+    return res.status(403).json({ message: "Forbidden: You can't delete this message" });
   } catch (err) {
     console.error("deleteMessage error", err);
     return res.status(500).json({ message: "Server error" });

@@ -24,11 +24,13 @@ function LessonButtons() {
   const navigate = useNavigate();
   const [difficulty, setDifficulty] = useState("BASIC");
   const [lives, setLives] = useState(0);
-  const { points: ctxPoints } = useContext(ProgressContext);
-  const points = typeof ctxPoints === 'number' ? ctxPoints : 0;
+  // Safely read ProgressContext — it may be undefined during hot-reload or if the provider
+  // isn't mounted yet. Fall back to safe defaults so the UI doesn't crash.
+  const ctx = useContext(ProgressContext) || {};
+  const points = typeof ctx.points === 'number' ? ctx.points : 0;
   const [unlockedLessons, setUnlockedLessons] = useState([1]);
   const buttonContainerRef = useRef(null);
-  const { progressData } = useContext(ProgressContext);
+  const progressData = ctx.progressData || null;
 
   const difficultyColors = {
     BASIC: "#579ecd",

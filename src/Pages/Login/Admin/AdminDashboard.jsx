@@ -52,6 +52,8 @@ const DashboardAdmin = () => {
     }
   }, [token]);
 
+  // (Socket client removed) real-time updates disabled; messages are fetched when notification modal opens.
+
   const fetchAdminMessages = async (grade = "") => {
     try {
       setLoadingMessages(true);
@@ -87,6 +89,19 @@ const DashboardAdmin = () => {
     } catch (err) {
       console.error("Failed to mark as read", err?.response?.data || err);
       toast.error("Failed to mark message as read.");
+    }
+  };
+
+  const deleteMessage = async (messageId) => {
+    if (!window.confirm("Delete this message? This cannot be undone.")) return;
+    try {
+      await axios.delete(`/api/messages/${messageId}`);
+      setMessages((prev) => prev.filter((m) => m._id !== messageId));
+      toast.success("Message deleted");
+    } catch (err) {
+      console.error("Failed to delete message", err?.response?.data || err);
+      const serverMsg = err?.response?.data?.message || "Failed to delete message.";
+      toast.error(serverMsg);
     }
   };
 
@@ -740,6 +755,38 @@ const DashboardAdmin = () => {
               >
                 Notification
               </h1>
+              {/* Mark all as read button */}
+              <div style={{ position: "absolute", top: 24, right: 96, zIndex: 11 }}>
+                <button
+                  onClick={async () => {
+                    // mark all unread messages as read
+                    const unread = messages.filter((m) => !m.isRead);
+                    if (!unread.length) return toast("No unread messages");
+                    try {
+                      await Promise.all(
+                        unread.map((m) => axios.put(`/api/messages/${m._id}/read`))
+                      );
+                      // update local state
+                      setMessages((prev) => prev.map((m) => ({ ...m, isRead: true })));
+                      toast.success("All messages marked as read");
+                    } catch (err) {
+                      console.error("Failed to mark all as read", err?.response?.data || err);
+                      toast.error("Failed to mark all as read");
+                    }
+                  }}
+                  style={{
+                    background: "#10b981",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: 8,
+                    padding: "0.5rem 0.9rem",
+                    cursor: "pointer",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Mark all read
+                </button>
+              </div>
 
               <div style={{ width: "100%" }}>
                 {loadingMessages ? (
@@ -843,22 +890,36 @@ const DashboardAdmin = () => {
                           marginLeft: "1rem",
                         }}
                       >
-                        {!msg.isRead && (
-                          <button
-                            onClick={() => markMessageAsRead(msg._id)}
-                            style={{
-                              background: "#4f46e5",
-                              color: "#fff",
-                              border: "none",
-                              borderRadius: "8px",
-                              padding: "0.4rem 0.8rem",
-                              cursor: "pointer",
-                              fontWeight: "bold",
-                            }}
-                          >
-                            Mark read
-                          </button>
-                        )}
+                        <button
+                          onClick={() => markMessageAsRead(msg._id)}
+                          disabled={Boolean(msg.isRead)}
+                          style={{
+                            background: msg.isRead ? "#9ca3af" : "#4f46e5",
+                            color: "#fff",
+                            border: "none",
+                            borderRadius: "8px",
+                            padding: "0.4rem 0.8rem",
+                            cursor: msg.isRead ? "default" : "pointer",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          {msg.isRead ? "Read" : "Mark read"}
+                        </button>
+
+                        <button
+                          onClick={() => deleteMessage(msg._id)}
+                          style={{
+                            background: "#e53935",
+                            color: "#fff",
+                            border: "none",
+                            borderRadius: "8px",
+                            padding: "0.4rem 0.8rem",
+                            cursor: "pointer",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Delete
+                        </button>
                       </div>
                     </div>
                   ))

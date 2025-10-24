@@ -143,13 +143,15 @@ const SuperAdmin = () => {
   // Fetch all messages sent by superadmin
   const fetchMessages = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/messages/for-admin", {
-        headers: { Authorization: `Bearer ${token}` },
+      // Use the 'sent' endpoint which returns messages created by the logged-in sender
+      // (the previous endpoint was for admin recipients and rejects non-admin roles)
+      const res = await axios.get("/api/messages/sent", {
+        baseURL: "http://localhost:5000",
       });
-      if (res.ok) {
-        const data = await res.json();
-        setMessages(data);
-      }
+      const raw = Array.isArray(res.data) ? res.data : res.data || [];
+      // Map server message objects into the UI-friendly shape
+      const mapped = raw.map((m) => mapMessage(m));
+      setMessages(mapped);
     } catch (err) {
       console.error("Failed to fetch messages", err);
     }
@@ -994,7 +996,10 @@ const SuperAdmin = () => {
                                 onChange={(e) =>
                                   setSendToAllAdmins(e.target.checked)
                                 }
-                                style={{ marginRight: "0.5rem" }}
+                               style={{
+  marginRight: "0.5rem",
+  color: "black", // correct property
+}}
                               />
                               Send to All Admins
                             </label>

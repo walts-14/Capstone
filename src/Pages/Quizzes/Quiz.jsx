@@ -412,19 +412,9 @@ function Quiz() {
           <p className="ekis-number " style={{ color: "#F44336" }}>{wrongAnswers}</p>
         </div>
 
-        {/* Summary row: score and attempts. Points are intentionally omitted on failed results to avoid confusion. */}
+        {/* Summary row: show correct / wrong only (remove fraction like "6/10") */}
         <div className="quiz-summary d-flex flex-row gap-4 align-items-center my-3">
-          <div className="score-box text-center">
-            <img src={check} alt="correct" style={{ width: 28, height: 28, marginBottom: 6 }} />
-            <div style={{ color: "#20BF55", fontSize: "1.2rem" }}><strong>{correctAnswers} / {totalQuestions}</strong></div>
-            <div style={{ color: "#878194" }}>{Math.round((correctAnswers / totalQuestions) * 100)}%</div>
-          </div>
-
           <div className="attempts-box text-center">
-            {/* Use retry icon to indicate try-again/attempts */}
-            <img src={retry} alt="attempts" style={{ width: 28, height: 28, marginBottom: 6 }} />
-            <div style={{ color: "#ffffff", fontSize: "1.2rem" }}><strong>#{displayAttempt}</strong></div>
-            <div style={{ color: "#878194" }}>Attempts</div>
           </div>
         </div>
 
