@@ -46,7 +46,7 @@ function Finish() {
   const location = useLocation();
 
   // Expecting lessonKey and level to be passed along with answers info
-  const { correctAnswers = 0, wrongAnswers = 0, lessonKey, level, mode, currentStep } = location.state || {};
+  const { correctAnswers = 0, wrongAnswers = 0, lessonKey, level, mode, currentStep, pointsEarned = null, attemptNumber = null } = location.state || {};
 
 
   // Define styles (same as in ProgressTracker)
@@ -105,11 +105,29 @@ function Finish() {
 
         <div className="stats-quiz d-flex flex-row gap-1 text-center ">
           {mode === "practice" ? null : (
-            <div className="dia-reward d-flex ">
-              <img src={diamond} className="img-fluid p-1 " alt="diamond img" />
-              <p className="dia-number ms-3  me-5">{correctAnswers * 10}</p>
-            </div>
-          )}
+              <div className="dia-reward d-flex ">
+                <img src={diamond} className="img-fluid p-1 " alt="diamond img" />
+                <p className="dia-number ms-3  me-5">
+                  {/* Prefer backend-provided pointsEarned when available. Otherwise compute based on level and attemptNumber. */}
+                  {(() => {
+                    if (pointsEarned !== null && pointsEarned !== undefined) return pointsEarned;
+                    // points tiers per attempt bucket
+                    const pointsTable = {
+                      basic: { firstTwo: 10, third: 5, fourthPlus: 2 },
+                      intermediate: { firstTwo: 15, third: 8, fourthPlus: 3 },
+                      advanced: { firstTwo: 20, third: 10, fourthPlus: 5 },
+                    };
+                    const lvl = currentLevel || 'basic';
+                    const tiers = pointsTable[lvl] || pointsTable.basic;
+                    let perAnswer = tiers.firstTwo;
+                    if (attemptNumber === 3) perAnswer = tiers.third;
+                    else if (attemptNumber >= 4) perAnswer = tiers.fourthPlus;
+                    // if attemptNumber is null/undefined, assume firstTwo (initial run)
+                    return perAnswer * Number(correctAnswers || 0);
+                  })()}
+                </p>
+              </div>
+            )}
           <img src={check} className="tama img-fluid p-1" alt="check img" />
           <p className="check-number ms-2" style={{ color: "#20BF55" }}>{correctAnswers}</p>
           <img src={ekis} className="mali img-fluid p-1 ms-5" alt="ekis img" />

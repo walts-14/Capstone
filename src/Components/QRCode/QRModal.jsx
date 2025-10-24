@@ -34,8 +34,8 @@ export default function QRModal({ visible, onClose, dataUrl, magicUrl, studentEm
     }}>
       <div style={{ background: "#fff", padding: 20, borderRadius: 8, width: 360, textAlign: "center" }}>
         <h3>Student QR Code</h3>
-        <div style={{ margin: "12px 0" }}>
-          <img src={dataUrl} alt="QR" style={{ width: 220, height: 220 }} />
+        <div style={{ margin: "12px 0", display: "flex", justifyContent: "center" }}>
+          <img src={dataUrl} alt="QR" style={{ width: 220, height: 220, display: "block", margin: "0 auto" }} />
         </div>
         <div style={{ display: "flex", gap: 8, justifyContent: "center", marginTop: 8 }}>
           <button onClick={download} className="btn btn-primary">Download</button>
