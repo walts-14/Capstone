@@ -399,60 +399,56 @@ const SuperAdmin = () => {
     }
     if (!formData.name || !formData.username || !formData.email) {
       return toast.error("All fields are required!");
-      try {
-        const payload = {
-          name: formData.name,
-          username: formData.username,
-          email: formData.email,
-          password: formData.password || undefined,
-          yearLevel: formData.yearLevel || undefined,
-          role: activeTab === "Teachers" ? "admin" : "user",
-        };
-        const urlBase =
-          formMode === "edit"
-            ? activeTab === "Users"
-              ? `/api/superadmin/users/${encodeURIComponent(formData.email)}`
-              : `/api/superadmin/admins/${encodeURIComponent(formData.email)}`
-            : "/api/superadmin/create-account";
-        const method = formMode === "edit" ? axios.put : axios.post;
-        const res = await method(urlBase, payload);
-        const returned = res?.data?.data;
-        // Show QR modal for both admin and user after creation (backend now sends QR for both)
-        if (
-          formMode !== "edit" &&
-          (returned?.qrDataUrl || returned?.magicUrl)
-        ) {
-          setQrDataUrl(returned.qrDataUrl || null);
-          setMagicUrl(returned.magicUrl || null);
-          setQrStudentEmail(returned.user?.email || payload.email);
-          setQrModalVisible(true);
-        } else {
-          if (formMode !== "edit")
-            console.log("No qrDataUrl or magicUrl in response:", returned);
-        }
-        toast.success(
-          `${formMode === "edit" ? "Updated" : "Created"} ${activeTab}`
-        );
-        await fetchUsers(formData.yearLevel);
-        setSelectedGrade(formData.yearLevel);
-        setShowForm(false);
-      } catch (error) {
-        console.error(
-          "handleFormSubmit error:",
-          error?.response?.data || error
-        );
-        const serverMsg =
-          error?.response?.data?.message ||
-          error?.response?.data?.error ||
-          error.message;
-        toast.error(serverMsg || "Failed to submit form.");
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const payload = {
+        name: formData.name,
+        username: formData.username,
+        email: formData.email,
+        password: formData.password || undefined,
+        yearLevel: formData.yearLevel || undefined,
+        role: activeTab === "Teachers" ? "admin" : "user",
+      };
+
+      const urlBase =
+        formMode === "edit"
+          ? activeTab === "Users"
+            ? `/api/superadmin/users/${encodeURIComponent(formData.email)}`
+            : `/api/superadmin/admins/${encodeURIComponent(formData.email)}`
+          : "/api/superadmin/create-account";
+
+      const method = formMode === "edit" ? axios.put : axios.post;
+      const res = await method(urlBase, payload);
+      const returned = res?.data?.data;
+
+      // Show QR modal for both admin and user after creation (backend now sends QR for both)
+      if (formMode !== "edit" && (returned?.qrDataUrl || returned?.magicUrl)) {
+        setQrDataUrl(returned.qrDataUrl || null);
+        setMagicUrl(returned.magicUrl || null);
+        setQrStudentEmail(returned.user?.email || payload.email);
+        setQrModalVisible(true);
+      } else {
+        if (formMode !== "edit")
+          console.log("No qrDataUrl or magicUrl in response:", returned);
       }
-      setIsSubmitting(false);
+
+      toast.success(`${formMode === "edit" ? "Updated" : "Created"} ${activeTab}`);
+      await fetchUsers(formData.yearLevel);
+      setSelectedGrade(formData.yearLevel);
+      setShowForm(false);
+    } catch (error) {
+      console.error("handleFormSubmit error:", error?.response?.data || error);
+      const serverMsg =
+        error?.response?.data?.message ||
+        error?.response?.data?.error ||
+        error.message;
+      toast.error(serverMsg || "Failed to submit form.");
+    } finally {
       setIsSubmitting(false);
     }
-    err.message;
-    toast.error(serverMsg || "Failed to submit form.");
-    // setIsSubmitting(false); // already called after try/catch
   };
 
   const handleDelete = async (email) => {
@@ -723,7 +719,14 @@ const SuperAdmin = () => {
       ) : (
         <>
           <div className="levels">
-            {["Grade 7", "Grade 8", "Grade 9", "Grade 10", "Grade 11", "Grade 12"].map((grade) => {
+            {[
+              "Grade 7",
+              "Grade 8",
+              "Grade 9",
+              "Grade 10",
+              "Grade 11",
+              "Grade 12",
+            ].map((grade) => {
               const gradeClass = grade.replace(" ", "").toLowerCase();
               return (
                 <div
@@ -733,8 +736,6 @@ const SuperAdmin = () => {
                   }`}
                   onClick={() => handleGradeSelection(grade)}
                   style={{
-                    background: selectedGrade === grade ? "#23263a" : "#d3d3d3",
-                    color: selectedGrade === grade ? "#fff" : "#23263a",
                     minWidth: "120px",
                     textAlign: "center",
                     fontWeight: "bold",
@@ -1403,7 +1404,7 @@ const SuperAdmin = () => {
             </div>
 
             <div className="contentdiv">
-              <div className="table-wrapper" style={{ marginTop: "-2rem" }}>
+              <div className="table-wrapper" style={{ marginTop: "4rem" }}>
                 <table className="dashboard-table text-light">
                   <thead>
                     <tr>
@@ -1453,7 +1454,7 @@ const SuperAdmin = () => {
                                   : EditIconImport
                               }
                               alt="Edit"
-                              className="img-action"
+                              className="img-action img-edit"
                               style={{ cursor: "pointer" }}
                               onClick={() => openForm("edit", u)}
                             />

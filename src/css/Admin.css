@@ -14,11 +14,11 @@
   position: relative;
   width: 100%;
   min-height: 100vh;
-  background-color: #f6f6f6;
+  background-color: #DCDCDC;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: 10px;
+
   box-sizing: border-box;
   overflow-x: hidden;
   overflow-y: auto;
@@ -67,23 +67,8 @@
   justify-content: center;
 }
 
-.button-icon-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  background-color: #f6f6f6;
-}
 
-.img-action {
-  width: 35px;
-  height: 35px;
-  cursor: pointer;
-  margin-left: 5px; /* Reduced spacing between images */
-  margin-right: 5px; /* Added spacing to the right */
-}
 
-/* Updated action styles */
 
 .action-admin {
   position: relative;
@@ -205,15 +190,13 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   background-color: #ffffff;
-  padding: 20px 20px;
-  border-radius: 10px;
+  padding-top: 50px;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-  margin-bottom: 20px;
   margin-left: -20px;
   width: 300px;
-  height: 300px;
+  height: 450px;
 }
 .sidebar-box {
   display: flex;
@@ -225,26 +208,32 @@
 .sidebar-item {
   display: flex;
   align-items: center;
+  text-align: center;
   gap: 10px;
   z-index: 11;
   color: #6c7294;
   font-weight: bold;
-  font-size: 1.7rem;
+  font-size: 2rem;
   cursor: pointer;
   padding: 10px;
-  border-radius: 10px;
   background-color: #ffffff;
   transition: background-color 0.3s ease, border 0.3s ease;
+  width: 105%;
+  position: relative;
+  left: 4px;
 }
 
 .sidebar-item:hover {
   background-color: #6c7294;
   color: #ffffff;
+  border: none;
 }
 
 .sidebar-item.active {
   background-color: #6c7294; /* Dark purple background for active state */
-  border: 2px solid #d3d3d3; /* Border for visual distinction */
+  /* remove stroke and rounded corner for active items */
+  border: none;
+  border-radius: 0;
   color: #ffffff;
 }
 .sidebar-icon {
@@ -280,24 +269,43 @@
   position: relative;
   z-index: 11;
 }
-.level-item.grade7 {
-  background-color: #cecece;
+.level-item.grade7 { background-color: #A9A7A7; }
+.level-item.grade8 { background-color: #868686; }
+.level-item.grade9 { background-color: #6B6B6B; }
+.level-item.grade10 { background-color: #555555; }
+.level-item.grade11 { background-color: #3B3B3B; }
+.level-item.grade12 { background-color: #303030; }
+
+/* Ensure grade buttons have consistent white bold text and subtle shadow */
+.level-item {
+  color: #ffffff !important;
+  font-weight: 800;
+  text-align: center;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.08);
 }
-.level-item.grade8 {
-  background-color: #a6a6a6;
+
+.level-item:hover {
+  transform: translateY(-2px);
+  transition: transform 120ms ease;
 }
-.level-item.grade9 {
-  background-color: #7a7a7a;
+
+/* Active grade becomes slightly darker and stands out */
+.level-item.active {
+  box-shadow: 0 6px 0 rgba(0,0,0,0.12) inset;
+  transform: none;
 }
-.level-item.grade10 {
-  background-color: #565656;
+
+/* Make selected grade clearly stand out (applies across Admin & SuperAdmin) */
+.level-item.active {
+  background-color: #23263a;
+  color: #ffffff !important;
 }
 .level-item:hover {
   opacity: 0.9; /* Slight hover effect */
 }
 /* Table Container - Updated for scrolling functionality */
 .contentdiv {
-  margin-top: -45rem;
+  margin-top: -50rem;
   margin-right: -150px;
   position: relative;
   z-index: 5;
@@ -378,25 +386,40 @@
   background-color: #f8f9fb;
 }
 
-/* Ensure the scrollbar has a nice style that matches the theme */
+/* Ensure contrasting text color depending on row background */
+.dashboard-table tbody tr:nth-child(even) td,
+.dashboard-table tbody tr:nth-child(even) th {
+  color: #ffffff; /* white text on dark rows */
+}
+
+.dashboard-table tbody tr:nth-child(odd) td,
+.dashboard-table tbody tr:nth-child(odd) th {
+  color: #6C7294; /* dark/purple text on light rows */
+}
+
+/* Make raster icons white on dark rows without swapping image assets */
+.dashboard-table tbody tr:nth-child(even) .img-edit {
+  filter: brightness(0) invert(1);
+}
+
+/* Reset filter on light rows in case images were previously styled */
+.dashboard-table tbody tr:nth-child(odd) .img-edit {
+  filter: none;
+}
+
+/* Hide visible scrollbars but keep scrolling functional */
+.table-wrapper {
+  /* Firefox */
+  scrollbar-width: none;
+  /* IE 10+ */
+  -ms-overflow-style: none;
+}
+
+/* Chrome, Edge, Safari */
 .table-wrapper::-webkit-scrollbar {
-  width: 12px; /* Slightly wider for better clicking */
-  height: 12px; /* For horizontal scrollbar */
-}
-
-.table-wrapper::-webkit-scrollbar-track {
-  background: #6c7294;
-  border-radius: 5px;
-}
-
-.table-wrapper::-webkit-scrollbar-thumb {
-  background: #100429;
-  border-radius: 5px;
-  border: 2px solid #271d3e; /* Border to make it more visible */
-}
-
-.table-wrapper::-webkit-scrollbar-thumb:hover {
-  background: #100429;
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 .btn-create {
@@ -431,6 +454,82 @@
 .btn-logout:hover {
   background-color: var(--semidark-red);
 }
+/* Interactive transitions and press effects for admin controls */
+.btn,
+.btn-create,
+.btn-cancel,
+.btn-logout,
+.level-item,
+.action-admin img,
+.action-admin button {
+  transition: transform 160ms ease, box-shadow 160ms ease, background-color 200ms ease, opacity 120ms ease, filter 160ms ease;
+  will-change: transform, opacity, box-shadow, filter;
+}
+
+/* Level (grade) button hover/active */
+.level-item {
+  /* ensure smooth hover even if previous rules set transform in :hover */
+  transition: transform 160ms ease, box-shadow 160ms ease, opacity 120ms ease;
+}
+.level-item:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+  opacity: 1;
+}
+.level-item:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.08) inset;
+}
+
+/* Create / popup buttons */
+.Create .btn:hover,
+.btn-create:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.16);
+}
+.Create .btn:active,
+.btn-create:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06) inset;
+}
+
+/* Action icons and buttons in table rows */
+.action-admin img:hover {
+  transform: scale(1.08);
+  filter: brightness(1.06) saturate(1.05);
+}
+.action-admin img:active {
+  transform: scale(0.95);
+  filter: brightness(0.95);
+}
+.action-admin button:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+}
+.action-admin button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Logout button - stronger shadow on hover for prominence */
+.btn-logout:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+.btn-logout:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06) inset;
+}
+
+/* Keyboard focus outlines for accessibility */
+.btn:focus,
+.btn-create:focus,
+.btn-cancel:focus,
+.btn-logout:focus,
+.level-item:focus,
+.action-admin img:focus {
+  outline: 3px solid rgba(58,134,209,0.18);
+  outline-offset: 4px;
+}
 .progress-modal {
   font-family: "Baloo";
   position: relative;
@@ -457,6 +556,22 @@
 }
 /* Progress Section Container */
 .progress-section-container {
+/* Hide visible scrollbars in the progress modal but keep scrolling functional */
+.progress-modal-container,
+.progress-modal-container > * {
+  /* allow scrolling when content overflows */
+  overflow: auto;
+  /* Firefox */
+  scrollbar-width: none;
+  /* IE 10+ */
+  -ms-overflow-style: none;
+}
+.progress-modal-container::-webkit-scrollbar,
+.progress-modal-container > *::-webkit-scrollbar {
+  display: none; /* Safari/Chrome */
+  width: 0;
+  height: 0;
+}
   background-color: #271d3e; /* Dark purple background for each section */
   padding: 15px;
 }

@@ -301,7 +301,14 @@ const DashboardAdmin = () => {
       ) : (
         <>
           <div className="levels">
-            {["Grade 7", "Grade 8", "Grade 9", "Grade 10", "Grade 11", "Grade 12"].map((grade) => {
+            {[
+              "Grade 7",
+              "Grade 8",
+              "Grade 9",
+              "Grade 10",
+              "Grade 11",
+              "Grade 12",
+            ].map((grade) => {
               const gradeClass = grade.replace(" ", "").toLowerCase();
               return (
                 <div
@@ -379,7 +386,7 @@ const DashboardAdmin = () => {
 
             {/* Updated table with wrapper for scrolling */}
             <div className="contentdiv">
-              <div className="table-wrapper">
+              <div className="table-wrapper" style={{ marginTop: "4rem" }}>
                 <table className="dashboard-table text-light">
                   <thead>
                     <tr>
@@ -408,6 +415,7 @@ const DashboardAdmin = () => {
                                 border: "none",
                                 marginLeft: "2rem",
                               }}
+
                             >
                               Progress
                             </button>
@@ -415,7 +423,7 @@ const DashboardAdmin = () => {
                             <img
                               src={EditIcon}
                               alt="Edit"
-                              className="img-action"
+                              className="img-action img-edit"
                               style={{ cursor: "pointer" }}
                               onClick={() => handleEditUser(u)}
                             />
@@ -632,7 +640,7 @@ const DashboardAdmin = () => {
                 top: "50%",
                 transform: "translate(-40%, -50%)",
                 width: "65vh",
-                height: "90vh",
+                height: "95vh",
                 borderRadius: "30px",
                 zIndex: 1000,
                 backgroundColor: "#1a1230",

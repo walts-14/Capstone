@@ -39,12 +39,21 @@ const Sidebar = ({
 
   return (
     <>
-      <div className="DashboardAdmin">
-        <h2 style={{ color: "#2563eb", fontWeight: "bold" }}>
-          {String(role).toLowerCase() === "superadmin" ? "Super Admin" : "Admin"}
-        </h2>
-      </div>
       <div className="left-sidebar">
+        <h2
+          style={{
+            color: "#3A86D1",
+            fontWeight: "bold",
+            fontSize: "70px",
+            textAlign: "center",
+            width: "100%",
+            margin: "0 0 50px 0",
+          }}
+        >
+          {String(role).toLowerCase() === "superadmin"
+            ? "Super Admin"
+            : "Admin"}
+        </h2>
         <div className="sidebar-box">
           <div
             className={`sidebar-item ${
