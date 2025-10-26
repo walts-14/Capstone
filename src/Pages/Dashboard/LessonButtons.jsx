@@ -225,179 +225,67 @@ function LessonButtons() {
       style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
     >
       <style jsx>{`
-        div::-webkit-scrollbar {
-          display: none;
-        }
-        
-          /* Glow on hover for unlocked basic lesson buttons */
-            .lesson-button.basic:not(.cursor-not-allowed):hover {
-              box-shadow: 0 12px 0 #246b9a, 0 0 24px 6px rgba(166,220,255,0.28); /* drop + cyan glow on hover */
-            }
+        /* hide default scrollbars for this container */
+        div::-webkit-scrollbar { display: none; }
 
-            .lesson-button.intermediate:not(.cursor-not-allowed):hover {
-              box-shadow: 0 12px 0 #a9890a, 0 0 24px 6px rgba(255,254,166,0.28); /* yellow glow */
-            }
+        /* Glow on hover for unlocked lesson buttons (keep original colors) */
+        .lesson-button.basic:not(.cursor-not-allowed):hover { box-shadow: 0 12px 0 #246b9a, 0 0 24px 6px rgba(166,220,255,0.28); }
+        .lesson-button.intermediate:not(.cursor-not-allowed):hover { box-shadow: 0 12px 0 #a9890a, 0 0 24px 6px rgba(255,254,166,0.28); }
+        .lesson-button.advanced:not(.cursor-not-allowed):hover { box-shadow: 0 12px 0 #992d22, 0 0 24px 6px rgba(255,125,111,0.28); }
 
-            .lesson-button.advanced:not(.cursor-not-allowed):hover {
-              box-shadow: 0 12px 0 #992d22, 0 0 24px 6px rgba(255,125,111,0.28); /* red glow */
-            }
-        
-        /* Large tablet responsive styles - ONLY activate at breakpoint */
-        @media (max-width: 1200px) {
-          .lesson-button {
-            height: 9rem !important;
-            width: 11rem !important;
-            font-size: 4.5rem !important;
-          }
-          
-          .lesson-button-shadow {
-            box-shadow: 0px 10px 0px !important;
-          }
-          
-          .lesson-button-shadow.basic {
-            box-shadow: 0px 10px 0px #246b9a !important;
-          }
-          
-          .lesson-button-shadow.intermediate {
-            box-shadow: 0px 10px 0px #a9890a !important;
-          }
-          
-          .lesson-button-shadow.advanced {
-            box-shadow: 0px 10px 0px #992d22 !important;
-          }
-          
-          .difficulty-button {
-            width: 22vw !important;
-            font-size: 2.25rem !important;
-            padding: 0.75rem 1.25rem !important;
-          }
-          
-          .header-container {
-            gap: 1.5rem !important;
-            margin-bottom: 2.5rem !important;
-            justify-content: center !important;
-          }
-        }
-        
-        /* Tablet responsive styles - ONLY activate at breakpoint */
-        @media (max-width: 1024px) {
-          .lesson-button {
-            height: 8rem !important;
-            width: 10rem !important;
-            font-size: 4rem !important;
-          }
-          
-          .lesson-button-shadow {
-            box-shadow: 0px 8px 0px !important;
-          }
-          
-          .lesson-button-shadow.basic {
-            box-shadow: 0px 8px 0px #246b9a !important;
-          }
-          
-          .lesson-button-shadow.intermediate {
-            box-shadow: 0px 8px 0px #a9890a !important;
-          }
-          
-          .lesson-button-shadow.advanced {
-            box-shadow: 0px 8px 0px #992d22 !important;
-          }
-          
-          .difficulty-button {
-            width: 20vw !important;
-            font-size: 2rem !important;
-            padding: 0.5rem 1rem !important;
-          }
-          
-          .header-container {
-            gap: 1rem !important;
-            margin-bottom: 2rem !important;
-            justify-content: center !important;
-          }
-        }
-        
-        /* Small tablet responsive styles - ONLY activate at breakpoint */
-        @media (max-width: 900px) {
-          .lesson-button {
-            height: 7rem !important;
-            width: 9rem !important;
-            font-size: 3.75rem !important;
-          }
-          
-          .lesson-button-shadow {
-            box-shadow: 0px 7px 0px !important;
-          }
-          
-          .lesson-button-shadow.basic {
-            box-shadow: 0px 7px 0px #246b9a !important;
-          }
-          
-          .lesson-button-shadow.intermediate {
-            box-shadow: 0px 7px 0px #a9890a !important;
-          }
-          
-          .lesson-button-shadow.advanced {
-            box-shadow: 0px 7px 0px #992d22 !important;
-          }
-          
-          .difficulty-button {
-            width: 18vw !important;
-            font-size: 1.875rem !important;
-            padding: 0.5rem 1rem !important;
-          }
-          
-          .header-container {
-            gap: 0.75rem !important;
-            margin-bottom: 1.75rem !important;
-            justify-content: center !important;
-          }
-        }
-        
-        /* Mobile responsive styles - ONLY activate at breakpoint */
-        @media (max-width: 640px) {
-          .lesson-button {
-            height: 6rem !important;
-            width: 8rem !important;
-            font-size: 3.25rem !important;
-          }
-          
-          .lesson-button-shadow {
-            box-shadow: 0px 6px 0px !important;
-          }
-          
-          .lesson-button-shadow.basic {
-            box-shadow: 0px 6px 0px #246b9a !important;
-          }
-          
-          .lesson-button-shadow.intermediate {
-            box-shadow: 0px 6px 0px #a9890a !important;
-          }
-          
-          .lesson-button-shadow.advanced {
-            box-shadow: 0px 6px 0px #992d22 !important;
-          }
-          
-          .difficulty-button {
-            width: 60vw !important;
-            font-size: 1.5rem !important;
-            padding: 0.75rem 1rem !important;
-          }
-          
-          .header-container {
-            gap: 0.5rem !important;
-            margin-bottom: 1.5rem !important;
-            justify-content: center !important;
-          }
-        }
+      /* Wrapper centers content and reserves space for right panel */
+      .lesson-wrap { max-width: 1600px; margin: 0 auto; padding: 0 1.5rem; }
+
+      /* Keep the layout strictly two columns on desktop
+        - Desktop & tablet: 2 columns
+        - Mobile (<=640px): 1 column
+        This preserves the look while avoiding extra columns */
+      .lessons-grid { display: grid; gap: 5.5rem; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+      @media (max-width: 640px) { .lessons-grid { grid-template-columns: repeat(1, minmax(0, 1fr)); gap: 4rem; } }
+      @media (min-width: 1400px) { .lessons-grid { gap: 7rem; } }
+      @media (min-width: 1800px) { .lessons-grid { gap: 8rem; } }
+      @media (min-width: 2560px) { .lessons-grid { gap: 9.5rem; } }
+
+      /* Tile container used to stagger vertical position without horizontal margins (2-column pattern) */
+      .lesson-tile { transition: transform 200ms ease; display:flex; justify-content:center; }
+      /* Odd items lift up to create the zigzag in a 2-column layout */
+      .lessons-grid .lesson-tile:nth-child(2n+1) { transform: translateY(-3.4rem); }
+      .lessons-grid .lesson-tile:nth-child(2n) { transform: translateY(0); }
+      /* Reduce stagger on narrow screens so items don't overlap */
+      @media (max-width: 900px) { .lessons-grid .lesson-tile:nth-child(2n+1) { transform: translateY(-1rem); } }
+
+        /* Default button sizing (responsive overrides below) */
+        .lesson-button { height: 6.5rem; width: 9rem; font-size: 3.25rem; }
+        @media (min-width: 1024px) { .lesson-button { height: 8.5rem; width: 11rem; font-size: 4.5rem; } }
+        @media (min-width: 1400px) { .lesson-button { height: 9.5rem; width: 12rem; font-size: 5.25rem; } }
+        @media (min-width: 2560px) { .lesson-button { height: 20.5rem !important; width: 23rem !important; font-size: 10rem !important; border-radius: 2rem !important; } }
+
+        /* keep original size adjustments for smaller breakpoints (preserve existing design intent) */
+        @media (max-width: 1200px) { .lesson-button { height: 9rem !important; width: 11rem !important; font-size: 4.5rem !important; } }
+        @media (max-width: 1024px) { .lesson-button { height: 8rem !important; width: 10rem !important; font-size: 4rem !important; } }
+        @media (max-width: 900px) { .lesson-button { height: 7rem !important; width: 9rem !important; font-size: 3.75rem !important; } }
+        @media (max-width: 640px) { .lesson-button { height: 6rem !important; width: 8rem !important; font-size: 3.25rem !important; } }
+
+        /* keep your difficulty button / header responsiveness intact */
+        .difficulty-button { width: 24vw; }
+        @media (max-width: 1200px) { .difficulty-button { width: 22vw !important; font-size: 2.25rem !important; padding: 0.75rem 1.25rem !important; } }
+        @media (max-width: 1024px) { .difficulty-button { width: 20vw !important; font-size: 2rem !important; padding: 0.5rem 1rem !important; } }
+        @media (max-width: 900px) { .difficulty-button { width: 18vw !important; font-size: 1.875rem !important; padding: 0.5rem 1rem !important; } }
+        @media (max-width: 640px) { .difficulty-button { width: 60vw !important; font-size: 1.5rem !important; padding: 0.75rem 1rem !important; } }
+
+        /* hide-scrollbar helper kept for container compatibility */
+        .hide-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
       `}</style>
 
       {/* Header with difficulty and lives/diamonds */}
       <div className="flex items-center justify-center gap-5 sticky top-3 z-10 mb-15 text-white header-container">
         <div
-          className="text-center px-5 py-2 rounded-2xl font-bold text-white text-[2.5rem] w-[24vw] difficulty-button"
+          className="text-center px-5 py-2 rounded-2xl font-bold text-white text-[2.5rem] difficulty-button"
           style={{
             backgroundColor: difficultyColors[difficulty],
             boxShadow: `0 0 0 5px ${strokeColors[difficulty] || '#A6DCFF'}`,
+            width: 'auto'
           }}
         >
           {difficulty}
@@ -405,110 +293,31 @@ function LessonButtons() {
         <LivesandDiamonds />
       </div>
 
-      {/* Lesson Groups with Zigzag Layout */}
-      {lessonGroups.map((group, groupIndex) => (
-        <div key={groupIndex} className="mb-10">
-          {/* Section Label */}
-          {groupIndex === 0 && (
-            <div className="lessons-container flex flex-col space-y-10">
-              {group.map((lesson, lessonIndex) => (
-                <div
-                  key={lesson.id}
-                  className={`flex ${getPositionClass(lessonIndex)}`}
-                >
-                  <div
-                    className={`${getLessonButtonClass(lesson)} lesson-button lesson-button-shadow ${
-                      lesson.id >= 1 && lesson.id <= 4 ? 'basic' : 
-                      lesson.id >= 5 && lesson.id <= 8 ? 'intermediate' : 'advanced'
-                    }`}
-                    onClick={() => {
-                      if (lesson.unlocked) {
-                        let difficulty = "BASIC";
-                        if (lesson.id >= 5 && lesson.id <= 8)
-                          difficulty = "INTERMEDIATE";
-                        if (lesson.id >= 9 && lesson.id <= 12)
-                          difficulty = "ADVANCED";
-
-                        navigate(`/page/${lesson.termId}`, {
-                          state: { difficulty },
-                        });
-                      }
-                    }}
-                  >
-                    {lesson.id}
-                  </div>
-                </div>
-              ))}
+      {/* Responsive lessons grid: keeps the column design while making it fluid */}
+      <div className="lesson-wrap">
+        <div className="lessons-grid">
+          {lessonRoutes.map((lesson, index) => (
+            <div key={lesson.id} className="lesson-tile">
+              <div
+                className={`${getLessonButtonClass(lesson)} lesson-button lesson-button-shadow ${
+                  lesson.id >= 1 && lesson.id <= 4 ? 'basic' :
+                  lesson.id >= 5 && lesson.id <= 8 ? 'intermediate' : 'advanced'
+                }`}
+                onClick={() => {
+                  if (lesson.unlocked) {
+                    let difficulty = 'BASIC';
+                    if (lesson.id >= 5 && lesson.id <= 8) difficulty = 'INTERMEDIATE';
+                    if (lesson.id >= 9 && lesson.id <= 12) difficulty = 'ADVANCED';
+                    navigate(`/page/${lesson.termId}`, { state: { difficulty } });
+                  }
+                }}
+              >
+                {lesson.id}
+              </div>
             </div>
-          )}
-
-          {groupIndex === 1 && (
-            <div className="lessons-container2 flex flex-col space-y-10">
-              {group.map((lesson, lessonIndex) => (
-                <div
-                  key={lesson.id}
-                  className={`flex ${getPositionClass(lessonIndex)}`}
-                >
-                  <div
-                    className={`${getLessonButtonClass(lesson)} lesson-button lesson-button-shadow ${
-                      lesson.id >= 1 && lesson.id <= 4 ? 'basic' : 
-                      lesson.id >= 5 && lesson.id <= 8 ? 'intermediate' : 'advanced'
-                    }`}
-                    onClick={() => {
-                      if (lesson.unlocked) {
-                        let difficulty = "BASIC";
-                        if (lesson.id >= 5 && lesson.id <= 8)
-                          difficulty = "INTERMEDIATE";
-                        if (lesson.id >= 9 && lesson.id <= 12)
-                          difficulty = "ADVANCED";
-
-                        navigate(`/page/${lesson.termId}`, {
-                          state: { difficulty },
-                        });
-                      }
-                    }}
-                  >
-                    {lesson.id}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {groupIndex === 2 && (
-            <div className="lessons-container3 flex flex-col space-y-10">
-              {group.map((lesson, lessonIndex) => (
-                <div
-                  key={lesson.id}
-                  className={`flex ${getPositionClass(lessonIndex)}`}
-                >
-                  <div
-                    className={`${getLessonButtonClass(lesson)} lesson-button lesson-button-shadow ${
-                      lesson.id >= 1 && lesson.id <= 4 ? 'basic' : 
-                      lesson.id >= 5 && lesson.id <= 8 ? 'intermediate' : 'advanced'
-                    }`}
-                    onClick={() => {
-                      if (lesson.unlocked) {
-                        let difficulty = "BASIC";
-                        if (lesson.id >= 5 && lesson.id <= 8)
-                          difficulty = "INTERMEDIATE";
-                        if (lesson.id >= 9 && lesson.id <= 12)
-                          difficulty = "ADVANCED";
-
-                        navigate(`/page/${lesson.termId}`, {
-                          state: { difficulty },
-                        });
-                      }
-                    }}
-                  >
-                    {lesson.id}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+          ))}
         </div>
-      ))}
+      </div>
     </div>
   );
 }
