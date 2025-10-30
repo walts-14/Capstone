@@ -172,7 +172,7 @@ const calculateOverallProgress = (progressData) => {
       <>
         {/* Streak Button */}
         <button
-          className="h-[10vh] w-[5.5vw] rounded-4 px-3 py-2 cursor-pointer absolute right-[27.8rem] top-20  flex items-center justify-center"
+          className="h-[10vh] w-[5.5vw] rounded-4 px-3 py-2 cursor-pointer static flex items-center justify-center"
           style={{ background: "#271d3e", boxShadow: "0 0 0 5px #F44336" }}
           onClick={toggle}
         >
@@ -193,7 +193,7 @@ const calculateOverallProgress = (progressData) => {
         {/* Manual Info Modal */}
         {isOpen && (
           <div
-            className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[9999]"
+            className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
             onClick={closeModal}
           >
             <div
@@ -413,13 +413,16 @@ export default function ProgressTracker({ student }) {
 
   return (
     <>
-      <div className="tracker flex flex-row items-center justify-center">
+      
+      <div className="tracker flex flex-row items-center justify-center gap-4 fixed right-12 top-20 z-[100]">
         {/* Streak button (fixed) */}
-        { <StreakButton /> }
+        <div  className="flex items-center ">
+            { <StreakButton /> }
+        </div>
 
         {/* Leaderboard box - align with streak button */}
         <div
-          className="flex items-center text-white rounded-3xl h-[10vh] w-[18vw] fixed right-12 top-20 gap-3 px-3"
+          className="flex items-center text-white rounded-3xl h-[10vh] w-[18vw]  gap-3 px-3 "
           style={{
             backgroundColor: "var(--dark-purple)",
             fontFamily: '"Baloo", sans-serif',
@@ -442,11 +445,10 @@ export default function ProgressTracker({ student }) {
             </p>
           </div>
         </div>
-      </div>
-
+     
       {/* CSS: .lessonTracker converted to Tailwind */}
       <div
-        className="absolute top-52 right-12 text-white rounded-4xl p-3 max-h-[43rem] h-auto w-[25vw] overflow-y-scroll"
+        className="absolute top-52 right-0 text-white rounded-4xl p-3 max-h-[43rem] h-auto w-[25vw] overflow-y-scroll "
         style={{
           backgroundColor: "var(--dark-purple)",
           fontFamily: '"Baloo", sans-serif',
@@ -454,6 +456,7 @@ export default function ProgressTracker({ student }) {
          
         }}
       >
+        
         {Object.keys(lessonsByLevel).map((level) => (
           <div
             key={level}
@@ -514,6 +517,7 @@ export default function ProgressTracker({ student }) {
           </div>
         ))}
       </div>
+    </div>
     </>
   );
 }
