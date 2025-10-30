@@ -22,7 +22,7 @@ const lessonsByLevel = {
 
 function LessonButtons() {
   const navigate = useNavigate();
-  const [difficulty, setDifficulty] = useState("BASIC");
+  const [difficulty, setDifficulty] = useState("INTERMEDIATE");
   const [lives, setLives] = useState(0);
   const { points: ctxPoints } = useContext(ProgressContext);
   const points = typeof ctxPoints === 'number' ? ctxPoints : 0;
@@ -221,9 +221,9 @@ function LessonButtons() {
   return (
     <>
           {/* Header with difficulty and lives/diamonds */}
-      <div className="flex items-center justify-center gap-5 sticky top-3 z-10  text-white header-container">
+      <div className="headerlessbtn flex items-center justify-center gap-5 sticky top-3 z-10  text-white header-container">
         <div
-          className="text-center px-5 py-2 rounded-2xl font-bold text-white text-[2.5rem] difficulty-button"
+          className="Difficulty text-center px-5 py-2 rounded-2xl font-bold text-white text-[2.5rem] difficulty-button"
           style={{
             backgroundColor: difficultyColors[difficulty],
             boxShadow: `0 0 0 5px ${strokeColors[difficulty] || '#A6DCFF'}`,
@@ -232,7 +232,10 @@ function LessonButtons() {
         >
           {difficulty}
         </div>
-        <LivesandDiamonds />
+        <div className="livesDia flex items-center justify-center">
+           <LivesandDiamonds />
+        </div>
+       
       </div>
 
       <div
@@ -257,7 +260,7 @@ function LessonButtons() {
         - Mobile (<=640px): 1 column
         This preserves the look while avoiding extra columns */
       .lessons-grid { display: grid; gap: 5.5rem; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
-      @media (max-width: 640px) { .lessons-grid { grid-template-columns: repeat(1, minmax(0, 1fr)); gap: 4rem; } }
+      @media (max-width: 639px){ .lessons-grid { gap: 4rem; } }
       @media (min-width: 1400px) { .lessons-grid { gap: 7rem; } }
       @media (min-width: 1800px) { .lessons-grid { gap: 8rem; } }
       @media (min-width: 2560px) { .lessons-grid { gap: 9.5rem; } }
@@ -283,38 +286,27 @@ function LessonButtons() {
         @media (min-width: 2560px) { .lesson-button { height: 20.5rem !important; width: 23rem !important; font-size: 10rem !important; border-radius: 3rem !important; }
                                      .lessons-grid .lesson-tile:nth-child(2n+1) { transform: translateY(-10rem); margin-top: 10rem; }
                                      .lessons-grid .lesson-tile:nth-child(2n) { transform: translateY(21rem); } }
-
-        // /* keep original size adjustments for smaller breakpoints (preserve existing design intent) */
-        // @media (max-width: 1200px) { .lesson-button { height: 9rem !important; width: 11rem !important; font-size: 4.5rem !important; } }
-        // @media (max-width: 1024px) { .lesson-button { height: 8rem !important; width: 10rem !important; font-size: 4rem !important; } }
-        // @media (max-width: 900px) { .lesson-button { height: 7rem !important; width: 9rem !important; font-size: 3.75rem !important; } }
-        // @media (max-width: 640px) { .lesson-button { height: 6rem !important; width: 8rem !important; font-size: 3.25rem !important; } }
-
-        /* keep your difficulty button / header responsiveness intact */
-        .difficulty-button { width: 24vw; }
-        /* Responsive difficulty capsule and header spacing
-           - Mobile-first defaults, then scale up for Laptop (>=1024), Laptop L (>=1400), and 4K (>=2560)
-        */
-        .header-container { gap: 1rem; margin-bottom: 1.5rem; }
-        .difficulty-button { width: 60vw; font-size: 1.5rem; padding: 0.6rem 1rem; }
-
-        /* Laptop: 1024x668 and up - two-column desktop proportions */
-        @media (min-width: 1024px) {
-          .header-container { gap: 1.5rem; margin-bottom: 2rem; }
-          .difficulty-button { width: 20vw !important; font-size: 2rem !important; padding: 0.6rem 1rem !important; }
+         
+        
+        /* Mobile sidenav - only show below 640px */
+        @media (max-width: 639px) {
+        .headerlessbtn { display: flex !important; gap: 1rem !important;  margin-top: 30vh !important; }
+        .Difficulty { display: flex !important;
+                      height: 75px;
+                      font-size: 2.6rem;
+                      padding-inline: 20px !important;
+                      
+                      }
+        .livesDia { display: flex !important;
+                    gap: 18px; }
+        .lesson-button { height: 10.5rem !important; width: 13rem !important; font-size: 8rem !important; border-radius: 3rem !important; }
+        .lessons-grid .lesson-tile:nth-child(2n+1) { transform: translateY(-8rem); margin-top: 8rem; }
+        .lessons-grid .lesson-tile:nth-child(2n) { transform: translateY(11.5rem); }
+        .max-h-screen{ max-height: 125vh !important; margin-top: 5vh !important; }
         }
-
-        /* Laptop L: 1440x891 and up */
-        @media (min-width: 1400px) {
-          .header-container { gap: 2rem; margin-bottom: 2.5rem; }
-          .difficulty-button { width: 15vw !important; font-size: 2rem !important; padding: 0.75rem 1.25rem !important; }
-        }
-
-        /* 4K: 2560x1672 and up - scale capsule and spacing for high-density displays */
-        @media (min-width: 2560px) {
-          .header-container { gap: 3rem; margin-top: 5rem; }
-          .difficulty-button { width: 20vw !important; font-size: 3.75rem !important; padding: 1rem 1.5rem !important; }
-        }
+      
+        
+        
 
         /* hide-scrollbar helper kept for container compatibility */
         .hide-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }

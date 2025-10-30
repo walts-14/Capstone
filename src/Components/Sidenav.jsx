@@ -245,7 +245,7 @@ function Sidenav() {
             display: none !important;
           }
         }
-
+        
         /* Smooth transitions for sidenav selection */
         .sidenav-item {
           will-change: transform, background-color, border-color, box-shadow;

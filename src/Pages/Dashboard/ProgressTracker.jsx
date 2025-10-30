@@ -598,7 +598,7 @@ export default function ProgressTracker({ student }) {
     </div>
 
     <div className="mobile-tracker flex flex-row items-center justify-center gap-4 fixed right-12 top-20 z-[1]">
-       <div className="streakleaderboard flex flex-row items-center justify-center gap-4 fixed left-12 top-10"> 
+       <div className="streakleaderboard flex flex-row items-center justify-center gap-4 fixed left-12 top-15"> 
         {/* Leaderboard box - align with streak button */}
         <div
           className="flex items-center text-white rounded-2xl h-[15.5vh] w-[80vw]  gap-2 px-3"

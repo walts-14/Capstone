@@ -94,10 +94,13 @@ function LivesandDiamonds({ showDiamonds = true, showLives = true }) {
       )}
 
       <style jsx>{`
-        /* Mobile-first defaults */
-        .lives-container, .diamonds-container { gap: 0.5rem; }
-        .heart-icon, .diamond-icon { width: 2rem; height: 2rem; }
-        .lives-number, .points-number { font-size: 1.125rem; margin-left: 0.25rem; }
+        /* Mobile sidenav - only show below 640px */
+        @media (max-width: 639px) {
+        .lives-container, .diamonds-container { gap: 0 }
+        .heart-icon, .diamond-icon { width: 3rem; height: auto; }
+        .lives-number, .points-number { font-size: 3rem; margin-left: 0.25rem; }
+        }
+
 
         /* Laptop breakpoint: 1024x668 and up */
         @media (min-width: 1024px) {
