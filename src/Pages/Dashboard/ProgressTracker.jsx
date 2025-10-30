@@ -5,6 +5,7 @@ import axios from "axios";
 import trophy from "../../assets/trophy.png";
 import fire from "../../assets/fire.png";
 import medal from "../../assets/diamond.png";
+import progress from "../../assets/ProgressIcon.png";
 
 // Helper to compute % complete for a lesson
 const calculateProgress = (progressObj = {}) => {
@@ -172,7 +173,7 @@ const calculateOverallProgress = (progressData) => {
       <>
         {/* Streak Button */}
         <button
-          className="h-[10vh] w-[5.5vw] rounded-4 px-3 py-2 cursor-pointer static flex items-center justify-center"
+          className="btnstreak h-[10vh] w-[5.5vw] rounded-4 px-3 py-2 cursor-pointer static flex items-center justify-center"
           style={{ background: "#271d3e", boxShadow: "0 0 0 5px #F44336" }}
           onClick={toggle}
         >
@@ -228,6 +229,70 @@ const calculateOverallProgress = (progressData) => {
             </div>
           </div>
         )}
+
+
+ {/* Streak Button MOBILE */}
+        <button
+          className="mobile-btnstreak rounded-4 p-1 cursor-pointer static flex items-center justify-center"
+          style={{ background: "#271d3e", boxShadow: "0 0 0 5px #F44336" }}
+          onClick={toggle}
+        >
+          <div className="flex flex-row items-center justify-center h-[14vh] w-[35vw]">
+            <img src={fire} alt="streak" className="h-15 w-54 mb-1" />
+            <div className="flex flex-col ">
+               <div className="text-white text-5xl h-[45px] flex items-center justify-center">
+              {currentStreakValue}
+               </div>
+              <span className="text-[#878194] text-center text-1xl leading-5">
+                Day <br /> Streak
+              </span>
+            </div>
+           
+          </div>
+        </button>
+
+        {/* Manual Info Modal */}
+        {isOpen && (
+          <div
+            className="mobile-streak fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+            onClick={closeModal}
+          >
+            <div
+              className="text-white p-8 rounded-3xl w-[70%] h-[46vh] max-w-[500px] text-center border-4 gap-2 mr-40"
+              style={{ background: "#100429", borderColor: "#FF6536" }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header with flame icon + number */}
+              <div className="flex items-center justify-center gap-2 h-[10vh]">
+                <div className="text-[6.5rem] font-bold">
+                  {currentStreakValue}
+                </div>
+                <img src={fire} alt="flame" className="w-20 h-auto mb-4" />
+              </div>
+              <h2 className="text-3xl mb-4 uppercase">DAY STREAK!</h2>
+              <p className="text-2xl mb-4 opacity-80">
+                Learn new FSL to earn points and build streak
+              </p>
+              <div className="flex items-center justify-center gap-2 mb-10 h-[50px]">
+                <img src={medal} alt="medal" className="w-14 h-auto" />
+                <span className="text-6xl font-bold text-yellow-400">
+                  +{getStreakReward(currentStreakValue)}
+                </span>
+              </div>
+              <button
+                className="py-3 px-6 rounded-full border-none text-white cursor-pointer text-4xl w-full"
+                style={{ background: "#c0392b" }}
+                onClick={closeModal}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
+
+
+
+
 
         {/* Reward Modal */}
         {showModal && (
@@ -330,6 +395,9 @@ export default function ProgressTracker({ student }) {
   };
   const [progressData, setProgressData] = useState(sanitizeProgressRecursive(contextProgressData));
 
+  // Mobile modal state for progress panel
+  const [mobileModalOpen, setMobileModalOpen] = useState(false);
+
   const targetName = unwrapDefault(sanitizedStudent?.name)?.trim() || (currentUserName || "").trim() || "";
 
   // Defensive logger (will not throw)
@@ -411,11 +479,91 @@ export default function ProgressTracker({ student }) {
 
   const trophySrc = srcFrom(trophy);
 
+  // Render the lessons/progress panel. Accepts isModal to change sizing/styling
+  const renderLessonsPanel = (isModal = false) => {
+    const panelClass = isModal
+      ? "text-white rounded-3xl p-3  h-280 w-full overflow-y-auto "
+      : "absolute top-52 right-0 text-white rounded-4xl p-3 max-h-[43rem] h-auto w-[25vw] overflow-y-scroll";
+    const panelStyle = isModal
+      ? {
+          backgroundColor: "#271D3E",
+          fontFamily: '"Baloo", sans-serif',
+          boxShadow: "0 0 0 5px #C0C0C0",
+        }
+      : {
+          backgroundColor: "var(--dark-purple)",
+          fontFamily: '"Baloo", sans-serif',
+          boxShadow: "0 0 0 5px #C0C0C0",
+        };
+
+    return (
+      <div className={panelClass} style={panelStyle}>
+        {Object.keys(lessonsByLevel).map((level) => (
+          <div
+            key={level}
+            className={`rounded-4xl mt-2 mb-3 m-0`}
+            style={{
+              backgroundColor: "var(--input-gray)",
+              border: "0px solid var(--input-gray)",
+              height: isModal ? "auto" : "47vh",
+            }}
+          >
+            <div
+              className={`text-4xl text-center mb-3 h-auto ${isModal ? "w-full" : "w-[13vw]"} p-2`}
+              style={{
+                backgroundColor:
+                  level === "basic"
+                    ? "var(--basic-blue)"
+                    : level === "intermediate"
+                    ? "#D4AC0D "
+                    : "#C0392B",
+                borderRadius: "40px 10px 70px 0",
+                fontFamily: '"Baloo", sans-serif',
+              }}
+            >
+              {level.charAt(0).toUpperCase() + level.slice(1)}
+            </div>
+
+            {lessonsByLevel[level].map((lessonKey, idx) => {
+              const prog = sanitizedProgressData[level]?.[lessonKey] || {};
+              const pct = calculateProgress(prog);
+              const lbl = `Lesson ${lessonOffsets[level] + idx + 1}`;
+              return (
+                <div
+                  key={lessonKey}
+                  className="flex mx-3 my-3 rounded-2xl p-2 justify-between"
+                  style={styles[level]}
+                >
+                  <span
+                    className="text-white text-4xl p-2"
+                    style={{ fontFamily: '"Baloo", sans-serif' }}
+                  >
+                    {lbl}
+                  </span>
+                  <span
+                    className="text-4xl p-2"
+                    style={{
+                      color: "#160A2E",
+                      fontFamily: '"Baloo", sans-serif',
+                    }}
+                  >
+                    {pct}%
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <>
       
       <div className="tracker flex flex-row items-center justify-center gap-4 fixed right-12 top-20 z-[100]">
         {/* Streak button (fixed) */}
+
         <div  className="flex items-center ">
             { <StreakButton /> }
         </div>
@@ -446,78 +594,136 @@ export default function ProgressTracker({ student }) {
           </div>
         </div>
      
-      {/* CSS: .lessonTracker converted to Tailwind */}
-      <div
-        className="absolute top-52 right-0 text-white rounded-4xl p-3 max-h-[43rem] h-auto w-[25vw] overflow-y-scroll "
-        style={{
-          backgroundColor: "var(--dark-purple)",
-          fontFamily: '"Baloo", sans-serif',
-           boxShadow: "0 0 0 5px #C0C0C0",
-         
-        }}
-      >
-        
-        {Object.keys(lessonsByLevel).map((level) => (
-          <div
-            key={level}
-            className={`rounded-4xl mt-2 mb-3 m-0`}
-            style={{
-              backgroundColor: "var(--input-gray)",
-              border: "0px solid var(--input-gray)",
-              height: "47vh",
-             
-            }}
-          >
-            {/* CSS: .basicTitle (and similar) converted to Tailwind */}
-            <div
-              className={`text-4xl text-center mb-3 h-auto w-[13vw] p-2`}
-              style={{
-                backgroundColor:
-                  level === "basic"
-                    ? "var(--basic-blue)"
-                    : level === "intermediate"
-                    ? "#D4AC0D "
-                    : "#C0392B",
-                borderRadius: "40px 10px 70px 0",
-                fontFamily: '"Baloo", sans-serif',
-              }}
-            >
-              {level.charAt(0).toUpperCase() + level.slice(1)}
-            </div>
-
-            {lessonsByLevel[level].map((lessonKey, idx) => {
-              const prog = sanitizedProgressData[level]?.[lessonKey] || {};
-              const pct  = calculateProgress(prog);
-              const lbl  = `Lesson ${lessonOffsets[level] + idx + 1}`;
-              return (
-                <div
-                  key={lessonKey}
-                  className="flex mx-3 my-3 rounded-2xl p-2 justify-between"
-                  style={styles[level]}
-                >
-                  {/* CSS: .lessonTracker span converted to Tailwind */}
-                  <span
-                    className="text-white text-4xl p-2"
-                    style={{ fontFamily: '"Baloo", sans-serif' }}
-                  >
-                    {lbl}
-                  </span>
-                  <span
-                    className="text-4xl p-2"
-                    style={{
-                      color: "#160A2E",
-                      fontFamily: '"Baloo", sans-serif',
-                    }}
-                  >
-                    {pct}%
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-        ))}
-      </div>
+      {renderLessonsPanel(false)}
     </div>
+
+    <div className="mobile-tracker flex flex-row items-center justify-center gap-4 fixed right-12 top-20 z-[1]">
+       <div className="streakleaderboard flex flex-row items-center justify-center gap-4 fixed left-12 top-10"> 
+        {/* Leaderboard box - align with streak button */}
+        <div
+          className="flex items-center text-white rounded-2xl h-[15.5vh] w-[80vw]  gap-2 px-3"
+          style={{
+            backgroundColor: "var(--dark-purple)",
+            fontFamily: '"Baloo", sans-serif',
+            boxShadow: "0 0 0 5px #DCBC3D",
+            alignItems: "center",
+          }}
+        >
+          <img src={trophySrc} className="w-18 h-16" alt="trophy" style={{ display: "block" }} />
+          <div className="flex flex-col justify-center">
+            <p className="text-3xl" style={{ margin: 0, lineHeight: 1 }}>
+              {userRank == null ? "..." : (typeof userRank === "number" ? `#${userRank}` : String(userRank))}
+            </p>
+            <p className="text-nowrap text-5xl ms-1" style={{ margin: 0, lineHeight: 1 }}>
+              {unwrapDefault(displayUsername)}
+            </p>
+          </div>
+        </div>
+         {/* Streak button (fixed) */}
+        <div className="flex items-center ">
+          {<StreakButton />}
+        </div>
+
+        {/* Mobile progress open button (replaces inline progress panel) */}
+        <div >
+          <button
+            onClick={() => setMobileModalOpen(true)}
+            className="py-2 px-4 h-[15.5vh] w-[40vw] text-white"
+            style={{ backgroundColor: "#271D3E", fontFamily: '"Baloo", sans-serif',
+                     fontFamily: '"Baloo", sans-serif',
+                     boxShadow: "0 0 0 5px #C0C0C0", 
+                     borderRadius: "16px"}}
+          >
+            <img src={progress} alt="" className="w-20 h-18" />
+          </button>
+        </div>
+      </div>
+        
+    </div>
+
+    {/* Mobile modal showing the progress tracker when open */}
+    {mobileModalOpen && (
+      <div className="fixed inset-0 z-[60] flex items-start justify-center bg-black bg-opacity-50" onClick={() => setMobileModalOpen(false)}>
+        <div
+          className="mt-8 w-[94%] max-w-[640px] rounded-3xl p-4 relative"
+          style={{ backgroundColor: "#271D3E", color: "white", fontFamily: '"Baloo", sans-serif' }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button
+            aria-label="Close progress modal"
+            onClick={() => setMobileModalOpen(false)}
+            style={{ position: "absolute", left: 12, top: 12 }}
+            className="text-white text-3xl font-bold"
+          >
+            ✕
+          </button>
+
+          <div className="mt-8">{renderLessonsPanel(true)}</div>
+        </div>
+      </div>
+    )}
+
+    {/* Responsive styles for smooth transition */}
+      <style>{`
+        /* Tablet sidenav and logo - show between 640px-1024px */
+        @media (min-width: 640px) and (max-width: 1023px) {
+         .btnstreak {
+            display: flex !important;
+          }
+          .mobile-tracker {
+            display: none !important;
+          }
+          .mobile-btnstreak {
+            display: none !important;
+          }
+          .mobile-streak {
+            display: none !important;
+          } 
+        }
+        
+        /* Mobile sidenav - only show below 640px */
+        @media (max-width: 639px) {
+           .btnstreak {
+            display: none !important;
+          }
+          .tracker {
+            display: none !important;
+          }
+          .mobile-tracker {
+            display: flex !important;
+            height: 7.5rem !important;
+          }
+          .mobile-btnstreak {
+            display: flex !important;
+        
+          }
+          .mobile-streak {
+            display: flex !important;
+     
+          } 
+          
+        }
+        
+        /* Desktop sidenav - show above 1024px */
+        @media (min-width: 1024px) {
+          .tracker {
+            display: flex !important;
+          }
+          .tablet-logo {
+            display: none !important;
+          }
+          .mobile-tracker {
+            display: none !important;
+          }
+           .mobile-btnstreak {
+            display: none !important;
+          }
+          .mobile-streak {
+            display: none !important;
+          }   
+        }
+
+      `}</style>
     </>
   );
 }
