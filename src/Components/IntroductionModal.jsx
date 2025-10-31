@@ -65,7 +65,7 @@ export default function IntroductionModal() {
           e.preventDefault();
           openModal();
         }}
-        className="question-button w-18 h-8 flex justify-center items-center -left-20 rounded-5 z-10 bg-transparent "
+        className="question-button w-18 h-8 flex justify-center items-center rounded-5 z-10 bg-transparent "
       >
         <img src={showInterpreter ? Hand : question} alt={showInterpreter ? "Hand" : "Help"} className="w-21" />
       </a>

@@ -84,7 +84,7 @@ function Sidenav() {
 
       {/* Sidebar container - desktop/laptop (only visible above 1024px) */}
       <div
-        className="fixed top-28 left-0 bottom-28 w-auto rounded-r-4xl flex text-center p-5 bg-[var(--purple)] h-[80vh] hidden lg:flex"
+        className="fixed top-28 left-0 bottom-28 w-auto rounded-r-4xl text-center p-5 bg-[var(--purple)] h-[80vh] hidden lg:flex"
         style={{ fontFamily: '"Baloo", sans-serif' }}
       >
         <nav className="text-white flex flex-col w-full z-10 gap-4">
@@ -133,7 +133,7 @@ function Sidenav() {
 
       {/* Sidebar container - tablet (visible from 640px to 1024px) */}
       <div
-        className="fixed top-0 left-0 h-screen w-[6.5rem] bg-[var(--purple)] flex flex-col items-center pt-24 z-10 hidden md:flex lg:hidden tablet-sidenav"
+        className="fixed top-0 left-0 h-screen w-[6.5rem] bg-[var(--purple)] flex-col items-center pt-24 z-10 hidden md:flex lg:hidden tablet-sidenav"
         style={{ fontFamily: '"Baloo", sans-serif' }}
       >
         <nav className="flex flex-col gap-10 items-center w-full mt-2">
@@ -166,8 +166,8 @@ function Sidenav() {
 
       {/* Sidebar container - mobile (bottom bar, only visible below 640px) */}
       <div
-        className="sidenav-mobile fixed bottom-0 left-0 w-full h-[8rem] bg-[var(--purple)] flex flex-row items-center justify-between px-2 z-20 md:hidden"
-        style={{ fontFamily: '"Baloo", sans-serif', transition: "all 0.3s" }}
+        className="sidenav-mobile fixed bottom-0 left-0 w-full h-[8rem] bg-[var(--purple)] flex flex-row items-center justify-between px-2 md:hidden"
+        style={{ fontFamily: '"Baloo", sans-serif', transition: "all 0.3s", zIndex: 2147483647 }}
       >
         <nav className="flex flex-row justify-between items-center w-full h-full">
           {menuItems.map((item, idx) => {
@@ -230,6 +230,7 @@ function Sidenav() {
           .sidenav-mobile {
             display: flex !important;
             height: 7.5rem !important;
+            z-index: 9999 !important; /* ensure on top of content */
           }
         }
         

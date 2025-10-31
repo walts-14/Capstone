@@ -38,6 +38,7 @@ body {
 
 .container-lecture {
   margin: 0 auto;
+  padding-bottom: 8rem; /* keep content clear of mobile bottom nav */
 }
 
 .tryone-container {

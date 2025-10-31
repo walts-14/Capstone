@@ -7,6 +7,7 @@ import rightArrow from "../../../assets/rightArrow.png";
 import "../../../css/lesoneContent.css";
 import { ProgressContext } from "../../../Pages/Dashboard/ProgressContext";
 import TrimmedVideo from "./TrimmedVideo";
+import Sidenav from "../../../Components/Sidenav";
 
 const levelMapping = {
   termsone: "basic",
@@ -230,6 +231,7 @@ const LesoneContent = () => {
 
   return (
     <>
+      <Sidenav />
       <div className="back fs-1 fw-bold d-flex" onClick={handleBack}>
         <img src={Back} className="img-fluid p-1 mt-1" alt="Back" />
       </div>

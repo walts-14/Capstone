@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Termslist from "./Termslist";
 import Sidenav from "../../../Components/Sidenav";
 import LibraryButtons from "../LibraryButtons";
 import Lessons from "../../../Components/dataLessons";
+import Back from "../../../assets/BackButton.png";
 import Lessonlist from "../../../Components/Lessonlist";
 
 function Termspage() {
   const { termId } = useParams(); // e.g., "termsone", "termstwo", etc.
+  const navigate = useNavigate();
   const [terms, setTerms] = useState([]);
   const [loading, setLoading] = useState(true);
   const lesson = Lessons[termId]; // Get lesson details (dataLessons)
@@ -32,7 +34,21 @@ function Termspage() {
   // Destructure the mapping (or undefined if not found)
   const mapping = termMap[termId];
   const level = mapping?.level;
+  const forcedDifficulty = level
+    ? level === "basic"
+      ? "Basic"
+      : level === "intermediate"
+      ? "Intermediate"
+      : "Advanced"
+    : undefined;
   const lessonNumber = mapping?.lessonNumber;
+
+  // Back handler to go back to the list for the same difficulty
+  function handleBack() {
+    if (level === "intermediate") navigate("/IntermediateLibrary");
+    else if (level === "advanced") navigate("/AdvancedLibrary");
+    else navigate("/BasicLibrary");
+  }
 
   useEffect(() => {
     // If there's no valid mapping, skip fetching
@@ -68,15 +84,20 @@ function Termspage() {
 
   return (
     <div className="termspage-content">
-      {lesson ? <Lessonlist Lessons={lesson} /> : <h1>No Lesson Data Found</h1>}
+      <div className="back fs-1 fw-bold d-flex" onClick={handleBack}>
+        <img src={Back} className="img-fluid p-1 mt-1" alt="Back" />
+      </div>
       <Sidenav />
-      <LibraryButtons />
+      <LibraryButtons forcedDifficulty={forcedDifficulty} />
+      <div className="terms-section">
+        {lesson ? <Lessonlist Lessons={lesson} /> : <h1>No Lesson Data Found</h1>}
 
-      {terms.length > 0 ? (
-        <Termslist LessonTerms={terms} lessonKey={termId} />
-      ) : (
-        <h2>No videos found for this lesson.</h2>
-      )}
+        {terms.length > 0 ? (
+          <Termslist LessonTerms={terms} lessonKey={termId} />
+        ) : (
+          <h2>No videos found for this lesson.</h2>
+        )}
+      </div>
     </div>
   );
 }
