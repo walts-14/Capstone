@@ -331,15 +331,17 @@ function LectureorQuiz() {
 
         <p>Back</p>
       </div>
-
+      <div className="MobileIntroduction">
+            <IntroductionModal />
+      </div>
       <div className="container d-flex flex-column justify-content-center align-items-center mb-25">
         <div className="status-bar">
           {/* This badge uses the dynamic difficulty */}
-          <div>
+          <div className="Introduction">
             <IntroductionModal />
           </div>
           <div
-            className="difficulty text-center"
+            className="Difficulty text-center px-5 py-2 rounded-2xl font-bold text-white text-[2.5rem] difficulty-button"
             style={{
               backgroundColor: difficultyColors[difficulty],
               boxShadow: `0 0 0 5px ${strokeColors[difficulty] || '#A6DCFF'}`,
@@ -426,6 +428,106 @@ function LectureorQuiz() {
           </div>
         </div>
       </div>
+              
+       {/* Responsive styles for smooth transition */}
+      <style>{`
+           /* Tablet sidenav and logo - show between 640px-1024px */
+        @media (min-width: 640px) and (max-width: 1023px) {
+          .MobileIntroduction {
+              display: none !important;
+            } 
+          .Introduction {
+              display: flex !important;
+            }
+         
+        }
+
+           /* Desktop sidenav - show above 1024px */
+        @media (min-width: 1024px) {
+           .MobileIntroduction {
+              display: none !important;
+            } 
+          .Introduction {
+              display: flex !important;
+            }
+       
+        }
+        
+        /* Mobile sidenav - only show below 640px */
+        @media (max-width: 639px) {
+           .back {
+            display: flex !important;
+            justify-content: center !important;
+            position: fixed !important;
+            left: 1rem !important;
+            font-size: 3rem !important;
+          }
+          .back img {
+            margin-top: 1.1rem !important;  
+          }
+          .Difficulty {
+            display: flex !important;
+            height: 75px;
+            font-size: 2.6rem;
+            padding-inline: 20px !important;
+          }
+          .status-bar {
+            display: flex !important;
+            gap: 3rem !important;
+            position: absolute !important;
+            top: 12rem !important;
+          }
+          .MobileIntroduction {
+            display: flex !important;
+            position: absolute !important;
+            top: 2.8rem !important;
+            left: 36rem !important;
+          }
+          .Introduction {
+            display: none !important;
+          }
+
+          .lecture-quiz-container {
+            display: flex !important;
+            flex-direction: row !important;
+            font-size: 2rem !important;
+          }
+          .lecture-quiz-container p{
+            font-size: 3rem !important;
+          } 
+          
+          .lecture-outer {
+            width: 17rem !important;
+            height: 32.5rem !important;
+          }
+            
+          .lecture-inner {
+            height: 27rem !important;
+          }
+         
+          .quiz-outer, .practice-outer {
+            width: 17rem !important;
+            height: 15rem !important;
+            padding: 0px !important;
+        
+         }
+          .quiz-inner img {
+            height:  60% !important;
+          }
+          .quiz-inner, .practice-inner {
+            width: 16.4rem !important;
+            height: 25vh !important;
+            margin-top: 2.8rem !important;
+         }
+         
+
+
+        
+     
+
+     
+
+      `}</style>
     </>
   );
 }

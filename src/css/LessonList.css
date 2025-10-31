@@ -78,6 +78,23 @@
   min-height: calc(100vh - 11rem);
 }
 
+
+/* Mobile */
+@media (max-width: 640px) {
+  .lesson-list {
+    position: relative;
+    top: 115px;
+  }
+  .lessonTitle {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    align-items: flex-start;
+  }
+  .lessonTitle h2 {
+    font-size: 2rem;
+  }
+}
 /* Tablet */
 @media (min-width: 640px) {
   .terms-list {
