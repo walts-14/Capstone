@@ -463,7 +463,9 @@ function LectureorQuiz() {
             font-size: 3rem !important;
           }
           .back img {
-            margin-top: 1.1rem !important;  
+            margin-top: 0.8rem !important;  
+            width: 3rem !important;
+            height: 2.5rem !important;
           }
           .Difficulty {
             display: flex !important;

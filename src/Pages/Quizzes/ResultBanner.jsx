@@ -72,6 +72,35 @@ export default function ResultBanner({ isCorrect }) {
       >
         {phrase}
       </span>
+
+        {/* Responsive styles for smooth transition */}
+      <style>{`
+        /* Tablet sidenav and logo - show between 640px-1024px */
+        @media (min-width: 640px) and (max-width: 1023px) {
+         
+        }
+        
+        /* Mobile sidenav - only show below 640px */
+        @media (max-width: 639px) {
+           .result-ans {
+            height: 120px !important;
+            top: 75vh !important;
+            border-radius: 0px 0px !important;
+           }
+          .result-ans img{
+            width: 60px !important;
+            height: 60px !important;
+          }
+
+          
+        }
+        
+        /* Desktop sidenav - show above 1024px */
+        @media (min-width: 1024px) {
+          
+        }
+
+      `}</style>
     </div>
   );
 }
