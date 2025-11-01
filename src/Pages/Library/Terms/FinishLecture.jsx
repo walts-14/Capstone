@@ -91,7 +91,7 @@ function FinishLecture() {
   return (
     <>
       <div className="finishtext d-flex flex-column align-items-center position-relative fw-bold fs-1">
-        <img src={Applause} className="img-fluid p-1 mb-3" alt="Applause" />
+        <img src={Applause} className="applause img-fluid p-1 mb-3" alt="Applause" />
         <p>You've Finished the Lesson</p>
 
         {showLectureBonus && (
@@ -138,6 +138,69 @@ function FinishLecture() {
           {numericStep === 1 ? "1 Quiz" : "2 Quiz"}
         </button>
       </div>
+      
+      {/* Responsive styles for smooth transition */}
+      <style>{`
+        /* Tablet sidenav and logo - show between 640px-1024px */
+        @media (min-width: 640px) and (max-width: 1023px) {
+
+        }
+
+        /* Mobile sidenav - only show below 640px */
+        @media (max-width: 639px) {
+          .applause {
+            width: 210px !important;  
+            height: auto !important;          
+          }
+          .finishtext p {
+            font-size: 3rem !important;
+            margin-bottom: 0px !important;  
+          }
+          .dia-reward {
+            margin-bottom: 15px !important;
+          }
+          .dia-reward img {
+            width: 4rem !important;  
+            height: 4rem !important;          
+          }
+          
+          .dia-reward p {
+            font-size: 3rem !important;
+
+          }
+          .${level}tracker span {
+            font-size: 3rem !important;
+            
+          }
+          .finishbuttons {
+            width: 180vw !important;
+            height: 20vh !important;
+            margin-left: 20px !important;
+          }
+            
+          .finishbuttons button {
+            font-size: 2rem !important;
+            width: 90vw !important;
+            height: 14vh !important;
+            
+          }
+          .Quiz  {
+            gap: 25px !important;
+          }
+          .Quiz img {
+            width: 4.9rem !important;  
+            height: 4.9rem !important;
+          }
+
+
+        }
+        
+        /* Desktop sidenav - show above 1024px */
+        @media (min-width: 1024px) {
+          
+        }
+
+      `}</style>
     </>
   );
 }

@@ -412,23 +412,8 @@ function Quiz() {
           <p className="ekis-number " style={{ color: "#F44336" }}>{wrongAnswers}</p>
         </div>
 
-        {/* Summary row: score and attempts. Points are intentionally omitted on failed results to avoid confusion. */}
-        <div className="quiz-summary d-flex flex-row gap-4 align-items-center my-3">
-          <div className="score-box text-center">
-            <img src={check} alt="correct" style={{ width: 28, height: 28, marginBottom: 6 }} />
-            <div style={{ color: "#20BF55", fontSize: "1.2rem" }}><strong>{correctAnswers} / {totalQuestions}</strong></div>
-            <div style={{ color: "#878194" }}>{Math.round((correctAnswers / totalQuestions) * 100)}%</div>
-          </div>
 
-          <div className="attempts-box text-center">
-            {/* Use retry icon to indicate try-again/attempts */}
-            <img src={retry} alt="attempts" style={{ width: 28, height: 28, marginBottom: 6 }} />
-            <div style={{ color: "#ffffff", fontSize: "1.2rem" }}><strong>#{displayAttempt}</strong></div>
-            <div style={{ color: "#878194" }}>Attempts</div>
-          </div>
-        </div>
-
-        <div className="d-flex flex-column align-items-center justify-content-center mb-4">
+        <div className="failedText d-flex flex-column align-items-center justify-content-center mb-4">
           <h1 className="text-white fw-bold text-uppercase mt-0" style={{ fontSize: "3rem", fontFamily: "Baloo, sans-serif" }}>{failHeading}</h1>
           <h2 style={{ fontSize: "2rem", fontFamily: "Baloo, sans-serif", color: "#878194" }}>
             You need at least 7 correct answers to pass the quiz
@@ -453,10 +438,72 @@ function Quiz() {
             className="retry-button d-flex flex-direction-row justify-content-center align-items-center"
             onClick={handleRetry}
           >
-            <img src={retry} className="img-fluid " alt="retry img" />
+            <img src={retry} className="img-fluid d-flex" alt="retry img" />
             <p style={{ color: "white" }}>Try again</p>
           </button>
         </div>
+          
+        {/* Responsive styles for smooth transition */}
+      <style>{`
+        /* Tablet sidenav and logo - show between 640px-1024px */
+        @media (min-width: 640px) and (max-width: 1023px) {
+         
+        }
+        
+        /* Mobile sidenav - only show below 640px */
+        @media (max-width: 639px) {
+          .applause {
+            width: 210px !important;  
+            height: auto !important;          
+          }
+          .textFinished {
+            font-size: 3rem !important;  
+          }
+          .stats-quiz img {
+            width: 5rem !important;  
+            height: 5rem !important;          
+          }
+          
+          .stats-quiz p {
+            font-size: 3rem !important;
+
+          }
+         
+          .finishbuttons {
+            width: 190vw !important;
+            height: 20vh !important;
+            margin-left: 3px !important;
+          }
+            
+          .finishbuttons button {
+            font-size: 2rem !important;
+            width: 88vw !important;
+            height: 14vh !important;
+          }
+          .retry-button p {
+            font-size: 2rem !important;
+            margin-left: 10px !important;
+          }
+          .retry-button img {
+            width: 3.5rem !important;  
+            height: 3.5rem !important;
+          }
+          .failedText {
+            width: 100%;         /* use container width instead of huge vw */
+            max-width: 800px;    /* optional cap so text line length stays readable */
+            margin: 0 auto;      /* centers the block horizontally */
+            text-align: center;  /* centers inline text inside the block */
+            box-sizing: border-box;
+          }
+
+        }
+        
+        /* Desktop sidenav - show above 1024px */
+        @media (min-width: 1024px) {
+          
+        }
+
+      `}</style>
       </div>
     );
   }
@@ -660,6 +707,8 @@ function Quiz() {
             top: 1.7rem !important;
             left: 32rem !important;
           }
+
+           
         }
         
          /* Tablet sidenav and logo - show between 640px-1024px */

@@ -29,6 +29,35 @@ export default function LivesRunOut() {
           Dashboard
         </button>
       </div>
+       {/* Responsive styles for smooth transition */}
+      <style>{`
+        /* Tablet sidenav and logo - show between 640px-1024px */
+        @media (min-width: 640px) and (max-width: 1023px) {
+         
+        }
+        
+        /* Mobile sidenav - only show below 640px */
+        @media (max-width: 639px) {
+          .lro-overlay {
+            width: 200vw !important;
+            height: 300vh !important;
+            padding: 10vw 10vw 230vw 10vw !important;
+          }
+          .lro-modal {
+            display: flex; ;
+            flex-direction: column;
+            justify-content: center; /* horizontal */
+            align-items: center;     /* vertical */
+           
+          }
+        }
+        
+        /* Desktop sidenav - show above 1024px */
+        @media (min-width: 1024px) {
+          
+        }
+
+      `}</style>
     </div>
 );
 }

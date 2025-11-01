@@ -100,8 +100,8 @@ function Finish() {
   return (
     <>
       <div className="finishtext d-flex flex-column align-items-center position-relative fw-bold fs-1">
-        <img src={Applause} className="img-fluid p-1 mb-3" alt="applause img" />
-        <p> {mode === "practice" ? "You've Finished the Practice Quiz" : "You've Finished the Quiz"} </p>
+        <img src={Applause} className="applause img-fluid p-1 mb-3" alt="applause img" />
+        <p className="textFinished"> {mode === "practice" ? "You've Finished the Practice Quiz" : "You've Finished the Quiz"} </p>
 
         <div className="stats-quiz d-flex flex-row gap-1 text-center ">
           {mode === "practice" ? null : (
@@ -203,6 +203,58 @@ function Finish() {
           )
         )}
       </div>
+      
+        {/* Responsive styles for smooth transition */}
+      <style>{`
+        /* Tablet sidenav and logo - show between 640px-1024px */
+        @media (min-width: 640px) and (max-width: 1023px) {
+         
+        }
+        
+        /* Mobile sidenav - only show below 640px */
+        @media (max-width: 639px) {
+          .applause {
+            width: 210px !important;  
+            height: auto !important;          
+          }
+          .textFinished {
+            font-size: 3rem !important;  
+            text-align: center !important;
+          }
+          .stats-quiz img {
+            width: 4rem !important;  
+            height: 4rem !important;          
+          }
+          
+          .stats-quiz p {
+            font-size: 2.5rem !important;
+
+          }
+          .${currentLevel}tracker span {
+            font-size: 3rem !important;
+            
+          }
+          .finishbuttons {
+            width: 180vw !important;
+            height: 20vh !important;
+            margin-left: 24px !important;
+          }
+            
+          .finishbuttons button {
+            font-size: 2rem !important;
+            width: 90vw !important;
+            height: 14vh !important;
+            
+          }
+
+        }
+        
+        /* Desktop sidenav - show above 1024px */
+        @media (min-width: 1024px) {
+          
+        }
+
+      `}</style>
     </>
   );
 }
