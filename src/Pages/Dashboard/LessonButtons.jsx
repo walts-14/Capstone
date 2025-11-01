@@ -22,7 +22,7 @@ const lessonsByLevel = {
 
 function LessonButtons() {
   const navigate = useNavigate();
-  const [difficulty, setDifficulty] = useState("INTERMEDIATE");
+  const [difficulty, setDifficulty] = useState("BASIC");
   const [lives, setLives] = useState(0);
   const { points: ctxPoints } = useContext(ProgressContext);
   const points = typeof ctxPoints === 'number' ? ctxPoints : 0;
@@ -44,29 +44,49 @@ function LessonButtons() {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (!buttonContainerRef.current) return;
       const container = buttonContainerRef.current;
-      const scrollTop = container.scrollTop;
-      const sections = container.querySelectorAll(
-        ".lessons-container, .lessons-container2, .lessons-container3"
-      );
+      if (!container) return;
 
-      let currentDifficulty = "BASIC";
-      sections.forEach((section, index) => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.offsetHeight;
-        if (scrollTop >= sectionTop - sectionHeight / 2) {
-          if (index === 1) currentDifficulty = "INTERMEDIATE";
-          if (index === 2) currentDifficulty = "ADVANCED";
+      // Use viewport coordinates so this works regardless of container offsetParent
+      const containerRect = container.getBoundingClientRect();
+      const lookY = containerRect.top + container.clientHeight / 3; // a point 1/3 down the container
+
+      const tiles = Array.from(container.querySelectorAll(".lesson-tile"));
+      if (!tiles.length) return;
+
+      let activeIndex = 0;
+      for (let i = 0; i < tiles.length; i++) {
+        const tRect = tiles[i].getBoundingClientRect();
+        if (tRect.top <= lookY && tRect.bottom >= lookY) {
+          activeIndex = i;
+          break;
         }
-      });
+      }
+
+      // Fallback: pick first tile that appears below the top edge
+      if (activeIndex === 0) {
+        for (let i = 0; i < tiles.length; i++) {
+          const tRect = tiles[i].getBoundingClientRect();
+          if (tRect.top >= containerRect.top - 1) {
+            activeIndex = i;
+            break;
+          }
+        }
+      }
+
+      const lessonId = activeIndex + 1; // tiles correspond to lessons 1..12
+      let currentDifficulty = "BASIC";
+      if (lessonId >= 5 && lessonId <= 8) currentDifficulty = "INTERMEDIATE";
+      else if (lessonId >= 9) currentDifficulty = "ADVANCED";
 
       setDifficulty(currentDifficulty);
     };
 
     const container = buttonContainerRef.current;
     if (container) {
-      container.addEventListener("scroll", handleScroll);
+      container.addEventListener("scroll", handleScroll, { passive: true });
+      // run once to initialize
+      handleScroll();
     }
     return () => {
       if (container) {
