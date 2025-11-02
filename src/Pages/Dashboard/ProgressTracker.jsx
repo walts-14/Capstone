@@ -483,7 +483,7 @@ export default function ProgressTracker({ student }) {
   const renderLessonsPanel = (isModal = false) => {
     const panelClass = isModal
       ? "text-white rounded-3xl p-3  h-280 w-full overflow-y-auto "
-      : "absolute top-52 right-0 text-white rounded-4xl p-3 max-h-[43rem] h-auto w-[25vw] overflow-y-scroll";
+      : "absolute top-40 right-0 text-white rounded-4xl p-3 max-h-[43rem] h-auto w-[25vw] overflow-y-scroll";
     const panelStyle = isModal
       ? {
           backgroundColor: "#271D3E",
