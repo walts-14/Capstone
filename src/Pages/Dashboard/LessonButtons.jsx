@@ -241,7 +241,10 @@ function LessonButtons() {
   return (
     <>
           {/* Header with difficulty and lives/diamonds */}
-      <div className="headerlessbtn flex items-center justify-center gap-5 sticky top-3 z-10  text-white header-container">
+      <div className="headerlessbtn flex items-center justify-center gap-5 sticky top-3 z-10  text-white header-container" 
+      style={{
+marginTop: "-40rem"
+      }}>
         <div
           className="Difficulty text-center px-5 py-2 rounded-2xl font-bold text-white text-[2.5rem] difficulty-button"
           style={{
