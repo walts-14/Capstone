@@ -983,26 +983,21 @@ const SuperAdmin = () => {
                       <form onSubmit={handleSendMessage}>
                         <div style={{ marginBottom: "1rem" }}>
                           <div style={{ marginBottom: "0.7rem" }}>
-                            <label
-                              style={{
-                                color: "#fff",
-                                fontWeight: "bold",
-                                fontSize: "1.1rem",
-                              }}
-                            >
-                              <input
-                                type="checkbox"
-                                checked={sendToAllAdmins}
-                                onChange={(e) =>
-                                  setSendToAllAdmins(e.target.checked)
-                                }
-                               style={{
-  marginRight: "0.5rem",
-  color: "black", // correct property
-}}
-                              />
-                              Send to All Admins
-                            </label>
+<label
+  style={{
+    color: "#000",
+    fontWeight: "bold",
+    fontSize: "1.1rem",
+  }}
+>
+  <input
+    type="checkbox"
+    checked={sendToAllAdmins}
+    onChange={(e) => setSendToAllAdmins(e.target.checked)}
+    style={{ marginRight: "0.5rem" }}
+  />
+  Send to All Admins
+</label>
                           </div>
                           <select
                             name="teacher"

@@ -1,5 +1,19 @@
 // backend/controllers/messageController.js
 
+// safe helper to get an ObjectId instance or null (works across mongoose/bson versions)
+const toObjectId = (v) => {
+  try {
+    if (!v && v !== 0) return null;
+    const s = String(v);
+    if (!mongoose.Types.ObjectId.isValid(s)) return null;
+    // use `new` to avoid "cannot be invoked without 'new'" errors
+    return new mongoose.Types.ObjectId(s);
+  } catch (e) {
+    return null;
+  }
+};
+
+
 import Message from "../models/message.js";
 import User from "../models/user.js";
 import mongoose from "mongoose";
@@ -179,69 +193,74 @@ export const getMessagesForAdmin = async (req, res) => {
   try {
     const user = req.user;
     if (!user) return res.status(401).json({ message: "Unauthorized" });
-    // tolerate role casing/variants (e.g. 'Admin', 'administrator')
     const role = String(user.role || "").toLowerCase();
     if (!role.includes("admin")) return res.status(403).json({ message: "Forbidden" });
 
-    // Build query: broadcasts targeted at admins OR messages that include this user as recipient
+    // Prepare both string and ObjectId forms for matching
+    const userIdStr = String(user._id || user.id || user.userId || "");
+    const userIdObj = toObjectId(userIdStr);
+
+    // Build flexible OR conditions:
     const orConditions = [{ isBroadcast: true, recipientRole: "admin" }];
-    try {
-      if (user._id && mongoose.Types.ObjectId.isValid(String(user._id))) {
-        orConditions.push({ recipientIds: mongoose.Types.ObjectId(String(user._id)) });
-      } else if (user._id) {
-        // fallback to direct match with whatever the token provides
-        orConditions.push({ recipientIds: user._id });
-      }
-    } catch (e) {
-      orConditions.push({ recipientIds: user._id });
+
+    if (userIdObj) {
+      orConditions.push({ recipientIds: userIdObj });
     }
+    // match string-stored ids
+    orConditions.push({ recipientIds: userIdStr });
+
+    // match embedded objects such as { value: "..."} or { _id: "..." }
+    orConditions.push({
+      recipientIds: {
+        $elemMatch: {
+          $or: [
+            { _id: userIdObj || userIdStr },
+            { id: userIdObj || userIdStr },
+            { value: userIdObj || userIdStr },
+          ],
+        },
+      },
+    });
 
     const query = { $or: orConditions };
 
-    // exclude messages the user has soft-deleted for themselves
-    try {
-      if (user._id && mongoose.Types.ObjectId.isValid(String(user._id))) {
-        query.$nor = [{ deletedFor: mongoose.Types.ObjectId(String(user._id)) }];
-      } else if (user._id) {
-        query.$nor = [{ deletedFor: user._id }];
-      }
-    } catch (e) {
-      // ignore
-    }
+    // Exclude messages soft-deleted for this user (both ObjectId and string)
+    const norArr = [];
+    if (userIdObj) norArr.push({ deletedFor: userIdObj });
+    norArr.push({ deletedFor: userIdStr });
+    if (norArr.length) query.$nor = norArr;
 
     if (req.query.grade) {
       query.$and = [{ grade: req.query.grade }];
     }
+
+    // Logging for debugging
+    const queryForLog = JSON.parse(JSON.stringify(query, (k, v) => {
+      if (v && v._bsontype === "ObjectID") return String(v);
+      return v;
+    }));
+   //console.log("getMessagesForAdmin - built query:", JSON.stringify(queryForLog, null, 2));
 
     const messages = await Message.find(query)
       .sort({ createdAt: -1 })
       .populate("senderId", "name email role")
       .lean();
 
-    // Debug: log the query and number of messages returned
-    try {
-      console.log("getMessagesForAdmin - user:", {
-        id: user._id || user.id || null,
-        role: user.role,
-        email: user.email || null,
-      });
-      console.log("getMessagesForAdmin - query:", JSON.stringify(query));
-      console.log("getMessagesForAdmin - found:", Array.isArray(messages) ? messages.length : 0);
-    } catch (e) {
-      /* ignore */
-    }
+    console.log("getMessagesForAdmin - found:", Array.isArray(messages) ? messages.length : 0);
 
     const data = messages.map((m) => {
-      const isRead = (m.readBy || []).some((r) => String(r.userId) === String(user._id));
+      const isRead = (m.readBy || []).some((r) => String(r.userId) === userIdStr);
       return { ...m, isRead };
     });
 
     return res.json(data);
   } catch (err) {
-    console.error("getMessagesForAdmin error", err);
-    return res.status(500).json({ message: "Server error" });
+    console.error("getMessagesForAdmin error:", err && err.stack ? err.stack : err);
+    return res.status(500).json({ message: "Server error", error: err?.message || String(err) });
   }
 };
+
+
 
 /**
  * Mark a message as read by the logged-in user

@@ -54,26 +54,47 @@ const DashboardAdmin = () => {
 
   // (Socket client removed) real-time updates disabled; messages are fetched when notification modal opens.
 
-  const fetchAdminMessages = async (grade = "") => {
-    try {
-      setLoadingMessages(true);
-      // axios instance has baseURL and Authorization defaults
-      const res = await axios.get("/api/messages/for-admin", {
-        params: grade ? { grade } : {},
-      });
-      // your backend returns an array (controller returns res.json(data))
-      // so res.data should be array
-      setMessages(Array.isArray(res.data) ? res.data : res.data || []);
-    } catch (err) {
-      console.error(
-        "Error fetching admin messages:",
-        err?.response?.data || err
-      );
-      toast.error("Failed to load notifications.");
-    } finally {
-      setLoadingMessages(false);
-    }
-  };
+const fetchAdminMessages = async (grade = "") => {
+  try {
+    setLoadingMessages(true);
+
+    // Be explicit about baseURL + token so we don't rely on other axios defaults
+    const tokenLocal = localStorage.getItem("token");
+    const headers = tokenLocal ? { Authorization: `Bearer ${tokenLocal}` } : {};
+
+    const res = await axios.get("/api/messages/for-admin", {
+      baseURL: "http://localhost:5000", // use your backend host (adjust if different)
+      headers,
+      params: grade ? { grade } : {},
+    });
+
+    // Debugging logs — check browser console / network
+    console.log("fetchAdminMessages - raw response:", res);
+
+    // Support multiple response shapes
+    let payload = [];
+    if (Array.isArray(res.data)) payload = res.data;
+    else if (Array.isArray(res.data?.data)) payload = res.data.data;
+    else if (Array.isArray(res.data?.data?.data)) payload = res.data.data.data;
+    else if (res.data?.message && Array.isArray(res.data?.messages)) payload = res.data.messages; // another possible shape
+    else payload = []; // fallback
+
+    console.log("fetchAdminMessages - normalized payload length:", payload.length);
+    setMessages(payload);
+  } catch (err) {
+    // Show full error info in console for debugging
+    console.error("Error fetching admin messages (detailed):", {
+      status: err?.response?.status,
+      data: err?.response?.data,
+      message: err?.message,
+    });
+    toast.error("Failed to load notifications.");
+    setMessages([]); // ensure UI shows No notifications rather than stale data
+  } finally {
+    setLoadingMessages(false);
+  }
+};
+
 
   useEffect(() => {
     fetchNotifications();
