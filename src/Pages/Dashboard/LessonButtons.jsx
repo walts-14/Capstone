@@ -25,7 +25,7 @@ function LessonButtons() {
   const [difficulty, setDifficulty] = useState("BASIC");
   const [lives, setLives] = useState(0);
   const { points: ctxPoints } = useContext(ProgressContext);
-  const points = typeof ctxPoints === 'number' ? ctxPoints : 0;
+  const points = typeof ctxPoints === "number" ? ctxPoints : 0;
   const [unlockedLessons, setUnlockedLessons] = useState([1]);
   const buttonContainerRef = useRef(null);
   const { progressData } = useContext(ProgressContext);
@@ -240,132 +240,255 @@ function LessonButtons() {
 
   return (
     <>
-          {/* Header with difficulty and lives/diamonds */}
-      <div className="headerlessbtn flex items-center justify-center gap-5 sticky top-3 z-10  text-white header-container" 
-      style={{
-marginTop: "-40rem"
-      }}>
+      {/* Header with difficulty and lives/diamonds */}
+      <div
+        className="headerlessbtn flex items-center justify-center gap-5 sticky top-3 z-10  text-white header-container"
+        style={{
+          marginTop: "-40rem",
+        }}
+      >
         <div
           className="Difficulty text-center px-5 py-2 rounded-2xl font-bold text-white text-[2.5rem] difficulty-button"
           style={{
             backgroundColor: difficultyColors[difficulty],
-            boxShadow: `0 0 0 5px ${strokeColors[difficulty] || '#A6DCFF'}`,
-            width: 'auto'
+            boxShadow: `0 0 0 5px ${strokeColors[difficulty] || "#A6DCFF"}`,
+            width: "auto",
           }}
         >
           {difficulty}
         </div>
         <div className="livesDia flex items-center justify-center">
-           <LivesandDiamonds />
+          <LivesandDiamonds />
         </div>
-       
       </div>
 
       <div
-      className="max-h-screen overflow-auto p-8 mt-[2rem] ml-auto scrollbar-hide"
-      ref={buttonContainerRef}
-      style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-    >
-      <style jsx>{`
-        /* hide default scrollbars for this container */
-        div::-webkit-scrollbar { display: none; }
+        className="max-h-screen overflow-auto p-8 mt-[2rem] ml-auto scrollbar-hide lesson-scroll-container"
+        ref={buttonContainerRef}
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+      >
+        <style jsx>{`
+          /* hide default scrollbars for this container */
+          div::-webkit-scrollbar {
+            display: none;
+          }
 
-        /* Glow on hover for unlocked lesson buttons (keep original colors) */
-        .lesson-button.basic:not(.cursor-not-allowed):hover { box-shadow: 0 12px 0 #246b9a, 0 0 24px 6px rgba(166,220,255,0.28); }
-        .lesson-button.intermediate:not(.cursor-not-allowed):hover { box-shadow: 0 12px 0 #a9890a, 0 0 24px 6px rgba(255,254,166,0.28); }
-        .lesson-button.advanced:not(.cursor-not-allowed):hover { box-shadow: 0 12px 0 #992d22, 0 0 24px 6px rgba(255,125,111,0.28); }
+          /* Glow on hover for unlocked lesson buttons (keep original colors) */
+          .lesson-button.basic:not(.cursor-not-allowed):hover {
+            box-shadow: 0 12px 0 #246b9a, 0 0 24px 6px rgba(166, 220, 255, 0.28);
+          }
+          .lesson-button.intermediate:not(.cursor-not-allowed):hover {
+            box-shadow: 0 12px 0 #a9890a, 0 0 24px 6px rgba(255, 254, 166, 0.28);
+          }
+          .lesson-button.advanced:not(.cursor-not-allowed):hover {
+            box-shadow: 0 12px 0 #992d22, 0 0 24px 6px rgba(255, 125, 111, 0.28);
+          }
 
-      /* Wrapper centers content and reserves space for right panel */
-      .lesson-wrap { max-width: 1600px; margin: 0 auto; padding: 0 1.5rem; }
+          /* Wrapper centers content and reserves space for right panel */
+          .lesson-wrap {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+          }
 
-      /* Keep the layout strictly two columns on desktop
+          /* Add extra bottom padding for desktop/laptop so lesson 12 is reachable */
+          @media (min-width: 1024px) {
+            .lesson-scroll-container {
+              padding-bottom: 8rem !important;
+            }
+          }
+
+          /* Keep the layout strictly two columns on desktop
         - Desktop & tablet: 2 columns
         - Mobile (<=640px): 1 column
         This preserves the look while avoiding extra columns */
-      .lessons-grid { display: grid; gap: 5.5rem; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
-      @media (max-width: 639px){ .lessons-grid { gap: 4rem; } }
-      @media (min-width: 1400px) { .lessons-grid { gap: 7rem; } }
-      @media (min-width: 1800px) { .lessons-grid { gap: 8rem; } }
-      @media (min-width: 2560px) { .lessons-grid { gap: 9.5rem; } }
+          .lessons-grid {
+            display: grid;
+            gap: 7rem;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            align-items: start;
+          }
+          @media (max-width: 639px) {
+            .lessons-grid {
+              gap: 4rem;
+            }
+          }
+          @media (min-width: 1400px) {
+            .lessons-grid {
+              gap: 7rem;
+            }
+          }
+          @media (min-width: 1800px) {
+            .lessons-grid {
+              gap: 8rem;
+            }
+          }
+          @media (min-width: 2560px) {
+            .lessons-grid {
+              gap: 9.5rem;
+            }
+          }
 
-      /* Tile container used to stagger vertical position without horizontal margins (2-column pattern) */
-      .lesson-tile { transition: transform 200ms ease; display:flex; justify-content:center; }
-      /* Odd items lift up to create the zigzag in a 2-column layout */
-      .lessons-grid .lesson-tile:nth-child(2n+1) { transform: translateY(-3.4rem); }
-      .lessons-grid .lesson-tile:nth-child(2n) { transform: translateY(0); }
-      /* Reduce stagger on narrow screens so items don't overlap */
-      @media (max-width: 900px) { .lessons-grid .lesson-tile:nth-child(2n+1) { transform: translateY(-1rem); } }
+          /* Tile container used to stagger vertical position without horizontal margins (2-column pattern) */
+          .lesson-tile {
+            transition: transform 200ms ease;
+            display: flex;
+            justify-content: center;
+          }
+          /* Odd items lift up to create the zigzag in a 2-column layout */
+          .lessons-grid .lesson-tile:nth-child(2n + 1) {
+            transform: translateY(-3.4rem);
+          }
+          .lessons-grid .lesson-tile:nth-child(2n) {
+            transform: translateY(0);
+          }
+          /* Reduce stagger on narrow screens so items don't overlap */
+          @media (max-width: 900px) {
+            .lessons-grid .lesson-tile:nth-child(2n + 1) {
+              transform: translateY(-1rem);
+            }
+          }
 
-        /* Default button sizing (responsive overrides below) */
-        .lesson-button { height: 6.5rem; width: 9rem; font-size: 3.25rem; }
-        @media (min-width: 1024px) { .lesson-button { height: 8rem; width: 8rem; font-size: 2rem; } 
-                                     .lessons-grid .lesson-tile:nth-child(2n+1) { transform: translateY(-2rem); margin-top: 2rem; }
-                                     .lessons-grid .lesson-tile:nth-child(2n) { transform: translateY(8rem); } 
-                                     .max-h-screen { margin-top: 5vh; } 
-                                     }
-        @media (min-width: 1400px) { .lesson-button { height: 10.5rem; width: 13rem; font-size: 6.25rem; } 
-                                     .lessons-grid .lesson-tile:nth-child(2n+1) { transform: translateY(-5rem); margin-top: 5rem; }
-                                     .lessons-grid .lesson-tile:nth-child(2n) { transform: translateY(11.5rem); } }
-        @media (min-width: 2560px) { .lesson-button { height: 20.5rem !important; width: 23rem !important; font-size: 10rem !important; border-radius: 3rem !important; }
-                                     .lessons-grid .lesson-tile:nth-child(2n+1) { transform: translateY(-10rem); margin-top: 10rem; }
-                                     .lessons-grid .lesson-tile:nth-child(2n) { transform: translateY(21rem); } }
-         
-        
-        /* Mobile sidenav - only show below 640px */
-        @media (max-width: 639px) {
-        .headerlessbtn { display: flex !important; gap: 1rem !important;  margin-top: 30vh !important; }
-        .Difficulty { display: flex !important;
-                      height: 75px;
-                      font-size: 2.6rem;
-                      padding-inline: 20px !important;
-                      
-                      }
-        .livesDia { display: flex !important;
-                    gap: 18px; }
-        .lesson-button { height: 10.5rem !important; width: 13rem !important; font-size: 8rem !important; border-radius: 3rem !important; }
-        .lessons-grid .lesson-tile:nth-child(2n+1) { transform: translateY(-8rem); margin-top: 8rem; }
-        .lessons-grid .lesson-tile:nth-child(2n) { transform: translateY(11.5rem); }
-        .max-h-screen{ max-height: 125vh !important; margin-top: 5vh !important; }
-        }
-      
-        
-        
+          /* Default button sizing (responsive overrides below) */
+          .lesson-button {
+            height: 6.5rem;
+            width: 9rem;
+            font-size: 3.25rem;
+          }
+          @media (min-width: 1024px) {
+            .lesson-button {
+              height: 8rem;
+              width: 8rem;
+              font-size: 2rem;
+            }
+            .lessons-grid .lesson-tile:nth-child(2n + 1) {
+              transform: translateY(-2rem);
+              margin-top: 2rem;
+            }
+            .lessons-grid .lesson-tile:nth-child(2n) {
+              transform: translateY(8rem);
+            }
+            .max-h-screen {
+              max-height: 95vh !important;
+              margin-top: 5vh;
+              margin-bottom: 16vh !important;
+            }
+            .lesson-scroll-container {
+              padding-bottom: 18rem !important;
+            }
+          }
+          @media (min-width: 1400px) {
+            .lesson-button {
+              height: 10.5rem;
+              width: 13rem;
+              font-size: 6.25rem;
+            }
+            .lessons-grid .lesson-tile:nth-child(2n + 1) {
+              transform: translateY(-5rem);
+              margin-top: 5rem;
+            }
+            .lessons-grid .lesson-tile:nth-child(2n) {
+              transform: translateY(11.5rem);
+            }
+          }
+          @media (min-width: 2560px) {
+            .lesson-button {
+              height: 20.5rem !important;
+              width: 23rem !important;
+              font-size: 10rem !important;
+              border-radius: 3rem !important;
+            }
+            .lessons-grid .lesson-tile:nth-child(2n + 1) {
+              transform: translateY(-10rem);
+              margin-top: 10rem;
+            }
+            .lessons-grid .lesson-tile:nth-child(2n) {
+              transform: translateY(21rem);
+            }
+          }
 
-        /* hide-scrollbar helper kept for container compatibility */
-        .hide-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-      `}</style>
+          /* Mobile sidenav - only show below 640px */
+          @media (max-width: 639px) {
+            .headerlessbtn {
+              display: flex !important;
+              gap: 1rem !important;
+              margin-top: 30vh !important;
+            }
+            .Difficulty {
+              display: flex !important;
+              height: 75px;
+              font-size: 2.6rem;
+              padding-inline: 20px !important;
+            }
+            .livesDia {
+              display: flex !important;
+              gap: 18px;
+            }
+            .lesson-button {
+              height: 10.5rem !important;
+              width: 13rem !important;
+              font-size: 8rem !important;
+              border-radius: 3rem !important;
+            }
+            .lessons-grid .lesson-tile:nth-child(2n + 1) {
+              transform: translateY(-8rem);
+              margin-top: 8rem;
+            }
+            .lessons-grid .lesson-tile:nth-child(2n) {
+              transform: translateY(11.5rem);
+            }
+            .max-h-screen {
+              max-height: 125vh !important;
+              margin-top: 5vh !important;
+            }
+          }
 
+          /* hide-scrollbar helper kept for container compatibility */
+          .hide-scrollbar {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+          }
+          .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+          }
+        `}</style>
 
-
-      {/* Responsive lessons grid: keeps the column design while making it fluid */}
-      <div className="lesson-wrap">
-        <div className="lessons-grid">
-          {lessonRoutes.map((lesson, index) => (
-            <div key={lesson.id} className="lesson-tile">
-              <div
-                className={`${getLessonButtonClass(lesson)} lesson-button lesson-button-shadow ${
-                  lesson.id >= 1 && lesson.id <= 4 ? 'basic' :
-                  lesson.id >= 5 && lesson.id <= 8 ? 'intermediate' : 'advanced'
-                }`}
-                onClick={() => {
-                  if (lesson.unlocked) {
-                    let difficulty = 'BASIC';
-                    if (lesson.id >= 5 && lesson.id <= 8) difficulty = 'INTERMEDIATE';
-                    if (lesson.id >= 9 && lesson.id <= 12) difficulty = 'ADVANCED';
-                    navigate(`/page/${lesson.termId}`, { state: { difficulty } });
-                  }
-                }}
-              >
-                {lesson.id}
+        {/* Responsive lessons grid: keeps the column design while making it fluid */}
+        <div className="lesson-wrap">
+          <div className="lessons-grid">
+            {lessonRoutes.map((lesson, index) => (
+              <div key={lesson.id} className="lesson-tile">
+                <div
+                  className={`${getLessonButtonClass(
+                    lesson
+                  )} lesson-button lesson-button-shadow ${
+                    lesson.id >= 1 && lesson.id <= 4
+                      ? "basic"
+                      : lesson.id >= 5 && lesson.id <= 8
+                      ? "intermediate"
+                      : "advanced"
+                  }`}
+                  onClick={() => {
+                    if (lesson.unlocked) {
+                      let difficulty = "BASIC";
+                      if (lesson.id >= 5 && lesson.id <= 8)
+                        difficulty = "INTERMEDIATE";
+                      if (lesson.id >= 9 && lesson.id <= 12)
+                        difficulty = "ADVANCED";
+                      navigate(`/page/${lesson.termId}`, {
+                        state: { difficulty },
+                      });
+                    }
+                  }}
+                >
+                  {lesson.id}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
-    </div>
     </>
-    
   );
 }
 
