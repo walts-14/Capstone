@@ -1,3 +1,64 @@
+/* Desktop layout for library pages */
+@media (min-width: 1024px) {
+  .library-main-layout {
+    margin-left: 320px;
+    margin-top: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: calc(100vw - 320px);
+    min-height: 100vh;
+    justify-content: flex-start;
+  }
+  .library-buttons-top {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+    bottom: 27rem;
+  }
+  .level-container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+    bottom: 27.2rem;
+    left: 0;
+    padding-bottom: 5rem;
+  }
+  .level-content {
+    min-height: 7.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+  .level-content .text-3xl {
+    font-size: 2.5rem !important;
+  }
+  .level-content .text-2xl {
+    font-size: 1.5rem !important;
+  }
+  .level-content .text-5xl {
+    font-size: 2.2rem !important;
+  }
+}
+@media (max-width: 1023px) {
+  .library-main-layout {
+    margin-left: 0;
+    margin-top: 0;
+    width: 100vw;
+  }
+  .library-buttons-top {
+    width: 100%;
+    margin-bottom: 0.5rem;
+    margin-top: 0;
+  }
+}
 @font-face {
   font-family: "Baloo";
   src: url("/src/font/Baloo-Regular.ttf") format("truetype");
@@ -50,7 +111,11 @@ a {
   min-height: 7.5rem;
   width: 100%;
   padding: 0.75rem 1rem;
-  background: linear-gradient(to bottom, var(--level-bg-start) 34px, var(--level-bg-end) 34px);
+  background: linear-gradient(
+    to bottom,
+    var(--level-bg-start) 34px,
+    var(--level-bg-end) 34px
+  );
   background-repeat: no-repeat;
   border-radius: 16px;
   color: var(--white);

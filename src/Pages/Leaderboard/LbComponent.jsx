@@ -50,6 +50,14 @@ function LbComponent() {
                 src={picFor(1, profile2)}
                 className="max-w-full h-auto user-avatar"
                 alt="profile img"
+                style={{
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                  width: "80px",
+                  height: "80px",
+                  aspectRatio: "1/1",
+                  backgroundColor: "#222"
+                }}
               />
               <p className="text-gray-500 text-4xl">
                 {sortedLeaderboard[1]?.name || "TBD"}
@@ -80,6 +88,14 @@ function LbComponent() {
                 src={picFor(0, profile1)}
                 className="max-w-full h-auto user-avatar"
                 alt="profile img"
+                style={{
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                  width: "80px",
+                  height: "80px",
+                  aspectRatio: "1/1",
+                  backgroundColor: "#222"
+                }}
               />
               <p className="text-gray-500 text-4xl">
                 {sortedLeaderboard[0]?.name || "TBD"}
