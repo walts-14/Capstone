@@ -39,8 +39,15 @@ function LbComponent() {
     sortedLeaderboard[idx]?.profilePic || fallback;
 
   return (
-    <>
-      <div className="flex flex-row items-center justify-center">
+    <div
+      className="flex flex-col w-full items-center justify-start"
+      style={{ minHeight: "100vh", overflow: "hidden" }}
+    >
+      {/* Top 3 Row */}
+      <div
+        className="flex flex-row items-center justify-center w-full"
+        style={{ marginTop: 0, paddingTop: 0 }}
+      >
         {/* Second Place */}
         <div className="flex items-center gap-2">
           <img src={medal2} className="max-w-full h-auto" alt="medal img" />
@@ -56,7 +63,7 @@ function LbComponent() {
                   width: "80px",
                   height: "80px",
                   aspectRatio: "1/1",
-                  backgroundColor: "#222"
+                  backgroundColor: "#222",
                 }}
               />
               <p className="text-gray-500 text-4xl">
@@ -94,7 +101,7 @@ function LbComponent() {
                   width: "80px",
                   height: "80px",
                   aspectRatio: "1/1",
-                  backgroundColor: "#222"
+                  backgroundColor: "#222",
                 }}
               />
               <p className="text-gray-500 text-4xl">
@@ -143,7 +150,7 @@ function LbComponent() {
       </div>
 
       {/* Table Header */}
-      <div className="user-points rounded-3xl flex text-center justify-between items-center pt-2 ml-8  sm:w-[90%] pl-3 text-sm  md:w-[80%] lg:w-[70%] xl:w-[60%]">
+      <div className="user-points rounded-3xl flex text-center justify-between items-center pt-2 ml-8 sm:w-[90%] pl-3 text-sm  md:w-[80%] lg:w-[70%] xl:w-[60%]">
         <span className="text-gray-500 text-2xl mr-auto ml-5">Users</span>
         <span className="text-gray-500 text-2xl">Grade Level</span>
         <span className="text-gray-500 text-2xl ml-auto mr-5">Points</span>
@@ -167,7 +174,7 @@ function LbComponent() {
                   <img
                     src={user.profilePic || profile3}
                     alt="profile"
-                    className="user-avatar max-w-full h-auto"
+                    className="user-avatar width-auto height-auto "
                   />
                   <span className="user-name text-white text-2xl">
                     {user.name || "No Name"}
@@ -195,7 +202,7 @@ function LbComponent() {
           </p>
         )}
       </div>
-    </>
+    </div>
   );
 }
 

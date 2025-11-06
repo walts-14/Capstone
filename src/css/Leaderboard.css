@@ -87,7 +87,9 @@
   font-family: "Baloo", sans-serif;
 }
 .leaderboard-container {
-  margin-left: 27rem;
+  position: absolute;
+  top: 0;
+  right: 2rem;
 }
 .number-label {
   width: 1.875rem;
