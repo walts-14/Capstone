@@ -233,17 +233,17 @@ const calculateOverallProgress = (progressData) => {
 
  {/* Streak Button MOBILE */}
         <button
-          className="mobile-btnstreak rounded-4 p-1 cursor-pointer static flex items-center justify-center"
-          style={{ background: "#271d3e", boxShadow: "0 0 0 5px #F44336" }}
+          className="mobile-btnstreak p-1 cursor-pointer static flex items-center justify-center"
+          style={{ background: "#271d3e", boxShadow: "0 0 0 3px #F44336", borderRadius: "12px" }}
           onClick={toggle}
         >
-          <div className="flex flex-row items-center justify-center h-[14vh] w-[35vw]">
-            <img src={fire} alt="streak" className="h-15 w-54 mb-1" />
+          <div className="flex flex-row items-center justify-center h-[7vh] w-[20vw]">
+            <img src={fire} alt="streak" className="h-9 w-9 mb-1" />
             <div className="flex flex-col ">
-               <div className="text-white text-5xl h-[45px] flex items-center justify-center">
+               <div className="text-white text-2xl h-[30px] flex items-center justify-center">
               {currentStreakValue}
                </div>
-              <span className="text-[#878194] text-center text-1xl leading-5">
+              <span className="text-[#878194] text-center text-[9px] leading-2">
                 Day <br /> Streak
               </span>
             </div>
@@ -597,24 +597,25 @@ export default function ProgressTracker({ student }) {
       {renderLessonsPanel(false)}
     </div>
 
-    <div className="mobile-tracker flex flex-row items-center justify-center gap-4 fixed right-12 top-20 z-[1]">
-       <div className="streakleaderboard flex flex-row items-center justify-center gap-4 fixed left-12 top-15"> 
+    <div className="mobile-tracker flex flex-row items-center justify-center gap-4 fixed right-7 top-20 z-[1]">
+       <div className="streakleaderboard flex flex-row items-center justify-center gap-3 fixed right-3 top-7"> 
         {/* Leaderboard box - align with streak button */}
         <div
-          className="flex items-center text-white rounded-2xl h-[15.5vh] w-[80vw]  gap-2 px-3"
+          className="flex items-center text-white  h-[8vh] w-[45vw]  gap-2 px-1"
           style={{
             backgroundColor: "var(--dark-purple)",
             fontFamily: '"Baloo", sans-serif',
-            boxShadow: "0 0 0 5px #DCBC3D",
+            boxShadow: "0 0 0 3px #DCBC3D",
             alignItems: "center",
+            borderRadius: "12px",
           }}
         >
-          <img src={trophySrc} className="w-18 h-16" alt="trophy" style={{ display: "block" }} />
+          <img src={trophySrc} className="h-9 w-9" alt="trophy" style={{ display: "block" }} />
           <div className="flex flex-col justify-center">
-            <p className="text-3xl" style={{ margin: 0, lineHeight: 1 }}>
+            <p className="text-1xl" style={{ margin: 0, lineHeight: 1 }}>
               {userRank == null ? "..." : (typeof userRank === "number" ? `#${userRank}` : String(userRank))}
             </p>
-            <p className="text-nowrap text-5xl ms-1" style={{ margin: 0, lineHeight: 1 }}>
+            <p className="text-nowrap text-2xl ms-1" style={{ margin: 0, lineHeight: 1 }}>
               {unwrapDefault(displayUsername)}
             </p>
           </div>
@@ -628,13 +629,13 @@ export default function ProgressTracker({ student }) {
         <div >
           <button
             onClick={() => setMobileModalOpen(true)}
-            className="py-2 px-4 h-[15.5vh] w-[40vw] text-white"
+            className="py-[2px] px-[6px] h-[8vh] w-[15vw] text-align"
             style={{ backgroundColor: "#271D3E", fontFamily: '"Baloo", sans-serif',
                      fontFamily: '"Baloo", sans-serif',
-                     boxShadow: "0 0 0 5px #C0C0C0", 
-                     borderRadius: "16px"}}
+                     boxShadow: "0 0 0 3px #C0C0C0", 
+                     borderRadius: "12px"}}
           >
-            <img src={progress} alt="" className="w-20 h-18" />
+            <img src={progress} alt="" className="h-9 w-9" />
           </button>
         </div>
       </div>

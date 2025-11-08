@@ -412,17 +412,17 @@ function LessonButtons() {
             .headerlessbtn {
               display: flex !important;
               gap: 1rem !important;
-              margin-top: 30vh !important;
+              margin-top: 20vh !important;
             }
             .Difficulty {
               display: flex !important;
-              height: 75px;
-              font-size: 2.6rem;
-              padding-inline: 20px !important;
+              height: 47px;
+              font-size: 1.2rem;
+              padding-inline: 10px !important;
             }
             .livesDia {
               display: flex !important;
-              gap: 18px;
+              gap: 14px;
             }
             .lesson-button {
               height: 10.5rem !important;

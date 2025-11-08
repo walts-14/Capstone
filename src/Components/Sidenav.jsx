@@ -166,7 +166,7 @@ function Sidenav() {
 
       {/* Sidebar container - mobile (bottom bar, only visible below 640px) */}
       <div
-        className="sidenav-mobile fixed bottom-0 left-0 w-full h-[8rem] bg-[var(--purple)] flex flex-row items-center justify-between px-2 md:hidden"
+        className="sidenav-mobile fixed bottom-0 left-0 w-full h-[3rem] bg-[var(--purple)] flex flex-row items-center justify-between px-2 md:hidden"
         style={{ fontFamily: '"Baloo", sans-serif', transition: "all 0.3s", zIndex: 2147483647 }}
       >
         <nav className="flex flex-row justify-between items-center w-full h-full">
@@ -186,14 +186,14 @@ function Sidenav() {
                 >
                   {isActive && (
                     <div
-                      className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 bg-[var(--mid-purple)] rounded-3xl "
-                      style={{ width: "5.8rem", height: "5.8rem", zIndex: 1 }}
+                      className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 bg-[var(--mid-purple)] rounded-2xl "
+                      style={{ width: "3.5rem", height: "3.5rem", zIndex: 1 }}
                     ></div>
                   )}
                   <img
                     src={item.icon}
                     alt={`${item.label.toLowerCase()} logo`}
-                    className="w-20 h-20 mb-1 relative"
+                    className="w-12 h-12 mb-1 relative"
                     style={{ zIndex: 2 }}
                   />
                   {/* Hide label on mobile for minimal look */}
@@ -229,7 +229,7 @@ function Sidenav() {
           }
           .sidenav-mobile {
             display: flex !important;
-            height: 7.5rem !important;
+            height: 5rem !important;
             z-index: 9999 !important; /* ensure on top of content */
           }
         }
