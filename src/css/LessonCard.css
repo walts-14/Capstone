@@ -83,14 +83,15 @@ body {
 }
 
 /* Tablet tweaks */
-@media (min-width: 640px) {
+@media (min-width: 768px) {
   .terms-card {
     min-height: 7rem;
-    padding: 0.6rem;
+    width: 75%;
+    margin-left: 4rem;
   }
   .term-name {
-    font-size: clamp(1.05rem, 1.8vw, 1.5rem);
-    -webkit-line-clamp: 3;
+    font-size: clamp(1.2rem, 1.8vw, 1.5rem);
+    word-break: word-wrap;
   }
 }
 

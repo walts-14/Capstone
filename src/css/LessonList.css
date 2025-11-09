@@ -72,12 +72,11 @@
 @media (min-width: 768px) {
   .terms-list {
     display: grid;
-    grid-template-columns: repeat(2, 3fr);
-    gap: 1rem;
-    padding: 0.5rem 1rem 8rem; /* bottom space for mobile nav */
+    grid-template-columns: repeat(2, 1fr);
+    padding-left: 4rem;
     margin-top: 8rem;
     width: 100%;
-    max-height: calc(100vh - 15rem);
+    max-height: calc(100vh - 12rem);
     overflow-y: auto; /* make grid scrollable */
     font-weight: 400;
     scrollbar-width: none; /* Firefox */
