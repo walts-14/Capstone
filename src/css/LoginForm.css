@@ -25,12 +25,12 @@
   --semidark-red: #86271e;
 }
 
-/* body {
+body {
   background-color: var(--background);
   display: flex;
   justify-content: center;
   align-items: center;
-} */
+}
 h1 {
   font-family: "Baloo";
   font-size: 40px;
