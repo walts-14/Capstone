@@ -601,7 +601,7 @@ export default function ProgressTracker({ student }) {
        <div className="streakleaderboard flex flex-row items-center justify-center gap-3 fixed right-3 top-7"> 
         {/* Leaderboard box - align with streak button */}
         <div
-          className="flex items-center text-white  h-[8vh] w-[45vw]  gap-2 px-1"
+          className="flex items-center text-white  h-[8.3vh] w-[45vw]  gap-2 px-1"
           style={{
             backgroundColor: "var(--dark-purple)",
             fontFamily: '"Baloo", sans-serif',
@@ -629,7 +629,7 @@ export default function ProgressTracker({ student }) {
         <div >
           <button
             onClick={() => setMobileModalOpen(true)}
-            className="py-[2px] px-[6px] h-[8vh] w-[15vw] text-align"
+            className="flex items-center py-[2px] px-[6px] h-[8.3vh] w-[15vw] text-align "
             style={{ backgroundColor: "#271D3E", fontFamily: '"Baloo", sans-serif',
                      fontFamily: '"Baloo", sans-serif',
                      boxShadow: "0 0 0 3px #C0C0C0", 
