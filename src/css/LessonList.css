@@ -1,3 +1,14 @@
+/* Left align lessonTitle for advanced lessons */
+.lessonTitle-advanced {
+  text-align: left !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  padding-left: 24px !important;
+  max-width: 900px;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 auto 1.2rem auto !important;
+}
 @font-face {
   font-family: "Baloo";
   src: url("/src/font/Baloo-Regular.ttf") format("truetype");
