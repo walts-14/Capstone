@@ -194,7 +194,7 @@ const calculateOverallProgress = (progressData) => {
         {/* Manual Info Modal */}
         {isOpen && (
           <div
-            className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+            className="streak fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
             onClick={closeModal}
           >
             <div
@@ -258,33 +258,33 @@ const calculateOverallProgress = (progressData) => {
             onClick={closeModal}
           >
             <div
-              className="text-white p-8 rounded-3xl w-[70%] h-[46vh] max-w-[500px] text-center border-4 gap-2 mr-40"
+              className="text-white p-4 rounded-3xl w-[70%] h-[46vh] max-w-[500px] text-center border-4 gap-2 z-999"
               style={{ background: "#100429", borderColor: "#FF6536" }}
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header with flame icon + number */}
               <div className="flex items-center justify-center gap-2 h-[10vh]">
-                <div className="text-[6.5rem] font-bold">
+                <div className="text-[4rem] font-bold">
                   {currentStreakValue}
                 </div>
-                <img src={fire} alt="flame" className="w-20 h-auto mb-4" />
+                <img src={fire} alt="flame" className="w-12 h-auto mb-2" />
               </div>
-              <h2 className="text-3xl mb-4 uppercase">DAY STREAK!</h2>
-              <p className="text-2xl mb-4 opacity-80">
+              <h2 className="text-1xl mb-2 uppercase">DAY STREAK!</h2>
+              <p className="text-1xl mb-2 opacity-80">
                 Learn new FSL to earn points and build streak
               </p>
-              <div className="flex items-center justify-center gap-2 mb-10 h-[50px]">
-                <img src={medal} alt="medal" className="w-14 h-auto" />
-                <span className="text-6xl font-bold text-yellow-400">
+              <div className="flex items-center justify-center gap-2 mb-1 h-[50px]">
+                <img src={medal} alt="medal" className="w-10 h-auto" />
+                <span className="text-4xl font-bold text-yellow-400">
                   +{getStreakReward(currentStreakValue)}
                 </span>
               </div>
               <button
-                className="py-3 px-6 rounded-full border-none text-white cursor-pointer text-4xl w-full"
-                style={{ background: "#c0392b" }}
+                className="  border-none text-white cursor-pointer text-5xl h-[32px] w-full"
+                style={{ background: "#c0392b", borderRadius: "12px" }}
                 onClick={closeModal}
               >
-                Close
+                Close 
               </button>
             </div>
           </div>
@@ -297,7 +297,7 @@ const calculateOverallProgress = (progressData) => {
         {/* Reward Modal */}
         {showModal && (
           <div
-            className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[9999]"
+            className="streak fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[9999]"
             onClick={closeModal}
           >
             <div
@@ -690,18 +690,23 @@ export default function ProgressTracker({ student }) {
           .tracker {
             display: none !important;
           }
+          .streak {
+            display: none !important;
+     
+          } 
           .mobile-tracker {
             display: flex !important;
             height: 7.5rem !important;
           }
           .mobile-btnstreak {
             display: flex !important;
-        
+          
           }
           .mobile-streak {
             display: flex !important;
-     
+            z-index: 9999;
           } 
+          
           
         }
         

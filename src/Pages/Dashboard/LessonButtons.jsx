@@ -310,7 +310,7 @@ function LessonButtons() {
           }
           @media (max-width: 639px) {
             .lessons-grid {
-              gap: 4rem;
+              gap: 2rem;
             }
           }
           @media (min-width: 1400px) {
@@ -413,33 +413,37 @@ function LessonButtons() {
               display: flex !important;
               gap: 1rem !important;
               margin-top: 20vh !important;
+              z-index: -999;
             }
             .Difficulty {
               display: flex !important;
               height: 47px;
               font-size: 1.2rem;
               padding-inline: 10px !important;
+              border-radius: 1rem !important;
             }
             .livesDia {
               display: flex !important;
               gap: 14px;
             }
             .lesson-button {
-              height: 10.5rem !important;
-              width: 13rem !important;
-              font-size: 8rem !important;
-              border-radius: 3rem !important;
+              height: 5.5rem !important;
+              width: 30rem !important;
+              font-size: 4rem !important;
+              border-radius: 1.5rem !important;
             }
             .lessons-grid .lesson-tile:nth-child(2n + 1) {
-              transform: translateY(-8rem);
-              margin-top: 8rem;
+              transform: translateY(-5rem);
+              margin-top: 4rem;
             }
             .lessons-grid .lesson-tile:nth-child(2n) {
-              transform: translateY(11.5rem);
+              transform: translateY(5rem);
             }
             .max-h-screen {
-              max-height: 125vh !important;
-              margin-top: 5vh !important;
+              max-height: 56vh !important;
+              margin-top: 4vh !important;
+              
+              padding: 1rem !important;
             }
           }
 
