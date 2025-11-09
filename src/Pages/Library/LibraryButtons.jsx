@@ -92,37 +92,6 @@ function LibraryButtons({ forcedDifficulty }) {
           </div>
         </div>
       </div>
-      <style>{`
-        @media (min-width: 1024px) {
-          .library-difficulty-mobile { display: none !important; }
-          .library-difficulty-desktop {
-            display: flex !important;
-            gap: 1.5rem;
-            margin-left: 1.5rem;
-          }
-          .difficulty-btn {
-            font-family: 'Baloo', sans-serif;
-            font-size: 1.35rem;
-            font-weight: 700;
-            color: #fff;
-            border: 4px solid transparent;
-            border-radius: 14px;
-            padding: 1rem 2.4rem;
-            min-width: 13rem;
-            cursor: pointer;
-            transition: background 0.2s, border-color 0.2s;
-            text-align: center;
-          }
-          .difficulty-btn.active {
-            box-shadow: 0 4px 8px rgba(46,134,193,0.18);
-            border-width: 4px;
-          }
-        }
-        @media (max-width: 1023px) {
-          .library-difficulty-desktop { display: none !important; }
-          .library-difficulty-mobile { display: block !important; }
-        }
-      `}</style>
     </>
   );
 }

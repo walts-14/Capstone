@@ -48,42 +48,7 @@ function BasicLibrary() {
         </div>
       </div>
       <style>{`
-        @media (min-width: 1024px) {
-          .library-main-layout {
-            margin-left: 320px;
-            margin-top: 2.5rem;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            width: calc(100vw - 320px);
-            min-height: 100vh;
-          }
-          .library-buttons-top {
-            width: 100%;
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            margin-top: 0.5rem;
-          }
-          .level-container {
-            width: 100%;
-            max-width: 900px;
-            margin: 0 auto;
-          }
-        }
-        @media (max-width: 1023px) {
-          .library-main-layout {
-            margin-left: 0;
-            margin-top: 0;
-            width: 100vw;
-          }
-          .library-buttons-top {
-            width: 100%;
-            margin-bottom: 0.5rem;
-            margin-top: 0;
-          }
-        }
+        
       `}</style>
     </div>
   );
