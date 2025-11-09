@@ -48,7 +48,7 @@ function LbComponent() {
             <div className="flex items-center gap-2">
               <img
                 src={picFor(1, profile2)}
-                className="max-w-full h-auto user-avatar"
+                className="w-20 h-20 user-avatar"
                 alt="profile img"
               />
               <p className="text-gray-500 text-4xl">
@@ -78,7 +78,7 @@ function LbComponent() {
             <div className="flex items-center gap-2">
               <img
                 src={picFor(0, profile1)}
-                className="max-w-full h-auto user-avatar"
+                className="w-20 h-20 user-avatar"
                 alt="profile img"
               />
               <p className="text-gray-500 text-4xl">
@@ -105,7 +105,7 @@ function LbComponent() {
             <div className="flex items-center gap-2">
               <img
                 src={picFor(2, profile3)}
-                className="max-w-full h-auto user-avatar"
+                className="w-20 h-20 user-avatar"
                 alt="profile img"
               />
               <p className="text-gray-500 text-4xl">
@@ -151,7 +151,7 @@ function LbComponent() {
                   <img
                     src={user.profilePic || profile3}
                     alt="profile"
-                    className="user-avatar max-w-full h-auto"
+                    className="user-avatar h-20 w-20"
                   />
                   <span className="user-name text-white text-2xl">
                     {user.name || "No Name"}

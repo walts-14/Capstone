@@ -56,8 +56,8 @@ body {
   font-size: clamp(0.875rem, 2.5vw, 1.2rem);
   font-family: "Baloo", sans-serif;
   position: relative;
-  left: -1.7em;
-  top: 4.5em;
+  left: -1rem;
+  top: 1em;
 }
 .settings-container img {
   position: relative;
@@ -143,8 +143,6 @@ body {
   opacity: 1;
 }
 .deletee {
-  top: 16em;
-  left: 2em;
   background-color: #d7443e;
 }
 .btns {

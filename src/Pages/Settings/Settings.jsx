@@ -181,19 +181,39 @@ function Settings() {
         </div>
 
         {/* ——— PROFILE PICTURE (with loading states) ——— */}
-        <div className="profile-picture-wrapper position-relative m-5">
-          <div className="position-relative">
-            <img src={profilePic} className="img-fluid" alt="profile picture" />
+        <div
+          className="profile-picture-wrapper position-relative m-5 d-flex flex-column align-items-center"
+          style={{ width: "180px" }}
+        >
+          <div
+            className="position-relative"
+            style={{ width: "180px", height: "180px" }}
+          >
+            <img
+              src={profilePic}
+              alt="profile picture"
+              style={{
+                width: "180px",
+                height: "180px",
+                objectFit: "cover",
+                borderRadius: "50%",
+                border: "6px solid #2d2346",
+                background: "#2d2346",
+                display: "block",
+                marginLeft: "-1.5rem",
+              }}
+            />
 
             {/* Loading overlay for upload */}
             {isUploadingPic && (
               <div
-                className="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+                className="position-absolute top-0 start-0 d-flex justify-content-center align-items-center"
                 style={{
+                  width: "180px",
+                  height: "180px",
                   backgroundColor: "rgba(0, 0, 0, 0.7)",
                   borderRadius: "50%",
-                  aspectRatio: "1/1",
-                  marginLeft: "1.5rem",
+                  zIndex: 2,
                 }}
               >
                 <div className="text-center text-white">
@@ -208,12 +228,14 @@ function Settings() {
             {/* Loading overlay for delete */}
             {isDeletingPic && (
               <div
-                className="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+                className="position-absolute top-0 start-0 d-flex justify-content-center align-items-center"
                 style={{
+                  width: "180px",
+                  height: "180px",
                   backgroundColor: "rgba(0, 0, 0, 0.7)",
                   borderRadius: "50%",
-                  aspectRatio: "1/1",
-                  marginLeft: "1.5rem",
+                  zIndex: 2,
+                  left: "50rem",
                 }}
               >
                 <div className="text-center text-white">
@@ -224,37 +246,51 @@ function Settings() {
                 </div>
               </div>
             )}
+
+            {/* Camera overlay icon */}
+            <div
+              className="camera-overlay d-flex justify-content-center align-items-center position-absolute top-0 start-0"
+              style={{
+                width: "180px",
+                height: "180px",
+                borderRadius: "50%",
+                zIndex: 1,
+                pointerEvents: "none",
+              }}
+            >
+              <i className="fas fa-camera fa-2x text-white"></i>
+            </div>
           </div>
 
           <label
             htmlFor="file-upload"
-            className="change-pic text-white fw-bold fs-1 rounded-4 p-2 text-center m-5 text-nowrap position-absolute"
+            className="change-pic text-white fw-bold fs-2 rounded-4 p-2 text-center text-nowrap mb-20"
             style={{
               cursor:
                 isUploadingPic || isDeletingPic ? "not-allowed" : "pointer",
               opacity: isUploadingPic || isDeletingPic ? 0.6 : 1,
               pointerEvents: isUploadingPic || isDeletingPic ? "none" : "auto",
+              width: "auto",
             }}
           >
             Change Profile
           </label>
 
           <button
-            className={`deletee btn-secondary fw-bold fs-5 rounded-4 position-absolute h-25 text-nowrap text-white ${
+            className={`deletee btn-secondary fw-bold fs-5 rounded-4 text-nowrap text-white ${
               isUploadingPic || isDeletingPic ? "disabled" : ""
             }`}
             onClick={handleDeleteProfilePicture}
             disabled={isUploadingPic || isDeletingPic}
             style={{
               opacity: isUploadingPic || isDeletingPic ? 0.6 : 1,
+              width: "auto",
+              marginTop: "1.5rem",
+              marginLeft: "1rem",
             }}
           >
             {isDeletingPic ? "Deleting..." : "Delete Picture"}
           </button>
-
-          <div className="camera-overlay d-flex justify-content-center align-items-center">
-            <i className="fas fa-camera fa-2x text-white"></i>
-          </div>
 
           <input
             type="file"
