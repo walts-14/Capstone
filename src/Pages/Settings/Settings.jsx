@@ -183,7 +183,19 @@ function Settings() {
         {/* ——— PROFILE PICTURE (with loading states) ——— */}
         <div className="profile-picture-wrapper position-relative m-5">
           <div className="position-relative">
-            <img src={profilePic} className="img-fluid" alt="profile picture" />
+            <img
+              src={profilePic}
+              className="img-fluid"
+              alt="profile picture"
+              style={{
+                borderRadius: "50%",
+                objectFit: "cover",
+                width: "200px",
+                height: "200px",
+                aspectRatio: "1/1",
+                backgroundColor: "#222",
+              }}
+            />
 
             {/* Loading overlay for upload */}
             {isUploadingPic && (

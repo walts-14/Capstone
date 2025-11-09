@@ -1,3 +1,64 @@
+/* Desktop layout for library pages */
+@media (min-width: 1024px) {
+  .library-main-layout {
+    margin-left: 320px;
+    margin-top: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: calc(100vw - 320px);
+    min-height: 100vh;
+    justify-content: flex-start;
+  }
+  .library-buttons-top {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+    bottom: 27rem;
+  }
+  .level-container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+    bottom: 27.2rem;
+    left: 0;
+    padding-bottom: 5rem;
+  }
+  .level-content {
+    min-height: 7.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+  .level-content .text-3xl {
+    font-size: 2.5rem !important;
+  }
+  .level-content .text-2xl {
+    font-size: 1.5rem !important;
+  }
+  .level-content .text-5xl {
+    font-size: 2.2rem !important;
+  }
+}
+@media (max-width: 1023px) {
+  .library-main-layout {
+    margin-left: 0;
+    margin-top: 0;
+    width: 100vw;
+  }
+  .library-buttons-top {
+    width: 100%;
+    margin-bottom: 0.5rem;
+    margin-top: 0;
+  }
+}
 @font-face {
   font-family: "Baloo";
   src: url("/src/font/Baloo-Regular.ttf") format("truetype");
@@ -50,7 +111,11 @@ a {
   min-height: 7.5rem;
   width: 100%;
   padding: 0.75rem 1rem;
-  background: linear-gradient(to bottom, var(--level-bg-start) 34px, var(--level-bg-end) 34px);
+  background: linear-gradient(
+    to bottom,
+    var(--level-bg-start) 34px,
+    var(--level-bg-end) 34px
+  );
   background-repeat: no-repeat;
   border-radius: 16px;
   color: var(--white);
@@ -74,5 +139,99 @@ a {
   }
   .level-container .level-content {
     min-height: 10rem;
+  }
+}
+
+/*Mobile*/
+@media (min-width: 320px) {
+  .level-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+    width: 100%;
+    overflow: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    margin-top: -1.5rem;
+    height: calc(100vh - 40px); /* adjust 80px based on your navbar height */
+    padding-bottom: 10rem;
+  }
+  .level-container::-webkit-scrollbar {
+    display: none;
+  }
+  .level-content span {
+    font-size: 1.3rem;
+    font-weight: 550;
+    padding-bottom: 0.5rem;
+  }
+  .level-content p {
+    font-size: 1.3rem;
+    font-weight: 550;
+  }
+  .lessonTitle {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: "Baloo";
+    color: var(--white);
+    padding: 12px 16px;
+    width: 100%;
+    margin: 0.75rem auto 0;
+    background-color: var(--semidark-blue);
+    border-radius: 10px;
+    position: absolute;
+    top: -8.3rem;
+    width: 100%;
+    z-index: 5;
+  }
+  .lessonTitle h1 {
+    width: 100%;
+    font-size: 1.5rem;
+  }
+  .lessonTitle h2 {
+    font-size: 1.3rem;
+    justify-content: left;
+  }
+}
+
+@media (min-width: 1024px) {
+  .library-main-layout {
+    margin-left: 320px;
+    margin-top: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: calc(100vw - 320px);
+    min-height: 100vh;
+  }
+  .library-buttons-top {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    margin-top: 0.5rem;
+  }
+  .level-container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .lessonTitle MobilelessonTitle {
+    width: 100%;
+  }
+}
+@media (max-width: 1023px) {
+  .library-main-layout {
+    margin-left: 0;
+    margin-top: 0;
+    width: 100vw;
+  }
+  .library-buttons-top {
+    width: 100%;
+    margin-bottom: 0.5rem;
+    margin-top: 0;
   }
 }

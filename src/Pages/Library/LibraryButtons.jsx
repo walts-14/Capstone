@@ -18,7 +18,8 @@ function LibraryButtons({ forcedDifficulty }) {
   // Dynamic colors for select background per difficulty
   const selectBackgroundColor = useMemo(() => {
     if (currentDifficulty === "Advanced") return "var(--advance-red)";
-    if (currentDifficulty === "Intermediate") return "var(--intermediate-yellow)";
+    if (currentDifficulty === "Intermediate")
+      return "var(--intermediate-yellow)";
     return "var(--basic-blue)";
   }, [currentDifficulty]);
 
@@ -32,17 +33,63 @@ function LibraryButtons({ forcedDifficulty }) {
     <>
       <div className="library-contents">
         <IntroductionModal />
+        {/* Mobile: dropdown, Desktop: buttons */}
         <div className="difficulty-select">
-          <select
-            aria-label="Select difficulty"
-            value={currentDifficulty}
-            onChange={handleDifficultyChange}
-            style={{ backgroundColor: selectBackgroundColor }}
-          >
-            <option value="Basic">BASIC</option>
-            <option value="Intermediate">INTERMEDIATE</option>
-            <option value="Advanced">ADVANCED</option>
-          </select>
+          <div className="library-difficulty-mobile">
+            <select
+              aria-label="Select difficulty"
+              value={currentDifficulty}
+              onChange={handleDifficultyChange}
+              style={{ backgroundColor: selectBackgroundColor }}
+            >
+              <option value="Basic">BASIC</option>
+              <option value="Intermediate">INTERMEDIATE</option>
+              <option value="Advanced">ADVANCED</option>
+            </select>
+          </div>
+          <div className="library-difficulty-desktop">
+            <button
+              className={`difficulty-btn ${
+                currentDifficulty === "Basic" ? "active" : ""
+              }`}
+              style={{
+                backgroundColor: "var(--basic-blue)",
+                borderColor:
+                  currentDifficulty === "Basic" ? "#A6DCFF" : "transparent",
+              }}
+              onClick={() => navigate("/BasicLibrary")}
+            >
+              BASIC
+            </button>
+            <button
+              className={`difficulty-btn ${
+                currentDifficulty === "Intermediate" ? "active" : ""
+              }`}
+              style={{
+                backgroundColor: "var(--intermediate-yellow)",
+                borderColor:
+                  currentDifficulty === "Intermediate"
+                    ? "#FFFEA6"
+                    : "transparent",
+              }}
+              onClick={() => navigate("/IntermediateLibrary")}
+            >
+              INTERMEDIATE
+            </button>
+            <button
+              className={`difficulty-btn ${
+                currentDifficulty === "Advanced" ? "active" : ""
+              }`}
+              style={{
+                backgroundColor: "var(--advance-red)",
+                borderColor:
+                  currentDifficulty === "Advanced" ? "#FF7D6F" : "transparent",
+              }}
+              onClick={() => navigate("/AdvancedLibrary")}
+            >
+              ADVANCE
+            </button>
+          </div>
         </div>
       </div>
     </>

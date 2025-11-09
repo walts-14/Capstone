@@ -194,7 +194,7 @@ const calculateOverallProgress = (progressData) => {
         {/* Manual Info Modal */}
         {isOpen && (
           <div
-            className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+            className="streak fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
             onClick={closeModal}
           >
             <div
@@ -233,17 +233,17 @@ const calculateOverallProgress = (progressData) => {
 
  {/* Streak Button MOBILE */}
         <button
-          className="mobile-btnstreak rounded-4 p-1 cursor-pointer static flex items-center justify-center"
-          style={{ background: "#271d3e", boxShadow: "0 0 0 5px #F44336" }}
+          className="mobile-btnstreak p-1 cursor-pointer static flex items-center justify-center"
+          style={{ background: "#271d3e", boxShadow: "0 0 0 3px #F44336", borderRadius: "12px" }}
           onClick={toggle}
         >
-          <div className="flex flex-row items-center justify-center h-[14vh] w-[35vw]">
-            <img src={fire} alt="streak" className="h-15 w-54 mb-1" />
+          <div className="flex flex-row items-center justify-center h-[7vh] w-[20vw]">
+            <img src={fire} alt="streak" className="h-9 w-9 mb-1" />
             <div className="flex flex-col ">
-               <div className="text-white text-5xl h-[45px] flex items-center justify-center">
+               <div className="text-white text-2xl h-[30px] flex items-center justify-center">
               {currentStreakValue}
                </div>
-              <span className="text-[#878194] text-center text-1xl leading-5">
+              <span className="text-[#878194] text-center text-[9px] leading-2">
                 Day <br /> Streak
               </span>
             </div>
@@ -258,33 +258,33 @@ const calculateOverallProgress = (progressData) => {
             onClick={closeModal}
           >
             <div
-              className="text-white p-8 rounded-3xl w-[70%] h-[46vh] max-w-[500px] text-center border-4 gap-2 mr-40"
+              className="text-white p-4 rounded-3xl w-[70%] h-[46vh] max-w-[500px] text-center border-4 gap-2 z-999"
               style={{ background: "#100429", borderColor: "#FF6536" }}
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header with flame icon + number */}
               <div className="flex items-center justify-center gap-2 h-[10vh]">
-                <div className="text-[6.5rem] font-bold">
+                <div className="text-[4rem] font-bold">
                   {currentStreakValue}
                 </div>
-                <img src={fire} alt="flame" className="w-20 h-auto mb-4" />
+                <img src={fire} alt="flame" className="w-12 h-auto mb-2" />
               </div>
-              <h2 className="text-3xl mb-4 uppercase">DAY STREAK!</h2>
-              <p className="text-2xl mb-4 opacity-80">
+              <h2 className="text-1xl mb-2 uppercase">DAY STREAK!</h2>
+              <p className="text-1xl mb-2 opacity-80">
                 Learn new FSL to earn points and build streak
               </p>
-              <div className="flex items-center justify-center gap-2 mb-10 h-[50px]">
-                <img src={medal} alt="medal" className="w-14 h-auto" />
-                <span className="text-6xl font-bold text-yellow-400">
+              <div className="flex items-center justify-center gap-2 mb-1 h-[50px]">
+                <img src={medal} alt="medal" className="w-10 h-auto" />
+                <span className="text-4xl font-bold text-yellow-400">
                   +{getStreakReward(currentStreakValue)}
                 </span>
               </div>
               <button
-                className="py-3 px-6 rounded-full border-none text-white cursor-pointer text-4xl w-full"
-                style={{ background: "#c0392b" }}
+                className="  border-none text-white cursor-pointer text-5xl h-[32px] w-full"
+                style={{ background: "#c0392b", borderRadius: "12px" }}
                 onClick={closeModal}
               >
-                Close
+                Close 
               </button>
             </div>
           </div>
@@ -297,7 +297,7 @@ const calculateOverallProgress = (progressData) => {
         {/* Reward Modal */}
         {showModal && (
           <div
-            className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[9999]"
+            className="streak fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[9999]"
             onClick={closeModal}
           >
             <div
@@ -483,7 +483,7 @@ export default function ProgressTracker({ student }) {
   const renderLessonsPanel = (isModal = false) => {
     const panelClass = isModal
       ? "text-white rounded-3xl p-3  h-280 w-full overflow-y-auto "
-      : "absolute top-52 right-0 text-white rounded-4xl p-3 max-h-[43rem] h-auto w-[25vw] overflow-y-scroll";
+      : "absolute top-40 right-0 text-white rounded-4xl p-3 max-h-[43rem] h-auto w-[25vw] overflow-y-scroll";
     const panelStyle = isModal
       ? {
           backgroundColor: "#271D3E",
@@ -597,24 +597,25 @@ export default function ProgressTracker({ student }) {
       {renderLessonsPanel(false)}
     </div>
 
-    <div className="mobile-tracker flex flex-row items-center justify-center gap-4 fixed right-12 top-20 z-[1]">
-       <div className="streakleaderboard flex flex-row items-center justify-center gap-4 fixed left-12 top-15"> 
+    <div className="mobile-tracker flex flex-row items-center justify-center gap-4 fixed right-7 top-20 z-[1]">
+       <div className="streakleaderboard flex flex-row items-center justify-center gap-3 fixed right-3 top-7"> 
         {/* Leaderboard box - align with streak button */}
         <div
-          className="flex items-center text-white rounded-2xl h-[15.5vh] w-[80vw]  gap-2 px-3"
+          className="flex items-center text-white  h-[8vh] w-[45vw]  gap-2 px-1"
           style={{
             backgroundColor: "var(--dark-purple)",
             fontFamily: '"Baloo", sans-serif',
-            boxShadow: "0 0 0 5px #DCBC3D",
+            boxShadow: "0 0 0 3px #DCBC3D",
             alignItems: "center",
+            borderRadius: "12px",
           }}
         >
-          <img src={trophySrc} className="w-18 h-16" alt="trophy" style={{ display: "block" }} />
+          <img src={trophySrc} className="h-9 w-9" alt="trophy" style={{ display: "block" }} />
           <div className="flex flex-col justify-center">
-            <p className="text-3xl" style={{ margin: 0, lineHeight: 1 }}>
+            <p className="text-1xl" style={{ margin: 0, lineHeight: 1 }}>
               {userRank == null ? "..." : (typeof userRank === "number" ? `#${userRank}` : String(userRank))}
             </p>
-            <p className="text-nowrap text-5xl ms-1" style={{ margin: 0, lineHeight: 1 }}>
+            <p className="text-nowrap text-2xl ms-1" style={{ margin: 0, lineHeight: 1 }}>
               {unwrapDefault(displayUsername)}
             </p>
           </div>
@@ -628,13 +629,13 @@ export default function ProgressTracker({ student }) {
         <div >
           <button
             onClick={() => setMobileModalOpen(true)}
-            className="py-2 px-4 h-[15.5vh] w-[40vw] text-white"
+            className="py-[2px] px-[6px] h-[8vh] w-[15vw] text-align"
             style={{ backgroundColor: "#271D3E", fontFamily: '"Baloo", sans-serif',
                      fontFamily: '"Baloo", sans-serif',
-                     boxShadow: "0 0 0 5px #C0C0C0", 
-                     borderRadius: "16px"}}
+                     boxShadow: "0 0 0 3px #C0C0C0", 
+                     borderRadius: "12px"}}
           >
-            <img src={progress} alt="" className="w-20 h-18" />
+            <img src={progress} alt="" className="h-9 w-9" />
           </button>
         </div>
       </div>
@@ -689,18 +690,23 @@ export default function ProgressTracker({ student }) {
           .tracker {
             display: none !important;
           }
+          .streak {
+            display: none !important;
+     
+          } 
           .mobile-tracker {
             display: flex !important;
             height: 7.5rem !important;
           }
           .mobile-btnstreak {
             display: flex !important;
-        
+          
           }
           .mobile-streak {
             display: flex !important;
-     
+            z-index: 9999;
           } 
+          
           
         }
         

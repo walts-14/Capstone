@@ -309,17 +309,19 @@ function LectureorQuiz() {
   };
 
   // which parts are currently unlocked?
-  const canLecture = currentStep === 1
-    // Lecture Part 1 is always available
-    ? true
-    // Lecture Part 2 only after you pass Quiz Part 1
-    : lessonProgress.step1Quiz;
+  const canLecture =
+    currentStep === 1
+      ? // Lecture Part 1 is always available
+        true
+      : // Lecture Part 2 only after you pass Quiz Part 1
+        lessonProgress.step1Quiz;
 
-  const canQuiz = currentStep === 1
-    // Quiz Part 1 only after you finish Lecture Part 1
-    ? lessonProgress.step1Lecture
-    // Quiz Part 2 only after you finish Lecture Part 2
-    : lessonProgress.step2Lecture;
+  const canQuiz =
+    currentStep === 1
+      ? // Quiz Part 1 only after you finish Lecture Part 1
+        lessonProgress.step1Lecture
+      : // Quiz Part 2 only after you finish Lecture Part 2
+        lessonProgress.step2Lecture;
 
   return (
     <>
@@ -332,7 +334,7 @@ function LectureorQuiz() {
         <p>Back</p>
       </div>
       <div className="MobileIntroduction">
-            <IntroductionModal />
+        <IntroductionModal />
       </div>
       <div className="container d-flex flex-column justify-content-center align-items-center mb-25">
         <div className="status-bar">
@@ -344,7 +346,7 @@ function LectureorQuiz() {
             className="Difficulty text-center px-5 py-2 rounded-2xl font-bold text-white text-[2.5rem] difficulty-button"
             style={{
               backgroundColor: difficultyColors[difficulty],
-              boxShadow: `0 0 0 5px ${strokeColors[difficulty] || '#A6DCFF'}`,
+              boxShadow: `0 0 0 5px ${strokeColors[difficulty] || "#A6DCFF"}`,
             }}
           >
             {difficulty}
@@ -371,7 +373,9 @@ function LectureorQuiz() {
 
         <div className="lecture-quiz-container">
           <div
-            className={`lecture-outer justify-content-center rounded-5${!canLecture ? " disabled" : ""}`}
+            className={`lecture-outer justify-content-center rounded-5${
+              !canLecture ? " disabled" : ""
+            }`}
             onClick={() => {
               if (!canLecture) return;
               handleLectureClick();
@@ -383,9 +387,13 @@ function LectureorQuiz() {
             </div>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "2rem" }}
+          >
             <div
-              className={`quiz-outer justify-content-center rounded-5${!canQuiz ? " disabled" : ""}`}
+              className={`quiz-outer justify-content-center rounded-5${
+                !canQuiz ? " disabled" : ""
+              }`}
               onClick={() => {
                 if (!canQuiz) return;
                 navigate(`/quiz/${lessonKey}`, {
@@ -406,7 +414,9 @@ function LectureorQuiz() {
             </div>
 
             <div
-              className={`practice-outer justify-content-center rounded-5${!canQuiz ? " disabled" : ""}`}
+              className={`practice-outer justify-content-center rounded-5${
+                !canQuiz ? " disabled" : ""
+              }`}
               onClick={() => {
                 if (!canQuiz) return;
                 navigate(`/practice/${lessonKey}`, {
@@ -428,8 +438,8 @@ function LectureorQuiz() {
           </div>
         </div>
       </div>
-              
-       {/* Responsive styles for smooth transition */}
+
+      {/* Responsive styles for smooth transition */}
       <style>{`
            /* Tablet sidenav and logo - show between 640px-1024px */
         @media (min-width: 640px) and (max-width: 1023px) {

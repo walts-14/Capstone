@@ -96,9 +96,9 @@ function LivesandDiamonds({ showDiamonds = true, showLives = true }) {
       <style jsx>{`
         /* Mobile sidenav - only show below 640px */
         @media (max-width: 639px) {
-        .lives-container, .diamonds-container { gap: 0 }
-        .heart-icon, .diamond-icon { width: 3rem; height: auto; }
-        .lives-number, .points-number { font-size: 3rem; margin-left: 0.25rem; }
+        .lives-container, .diamonds-container { gap: 0px }
+        .heart-icon, .diamond-icon { width: 1.5rem; height: auto; }
+        .lives-number, .points-number { font-size: 1.3rem; margin-left: 0.25rem; }
         }
 
 

@@ -1,6 +1,12 @@
 /* Button positioning */
 
 /* Full-screen overlay */
+@media (min-width: 320px) {
+  .question-button img {
+    height: 3rem;
+    width: 3rem;
+  }
+}
 .modal-overlay {
   position: fixed;
   top: 0;

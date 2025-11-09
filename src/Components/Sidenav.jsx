@@ -73,7 +73,7 @@ function Sidenav() {
       >
         <p className="m-0">WeSign</p>
       </div>
-      
+
       {/* Logo - tablet (visible from 640px to 1024px) */}
       <div
         className="fixed top-7 left-8 text-white font-bold text-5xl z-20 hidden md:block lg:hidden tablet-logo"
@@ -111,7 +111,8 @@ function Sidenav() {
                         : "transparent",
                       marginLeft: "-2rem",
                       width: "clamp(15vw, 18vw, 20vw)",
-                      transition: 'background-color 280ms ease, border-color 280ms ease, transform 280ms ease, box-shadow 280ms ease, margin-left 280ms ease',
+                      transition:
+                        "background-color 280ms ease, border-color 280ms ease, transform 280ms ease, box-shadow 280ms ease, margin-left 280ms ease",
                     }}
                   >
                     <img
@@ -166,8 +167,12 @@ function Sidenav() {
 
       {/* Sidebar container - mobile (bottom bar, only visible below 640px) */}
       <div
-        className="sidenav-mobile fixed bottom-0 left-0 w-full h-[8rem] bg-[var(--purple)] flex flex-row items-center justify-between px-2 md:hidden"
-        style={{ fontFamily: '"Baloo", sans-serif', transition: "all 0.3s", zIndex: 2147483647 }}
+        className="sidenav-mobile fixed bottom-0 left-0 w-full h-full bg-[var(--purple)] flex flex-row items-center justify-between px-2 md:hidden"
+        style={{
+          fontFamily: '"Baloo", sans-serif',
+          transition: "all 0.3s",
+          zIndex: 2147483647,
+        }}
       >
         <nav className="flex flex-row justify-between items-center w-full h-full">
           {menuItems.map((item, idx) => {
@@ -186,14 +191,14 @@ function Sidenav() {
                 >
                   {isActive && (
                     <div
-                      className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 bg-[var(--mid-purple)] rounded-3xl "
-                      style={{ width: "5.8rem", height: "5.8rem", zIndex: 1 }}
+                      className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 bg-[var(--mid-purple)] rounded-2xl "
+                      style={{ width: "3.5rem", height: "3.5rem", zIndex: 1 }}
                     ></div>
                   )}
                   <img
                     src={item.icon}
                     alt={`${item.label.toLowerCase()} logo`}
-                    className="w-20 h-20 mb-1 relative"
+                    className="w-auto h-10 mb-1 relative"
                     style={{ zIndex: 2 }}
                   />
                   {/* Hide label on mobile for minimal look */}
@@ -229,7 +234,7 @@ function Sidenav() {
           }
           .sidenav-mobile {
             display: flex !important;
-            height: 7.5rem !important;
+            height: 5rem !important;
             z-index: 9999 !important; /* ensure on top of content */
           }
         }
