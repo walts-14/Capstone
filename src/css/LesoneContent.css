@@ -1,3 +1,18 @@
+/* Advanced lesson styles for smaller text and container */
+.advanced-terms {
+  font-size: 1.1rem !important;
+  padding: 8px 10px !important;
+  min-height: 32px;
+  max-height: 90px;
+  line-height: 1.2;
+}
+.advanced-definition {
+  font-size: 0.95rem !important;
+  padding: 8px 10px !important;
+  min-height: 32px;
+  max-height: 90px;
+  line-height: 1.2;
+}
 :root {
   --background: #100429;
   --semidark-purple: #271d3e;
@@ -61,17 +76,16 @@ body {
   /* Adds a white border */
   border-radius: 50px;
   /* Rounds the corners */
-
 }
 
 .back {
   color: var(--purple);
   font-size: 2rem;
-  height: 5vh;
-  position: absolute;
-  top: 1.5rem;
+  height: auto;
   cursor: pointer;
   font-family: "Baloo", sans-serif;
+  margin: 1rem 0 1rem -1rem;
+  z-index: 10;
 }
 
 .text-container {
@@ -96,7 +110,7 @@ body {
 
 .textOne {
   font-family: "Baloo", sans-serif;
-  font-size: 3rem;
+  font-size: 2rem;
   background: #4da6ff;
   border-radius: 22px;
   padding: 10px 65px;
@@ -105,37 +119,115 @@ body {
   width: fit-content;
   font-weight: bold;
   color: white;
+  text-align: left;
+  word-break: break-word;
+  max-width: 100%;
+}
+
+/* Definition text for mobile and left alignment */
+.definition-text {
+  text-align: center;
+  width: 90%;
+  max-width: 100%;
+  overflow: visible;
+  white-space: normal;
+  font-size: 1.2rem;
+  background: #4da6ff;
+  border-radius: 22px;
+  padding: 10px 20px;
+  color: white;
+  font-family: "Baloo", sans-serif;
+  font-weight: 500;
+  margin-top: 1rem;
+  box-shadow: 0 5px 1px 8px var(--shadowblue);
 }
 
 .letter-container button {
-  background: #271D3E;
+  background: #271d3e;
   border-radius: 22px;
   padding: 10px 20px;
   text-decoration: none;
-  box-shadow: 0 5px 1px 8px #4A2574;
   width: fit-content;
   font-weight: bold;
   color: white;
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    background-color 0.2s ease;
 }
 
 .arrow {
   width: 70px;
   height: auto;
   cursor: pointer;
-
 }
 
-.letter-container button:hover {
-  transform: translateY(-4px) scale(1.03);
-  /* We use the same inline box-shadow color, so you only need to change the spread */
-  box-shadow: 0 8px 2px 10px #4A2574;
-}
-
-.letter-container button:active {
-  transform: translateY(0) scale(0.98);
-  box-shadow: 0 3px 1px 6px #4A2574;
+@media (min-width: 320px) {
+  .container-lecture video {
+    width: 95vw;
+    border: 5px solid var(--grey-purple);
+    border-radius: 15px;
+    height: auto;
+    position: relative;
+    top: 10rem;
+  }
+  .text-container {
+    width: 90vw;
+    height: auto;
+    position: relative;
+    top: 12rem;
+    align-items: flex-start;
+  }
+  .text-container .textOne {
+    height: auto;
+    width: 100%;
+    min-width: 0;
+    align-items: flex-start;
+    text-align: left;
+    padding: 10px 10px;
+    font-size: 1.2rem;
+    box-sizing: border-box;
+    word-break: break-word;
+  }
+  .advanced-terms {
+    font-size: 0.95rem !important;
+    padding: 6px 6px !important;
+    min-height: 24px;
+    max-height: 60px;
+    line-height: 1.1;
+  }
+  .advanced-definition {
+    font-size: 0.85rem !important;
+    padding: 6px 6px !important;
+    min-height: 24px;
+    max-height: 60px;
+    line-height: 1.1;
+  }
+  .definition-text {
+    font-size: 1rem;
+    padding: 10px 10px;
+    width: 100%;
+    min-width: 0;
+    text-align: left;
+    box-sizing: border-box;
+    word-break: break-word;
+  }
+  .text-container p {
+    font-size: 1.1rem;
+    font-weight: 500;
+    border-radius: 5px;
+    text-align: left;
+  }
+  .letter-container button {
+    width: 30%;
+    height: auto;
+    background: #271d3e;
+    border-radius: 3px;
+    padding: 10px 15px;
+  }
+  .letter-container .arrow {
+    width: 60vw;
+    height: auto;
+  }
+  .back img {
+    height: 6vh;
+    width: 100%;
+    margin-left: -2.5rem;
+  }
 }

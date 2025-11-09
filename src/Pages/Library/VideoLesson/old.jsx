@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState, useContext } from "react";
 import Back from "../../../assets/BackButton.png";
 import leftArrow from "../../../assets/leftArrow.png";
@@ -59,7 +58,15 @@ const LesoneContent = () => {
         });
       }
     }
-  }, [step, currentIndex, currentStepTerms, lessonKey, navigate, showButton, fromLecture]);
+  }, [
+    step,
+    currentIndex,
+    currentStepTerms,
+    lessonKey,
+    navigate,
+    showButton,
+    fromLecture,
+  ]);
 
   useEffect(() => {
     if (
@@ -69,14 +76,26 @@ const LesoneContent = () => {
     ) {
       if (step === 1) {
         updateProgress(level, lessonKey, "step1Lecture");
-        console.log(`Automatically updated progress for ${lessonKey} step1Lecture`);
+        console.log(
+          `Automatically updated progress for ${lessonKey} step1Lecture`
+        );
       } else if (step === 2) {
         updateProgress(level, lessonKey, "step2Lecture");
-        console.log(`Automatically updated progress for ${lessonKey} step2Lecture`);
+        console.log(
+          `Automatically updated progress for ${lessonKey} step2Lecture`
+        );
       }
       setHasUpdated(true);
     }
-  }, [hasUpdated, currentIndex, currentStepTerms, step, updateProgress, lessonKey, level]);
+  }, [
+    hasUpdated,
+    currentIndex,
+    currentStepTerms,
+    step,
+    updateProgress,
+    lessonKey,
+    level,
+  ]);
 
   useEffect(() => {
     setHasUpdated(false);

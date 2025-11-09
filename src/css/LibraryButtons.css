@@ -61,14 +61,14 @@
 }
 
 /* Tablet */
-@media (min-width: 640px) {
+@media (min-width: 768px) {
   .library-contents {
     gap: 1.25rem;
     padding-top: 1.25rem;
     max-width: 768px;
   }
   .difficulty-select select {
-    font-size: 1.25rem;
+    font-size: 1.7rem;
     padding: 0.9rem 2.1rem;
     min-width: 12rem;
     text-align-last: center;

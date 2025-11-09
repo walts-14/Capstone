@@ -6,6 +6,12 @@
     height: 3rem;
     width: 3rem;
   }
+  @media (min-width: 768px) {
+    .question-button img {
+      height: 4.2rem;
+      width: 4.2rem;
+    }
+  }
 }
 .modal-overlay {
   position: fixed;
