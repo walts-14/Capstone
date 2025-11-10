@@ -15,12 +15,18 @@ function LibraryButtons({ forcedDifficulty }) {
     return "Basic";
   }, [forcedDifficulty, location.pathname]);
 
-  // Dynamic colors for select background per difficulty
+  // Dynamic colors for select background and border per difficulty
   const selectBackgroundColor = useMemo(() => {
     if (currentDifficulty === "Advanced") return "var(--advance-red)";
     if (currentDifficulty === "Intermediate")
       return "var(--intermediate-yellow)";
     return "var(--basic-blue)";
+  }, [currentDifficulty]);
+
+  const selectBorderColor = useMemo(() => {
+    if (currentDifficulty === "Advanced") return "#FF7D6F";
+    if (currentDifficulty === "Intermediate") return "#FFFEA6";
+    return "#579ECD";
   }, [currentDifficulty]);
 
   function handleDifficultyChange(e) {
@@ -40,7 +46,14 @@ function LibraryButtons({ forcedDifficulty }) {
               aria-label="Select difficulty"
               value={currentDifficulty}
               onChange={handleDifficultyChange}
-              style={{ backgroundColor: selectBackgroundColor }}
+              style={{
+                backgroundColor: selectBackgroundColor,
+                border: `3px solid ${selectBorderColor}`,
+                outline: "none",
+                boxShadow: `0 0 0 2px ${selectBorderColor}`,
+                borderRadius: "0.75rem",
+                fontWeight: 700,
+              }}
             >
               <option value="Basic">BASIC</option>
               <option value="Intermediate">INTERMEDIATE</option>

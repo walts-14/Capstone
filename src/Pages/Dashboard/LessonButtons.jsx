@@ -36,8 +36,9 @@ function LessonButtons() {
     ADVANCED: "#C0392B",
   };
 
-  const strokeColors = {
-    BASIC: "#A6DCFF",
+  // Border highlight colors to match LibraryButtons select
+  const highlightBorderColors = {
+    BASIC: "#2E86C1",
     INTERMEDIATE: "#FFFEA6",
     ADVANCED: "#FF7D6F",
   };
@@ -251,8 +252,8 @@ function LessonButtons() {
           className="Difficulty text-center px-5 py-2 rounded-2xl font-bold text-white text-[2.5rem] difficulty-button"
           style={{
             backgroundColor: difficultyColors[difficulty],
-            boxShadow: `0 0 0 5px ${strokeColors[difficulty] || "#A6DCFF"}`,
-            width: "auto",
+            border: `4px solid ${highlightBorderColors[difficulty]}`,
+            width: "auto"
           }}
         >
           {difficulty}
@@ -442,7 +443,7 @@ function LessonButtons() {
             .max-h-screen {
               max-height: 56vh !important;
               margin-top: 4vh !important;
-              
+
               padding: 1rem !important;
             }
           }
