@@ -82,15 +82,24 @@ export default function ResultBanner({ isCorrect }) {
         
         /* Mobile sidenav - only show below 640px */
         @media (max-width: 639px) {
-           .result-ans {
-            height: 120px !important;
-            top: 75vh !important;
-            border-radius: 0px 0px !important;
-           }
-          .result-ans img{
-            width: 60px !important;
-            height: 60px !important;
+          .result-ans {
+            height: 68px !important;
+            width: 100vw !important;
+            top: 30vh !important;
+            border-radius: 0px 0px   !important;
+            text-align: center !important;
           }
+          .result-ans span{
+            font-size: 1.2rem !important;
+            margin: 0rem !important;
+            
+          }
+          .result-ans img{
+            width: 30px !important;
+            height: 30px !important;
+            margin-right: 1.2rem !important;
+          }
+
 
           
         }
