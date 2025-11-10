@@ -26,7 +26,7 @@ const progressStructure = {
 
 // Streak schema to track bonus streaks
 const streakSchema = {
-  currentStreak: { type: Number, default: 1 },
+  currentStreak: { type: Number, default: 0 },
   lastUpdated:   { type: Date,   default: null },
   streakFreeze:  { type: Boolean, default: false }
 };

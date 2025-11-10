@@ -65,7 +65,7 @@ const normalizeAsset = (imp) =>
   imp && typeof imp === "object" && Object.prototype.hasOwnProperty.call(imp, "default") ? imp.default : imp;
 
 export default function StreakButton() {
-  const { streakData = {}, incrementStreak } = useContext(ProgressContext) || {};
+  const { streakData = {}, incrementStreak, currentUserEmail } = useContext(ProgressContext) || {};
 
   const [isOpen, setIsOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -148,108 +148,66 @@ export default function StreakButton() {
     setIsOpen(false);
   };
 
-  // Reward modal logic — fixed for streak reset and increment
+  // Combined reward modal and auto-show logic
   useEffect(() => {
-    if (modalShownDate === null) return;
+    if (!currentUserEmail) return;
+
+    const key = MODAL_SHOWN_KEY(currentUserEmail);
     const today = new Date();
     const todayStr = today.toDateString();
-    if (modalShownDate === todayStr) return;
-    if (isOpen) return;
 
-    // Helper to call backend for streak update
+    try {
+      const stored = localStorage.getItem(key);
+      if (stored === todayStr) return;
+    } catch (e) {
+      console.warn("StreakButton: failed to read modalShownDate from localStorage", e);
+    }
+
     const updateStreak = (reset = false) => {
       try {
-        if (typeof incrementStreak === "function") incrementStreak(reset);
-        else console.warn("StreakButton: incrementStreak not available from context; skipping server call.");
+        if (typeof incrementStreak === "function") {
+          incrementStreak(reset);
+        } else {
+          console.warn("StreakButton: incrementStreak not available from context; skipping server call.");
+        }
       } catch (e) {
         console.error("StreakButton: incrementStreak failed", e);
       }
     };
 
-    if (!lastUpdatedStrSafe || lastUpdatedStrSafe === "") {
-      // First time or streak is 0. Call with reset=true so backend treats this as Day 1 reset
-      // (prevents client-side increment + backend reset mismatch which can look like a duplicate award)
-      updateStreak(true); // reset/start streak as Day 1
-      setShowModal(true);
-      setModalShownDate(todayStr);
-      try { localStorage.setItem(MODAL_SHOWN_KEY, todayStr); } catch (e) {}
-      return;
-    }
-
-    const lastDate = new Date(String(lastUpdatedStrSafe));
-    if (!isNaN(lastDate.getTime())) {
-      const diffTime = today.getTime() - lastDate.getTime();
-      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-      if (diffDays === 1) {
-        // Consecutive day, increment streak
-        updateStreak(false);
-        setShowModal(true);
-        setModalShownDate(todayStr);
-        try { localStorage.setItem(MODAL_SHOWN_KEY, todayStr); } catch (e) {}
-        return;
-      } else if (diffDays > 1) {
-        // Missed a day, reset streak
-        updateStreak(true);
-        setShowModal(true);
-        setModalShownDate(todayStr);
-        try { localStorage.setItem(MODAL_SHOWN_KEY, todayStr); } catch (e) {}
-        return;
-      } else if (diffDays === 0) {
-        // Already claimed today, just show modal if needed
-        setShowModal(true);
-        setModalShownDate(todayStr);
-        try { localStorage.setItem(MODAL_SHOWN_KEY, todayStr); } catch (e) {}
-        return;
-      }
-    }
-  }, [lastUpdatedStrSafe, displayStreakNum, modalShownDate, isOpen]);
-
-  // Auto-show streak modal on first login of the day for the current user
-  useEffect(() => {
-    if (!currentUserEmail) return;
-    const key = MODAL_SHOWN_KEY(currentUserEmail);
-    const today = new Date();
-    const todayStr = today.toDateString();
-    // If we've already shown modal for this user today, skip
-    try {
-      const stored = localStorage.getItem(key);
-      if (stored === todayStr) return;
-    } catch (e) {}
-
-    // Decide whether to claim/increment streak now — use safeLastUpdatedDate computed above
     const lastDate = safeLastUpdatedDate;
     const now = new Date();
-    // If lastUpdated is missing -> first ever claim: reset to Day 1
-    if (!lastDate) {
-      try {
-        updateStreak(true);
-      } catch (e) {}
-      setShowModal(true);
-      setModalShownDate(todayStr);
-      try { localStorage.setItem(key, todayStr); } catch (e) {}
-      return;
-    }
 
-    const diffTime = now.getTime() - lastDate.getTime();
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    if (diffDays === 1) {
-      // Consecutive day, increment streak
-      updateStreak(false);
-      setShowModal(true);
-      setModalShownDate(todayStr);
-      try { localStorage.setItem(key, todayStr); } catch (e) {}
-      return;
-    }
-    if (diffDays > 1) {
-      // Missed a day, reset streak
+    if (!lastDate) {
       updateStreak(true);
       setShowModal(true);
       setModalShownDate(todayStr);
-      try { localStorage.setItem(key, todayStr); } catch (e) {}
+      try {
+        localStorage.setItem(key, todayStr);
+      } catch (e) {}
       return;
     }
-    // diffDays === 0 -> already claimed today; do not auto-show
-  }, [currentUserEmail, safeLastUpdatedDate]);
+
+    const diffTime = now.setHours(0, 0, 0, 0) - lastDate.setHours(0, 0, 0, 0);
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 1) {
+      updateStreak(false);
+      setShowModal(true);
+      setModalShownDate(todayStr);
+      try {
+        localStorage.setItem(key, todayStr);
+      } catch (e) {}
+    } else if (diffDays > 1) {
+      updateStreak(true);
+      setShowModal(true);
+      setModalShownDate(todayStr);
+      try {
+        localStorage.setItem(key, todayStr);
+      } catch (e) {}
+    }
+  }, [currentUserEmail, safeLastUpdatedDate, incrementStreak]);
+
 
   const calcReward = (day) => {
     const d = Number(day) || 1;
