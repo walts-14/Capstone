@@ -43,9 +43,10 @@ body {
   position: relative;
   top: 7rem;
   left: 50%;
-  transform: translateX(-50%) translateX(14rem); /* center + offset */
-  padding: 1rem;
+  transform: translateX(-50%);
+  padding: 1.5rem 2.5rem;
   border-radius: 1rem;
+  box-sizing: border-box;
 }
 .change-pic {
   background-color: var(--input-gray);
@@ -170,4 +171,90 @@ body {
 .twobuttons {
   left: 12em;
   top: 10rem;
+}
+@media (min-width: 320px) {
+  .settings-container {
+    width: 90vw !important;
+    min-width: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 1.2rem 0.5rem;
+    top: 5rem;
+    height: auto;
+  }
+  .profile-picture-wrapper {
+    left: 0;
+    margin: 0 auto 1.5rem auto;
+    width: 140px;
+    height: 140px;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+  .profile-picture-wrapper img {
+    width: 100%;
+    height: 100%;
+    min-width: 100px;
+    min-height: 100px;
+    max-width: 140px;
+    max-height: 140px;
+  }
+  .change-pic {
+    left: 0;
+    top: 0.5em;
+    width: 100%;
+    font-size: 1rem;
+    margin: 0.5rem auto 0 auto;
+    padding: 0.5rem 0.2rem;
+    text-align: center;
+    position: relative;
+  }
+  .deletee {
+    left: 0;
+    top: 0.5em;
+    width: 100%;
+    margin: 0.5rem auto 0 auto;
+    font-size: 1rem;
+    padding: 0.5rem 0.2rem;
+    text-align: center;
+    position: relative;
+  }
+  .btns {
+    left: 0;
+    width: 100%;
+    bottom: 2em;
+    padding: 0;
+    margin: 0 auto;
+    position: static;
+    justify-content: center;
+  }
+  .btns .btn {
+    width: 90%;
+    font-size: 1.1rem;
+    height: 2.5rem;
+    margin: 0 auto;
+    display: block;
+  }
+  .students-information,
+  .student-details,
+  .username-stud-view,
+  .email-stud-view {
+    width: 100% !important;
+    left: 0 !important;
+    font-size: 1.1rem !important;
+    padding: 0.5rem 0.5rem !important;
+    box-sizing: border-box;
+  }
+  .name-stud,
+  .username-stud,
+  .email-stud {
+    left: 0 !important;
+    font-size: 1.1rem !important;
+    top: 0 !important;
+    position: static !important;
+    margin-bottom: 0.2rem;
+    display: block;
+  }
 }
