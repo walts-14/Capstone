@@ -158,23 +158,17 @@ function Settings() {
       <div className="settings-container rounded-4 position-absolute">
         {/* ——— STUDENT INFO (no design changes) ——— */}
         <div className="students-information">
-          <span className="name-stud text-white fw-bold position-absolute">
-            Name
-          </span>
+          <span className="name-stud text-white fw-bold">Name</span>
           <div className="student-details rounded-4 position-relative p-1 pt-3 ps-4 text-left">
             <p className="text-white text-left">{userName}</p>
           </div>
 
-          <span className="username-stud text-white fw-bold position-absolute">
-            Username
-          </span>
+          <span className="username-stud text-white fw-bold">Username</span>
           <div className="username-stud-view rounded-4 position-relative p-1 pt-3 ps-4 text-left">
             <p className="text-white text-left">{userUsername}</p>
           </div>
 
-          <span className="email-stud text-white fw-bold position-absolute">
-            Email
-          </span>
+          <span className="email-stud text-white fw-bold">Email</span>
           <div className="email-stud-view rounded-4 position-relative p-1 pt-3 ps-4 text-left">
             <p className="text-white text-left">{userEmail}</p>
           </div>
@@ -240,7 +234,7 @@ function Settings() {
 
           <label
             htmlFor="file-upload"
-            className="change-pic text-white fw-bold fs-1 rounded-4 p-2 text-center m-5 text-nowrap position-absolute"
+            className="change-pic text-white fw-bold rounded-4 p-2 text-center m-5 text-nowrap position-absolute"
             style={{
               cursor:
                 isUploadingPic || isDeletingPic ? "not-allowed" : "pointer",
@@ -252,7 +246,7 @@ function Settings() {
           </label>
 
           <button
-            className={`deletee btn-secondary fw-bold fs-5 rounded-4 position-absolute h-25 text-nowrap text-white ${
+            className={`deletee btn-secondary fw-bold rounded-4 position-absolute h-25 text-nowrap text-white ${
               isUploadingPic || isDeletingPic ? "disabled" : ""
             }`}
             onClick={handleDeleteProfilePicture}
@@ -283,7 +277,7 @@ function Settings() {
         <div className="btns">
           <button
             type="button"
-            className="btn btn-secondary btn-lg fw-bold fs-3 rounded-5 position-absolute"
+            className="btn btn-secondary fw-bold rounded-5 position-absolute"
             onClick={logout}
           >
             Log out
