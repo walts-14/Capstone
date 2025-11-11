@@ -149,8 +149,8 @@ function Sidenav() {
                 style={{ textDecoration: "none" }}
               >
                 <div
-                  className={`flex flex-col items-center justify-center w-full py-2 ${
-                    isActive ? "bg-[var(--semidark-purple)] rounded-2xl" : ""
+                className={`flex flex-col items-center justify-center  w-[4rem] py-2 ${
+                    isActive ? "bg-[var(--mid-purple)] rounded-2xl" : ""
                   }`}
                 >
                   <img
@@ -212,7 +212,7 @@ function Sidenav() {
       {/* Responsive styles for smooth transition */}
       <style>{`
         /* Tablet sidenav and logo - show between 640px-1024px */
-        @media (min-width: 640px) and (max-width: 1023px) {
+        @media (max-width: 768px) {
           .tablet-sidenav {
             display: flex !important;
           }

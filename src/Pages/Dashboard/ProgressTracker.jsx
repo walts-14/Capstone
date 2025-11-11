@@ -180,9 +180,9 @@ const calculateOverallProgress = (progressData) => {
           <div className="flex flex-row items-center justify-center">
             <img src={fire} alt="streak" className="h-auto w-12 mb-1" />
             <div className="flex flex-col ">
-               <div className="text-white text-4xl mx-0 h-[45px] flex items-center justify-center">
+               <p className=" text-white text-4xl mx-0 h-[45px] flex items-center justify-center">
               {currentStreakValue}
-            </div>
+            </p>
             <span className="text-[#878194] text-center text-base leading-4 mt-1">
               Day <br /> Streak
             </span>
@@ -198,13 +198,13 @@ const calculateOverallProgress = (progressData) => {
             onClick={closeModal}
           >
             <div
-              className="text-white p-8 rounded-3xl w-[70%] h-[46vh] max-w-[500px] text-center border-4 gap-2 mr-40"
+              className="streakContainer text-white p-8 rounded-3xl w-[70%] h-[46vh] max-w-[500px] text-center border-4 gap-2 mr-40"
               style={{ background: "#100429", borderColor: "#FF6536" }}
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header with flame icon + number */}
               <div className="flex items-center justify-center gap-2 h-[10vh]">
-                <div className="text-[6.5rem] font-bold">
+                <div className="currentText text-[6.5rem] font-bold">
                   {currentStreakValue}
                 </div>
                 <img src={fire} alt="flame" className="w-20 h-auto mb-4" />
@@ -213,14 +213,14 @@ const calculateOverallProgress = (progressData) => {
               <p className="text-2xl mb-4 opacity-80">
                 Learn new FSL to earn points and build streak
               </p>
-              <div className="flex items-center justify-center gap-2 mb-10 h-[50px]">
+              <div className="rewardStreak flex items-center justify-center gap-2 mb-10 h-[50px]">
                 <img src={medal} alt="medal" className="w-14 h-auto" />
                 <span className="text-6xl font-bold text-yellow-400">
                   +{getStreakReward(currentStreakValue)}
                 </span>
               </div>
               <button
-                className="py-3 px-6 rounded-full border-none text-white cursor-pointer text-4xl w-full"
+                className="closeBtn py-3 px-6 rounded-full border-none text-white cursor-pointer text-4xl w-full"
                 style={{ background: "#c0392b" }}
                 onClick={closeModal}
               >
@@ -483,7 +483,7 @@ export default function ProgressTracker({ student }) {
   const renderLessonsPanel = (isModal = false) => {
     const panelClass = isModal
       ? "panelClass text-white rounded-3xl p-3  h-280 w-full overflow-y-auto "
-      : "absolute top-40 right-0 text-white rounded-4xl p-3 max-h-[43rem] h-auto w-[25vw] overflow-y-scroll";
+      : "panelClass absolute top-40 right-0 text-white rounded-4xl p-3 max-h-[43rem] h-auto w-[25vw] overflow-y-scroll";
     const panelStyle = isModal
       ? {
           backgroundColor: "#271D3E",
@@ -570,7 +570,7 @@ export default function ProgressTracker({ student }) {
 
         {/* Leaderboard box - align with streak button */}
         <div
-          className="flex items-center text-white rounded-3xl h-[10vh] w-[18vw]  gap-3 px-3 "
+          className="btnleaderboard flex items-center text-white rounded-3xl h-[10vh] w-[18vw]  gap-3 px-3 "
           style={{
             backgroundColor: "var(--dark-purple)",
             fontFamily: '"Baloo", sans-serif',
@@ -588,9 +588,9 @@ export default function ProgressTracker({ student }) {
             <p className="fs-1 text-left ms-1" style={{ margin: 0, lineHeight: 1 }}>
               {userRank == null ? "..." : (typeof userRank === "number" ? `#${userRank}` : String(userRank))}
             </p>
-            <p className="text-nowrap fs-2 ms-1" style={{ margin: 0, lineHeight: 1 }}>
+            <span className="text-nowrap fs-2 ms-1" style={{ margin: 0, lineHeight: 1 }}>
               {unwrapDefault(displayUsername)}
-            </p>
+            </span>
           </div>
         </div>
      
@@ -667,7 +667,7 @@ export default function ProgressTracker({ student }) {
     {/* Responsive styles for smooth transition */}
       <style>{`
         /* Tablet sidenav and logo - show between 640px-1024px */
-        @media (min-width: 640px) and (max-width: 1023px) {
+        @media (max-width: 768px) {
          .btnstreak {
             display: flex !important;
           }
@@ -680,6 +680,111 @@ export default function ProgressTracker({ student }) {
           .mobile-streak {
             display: none !important;
           } 
+          .tracker {
+            position: fixed !important;
+            top: 60px !important;
+            right: 3vw !important;
+            gap: 18px !important;
+          }
+          .streak {
+            z-index: 9999;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            
+          }
+          .streakContainer {
+            width: 420px;
+            height: 420px;
+            margin-right: 0px !important;
+          } 
+          .uppercase {
+            margin-bottom: 4px !important;
+            margin-top: 8px !important;
+          }
+          .closeBtn {
+            border-radius: 12px !important;
+            font-size: 24px !important;
+          }
+          .btnstreak {
+            width: 10vw !important;
+            height: 10vh !important;
+          }
+          .btnstreak img, .btnleaderboard img {
+            width: 2.8rem !important;
+            height: 2.3rem !important;
+            margin-right: 0px !important;
+          }
+          .btnstreak p {
+            font-size: 2rem !important;
+            margin: 0px !important;
+            height: 30px !important;
+            leading: 1 !important;
+          }
+          .btnstreak span {
+            font-size: 0.7rem !important;
+            margin-top: 0px !important;
+          }
+          .btnleaderboard {
+            border-radius: 18px !important;
+            gap: 0rem !important;
+            padding: 4px !important;
+          }
+          .btnleaderboard p {
+            font-size: 1.5rem !important;
+          }
+          .btnleaderboard span {
+            font-size: 1rem !important;
+          }
+          .panelClass {
+            height: 72vh !important;
+            width: 30.3vw !important;
+            position: fixed !important;
+            top: 150px !important;
+            right: 3vw !important;
+            z-index: -1;
+          }
+          /* Progress panel adjustments for small phones */
+          /* make level headers and lesson labels smaller and panels height:auto */
+          .Difprogress {
+            height: 38vh !important;
+            max-height: none !important;
+            border-radius: 20px !important;
+          }
+          /* header inside each level box: pill sizing + font-size */
+           .DifHeader {
+            font-size: 1.5rem !important; /* requested header font-size */
+            padding: 0.15rem !important;
+            line-height: 1 !important;
+            width: 172px !important;
+            height: 28px !important;
+            display: inline-block !important;
+            text-align: center !important;
+            vertical-align: middle !important;
+            overflow: visible !important;
+            margin-button: 0px;
+          }
+
+          .Lesprogress {
+            margin: 0.5rem !important;
+            height: 40px !important;
+           
+          }
+          /* lesson label and percent text size */
+          .rounded-2xl .Leslabel,
+          .Lesprogress .Perclabel {
+            font-size: 1rem !important; /* requested lesson/percent size */
+            width: auto !important;
+            padding: 4px !important;
+          }
+          /* ensure the header padding boxes behave on small screens */
+          .Difprogress > DifHeader {
+            box-sizing: border-box !important;
+          }
+          /* reduce inner padding for compact layout */
+          .Lesprogress {
+            padding: 0.4rem !important;
+          }
         }
         
         /* Mobile sidenav - only show below 640px */

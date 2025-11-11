@@ -313,6 +313,11 @@ function LessonButtons() {
               gap: 2rem;
             }
           }
+          @media (max-width: 768px)  {
+            .lessons-grid {
+              gap: 2rem;
+          }
+          }
           @media (min-width: 1400px) {
             .lessons-grid {
               gap: 7rem;
@@ -342,6 +347,7 @@ function LessonButtons() {
           .lessons-grid .lesson-tile:nth-child(2n) {
             transform: translateY(0);
           }
+
           /* Reduce stagger on narrow screens so items don't overlap */
           @media (max-width: 900px) {
             .lessons-grid .lesson-tile:nth-child(2n + 1) {
@@ -377,33 +383,45 @@ function LessonButtons() {
               padding-bottom: 18rem !important;
             }
           }
-          @media (min-width: 1400px) {
+
+          /* Mobile sidenav - only show below 640px */
+          @media (min-width: 640px) and (max-width: 768px)  {
+            .headerlessbtn {
+              display: flex !important;
+              gap: 1rem !important;
+              margin-top: 8vh !important;
+              margin-right: 8rem !important;
+              z-index: -999;
+            }
+            .Difficulty {
+              display: flex !important;
+              height: 54px;
+              font-size: 1.4rem;
+              padding-inline: 12px !important;
+              border-radius: 1rem !important;
+            }
+            .livesDia {
+              display: flex !important;
+              gap: 14px;
+            }
             .lesson-button {
-              height: 10.5rem;
-              width: 13rem;
-              font-size: 6.25rem;
+              height: 6rem !important;
+              width: 8rem !important;
+              font-size: 4rem !important;
+              border-radius: 1.5rem !important;
             }
             .lessons-grid .lesson-tile:nth-child(2n + 1) {
               transform: translateY(-5rem);
-              margin-top: 5rem;
+              margin-top: 4rem;
             }
             .lessons-grid .lesson-tile:nth-child(2n) {
-              transform: translateY(11.5rem);
+              transform: translateY(5rem);
             }
-          }
-          @media (min-width: 2560px) {
-            .lesson-button {
-              height: 20.5rem !important;
-              width: 23rem !important;
-              font-size: 10rem !important;
-              border-radius: 3rem !important;
-            }
-            .lessons-grid .lesson-tile:nth-child(2n + 1) {
-              transform: translateY(-10rem);
-              margin-top: 10rem;
-            }
-            .lessons-grid .lesson-tile:nth-child(2n) {
-              transform: translateY(21rem);
+            .max-h-screen {
+              max-height: 72vh !important;
+              margin-top: 4vh !important;
+              margin-right: 8rem !important;
+              padding: 1rem !important;
             }
           }
 
