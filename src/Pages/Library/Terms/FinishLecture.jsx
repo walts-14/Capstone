@@ -135,7 +135,7 @@ function FinishLecture() {
             className="img-fluid d-flex p-2 mb-1 "
             alt="dashboard"
           />
-          {numericStep === 1 ? "1 Quiz" : "2 Quiz"}
+           <p> {numericStep === 1 ? "1 Quiz" : "2 Quiz"} </p>
         </button>
       </div>
       
@@ -148,50 +148,69 @@ function FinishLecture() {
 
         /* Mobile sidenav - only show below 640px */
         @media (max-width: 639px) {
+          .finishtext {
+            top: 130px !important;
+          }
+
           .applause {
-            width: 210px !important;  
+            width: 100px !important;  
             height: auto !important;          
           }
           .finishtext p {
-            font-size: 3rem !important;
+            font-size: 1.5rem !important;
             margin-bottom: 0px !important;  
           }
           .dia-reward {
             margin-bottom: 15px !important;
           }
           .dia-reward img {
-            width: 4rem !important;  
-            height: 4rem !important;          
+            width: 2rem !important;  
+            height: 2rem !important;          
           }
           
           .dia-reward p {
-            font-size: 3rem !important;
-
+            font-size: 1.5rem !important;
+            margin-left: 2px !important;
+          }
+          .${level}tracker {
+            width: 90vw !important;
+            gap: 4px !important;
           }
           .${level}tracker span {
-            font-size: 3rem !important;
+            font-size: 1.5rem !important;
             
           }
           .finishbuttons {
-            width: 180vw !important;
-            height: 20vh !important;
-            margin-left: 20px !important;
+            width: 95vw !important;
+            height: 12vh !important;
+            margin-left: 0px !important;
+            gap: 2px !important;
+            margin-top: 150px !important;
           }
             
           .finishbuttons button {
-            font-size: 2rem !important;
-            width: 90vw !important;
-            height: 14vh !important;
+            font-size: 1.1rem !important;
+            width: 95vw !important;
+            height: 8vh !important;
+            margin-left: 6px !important;
+            margin-right: 6px !important;
+            gap: 0px !important;
             
           }
           .Quiz  {
             gap: 25px !important;
+            
           }
           .Quiz img {
-            width: 4.9rem !important;  
-            height: 4.9rem !important;
+            width: 3rem !important;  
+            height: 3rem !important;
+            position: fixed !important;
+            right: 100px !important;
           }
-
+          .Quiz p {
+            margin-top: 10px;
+            margin-left: 20px;
+          }
 
         }
         

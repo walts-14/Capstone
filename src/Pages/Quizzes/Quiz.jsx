@@ -403,7 +403,7 @@ function Quiz() {
   const displayTotalPoints = backendTotalPoints ?? "-";
     return (
       <div className="d-flex flex-column align-items-center justify-content-center gap-2" style={{ minHeight: "100vh", backgroundColor: "var(--background)" }}>
-        <img src={failed} alt="" className="mb-4" />
+        <img src={failed} alt="" className="applause mb-4" />
 
         <div className="stats-quiz d-flex flex-row gap-2 text-center fs-1 ">
           <img src={check} className="tama img-fluid p-1" alt="check img" />
@@ -428,7 +428,7 @@ function Quiz() {
           >
             <img
               src={dashboardlogo}
-              className="img-fluid d-flex p-1 mt-1"
+              className="img-fluid d-flex p-1 "
               alt="dashboard img"
             />
             Dashboard
@@ -453,48 +453,58 @@ function Quiz() {
         /* Mobile sidenav - only show below 640px */
         @media (max-width: 639px) {
           .applause {
-            width: 210px !important;  
+            width: 100px !important;  
             height: auto !important;          
-          }
-          .textFinished {
-            font-size: 3rem !important;  
-          }
-          .stats-quiz img {
-            width: 5rem !important;  
-            height: 5rem !important;          
-          }
-          
-          .stats-quiz p {
-            font-size: 3rem !important;
-
-          }
-         
-          .finishbuttons {
-            width: 190vw !important;
-            height: 20vh !important;
-            margin-left: 3px !important;
-          }
-            
-          .finishbuttons button {
-            font-size: 2rem !important;
-            width: 88vw !important;
-            height: 14vh !important;
-          }
-          .retry-button p {
-            font-size: 2rem !important;
-            margin-left: 10px !important;
-          }
-          .retry-button img {
-            width: 3.5rem !important;  
-            height: 3.5rem !important;
           }
           .failedText {
             width: 100%;         /* use container width instead of huge vw */
             max-width: 800px;    /* optional cap so text line length stays readable */
-            margin: 0 auto;      /* centers the block horizontally */
+            margin-button: 0px  !important;     /* centers the block horizontally */
             text-align: center;  /* centers inline text inside the block */
             box-sizing: border-box;
           }
+           .failedText h1 {
+             font-size: 1.5rem !important;
+          }
+          .failedText h2 {
+             font-size: 1rem !important;
+          }
+          .stats-quiz img {
+            width: 2rem !important;  
+            height: 2rem !important;          
+          }
+         
+          .stats-quiz p {
+            font-size: 1.5  rem !important;
+            margin-button: 2px  !important;
+          }
+         
+          .finishbuttons {
+             width: 95vw !important;
+            height: 12vh !important;
+            margin-left: 3px !important;
+
+          }
+            
+          .finishbuttons button {
+            font-size: 1.1rem !important;
+            width: 42vw !important;
+            height: 8vh !important;
+            gap: 0px !important;
+          }
+          .finishbuttons p {
+            width: 5px;
+          }
+          .retry-button p {
+            font-size: 1rem !important;
+            width: 80px;
+          }
+         
+          .retry-button img {
+            width: 1.5rem !important;  
+            height: 1.5rem !important;
+          }
+        
 
         }
         
@@ -664,7 +674,7 @@ function Quiz() {
           border-radius: 12px !important;
           margin: 0 auto !important;
           position: absolute !important;
-          top: 6.5vh !important;
+          top: 6.2vh !important;
           left: 50% !important;
           transform: translateX(-50%) !important;
           z-index: 1 !important;

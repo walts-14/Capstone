@@ -105,29 +105,29 @@ function Finish() {
 
         <div className="stats-quiz d-flex flex-row gap-1 text-center ">
           {mode === "practice" ? null : (
-              <div className="dia-reward d-flex ">
-                <img src={diamond} className="img-fluid p-1 " alt="diamond img" />
-                <p className="dia-number ms-3  me-5">
-                  {/* Prefer backend-provided pointsEarned when available. Otherwise compute based on level and attemptNumber. */}
-                  {(() => {
-                    if (pointsEarned !== null && pointsEarned !== undefined) return pointsEarned;
-                    // points tiers per attempt bucket
-                    const pointsTable = {
-                      basic: { firstTwo: 10, third: 5, fourthPlus: 2 },
-                      intermediate: { firstTwo: 15, third: 8, fourthPlus: 3 },
-                      advanced: { firstTwo: 20, third: 10, fourthPlus: 5 },
-                    };
-                    const lvl = currentLevel || 'basic';
-                    const tiers = pointsTable[lvl] || pointsTable.basic;
-                    let perAnswer = tiers.firstTwo;
-                    if (attemptNumber === 3) perAnswer = tiers.third;
-                    else if (attemptNumber >= 4) perAnswer = tiers.fourthPlus;
-                    // if attemptNumber is null/undefined, assume firstTwo (initial run)
-                    return perAnswer * Number(correctAnswers || 0);
-                  })()}
-                </p>
-              </div>
-            )}
+            <div className="dia-reward d-flex ">
+              <img src={diamond} className="img-fluid p-1 " alt="diamond img" />
+              <p className="dia-number ms-3  me-5">
+                {/* Prefer backend-provided pointsEarned when available. Otherwise compute based on level and attemptNumber. */}
+                {(() => {
+                  if (pointsEarned !== null && pointsEarned !== undefined) return pointsEarned;
+                  // points tiers per attempt bucket
+                  const pointsTable = {
+                    basic: { firstTwo: 10, third: 5, fourthPlus: 2 },
+                    intermediate: { firstTwo: 15, third: 8, fourthPlus: 3 },
+                    advanced: { firstTwo: 20, third: 10, fourthPlus: 5 },
+                  };
+                  const lvl = currentLevel || 'basic';
+                  const tiers = pointsTable[lvl] || pointsTable.basic;
+                  let perAnswer = tiers.firstTwo;
+                  if (attemptNumber === 3) perAnswer = tiers.third;
+                  else if (attemptNumber >= 4) perAnswer = tiers.fourthPlus;
+                  // if attemptNumber is null/undefined, assume firstTwo (initial run)
+                  return perAnswer * Number(correctAnswers || 0);
+                })()}
+              </p>
+            </div>
+          )}
           <img src={check} className="tama img-fluid p-1" alt="check img" />
           <p className="check-number ms-2" style={{ color: "#20BF55" }}>{correctAnswers}</p>
           <img src={ekis} className="mali img-fluid p-1 ms-5" alt="ekis img" />
@@ -174,7 +174,7 @@ function Finish() {
               className="img-fluid d-flex p-2 mb-1"
               alt="quiz"
             />
-            {currentStep === 1 ? "1 Quiz" : "2 Quiz"}
+            <p>{currentStep === 1 ? "1 Quiz" : "2 Quiz"}</p>
           </button>
         ) : (
           /* Regular mode: Show Continue button only for step 1 */
@@ -203,8 +203,8 @@ function Finish() {
           )
         )}
       </div>
-      
-        {/* Responsive styles for smooth transition */}
+
+      {/* Responsive styles for smooth transition */}
       <style>{`
         /* Tablet sidenav and logo - show between 640px-1024px */
         @media (min-width: 640px) and (max-width: 1023px) {
@@ -213,40 +213,76 @@ function Finish() {
         
         /* Mobile sidenav - only show below 640px */
         @media (max-width: 639px) {
+          .finishtext {
+            top: 80px !important;
+          }
           .applause {
-            width: 210px !important;  
+            width: 100px !important;  
             height: auto !important;          
           }
           .textFinished {
-            font-size: 3rem !important;  
+            font-size: 1.5rem !important;  
             text-align: center !important;
           }
           .stats-quiz img {
-            width: 4rem !important;  
-            height: 4rem !important;          
+            width: 2rem !important;  
+            height: 2rem !important;          
           }
           
           .stats-quiz p {
-            font-size: 2.5rem !important;
+            font-size: 1.5rem !important;
 
           }
+          .${currentLevel}tracker {
+            width: 90vw !important;
+            gap: 4px !important;
+          }
           .${currentLevel}tracker span {
-            font-size: 3rem !important;
+            font-size: 1.5rem !important;
             
           }
           .finishbuttons {
-            width: 180vw !important;
-            height: 20vh !important;
-            margin-left: 24px !important;
+            width: 95vw !important;
+            height: 12vh !important;
+            margin-left: 6px !important;
+            gap: 2px !important;
+            margin-top: 100px !important;
           }
             
           .finishbuttons button {
-            font-size: 2rem !important;
-            width: 90vw !important;
-            height: 14vh !important;
+            font-size: 1.1rem !important;
+            width: 42vw !important;
+            height: 8vh !important;
+            margin-left: 6px !important;
+            margin-right: 6px !important;
+            gap: 0px !important;
             
           }
 
+          .continue{
+            padding: 20px !important;
+          }
+          .continue img, dashboard-button img {
+            display: flex;
+            width: 30px !important;
+            margin-top: 6px;
+            margin-right: 8px;
+          }
+          .Quiz  {
+            gap: 25px !important;
+            
+          }
+          .Quiz img {
+            width: 3rem !important;  
+            height: 3rem !important;
+            position: fixed !important;
+            right: 100px !important;
+          }
+          .Quiz p {
+            margin-top: 10px;
+            margin-left: 20px;
+          }
+          
         }
         
         /* Desktop sidenav - show above 1024px */

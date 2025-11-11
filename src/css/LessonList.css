@@ -72,7 +72,7 @@
   }
   .lesson-list {
     position: absolute;
-    top: 275px;
+    top: 265px;
     left: 15px;
     width: 90%;
     height: 50%;
@@ -87,7 +87,7 @@
     align-items: flex-start;
   }
   .lessonTitle h2 {
-    font-size: 1rem;
+    font-size: 0.9rem;
    
   }
 }
