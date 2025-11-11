@@ -487,7 +487,7 @@ function LectureorQuiz() {
           .status-bar {
             display: flex !important;
             position: absolute !important;
-            top: 5rem !important;
+            top: 5.5rem !important;
           }
           .MobileIntroduction {
             display: flex !important;

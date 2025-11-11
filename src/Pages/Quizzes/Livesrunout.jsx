@@ -40,7 +40,7 @@ export default function LivesRunOut() {
         @media (max-width: 639px) {
           .lro-overlay {
             width: 100vw !important;
-            height: 60vh !important;
+            height: 100vh !important;
             padding: 10vw 10vw 230vw 10vw !important;
           }
           .lro-modal {
@@ -48,33 +48,11 @@ export default function LivesRunOut() {
             flex-direction: column;
             justify-content: center; /* horizontal */
             align-items: center;     /* vertical */
-            height: 60vh !important;
-            margin-top: 80vh !important;
-            padding: 0px 5px 0px 5px !important;
-            border-radius: 30px !important;
+           
           }
-          .lro-modal h2 {
-            font-size: 2rem !important;
-          }
-          .lro-modal p { 
+          .lro-button {
             font-size: 1rem !important;
           }
-          .lro-modal img {
-            width: 6rem !important;
-            height: 6rem !important;
-          }
-
-          .lro-button {
-            font-size: 1.5rem !important;
-            width: 12rem!important;
-            height: 4rem!important;
-            padding: 0px 5px 0px 5px !important;
-          }
-           .lro-button img {
-            width: 2.5rem !important;
-            height: 2.5rem !important;
-          }
-          
         }
         
         /* Desktop sidenav - show above 1024px */

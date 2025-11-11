@@ -482,7 +482,7 @@ export default function ProgressTracker({ student }) {
   // Render the lessons/progress panel. Accepts isModal to change sizing/styling
   const renderLessonsPanel = (isModal = false) => {
     const panelClass = isModal
-      ? "text-white rounded-3xl p-3  h-280 w-full overflow-y-auto "
+      ? "panelClass text-white rounded-3xl p-3  h-280 w-full overflow-y-auto "
       : "absolute top-40 right-0 text-white rounded-4xl p-3 max-h-[43rem] h-auto w-[25vw] overflow-y-scroll";
     const panelStyle = isModal
       ? {
@@ -501,7 +501,7 @@ export default function ProgressTracker({ student }) {
         {Object.keys(lessonsByLevel).map((level) => (
           <div
             key={level}
-            className={`rounded-4xl mt-2 mb-3 m-0`}
+            className={`Difprogress rounded-4xl mt-2 mb-3 m-0`}
             style={{
               backgroundColor: "var(--input-gray)",
               border: "0px solid var(--input-gray)",
@@ -509,7 +509,7 @@ export default function ProgressTracker({ student }) {
             }}
           >
             <div
-              className={`text-4xl text-center mb-3 h-auto ${isModal ? "w-full" : "w-[13vw]"} p-2`}
+              className={`DifHeader text-4xl text-center mb-3 h-auto ${isModal ? "w-full" : "w-[13vw]"} p-2`}
               style={{
                 backgroundColor:
                   level === "basic"
@@ -531,17 +531,17 @@ export default function ProgressTracker({ student }) {
               return (
                 <div
                   key={lessonKey}
-                  className="flex mx-3 my-3 rounded-2xl p-2 justify-between"
+                  className="Lesprogress flex mx-3 my-3 rounded-2xl p-2 justify-between"
                   style={styles[level]}
                 >
                   <span
-                    className="text-white text-4xl p-2"
+                    className="Leslabel text-white text-4xl p-2"
                     style={{ fontFamily: '"Baloo", sans-serif' }}
                   >
                     {lbl}
                   </span>
                   <span
-                    className="text-4xl p-2"
+                    className="Perclabel text-4xl p-2"
                     style={{
                       color: "#160A2E",
                       fontFamily: '"Baloo", sans-serif',
@@ -707,6 +707,50 @@ export default function ProgressTracker({ student }) {
             z-index: 9999;
           } 
           
+          .panelClass {
+            height: 70vh !important;
+          }
+          /* Progress panel adjustments for small phones */
+          /* make level headers and lesson labels smaller and panels height:auto */
+          .Difprogress {
+            height: 38vh !important;
+            max-height: none !important;
+            border-radius: 20px !important;
+          }
+          /* header inside each level box: pill sizing + font-size */
+           .DifHeader {
+            font-size: 1.5rem !important; /* requested header font-size */
+            padding: 0.15rem !important;
+            line-height: 1 !important;
+            width: 172px !important;
+            height: 28px !important;
+            display: inline-block !important;
+            text-align: center !important;
+            vertical-align: middle !important;
+            overflow: visible !important;
+            margin-button: 0px;
+          }
+
+          .Lesprogress {
+            margin: 0.5rem !important;
+            height: 40px !important;
+           
+          }
+          /* lesson label and percent text size */
+          .rounded-2xl .Leslabel,
+          .Lesprogress .Perclabel {
+            font-size: 1rem !important; /* requested lesson/percent size */
+            width: auto !important;
+            padding: 4px !important;
+          }
+          /* ensure the header padding boxes behave on small screens */
+          .Difprogress > DifHeader {
+            box-sizing: border-box !important;
+          }
+          /* reduce inner padding for compact layout */
+          .Lesprogress {
+            padding: 0.4rem !important;
+          }
           
         }
         
