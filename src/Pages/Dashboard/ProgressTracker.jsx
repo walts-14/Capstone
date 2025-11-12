@@ -588,7 +588,7 @@ export default function ProgressTracker({ student }) {
             <p className="fs-1 text-left ms-1" style={{ margin: 0, lineHeight: 1 }}>
               {userRank == null ? "..." : (typeof userRank === "number" ? `#${userRank}` : String(userRank))}
             </p>
-            <span className="text-nowrap fs-2 ms-1" style={{ margin: 0, lineHeight: 1 }}>
+            <span className="truncate fs-2 ms-1 " style={{ margin: 0, lineHeight: 1 }}>
               {unwrapDefault(displayUsername)}
             </span>
           </div>
@@ -876,6 +876,123 @@ export default function ProgressTracker({ student }) {
           .mobile-streak {
             display: none !important;
           }   
+          .btnstreak {
+            display: flex !important;
+          }
+          .mobile-tracker {
+            display: none !important;
+          }
+          .mobile-btnstreak {
+            display: none !important;
+          }
+          .mobile-streak {
+            display: none !important;
+          } 
+          .tracker {
+            position: fixed !important;
+            top: 60px !important;
+            right: 3vw !important;
+            gap: 18px !important;
+          }
+          .streak {
+            z-index: 9999;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            
+          }
+          .streakContainer {
+            width: 420px;
+            height: 420px;
+            margin-right: 0px !important;
+          } 
+          .uppercase {
+            margin-bottom: 4px !important;
+            margin-top: 8px !important;
+          }
+          .closeBtn {
+            border-radius: 12px !important;
+            font-size: 24px !important;
+          }
+          .btnstreak {
+            width: 10vw !important;
+            height: 10vh !important;
+          }
+          .btnstreak img, .btnleaderboard img {
+            width: 2.8rem !important;
+            height: 2.3rem !important;
+            margin-right: 0px !important;
+          }
+          .btnstreak p {
+            font-size: 2rem !important;
+            margin: 0px !important;
+            height: 30px !important;
+            leading: 1 !important;
+          }
+          .btnstreak span {
+            font-size: 0.7rem !important;
+            margin-top: 0px !important;
+          }
+          .btnleaderboard {
+            border-radius: 18px !important;
+            gap: 0rem !important;
+            padding: 4px !important;
+          }
+          .btnleaderboard p {
+            font-size: 1.5rem !important;
+          }
+          .btnleaderboard span {
+            font-size: 1rem !important;
+          }
+          .panelClass {
+            height: 72vh !important;
+            width: 30.3vw !important;
+            position: fixed !important;
+            top: 150px !important;
+            right: 2.5vw !important;
+            z-index: -1;
+          }
+          /* Progress panel adjustments for small phones */
+          /* make level headers and lesson labels smaller and panels height:auto */
+          .Difprogress {
+            height: 38vh !important;
+            max-height: none !important;
+            border-radius: 20px !important;
+          }
+          /* header inside each level box: pill sizing + font-size */
+           .DifHeader {
+            font-size: 1.5rem !important; /* requested header font-size */
+            padding: 0.15rem !important;
+            line-height: 1 !important;
+            width: 172px !important;
+            height: 28px !important;
+            display: inline-block !important;
+            text-align: center !important;
+            vertical-align: middle !important;
+            overflow: visible !important;
+            margin-button: 0px;
+          }
+
+          .Lesprogress {
+            margin: 0.5rem !important;
+            height: 40px !important;
+           
+          }
+          /* lesson label and percent text size */
+          .rounded-2xl .Leslabel,
+          .Lesprogress .Perclabel {
+            font-size: 1rem !important; /* requested lesson/percent size */
+            width: auto !important;
+            padding: 4px !important;
+          }
+          /* ensure the header padding boxes behave on small screens */
+          .Difprogress > DifHeader {
+            box-sizing: border-box !important;
+          }
+          /* reduce inner padding for compact layout */
+          .Lesprogress {
+            padding: 0.4rem !important;
+          }
         }
 
       `}</style>

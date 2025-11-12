@@ -68,7 +68,7 @@ function Sidenav() {
     <>
       {/* Logo - desktop/laptop */}
       <div
-        className="fixed top-7 left-22 text-white font-bold text-7xl z-20 hidden lg:block"
+        className="fixed top-7 left-6 text-white font-bold text-6xl z-20 hidden lg:block"
         style={{ fontFamily: '"Baloo", sans-serif' }}
       >
         <p className="m-0">WeSign</p>
@@ -84,53 +84,45 @@ function Sidenav() {
 
       {/* Sidebar container - desktop/laptop (only visible above 1024px) */}
       <div
-        className="fixed top-28 left-0 bottom-28 w-auto rounded-r-4xl text-center p-5 bg-[var(--purple)] h-[80vh] hidden lg:flex"
-        style={{ fontFamily: '"Baloo", sans-serif' }}
-      >
-        <nav className="text-white flex flex-col w-full z-10 gap-4">
-          {menuItems.map((item, idx) => {
-            const normalizedItemPath = normalizePath(item.path);
-            const isActive = currentPath === normalizedItemPath;
-            return (
-              <div key={item.path}>
-                <Link
-                  to={item.path}
-                  className="no-underline"
-                  style={{ textDecoration: "none" }}
-                >
-                  <div
-                    className={`sidenav-item flex items-center justify-start relative rounded-3xl transition-all duration-200 cursor-pointer overflow-hidden h-16 sm:h-18 md:h-20 lg:h-24 px-4 sm:px-6 ${
-                      isActive ? "border-4 active" : ""
-                    }`}
-                    style={{
-                      backgroundColor: isActive
-                        ? "var(--background)"
-                        : "var(--purple)",
-                      borderColor: isActive
-                        ? "var(--mid-purple)"
-                        : "transparent",
-                      marginLeft: "-2rem",
-                      width: "clamp(15vw, 18vw, 20vw)",
-                      transition:
-                        "background-color 280ms ease, border-color 280ms ease, transform 280ms ease, box-shadow 280ms ease, margin-left 280ms ease",
-                    }}
-                  >
-                    <img
-                      src={item.icon}
-                      alt={`${item.label.toLowerCase()} logo`}
-                      className="flex-shrink-0 object-contain w-12 h-12 min-w-[40px] min-h-[40px] sm:w-14 sm:h-14 sm:min-w-[56px] sm:min-h-[56px] md:w-16 md:h-16 md:min-w-[64px] md:min-h-[64px]"
-                    />
-                    <span className="text-white truncate flex-1 text-center text-xl sm:text-2xl md:text-3xl lg:text-4xl ml-4 sm:ml-5">
-                      {item.label}
-                    </span>
-                  </div>
-                </Link>
-                {idx === 2 && <div className="h-4" />}
-              </div>
-            );
-          })}
-        </nav>
-      </div>
+  className="fixed top-28 left-0 bottom-28 rounded-r-4xl p-4 bg-[var(--purple)] h-[80vh] hidden lg:flex"
+  style={{ fontFamily: '"Baloo", sans-serif' }}
+>
+  <nav className="text-white flex flex-col w-full z-10 gap-4">
+    {menuItems.map((item, idx) => {
+      const normalizedItemPath = normalizePath(item.path);
+      const isActive = currentPath === normalizedItemPath;
+      return (
+        <div key={item.path}>
+          <Link to={item.path} className="no-underline">
+            <div
+              className={`sidenav-item flex items-center gap-3 rounded-3xl cursor-pointer
+                transition-all duration-300 transform
+                ${isActive ? "bg-[var(--background)] border-4 border-[var(--mid-purple)]"
+                           : "bg-[var(--purple)] border-transparent"}
+                flex-none
+                ${isActive ? "w-[20vw] ml-0 px-4 py-3" : "w-[20vw] ml-0 px-3 py-2"}
+              `}
+              style={{
+                // inline clamp optional — remove this if using the w-[..] classes above
+                // width: isActive ? "clamp(18vw,20vw,22vw)" : "clamp(10vw,12vw,14vw)",
+              }}
+            >
+              <img
+                src={item.icon}
+                alt={`${item.label.toLowerCase()} logo`}
+                className="flex-shrink-0 object-contain w-9 h-9"
+              />
+              <span className={`truncate text-2xl ${isActive ? "text-white" : "text-white"} text-left flex-1`}>
+                {item.label}
+              </span>
+            </div>
+          </Link>
+          {idx === 2 && <div className="h-4" />}
+        </div>
+      );
+    })}
+  </nav>
+</div>
 
       {/* Sidebar container - tablet (visible from 640px to 1024px) */}
       <div

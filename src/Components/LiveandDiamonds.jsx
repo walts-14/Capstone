@@ -109,7 +109,7 @@ function LivesandDiamonds({ showDiamonds = true, showLives = true }) {
         /* Laptop breakpoint: 1024x668 and up */
         @media (min-width: 1024px) {
           .lives-container, .diamonds-container { gap: 0.5rem; }
-          .heart-icon, .diamond-icon { width: 3rem; height: 3rem; }
+          .heart-icon, .diamond-icon { width: 2rem; height: 2rem; }
           .lives-number, .points-number { font-size: 1.75rem; margin-left: 0.5rem; }
         }
 
