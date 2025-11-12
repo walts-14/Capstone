@@ -258,6 +258,8 @@ function Finish() {
           }
           .dashboard-button img {
             margin-right: 5px !important;
+            display: flex;
+            width: 30px !important;
           }
           .continue {
             padding: 20px !important;
@@ -268,12 +270,21 @@ function Finish() {
             height: 2.3rem !important;
             position: relative !important;
             left: 0px !important;
-            margin-top: 60px;
-            margin-right: 8px;
+            margin-top: 8px;
+            margin-right: 16px;
           }
           .continue p {
             margin-top: 0px;
             margin-left: 20px;
+          }
+          .Quiz  {
+            gap: 25px !important;
+            padding-left: 18px !important;
+          }
+          
+          .Quiz p {
+            margin-top: 10px;
+            margin-left: 12px;
           }
 
         }

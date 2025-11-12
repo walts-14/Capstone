@@ -403,7 +403,7 @@ function Quiz() {
   const displayTotalPoints = backendTotalPoints ?? "-";
     return (
       <div className="d-flex flex-column align-items-center justify-content-center gap-2" style={{ minHeight: "100vh", backgroundColor: "var(--background)" }}>
-        <img src={failed} alt="" className="mb-4" />
+        <img className="failedIcon mb-4" src={failed} alt=""  />
 
         <div className="stats-quiz d-flex flex-row gap-2 text-center fs-1 ">
           <img src={check} className="tama img-fluid p-1" alt="check img" />
@@ -447,55 +447,136 @@ function Quiz() {
       <style>{`
         /* Tablet sidenav and logo - show between 640px-1024px */
         @media (min-width: 640px) and (max-width: 768px) {
-         
-        }
-        
-        /* Mobile sidenav - only show below 640px */
-        @media (max-width: 639px) {
-          .applause {
-            width: 210px !important;  
-            height: auto !important;          
-          }
-          .textFinished {
-            font-size: 3rem !important;  
-          }
-          .stats-quiz img {
-            width: 5rem !important;  
-            height: 5rem !important;          
-          }
-          
-          .stats-quiz p {
-            font-size: 3rem !important;
-
-          }
-         
-          .finishbuttons {
-            width: 190vw !important;
-            height: 20vh !important;
-            margin-left: 3px !important;
-          }
-            
-          .finishbuttons button {
-            font-size: 2rem !important;
-            width: 88vw !important;
-            height: 14vh !important;
-          }
-          .retry-button p {
-            font-size: 2rem !important;
-            margin-left: 10px !important;
-          }
-          .retry-button img {
-            width: 3.5rem !important;  
-            height: 3.5rem !important;
+          .failedIcon {
+            width: 100px !important;  
+            height: auto !important;                 
           }
           .failedText {
             width: 100%;         /* use container width instead of huge vw */
             max-width: 800px;    /* optional cap so text line length stays readable */
-            margin: 0 auto;      /* centers the block horizontally */
+            margin: 0 0 0 0;      /* centers the block horizontally */
             text-align: center;  /* centers inline text inside the block */
             box-sizing: border-box;
+            font-size: 1.5rem !important;
           }
+          .failedText h1 {
+            font-size: 1.6rem !important;
+          }
+          .failedText h2{
+            font-size: 1.3rem !important;
+          }
+          .stats-quiz img {
+            width: 2rem !important;  
+            height: 2rem !important;      
+          }
+          
+          .stats-quiz p {
+            font-size: 1.5rem !important;
 
+          }
+         
+          .finishbuttons {
+            width: 56vw !important;
+            height: 12vh !important;
+            margin-left: 2px !important;
+            gap: 2px !important;
+          }
+            
+          .finishbuttons button {
+            font-size: 1.1rem !important;
+            width: 95vw !important;
+            height: 10vh !important;
+            margin-left: 6px !important;
+            margin-right: 6px !important;
+            gap: 0px !important;
+            border-radius: 12px !important;
+            padding: 2px !important;
+          }
+          .dashboard-button img {
+            width: 2.3rem !important;  
+            height: 2.3rem !important;
+            margin-bottom: 6px !important;
+          }
+          .retry-button {
+            width: 44vw !important;
+            height: 8vh !important;
+          }
+          .retry-button p {
+            font-size: 1.1rem !important;
+            width: 100px !important;
+          }
+          .retry-button img {
+            width: 2.3rem !important;  
+            height: 2.3rem !important;
+            margin-top: 4px !important;
+          }
+        }
+        
+        /* Mobile sidenav - only show below 640px */
+        @media (max-width: 639px) {
+          .failedIcon {
+            width: 100px !important;  
+            height: auto !important;                 
+          }
+          .failedText {
+            width: 100%;         /* use container width instead of huge vw */
+            max-width: 800px;    /* optional cap so text line length stays readable */
+            margin: 0 0 0 0;      /* centers the block horizontally */
+            text-align: center;  /* centers inline text inside the block */
+            box-sizing: border-box;
+            font-size: 1.5rem !important;
+          }
+          .failedText h1 {
+            font-size: 1.5rem !important;
+          }
+          .failedText h2{
+            font-size: 1.2rem !important;
+          }
+          .stats-quiz img {
+            width: 2rem !important;  
+            height: 2rem !important;      
+          }
+          
+          .stats-quiz p {
+            font-size: 1.5rem !important;
+
+          }
+         
+          .finishbuttons {
+            width: 95vw !important;
+            height: 12vh !important;
+            margin-left: 2px !important;
+            gap: 2px !important;
+          }
+            
+          .finishbuttons button {
+           font-size: 1.1rem !important;
+            width: 44vw !important;
+            height: 8vh !important;
+            margin-left: 6px !important;
+            margin-right: 6px !important;
+            gap: 0px !important;
+            border-radius: 12px !important;
+            padding: 2px !important;
+          }
+          .dashboard-button img {
+            width: 2.3rem !important;  
+            height: 2.3rem !important;
+            margin-bottom: 6px !important;
+          }
+          .retry-button {
+            width: 44vw !important;
+            height: 8vh !important;
+          }
+          .retry-button p {
+            font-size: 1.1rem !important;
+          
+          }
+          .retry-button img {
+            width: 2.3rem !important;  
+            height: 2.3rem !important;
+            margin-top: 4px !important;
+          }
         }
         
         /* Desktop sidenav - show above 1024px */

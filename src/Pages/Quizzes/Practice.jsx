@@ -312,8 +312,102 @@ function Practice() {
         }
         
          /* Tablet sidenav and logo - show between 640px-1024px */
-        @media (min-width: 640px) and (max-width: 1023px) {
+        @media (min-width: 640px) and (max-width: 768px) {
+            .back {
+            display: flex !important;
+            justify-content: center !important;
+            position: fixed !important;
+            left: 0.5rem !important;
+            top: 0.5rem !important;
+            font-size: 1.5rem !important;
+          }
+          .lives-quizz {
+          display: flex !important;
+          position: absolute !important;
+          top:  7rem !important;
+          right: 4rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
+          
+         }
+          .back img {
+            width: 2rem !important;
+            height: 1.5rem !important;
+          }
+          .grid {
+            height: 60vh !important;
+            width: 90vw !important;
+            border-radius: 18px !important;
+            gap: 56px 102px !important;
+            margin-top: 15px !important;
+          }
 
+          .quiz-question {
+            display: block !important;
+            font-size: 1.7rem !important;
+            position: fixed !important;
+            left: 50% !important;
+            top: 10rem !important;
+            transform: translateX(-50%) !important;
+            width: 80vw !important;
+            text-align: center !important;
+          }
+          .choices {
+            height: 20vh !important;
+            width: 38vw !important;
+            position: relative !important;
+            top: 8vh !important;
+            right: 38px !important;
+            margin: 0 auto !important;
+           }
+          .choice-a, .choice-b, .choice-c, .choice-d {
+            height: 7vh !important;
+            width: 7vw !important;
+            position: absolute !important;
+            bottom: 6vh !important;
+            left: 7px !important;
+            margin: 0px auto !important;
+            border-radius: 12px !important;
+          }
+          .choice-a strong, .choice-b strong, .choice-c strong, .choice-d strong {
+            margin-top: 2px !important;
+            font-size: 1.5rem !important;
+          }
+          .choice-a video, .choice-b video, .choice-c video, .choice-d video {
+            width: 41vw !important;
+            height: auto !important;
+            max-width: 180px !important;
+            max-height: 30vh !important;
+            object-fit: contain !important;
+            display: block !important;
+            border: 2px solid #7338A0 !important;
+            border-radius: 12px !important;
+            margin: 0 auto !important;
+            position: absolute !important;
+            bottom: -2rem !important;
+            
+            left: 10.7rem !important;
+            transform: translateX(-50%) !important;
+            z-index: 1 !important;
+          }
+          
+          .continue {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            font-size: 1.6rem !important;
+            padding-top: 10px !important;
+            
+          } 
+          .continue img {
+            margin: 0px !important;
+            margin-top: 10px !important;
+            margin-left: 8px !important;
+            width: 2.5rem !important;
+            height: 2.3rem !important;
+          }
+          .continue p {
+            margin-bottom: 0px !important;
+            margin-top: 4px !important;
+          }      
         }
 
         /* Desktop sidenav - show above 1024px */
