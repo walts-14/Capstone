@@ -210,110 +210,128 @@ function Practice() {
       <style>{`
        
         
-        /* Mobile sidenav - only show below 640px */
+         /* Mobile sidenav - only show below 640px */
         @media (max-width: 639px) {
-          .progress {
-            margin-left: 30px !important;
-            margin-top: 15vh !important;
-            align-items: center !important;          
-            width: 185vw !important; 
-            height: 30px !important;
-            border-radius: 50px !important;
-          }
-          .grid {
-            height: 530vh !important;
-            width: 203.5vw !important;
-            border-radius: 0px !important;
-            gap: 170px 225px !important;
-          }
-          .choices {
-            height: 40vh !important;
-            width: 95vw !important;
-            border-radius: 20px !important;
-            position: relative !important;
-            top: 45vh !important;
-            right: 155px !important;
-          }
-          .choice-a, .choice-b, .choice-c, .choice-d {
-            height: 10vh !important;
-            width: 20vw !important;
-            position: relative !important;
-            bottom: 13vh !important;
-            right: 35px !important;
-          }
-          .choice-a strong, .choice-b strong, .choice-c strong, .choice-d strong {
-            margin-top: 8px !important;
-          }
-          .choice-a video, .choice-b video, .choice-c video, .choice-d video {
-            width: 85vw !important;
-            height: auto !important;
-            max-width: 720px !important;
-            max-height: 60vh !important;
-            object-fit: contain !important;
-            display: block !important;
-            border: 2px solid #7338A0 !important;
-            border-radius: 15px !important;
-            margin: 0 0 0 0 !important;
-            position: absolute !important;
-            top: 11vh !important;
-            left: 8.5rem !important;
-            transform: translateX(-50%) !important;
-            z-index: 1 !important;
-          }
-          
-          .continue {
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            position: absolute !important;
-            top: 185vh !important;
-            left: 35px !important;
-            height: 15vh !important;
-            width: 180vw !important;
-            font-size: 4rem !important;
-            padding-top: 20px !important;
-          }
-          .continue img {
-            margin: 0px !important;
-            margin-left: 10px !important;
-            width: 4.3rem !important;
-            height: 4rem !important;
-          }
-          .quiz-question {
-            display: block !important;
-            font-size: 3.4rem !important;
-            position: fixed !important;
-            left: 50% !important;
-            top: 13rem !important;
-            transform: translateX(-50%) !important;
-            width: 190vw !important;
+       .progress {
+          margin-left: 14px !important;
+          margin-top: 10vh !important;
+          align-items: center !important;
+          width: 92vw !important;
+          height: 18px !important;
+          border-radius: 50px !important;
+        }
+
+        .grid {
+          height: 200vh !important;
+          width: 100vw !important;
+          border-radius: 0px !important;
+          gap: 60px 68px !important;
+          margin-top: 15px !important;
+        }
+
+        .choices {
+          height: 22vh !important;
+          width: 46vw !important;
+          position: relative !important;
+          top: 8vh !important;
+          right: 29px !important;
+          margin: 0 auto !important;
+        }
+
+        .choice-a, .choice-b, .choice-c, .choice-d {
+          height: 5vh !important;
+          width: 50vw !important;
+          position: relative !important;
+          bottom: 6vh !important;
+          right: 0 !important;
+          margin: 8px auto !important;
+          border-radius: 12px !important;
+        }
         
-          }
-          .back {
+        .choice-a strong, .choice-b strong, .choice-c strong, .choice-d strong {
+          margin-top: 2px !important;
+          font-size: 1rem !important;
+        }
+
+        .choice-a video, .choice-b video, .choice-c video, .choice-d video {
+          width: 41vw !important;
+          height: auto !important;
+          max-width: 300px !important;
+          max-height: 45vh !important;
+          object-fit: contain !important;
+          display: block !important;
+          border: 2px solid #7338A0 !important;
+          border-radius: 12px !important;
+          margin: 0 auto !important;
+          position: absolute !important;
+          top: 6.5vh !important;
+          left: 50% !important;
+          transform: translateX(-50%) !important;
+          z-index: 1 !important;
+        }
+
+        .continue {
+          display: flex !important;
+          justify-content: center !important;
+          align-items: center !important;
+          position: absolute !important;
+          top: 91vh !important;
+          left: 12px !important;
+          height: 6vh !important;
+          width: 92vw !important;
+          font-size: 1.6rem !important;
+          padding-top: 10px !important;
+          border-radius: 12px !important;
+        }
+
+        .continue img {
+          margin: 0px !important;
+          margin-top: 10px !important;
+          margin-left: 8px !important;
+          width: 2.2rem !important;
+          height: 2rem !important;
+        }
+        .continue p {
+          margin-bottom: 0px !important;
+          margin-top: 4px !important;
+        }      
+        .quiz-question {
+          display: block !important;
+          font-size: 1.3rem !important;
+          position: fixed !important;
+          left: 50% !important;
+          top: 8rem !important;
+          transform: translateX(-50%) !important;
+          width: 92vw !important;
+          text-align: center !important;
+        }
+
+         .back {
             display: flex !important;
             justify-content: center !important;
             position: fixed !important;
-            left: 1rem !important;
-            font-size: 3rem !important;
+            left: 0.5rem !important;
+            top: 0.5rem !important;
+            font-size: 1.5rem !important;
           }
           .back img {
-            margin-top: 0.8rem !important;  
-            width: 3rem !important;
-            height: 2.5rem !important;
-          }
-          .lives-quizz {
-            display: flex !important;
-            position: absolute !important;
-            top: 1.7rem !important;
-            left: 32rem !important;
+            width: 2rem !important;
+            height: 1.5rem !important;
           }
 
+        .lives-quizz {
+          display: flex !important;
+          position: absolute !important;
+          top:  0.5rem !important;
+          left: 16.5rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
+          transform: scale(1) !important;
+        }
            
         }
         
          /* Tablet sidenav and logo - show between 640px-1024px */
         @media (min-width: 640px) and (max-width: 768px) {
-            .back {
+           .back {
             display: flex !important;
             justify-content: center !important;
             position: fixed !important;
