@@ -28,108 +28,132 @@
   --midlight-red: #d7443e;
   --midblue: #04aae0;
 }
+
 body {
   overflow-y: scroll;
   margin: 0;
   padding: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  min-height: 100vh;
+  box-sizing: border-box;
 }
 
 .settings-container {
   background-color: #271d3e;
-  width: clamp(320px, 72vw, 1500px);
-  min-height: 80.5vh;
-  position: relative;
-  top: 7rem;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 1.5rem 2.5rem;
+  width: 90%;
+  max-width: 767px;
+  min-width: 0;
+  margin: 5rem auto 0 auto;
+  min-height: 80vh;
+  padding: 1.2rem 0.5rem;
   border-radius: 1rem;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .change-pic {
   background-color: var(--input-gray);
-  height: auto;
-  width: clamp(200px, 17vw, 300px);
-  padding: 1rem;
-  margin: 1rem auto;
-  font-size: clamp(0.875rem, 2.5vw, 1.2rem);
+  width: 100%;
+  max-width: 260px;
+  padding: 0.6rem 0.2rem;
+  margin: -57rem auto 0 -12rem;
+  font-size: 1rem;
   font-family: "Baloo", sans-serif;
+  border-radius: 0.5rem;
+  text-align: center;
   position: relative;
-  left: -1.7em;
-  top: 4.5em;
 }
-.settings-container img {
+.students-information {
+  width: 100%;
   position: relative;
-  left: 1.5em;
-  top: 0;
+  margin-top: 12rem;
 }
 .student-details {
-  height: auto;
-  width: 37vw;
+  width: 100%;
   background-color: var(--background);
-  font-size: 3rem;
+  font-size: 1.1rem;
   font-family: "Baloo", sans-serif;
-  left: 12.5em;
-  top: 1.8em;
+  margin: 0.7rem 0 0.5rem 0;
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.9rem;
+  box-sizing: border-box;
 }
 .name-stud {
   font-family: "Baloo", sans-serif;
-  left: 16em;
-  top: 1em;
-  font-size: 2.5rem;
+  font-size: 1rem;
+  font-weight: 400;
+  margin-bottom: 0.1rem;
+  margin-left: 0.5rem;
+  margin-top: 0.5rem;
+  color: #fff;
+  background: transparent;
 }
 .username-stud {
   font-family: "Baloo", sans-serif;
-  left: 16em;
-  top: 5.5em;
-  font-size: 2.5rem;
+  font-size: 1rem;
+  font-weight: 400;
+  margin-bottom: 0.1rem;
+  margin-left: 0.5rem;
+  margin-top: 0.5em;
+  color: #fff;
+  background: transparent;
 }
 .username-stud-view {
-  height: auto;
-  width: 37vw;
+  width: 100%;
   background-color: var(--background);
-  font-size: 3rem;
+  font-size: 1.1rem;
   font-family: "Baloo", sans-serif;
-  left: 12.5em;
-  top: 3.3em;
+  margin: 0.7rem 0 0.5rem 0;
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.9rem;
+  box-sizing: border-box;
 }
 .email-stud {
   font-family: "Baloo", sans-serif;
-  left: 16em;
-  top: 10em;
-  font-size: 2.5rem;
+  font-size: 1rem;
+  font-weight: 400;
+  margin-bottom: 0.1rem;
+  margin-left: 0.5rem;
+  margin-top: 0.5rem;
+  color: #fff;
+  background: transparent;
 }
 .email-stud-view {
-  height: auto;
-  width: 37vw;
+  width: 100%;
   background-color: var(--background);
-  font-size: 3rem;
+  font-size: 1.1rem;
   font-family: "Baloo", sans-serif;
-  left: 12.5em;
-  top: 5em;
+  margin: 0.7rem 0 0.5rem 0;
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.9rem;
+  box-sizing: border-box;
 }
 .profile-picture-wrapper {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 1.2rem auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
-  width: 200px; /* adjust based on your original image size */
-  height: 200px;
-  left: 3em;
-  bottom: 20em;
 }
-
 .profile-picture-wrapper img {
   width: 100%;
   height: 100%;
+  min-width: 80px;
+  min-height: 80px;
+  max-width: 120px;
+  max-height: 120px;
   object-fit: cover;
   border-radius: 50%;
+  margin: -38rem auto 0.5rem auto;
 }
-
 /* Hidden overlay by default */
 .camera-overlay {
   position: absolute;
-  top: 0;
-  left: 1.5rem;
+  top: -34.2rem;
+  left: 0;
   width: 100%;
   height: 100%;
   border-radius: 50%;
@@ -144,450 +168,278 @@ body {
   opacity: 1;
 }
 .deletee {
-  top: 16em;
-  left: 2em;
   background-color: #d7443e;
+  width: auto;
+  height: 100%;
+  max-width: 260px;
+  margin: -57rem auto 0 9rem;
+  font-size: 1rem;
+  font-weight: 400;
+  padding: 0.2rem 0.5rem;
+  text-align: center;
+  border-radius: 0.5rem;
+  position: fixed;
 }
 .btns {
   display: flex;
-  position: fixed;
-  bottom: 5em;
-  left: -3em;
-  width: 30em;
+  width: 100%;
   justify-content: center;
   align-items: center;
   gap: 1em;
+  margin: -5rem 10rem 0 0;
+  position: static;
 }
-.btns .btn:nth-child(1) {
+.btns .btn {
   font-family: "Baloo", sans-serif;
-  width: 35%;
-  height: 7vh;
+  width: auto;
+  max-width: 260px;
+  height: 2.5rem;
   background-color: var(--midlight-red);
+  font-size: 1.2rem;
+  border-radius: 0.5rem;
 }
 .twobuttons button {
   background-color: #924dbf;
   padding: 0.2rem;
 }
 .twobuttons {
-  left: 12em;
-  top: 10rem;
+  margin-top: 1.2rem;
 }
-@media (min-width: 320px) {
+
+/* TABLET & DESKTOP */
+@media (min-width: 640px) {
   .settings-container {
-    width: 90vw;
+    background-color: #271d3e;
+    width: 79%;
+    max-width: 1023px;
     min-width: 0;
-    left: 50%;
-    transform: translateX(-50%);
+    margin: 5rem auto 0 7.9rem;
+    min-height: 80vh;
     padding: 1.2rem 0.5rem;
-    top: 5rem;
-    height: auto;
-  }
-  .profile-picture-wrapper {
-    left: 0;
-    margin: 0 auto 1.5rem auto;
-    width: 140px;
-    height: 140px;
-    bottom: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-  }
-  .profile-picture-wrapper img {
-    width: 100%;
-    height: 100%;
-    min-width: 100px;
-    min-height: 100px;
-    max-width: 140px;
-    max-height: 140px;
-    top: -20rem;
-  }
-  .change-pic {
-    left: -1 rem;
-    top: -13.5em;
-    width: 100%;
-    font-size: 1rem;
-    font-weight: 400;
-    margin: 0.5rem auto 0 auto;
-    padding: 0.5rem 0.2rem;
-    text-align: center;
-    position: relative;
-  }
-  .deletee {
-    left: 1.5rem;
-    top: -8em;
-    width: 100%;
-    margin: 0.5rem auto 0 auto;
-    font-size: 1rem;
-    font-weight: 400;
-    padding: 0.5rem 0.2rem;
-    text-align: center;
-    position: relative;
-  }
-  .btns {
-    left: 0;
-    width: 100%;
-    bottom: 2em;
-    padding: 0;
-    margin: 0 auto;
-    position: static;
-    justify-content: center;
-  }
-  .btns .btn {
-    width: 100%;
-    height: auto;
-    font-size: 1.2rem;
-    bottom: 1rem;
-    right: 1rem;
-    display: block;
-  }
-  .students-information,
-  .student-details,
-  .username-stud-view,
-  .email-stud-view {
-    width: 100% !important;
-    left: 0 !important;
-    font-size: 1.1rem !important;
-    padding: 0.4rem 0.9rem !important;
+    border-radius: 1rem;
     box-sizing: border-box;
-    top: 15rem;
-    font-weight: 500;
-  }
-  .name-stud,
-  .username-stud,
-  .email-stud {
-    display: inline-block;
-    font-size: 0.95rem;
-    font-weight: 700;
-    margin-bottom: 0.1rem;
-    margin-left: 0.5rem;
-    margin-top: 0.5rem;
-    position: relative;
-    top: 15rem;
-    left: 0.1rem;
-    color: #fff;
-    background: transparent;
-    z-index: 2;
-  }
-  .student-details p,
-  .username-stud-view p,
-  .email-stud-view p {
-    margin-top: 0.2rem;
-    margin-left: 0.5rem;
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #fff;
-    position: relative;
-    z-index: 1;
-  }
-  .camera-overlay {
-    position: absolute;
-    top: -20rem;
-    left: 1.5rem;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background-color: rgba(0, 0, 0, 0.4);
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-    pointer-events: none;
-  }
-}
-@media (min-width: 375px) {
-  .settings-container {
-    width: 90vw;
-    min-width: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 1.2rem 0.5rem;
-    top: 5rem;
-    height: auto;
-  }
-  .profile-picture-wrapper {
-    left: 0;
-    margin: 0 auto 1.5rem auto;
-    width: 140px;
-    height: 140px;
-    bottom: 0;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    position: relative;
-  }
-  .profile-picture-wrapper img {
-    width: 100%;
-    height: 100%;
-    min-width: 100px;
-    min-height: 100px;
-    max-width: 140px;
-    max-height: 140px;
-    top: -20rem;
-    left: 3rem;
-  }
-  .change-pic {
-    left: 0.1rem;
-    top: -13.5em;
-    width: 100%;
-    font-size: 1rem;
-    font-weight: 400;
-    margin: 0.5rem auto 0 auto;
-    padding: 0.5rem 0.2rem;
-    text-align: center;
-    position: relative;
-  }
-  .deletee {
-    left: 3.2rem;
-    top: -8em;
-    width: 100%;
-    margin: 0.5rem auto 0 auto;
-    font-size: 1rem;
-    font-weight: 400;
-    padding: 0.5rem 0.2rem;
-    text-align: center;
-    position: relative;
-  }
-  .btns {
-    left: 0;
-    width: 100%;
-    bottom: 2em;
-    padding: 0;
-    margin: 0 auto;
-    position: static;
-    justify-content: center;
-  }
-  .btns .btn {
-    width: 100%;
-    height: auto;
-    font-size: 1.2rem;
-    bottom: 1rem;
-    right: 1rem;
-    display: block;
-  }
-  .students-information,
-  .student-details,
-  .username-stud-view,
-  .email-stud-view {
-    width: 100% !important;
-    left: 0 !important;
-    font-size: 1.1rem !important;
-    padding: 0.4rem 0.9rem !important;
-    box-sizing: border-box;
-    top: 15rem;
-    font-weight: 500;
-  }
-  .name-stud,
-  .username-stud,
-  .email-stud {
-    display: inline-block;
-    font-size: 0.95rem;
-    font-weight: 700;
-    margin-bottom: 0.1rem;
-    margin-left: 0.5rem;
-    margin-top: 0.5rem;
-    position: relative;
-    top: 15rem;
-    left: 0.1rem;
-    color: #fff;
-    background: transparent;
-    z-index: 2;
-  }
-  .student-details p,
-  .username-stud-view p,
-  .email-stud-view p {
-    margin-top: 0.2rem;
-    margin-left: 0.5rem;
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #fff;
-    position: relative;
-    z-index: 1;
-  }
-  .camera-overlay {
-    position: absolute;
-    top: -20rem;
-    left: 3rem;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background-color: rgba(0, 0, 0, 0.4);
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-    pointer-events: none;
-  }
-}
-@media (min-width: 425px) {
-  .settings-container {
-    width: 90vw;
-    min-width: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 1.2rem 0.5rem;
-    top: 5rem;
-    height: auto;
   }
   .profile-picture-wrapper {
-    left: 0;
-    margin: 0 auto 1.5rem auto;
-    width: 140px;
-    height: 140px;
-    bottom: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-  }
-  .profile-picture-wrapper img {
-    width: 100%;
-    height: 100%;
-    min-width: 100px;
-    min-height: 100px;
-    max-width: 140px;
-    max-height: 140px;
-    top: -20rem;
-    left: 4rem;
-  }
-  .change-pic {
-    left: 0.9rem;
-    top: -13.5em;
-    width: 100%;
-    font-size: 1rem;
-    font-weight: 400;
-    margin: 0.5rem auto 0 auto;
-    padding: 0.5rem 0.2rem;
-    text-align: center;
-    position: relative;
-  }
-  .deletee {
-    left: 4rem;
-    top: -8em;
-    width: 100%;
-    margin: 0.5rem auto 0 auto;
-    font-size: 1rem;
-    font-weight: 400;
-    padding: 0.5rem 0.2rem;
-    text-align: center;
-    position: relative;
-  }
-  .camera-overlay {
-    position: absolute;
-    top: -20rem;
-    left: 4rem;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background-color: rgba(0, 0, 0, 0.4);
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-    pointer-events: none;
-  }
-}
-/*TABLET*/
-@media (min-width: 768px) {
-  .settings-container {
-    width: 80%;
-    left: 23rem;
-    transform: translateX(-40%);
-    padding: 1.2rem -10rem;
-    height: 85vh;
-    top: 5rem;
-  }
-  .profile-picture-wrapper {
-    left: 0;
-    margin: 0 auto 1.5rem auto;
     width: 160px;
     height: 160px;
-    bottom: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
+    max-width: 200px;
+    max-height: 200px;
   }
   .profile-picture-wrapper img {
     width: 100%;
     height: 100%;
-    min-width: 100px;
-    min-height: 100px;
-    max-width: 200px;
-    max-height: 200px;
-    top: -25rem;
-    left: 11rem;
+    min-width: 80px;
+    min-height: 80px;
+    max-width: 140px;
+    max-height: 140px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin: -43rem auto 0.5rem auto;
+  }
+  .camera-overlay {
+    position: absolute;
+    top: -38rem;
+    left: 0.1rem;
+    width: 87%;
+    height: 87%;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    pointer-events: none;
   }
   .change-pic {
-    left: -1.9rem;
-    top: -10.5em;
-    width: auto;
-    font-size: 1.5rem;
-    font-weight: 100;
-    margin: 0.5rem auto 0 auto;
-    padding: 0.5rem 0.2rem;
+    background-color: var(--input-gray);
+    width: 100%;
+    max-width: 260px;
+    padding: 0.6rem 0.2rem;
+    margin: -65rem auto 0 -15rem;
+    font-size: 1.3rem;
+    font-family: "Baloo", sans-serif;
+    border-radius: 0.5rem;
     text-align: center;
     position: relative;
   }
   .deletee {
-    left: 19.9rem;
-    top: -8.9em;
+    background-color: #d7443e;
     width: auto;
-    min-height: 6vh;
-    padding: 0.5rem 0.7rem;
-    font-size: 1.5rem;
+    height: 100%;
+    max-width: 260px;
+    margin: -65rem auto 0 13rem;
+    font-size: 1.3rem;
     font-weight: 400;
+    padding: 0.2rem 0.5rem;
     text-align: center;
-    position: relative;
+    border-radius: 0.5rem;
+    position: fixed;
   }
-  .btns {
-    left: 0;
+  .students-information {
     width: 100%;
-    bottom: 2em;
-    padding: 0;
-    margin: 0 auto;
-    position: static;
-    justify-content: center;
+    position: relative;
+    margin-top: 13rem;
   }
   .btns .btn {
-    width: 100%;
-    height: auto;
-    font-size: 1.2rem;
-    bottom: 1rem;
-    right: 1rem;
-    display: block;
+    display: flex;
+    width: auto;
+    font-size: 1.8rem;
+    padding: 1rem;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+    margin: -2rem 10rem 0 0;
+    position: static;
   }
-  .students-information,
   .student-details,
   .username-stud-view,
   .email-stud-view {
-    width: 100%;
-    left: 0;
-    font-size: 1.8rem;
-    padding: 0.4rem 0.9rem;
-    box-sizing: border-box;
-    top: 16.5rem;
-    font-weight: 100;
+    font-size: 1.5rem;
+    padding: 0.7rem 1.2rem;
   }
   .name-stud,
   .username-stud,
   .email-stud {
-    display: inline-block;
-    font-size: 1.5rem;
-    font-weight: 400;
-    margin-bottom: 0.1rem;
-    margin-left: 0.5rem;
-    margin-top: 0.5rem;
-    position: relative;
-    top: 16.5rem;
-    left: 0.1rem;
-    color: #fff;
-    background: transparent;
-    z-index: 2;
+    font-size: 1.2rem;
   }
-  .student-details p,
-  .username-stud-view p,
-  .email-stud-view p {
-    margin-top: 0.5rem;
-    margin-left: 0.5rem;
-    font-size: 1.5rem;
-    font-weight: 400;
-    color: #fff;
+}
+@media (min-width: 1024px) {
+  .settings-container {
+    width: 70%;
+    max-width: 1200px;
+    margin: 7em auto 0 18rem;
+    min-height: 80vh;
+    padding: 2rem 2.5rem;
+    border-radius: 1.2rem;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     position: relative;
-    z-index: 1;
+  }
+  .profile-picture-wrapper {
+    width: 180px;
+    height: 180px;
+    max-width: 220px;
+    max-height: 220px;
+    margin-bottom: 1.5rem;
+  }
+  .profile-picture-wrapper img {
+    width: 100%;
+    height: 100%;
+    min-width: 120px;
+    min-height: 120px;
+    max-width: 180px;
+    max-height: 180px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin: 0 auto 1rem auto;
+  }
+  .camera-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    pointer-events: none;
+  }
+  .students-information {
+    width: 100%;
+    position: relative;
+    margin-top: 2rem;
+  }
+  .change-pic {
+    font-size: 1.3rem;
+    max-width: 300px;
+    margin: 0 1rem 0 0;
+    padding: 0.7rem 1.2rem;
+  }
+  .deletee {
+    font-size: 1.3rem;
+    max-width: 300px;
+    margin: 0;
+    padding: 0.7rem 1.2rem;
+    position: static;
+  }
+  .btns {
+    left: 2.5rem;
+    bottom: 2.5rem;
+  }
+  .btns .btn {
+    font-size: 1.5rem;
+    padding: 1rem 2.5rem;
+    border-radius: 2rem;
+    width: auto;
+    min-width: 160px;
+    max-width: 320px;
+  }
+  .student-details,
+  .username-stud-view,
+  .email-stud-view {
+    font-size: 1.3rem;
+    padding: 0.7rem 1.2rem;
+  }
+  .name-stud,
+  .username-stud,
+  .email-stud {
+    font-size: 1.1rem;
+  }
+}
+@media (min-width: 1440px) {
+  .settings-container {
+    width: 70%;
+    max-width: 1600px;
+    margin: 5.5rem auto 0 24rem;
+    padding: 2.5rem 4rem;
+    border-radius: 1.5rem;
+  }
+  .profile-picture-wrapper {
+    width: 220px;
+    height: 220px;
+    max-width: 260px;
+    max-height: 260px;
+    margin-bottom: 2rem;
+  }
+  .profile-picture-wrapper img {
+    min-width: 180px;
+    min-height: 180px;
+    max-width: 220px;
+    max-height: 220px;
+    margin: 0 auto 1.5rem auto;
+  }
+  .students-information {
+    margin-top: 2.5rem;
+  }
+  .change-pic,
+  .deletee {
+    font-size: 1.5rem;
+    max-width: 350px;
+    padding: 1rem 2rem;
+  }
+  .btns {
+    left: 3.5rem;
+    bottom: 3.5rem;
+  }
+  .btns .btn {
+    font-size: 1.7rem;
+    min-width: 200px;
+    max-width: 400px;
+    padding: 1.2rem 3rem;
+  }
+  .student-details,
+  .username-stud-view,
+  .email-stud-view {
+    font-size: 1.5rem;
+    padding: 1rem 2rem;
+  }
+  .name-stud,
+  .username-stud,
+  .email-stud {
+    font-size: 1.3rem;
   }
 }

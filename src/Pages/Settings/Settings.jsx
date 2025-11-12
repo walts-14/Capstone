@@ -234,7 +234,7 @@ function Settings() {
 
           <label
             htmlFor="file-upload"
-            className="change-pic text-white rounded-4 p-2 text-center m-5 text-nowrap position-absolute"
+            className="change-pic text-white rounded-4 p-2 text-center text-nowrap"
             style={{
               cursor:
                 isUploadingPic || isDeletingPic ? "not-allowed" : "pointer",
@@ -277,7 +277,7 @@ function Settings() {
         <div className="btns">
           <button
             type="button"
-            className="btn btn-secondary fw-bold rounded-5 position-absolute"
+            className="btn btn-secondary rounded-5 position-absolute"
             onClick={logout}
           >
             Log out
