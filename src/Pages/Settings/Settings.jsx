@@ -246,7 +246,7 @@ function Settings() {
           </label>
 
           <button
-            className={`deletee btn-secondary rounded-4 position-absolute h-25 text-nowrap text-white ${
+            className={`deletee btn-secondary rounded-4 position-absolute text-nowrap text-white ${
               isUploadingPic || isDeletingPic ? "disabled" : ""
             }`}
             onClick={handleDeleteProfilePicture}
@@ -277,7 +277,7 @@ function Settings() {
         <div className="btns">
           <button
             type="button"
-            className="btn btn-secondary rounded-5 position-absolute"
+            className="btn btn-secondary rounded-5"
             onClick={logout}
           >
             Log out

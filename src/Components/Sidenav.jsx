@@ -68,7 +68,7 @@ function Sidenav() {
     <>
       {/* Logo - desktop/laptop */}
       <div
-        className="fixed top-7 max-w-1 ml-10 left-3 text-white font-bold text-7xl z-20 hidden lg:block"
+        className="fixed top-7 max-w-1 ml-5 text-white font-bold text-7xl z-20 hidden lg:block"
         style={{ fontFamily: '"Baloo", sans-serif' }}
       >
         <p className="m-0">WeSign</p>
