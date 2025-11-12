@@ -80,12 +80,34 @@
   .library-contents {
     gap: 1.5rem;
     max-width: 1100px;
+    position: fixed;
+    top: -1.2rem;
+    left: 290px;
+    width: calc(100vw - 320px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    background: transparent;
   }
-  .difficulty-select select {
+  .library-difficulty-mobile {
+    display: none !important;
+  }
+  .library-difficulty-desktop {
+    display: flex !important;
+    gap: 1.25rem;
+    align-items: center;
+  }
+  .difficulty-btn {
+    padding: 0.8rem 1.8rem;
     font-size: 1.35rem;
-    padding: 1rem 2.4rem;
-    min-width: 13rem;
-    text-align-last: center;
+    font-weight: 700;
+    border-radius: 0.75rem;
+    border: 3px solid transparent;
+    color: var(--white);
+    cursor: pointer;
+    font-family: "Baloo", sans-serif;
+    transition: all 0.2s ease;
   }
 }
 @media (max-width: 1023px) {
@@ -94,6 +116,70 @@
   }
   .library-difficulty-mobile {
     display: block !important;
+  }
+}
+
+/* Large Desktop (1440px) */
+@media (min-width: 1440px) {
+  .library-contents {
+    max-width: 1200px;
+    position: fixed;
+    top: -1.2 rem;
+    left: 290px;
+    width: calc(100vw - 320px);
+    z-index: 100;
+  }
+  .difficulty-btn {
+    padding: 0.9rem 2rem;
+    font-size: 1.4rem;
+  }
+}
+
+/* Full HD (1920px) */
+@media (min-width: 1920px) {
+  .library-contents {
+    max-width: 1400px;
+    position: fixed;
+    top: 1rem;
+    left: 290px;
+    width: calc(100vw - 320px);
+    z-index: 100;
+  }
+  .difficulty-btn {
+    padding: 1rem 2.2rem;
+    font-size: 1.5rem;
+  }
+}
+
+/* 2K/QHD (2560px) */
+@media (min-width: 2560px) {
+  .library-contents {
+    max-width: 1600px;
+    position: fixed;
+    top: -0.6rem;
+    left: 40rem;
+    width: calc(100vw - 320px);
+    z-index: 100;
+  }
+  .difficulty-btn {
+    padding: 1.1rem 2.4rem;
+    font-size: 1.7rem;
+  }
+}
+
+/* 4K/UHD (3840px) */
+@media (min-width: 3840px) {
+  .library-contents {
+    max-width: 2000px;
+    position: fixed;
+    top: 1rem;
+    left: 290px;
+    width: calc(100vw - 320px);
+    z-index: 100;
+  }
+  .difficulty-btn {
+    padding: 1.2rem 2.6rem;
+    font-size: 2rem;
   }
 }
 

@@ -6,11 +6,17 @@
     height: 3rem;
     width: 3rem;
   }
-  @media (min-width: 768px) {
-    .question-button img {
-      height: 4.2rem;
-      width: 4.2rem;
-    }
+}
+@media (min-width: 768px) {
+  .question-button img {
+    height: 4.2rem;
+    width: 4.2rem;
+  }
+}
+@media (min-width: 1024px) {
+  .question-button img {
+    height: 4.2rem;
+    width: 4.2rem;
   }
 }
 .modal-overlay {
