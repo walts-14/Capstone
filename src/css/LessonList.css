@@ -92,7 +92,7 @@
   }
 }
 /* Tablet */
-@media (min-width: 640px) and (max-width: 1023px){
+@media (min-width: 640px) and (max-width: 768px){
   .terms-list {
     max-width: 768px;
     grid-template-columns: repeat(4, 1fr);
@@ -100,7 +100,20 @@
   }
   .lessonTitle {
     max-width: 768px;
-    padding: 14px 20px;
+    padding: 10px 16px;
+    position: absolute;
+    top: 120px;
+    left: 124px;
+    width: 68%;
+    height: 12%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .lessonTitle h2 {
+    font-size: 1.4rem;
+   
   }
 }
 
