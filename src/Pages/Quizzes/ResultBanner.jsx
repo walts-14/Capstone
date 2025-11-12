@@ -76,8 +76,24 @@ export default function ResultBanner({ isCorrect }) {
         {/* Responsive styles for smooth transition */}
       <style>{`
         /* Tablet sidenav and logo - show between 640px-1024px */
-        @media (min-width: 640px) and (max-width: 1023px) {
-         
+        @media (min-width: 640px) and (max-width: 768px) {
+          .result-ans {
+            height: 68px !important;
+            width: 42vw !important;
+            top: 15.2vh !important;
+        
+            text-align: center !important;
+          }
+          .result-ans span{
+            font-size: 1.4rem !important;
+            margin: 0rem !important;
+            
+          }
+          .result-ans img{
+            width: 30px !important;
+            height: 30px !important;
+            margin-left: 0.8rem !important;
+          }
         }
         
         /* Mobile sidenav - only show below 640px */
@@ -99,9 +115,6 @@ export default function ResultBanner({ isCorrect }) {
             height: 30px !important;
             margin-right: 1.2rem !important;
           }
-
-
-          
         }
         
         /* Desktop sidenav - show above 1024px */

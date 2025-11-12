@@ -142,7 +142,78 @@ function FinishLecture() {
       {/* Responsive styles for smooth transition */}
       <style>{`
         /* Tablet sidenav and logo - show between 640px-1024px */
-        @media (min-width: 640px) and (max-width: 1023px) {
+        @media (min-width: 640px) and (max-width: 768px) {
+          .finishtext {
+            top: 130px !important;
+          }
+
+          .applause {
+            width: 100px !important;  
+            height: auto !important;          
+          }
+          .finishtext p {
+            font-size: 1.5rem !important;
+            margin-bottom: 0px !important;  
+          }
+          .dia-reward {
+            margin-bottom: 15px !important;
+          }
+          .dia-reward img {
+            width: 2rem !important;  
+            height: 2rem !important;          
+          }
+          
+          .dia-reward p {
+            font-size: 1.5rem !important;
+            margin-left: 2px !important;
+          }
+          .${level}tracker {
+            width: 60vw !important;
+            gap: 4px !important;
+            margin-top: 10px !important;
+          }
+          .${level}tracker span {
+            font-size: 1.5rem !important;
+            
+          }
+          .finishbuttons {
+            width: 56vw !important;
+            height: 12vh !important;
+            margin-left: 15px !important;
+            gap: 2px !important;
+            margin-top: 150px !important;
+          }
+            
+          .finishbuttons button {
+            font-size: 1.4rem !important;
+            width: 95vw !important;
+            height: 10vh !important;
+            margin-left: 6px !important;
+            margin-right: 6px !important;
+            gap: 0px !important;
+            
+          }
+          
+          .Quiz  {
+            gap: 25px !important;
+            
+          }
+          .dashboard-button {
+            margin-top: 4px !important;
+          }
+          .dashboard-button img {
+            margin-right: 5px !important;
+          }
+          .Quiz img {
+            width: 3.8rem !important;  
+            height: 3.8rem !important;
+            position: relative !important;
+            left: 10px !important;
+          }
+          .Quiz p {
+            margin-top: 10px;
+            margin-left: 20px;
+          }
 
         }
 
