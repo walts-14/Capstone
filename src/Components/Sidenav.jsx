@@ -149,7 +149,7 @@ function Sidenav() {
                 style={{ textDecoration: "none" }}
               >
                 <div
-                className={`flex flex-col items-center justify-center  w-[4rem] py-2 ${
+                className={`flex flex-col items-center justify-center  w-[3.8rem] h-[3.8rem] py-2 ${
                     isActive ? "bg-[var(--mid-purple)] rounded-2xl" : ""
                   }`}
                 >
@@ -192,7 +192,7 @@ function Sidenav() {
                   {isActive && (
                     <div
                       className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 bg-[var(--mid-purple)] rounded-2xl "
-                      style={{ width: "3.5rem", height: "3.5rem", zIndex: 1 }}
+                      style={{ width: "3.2rem", height: "3.2rem", zIndex: 1 }}
                     ></div>
                   )}
                   <img
