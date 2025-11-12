@@ -177,7 +177,13 @@ const calculateOverallProgress = (progressData) => {
           onClick={toggle}
         >
           <div className="flex flex-row items-center justify-center">
-            <img src={fire} alt="streak" className="h-auto w-12 mb-1" />
+            <img
+              src={fire}
+              alt="streak"
+              className="h-auto w-12 mb-1"
+              width="48"
+              height="48"
+            />
             <div className="flex flex-col ">
                <div className="text-white text-4xl mx-0 h-[45px] flex items-center justify-center">
               {currentStreakValue}
@@ -206,14 +212,26 @@ const calculateOverallProgress = (progressData) => {
                 <div className="text-[6.5rem] font-bold">
                   {currentStreakValue}
                 </div>
-                <img src={fire} alt="flame" className="w-20 h-auto mb-4" />
+                <img
+                  src={fire}
+                  alt="flame"
+                  className="w-20 h-auto mb-4"
+                  width="80"
+                  height="80"
+                />
               </div>
               <h2 className="text-3xl mb-4 uppercase">DAY STREAK!</h2>
               <p className="text-2xl mb-4 opacity-80">
                 Learn new FSL to earn points and build streak
               </p>
               <div className="flex items-center justify-center gap-2 mb-10 h-[50px]">
-                <img src={medal} alt="medal" className="w-14 h-auto" />
+                <img
+                  src={medal}
+                  alt="medal"
+                  className="w-14 h-auto"
+                  width="56"
+                  height="56"
+                />
                 <span className="text-6xl font-bold text-yellow-400">
                   +{getStreakReward(currentStreakValue)}
                 </span>
@@ -245,14 +263,26 @@ const calculateOverallProgress = (progressData) => {
                 <div className="text-[6.5rem] font-bold">
                   {currentStreakValue}
                 </div>
-                <img src={fire} alt="flame" className="w-20 h-auto mb-4" />
+                <img
+                  src={fire}
+                  alt="flame"
+                  className="w-20 h-auto mb-4"
+                  width="80"
+                  height="80"
+                />
               </div>
               <h2 className="text-3xl mb-4 uppercase">DAY STREAK!</h2>
               <p className="text-2xl mb-4 opacity-80">
                 Learn new FSL to earn points and build streak
               </p>
               <div className="flex items-center justify-center gap-2 mb-10 h-[50px]">
-                <img src={medal} alt="medal" className="w-14 h-auto" />
+                <img
+                  src={medal}
+                  alt="medal"
+                  className="w-14 h-auto"
+                  width="56"
+                  height="56"
+                />
                 <span className="text-6xl font-bold text-yellow-400">
                   +{getStreakReward(currentStreakValue)}
                 </span>
@@ -431,6 +461,8 @@ export default function ProgressTracker({ student }) {
             src={trophySrc}
             className="h-10 w-auto me-2"
             alt="trophy"
+            width="40"
+            height="40"
             style={{ display: 'block' }}
           />
           <div className="flex flex-col justify-center">

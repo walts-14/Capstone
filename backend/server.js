@@ -18,7 +18,7 @@ import progressRoutes from "./routes/progressRoutes.js";
 import streakRoutes from "./routes/streakRoutes.js";
 import pointsRoutes from "./routes/pointsRoutes.js";
 import messageRoutes from "./routes/messageRoute.js"; // Import message feature
-// (Socket.IO removed)
+import compression from "compression";
 
 //configuring dotenv
 dotenv.config();
@@ -27,6 +27,8 @@ dotenv.config();
 const app = express();
 //middleware
 app.use(express.json());
+
+app.use(compression());
 
 app.use(
   cors({

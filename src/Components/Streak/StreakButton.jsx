@@ -228,7 +228,7 @@ export default function StreakButton() {
   return (
     <>
       <button className="streak-btn" onClick={toggle} type="button">
-        {typeof fireSrc === "string" ? <img src={fireSrc} alt="streak" className="streak-icon" /> : fireSrc}
+        {typeof fireSrc === "string" ? <img src={fireSrc} alt="streak" className="streak-icon" width={28} height={28} loading="eager" /> :  fireSrc}
         <div className="streak-info">
           <div className="streak-num">{String(displayStreakNumber)}</div>
           <span className="streak-label">Day <br /> Streak</span>
@@ -240,12 +240,12 @@ export default function StreakButton() {
           <div className="streak-modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="streak-modal-header">
               <div className="streak-header-number">{String(displayStreakNumber)}</div>
-              {typeof fireSrc === "string" ? <img src={fireSrc} alt="flame" className="streak-header-flame" /> : fireSrc}
+              {typeof fireSrc === "string" ? <img src={fireSrc} alt="flame" className="streak-header-flame" width={28} height={28} loading="eager"/> : fireSrc}
             </div>
             <h2 className="streak-modal-title">DAY STREAK!</h2>
             <p className="streak-modal-subtitle">Learn new FSL to earn points and build streak</p>
             <div className="streak-modal-reward">
-              {typeof medalSrc === "string" ? <img src={medalSrc} alt="medal" className="streak-reward-icon" /> : medalSrc}
+              {typeof medalSrc === "string" ? <img src={medalSrc} alt="medal" className="streak-reward-icon" width={36} height={36} loading="eager"/> : medalSrc}
               <span className="streak-reward-text">+{String(calcReward(displayStreakNumber))}</span>
             </div>
             <button className="streak-close-btn" onClick={closeModal}>Close</button>
@@ -258,12 +258,12 @@ export default function StreakButton() {
           <div className="streak-modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="streak-modal-header">
               <div className="streak-header-number">{String(displayStreakNumber)}</div>
-              {typeof fireSrc === "string" ? <img src={fireSrc} alt="flame" className="streak-header-flame" /> : fireSrc}
+              {typeof fireSrc === "string" ? <img src={fireSrc} alt="flame" className="streak-header-flame"  width={28} height={28} loading="eager"/> : fireSrc}
             </div>
             <h2 className="streak-modal-title">DAY STREAK!</h2>
             <p className="streak-modal-subtitle">Learn new FSL to earn points and build streak</p>
             <div className="streak-modal-reward">
-              {typeof medalSrc === "string" ? <img src={medalSrc} alt="medal" className="streak-reward-icon" /> : medalSrc}
+              {typeof medalSrc === "string" ? <img src={medalSrc} alt="medal" className="streak-reward-icon" width={36} height={36} loading="eager"/> : medalSrc}
               <span className="streak-reward-text">+{String(calcReward(displayStreakNumber))}</span>
             </div>
             <button className="streak-close-btn" onClick={closeModal}>Close</button>

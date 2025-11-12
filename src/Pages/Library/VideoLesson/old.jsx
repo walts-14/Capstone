@@ -169,7 +169,7 @@ const LesoneContent = () => {
   return (
     <>
       <div className="back fs-1 fw-bold d-flex" onClick={handleBack}>
-        <img src={backkpoint} className="img-fluid p-1 mt-1" alt="Back" />
+        <img src={backkpoint} className="img-fluid p-1 mt-1" alt="Back" width={40} height={40}/>
         <p>Back</p>
       </div>
 
@@ -191,7 +191,7 @@ const LesoneContent = () => {
         <div className="text-container d-flex flex-column align-items-center justify-content-center gap-5 mt-4">
           <div className="letter-container">
             <button onClick={() => handleNavigation("prev")}>
-              <img src={leftArrow} alt="Left Arrow" className="arrow" />
+              <img src={leftArrow} alt="Left Arrow" className="arrow" width={48} height={48} style={{display: 'block'}}/>
             </button>
 
             <div className="textOne">
@@ -200,7 +200,7 @@ const LesoneContent = () => {
 
             {/* Remove the disabled attribute from the next button so it remains clickable even at the end */}
             <button onClick={() => handleNavigation("next")}>
-              <img src={rightArrow} alt="Right Arrow" className="arrow" />
+              <img src={rightArrow} alt="Right Arrow" className="arrow" width={48} height={48} style={{display: 'block'}}/>
             </button>
           </div>
 

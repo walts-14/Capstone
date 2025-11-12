@@ -226,7 +226,7 @@ function LessonButtons() {
       ref={buttonContainerRef}
       style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
     >
-      <style jsx>{`
+      <style>{`
         div::-webkit-scrollbar {
           display: none;
         }

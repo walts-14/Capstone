@@ -1,4 +1,13 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
+
+const prefetchVideo = (url) => {
+  if (!url) return;
+  const link = document.createElement("link");
+  link.rel = "prefetch";
+  link.href = url;
+  link.as = "video";
+  document.head.appendChild(link);
+};
 
 export default function TrimmedVideo({ src, width, height, start = .5, end = 5, playbackRate = 1.3 }) {
   const videoRef = useRef(null);
@@ -29,6 +38,11 @@ export default function TrimmedVideo({ src, width, height, start = .5, end = 5, 
       v.play().catch(() => {});
     }
   };
+
+  useEffect(() => {
+  prefetchVideo(src);
+}, [src]);
+
 
   return (
     <video
