@@ -1,7 +1,7 @@
 import React from "react";
 import check from "../../assets/check.png";
 import ekis from "../../assets/ekis.png";
-import "../../css/ResultBanner.css";
+import "../../css/resultbanner.css";
 
 const correctPhrases = [
   "Great job!",
