@@ -119,7 +119,23 @@ export default function ResultBanner({ isCorrect }) {
         
         /* Desktop sidenav - show above 1024px */
         @media (min-width: 1024px) {
-          
+             .result-ans {
+            height: 68px !important;
+            width: 34vw !important;
+            top: 15.2vh !important;
+        
+            text-align: center !important;
+          }
+          .result-ans span{
+            font-size: 1.4rem !important;
+            margin: 0rem !important;
+            
+          }
+          .result-ans img{
+            width: 30px !important;
+            height: 30px !important;
+            margin-left: 0rem !important;
+          }
         }
 
       `}</style>

@@ -117,7 +117,43 @@ export default function LivesRunOut() {
         
         /* Desktop sidenav - show above 1024px */
         @media (min-width: 1024px) {
-          
+            .lro-overlay {
+            width: 100vw !important;
+            height: 100vh !important;
+            padding: 10vw 10vw 230vw 10vw !important;
+          }
+          .lro-modal {
+            display: flex; ;
+            flex-direction: column;
+            justify-content: center; /* horizontal */
+            align-items: center;     /* vertical */
+            width: 52vw !important;
+            height: 66vh !important;
+            margin-top: 80vh !important;
+          }
+          .lro-button {
+            font-size: 1.5rem !important;
+            height: 5rem !important;
+          }
+          .lro-button img{
+            width: 40px !important;
+            height: 40px !important;
+          }
+          .lro-icon {
+            width: 110px;
+            margin-bottom: 0rem;
+          }
+          .lro-title {
+            margin: 0.5rem 0;
+            font-size: 2.5rem;
+            color: #ffffff;
+          }
+          .lro-text {
+            color: #ddd;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+            font-size: 1.5rem;
+          }
         }
 
       `}</style>

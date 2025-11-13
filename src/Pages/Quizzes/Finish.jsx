@@ -365,7 +365,90 @@ function Finish() {
         
         /* Desktop sidenav - show above 1024px */
         @media (min-width: 1024px) {
+             .finishtext {
+            top: 80px !important;
+          }
+          .applause {
+            width: 100px !important;  
+            height: auto !important;          
+          }
+          .textFinished {
+            font-size: 1.5rem !important;  
+            text-align: center !important;
+          }
+          .stats-quiz img {
+            width: 2.8rem !important;  
+            height: 2.8rem !important;           
+          }
           
+          .stats-quiz p {
+            font-size: 2rem !important;
+
+          }
+          .${currentLevel}tracker {
+            width: 60vw !important;
+            gap: 4px !important;
+          }
+          .${currentLevel}tracker span {
+            font-size: 1.5rem !important;
+            
+          }
+          .finishbuttons {
+            width: 56vw !important;
+            height: 12vh !important;
+            margin-left: 15px !important;
+            gap: 2px !important;
+            margin-top: 110px !important;
+          }
+            
+          .finishbuttons button {
+            font-size: 1.4rem !important;
+            width: 95vw !important;
+            height: 10vh !important;
+            margin-left: 6px !important;
+            margin-right: 6px !important;
+            gap: 0px !important;
+            
+          }
+          .dashboard-button {
+            margin-top: 4px !important;
+          }
+          .dashboard-button img {
+            margin-right: 5px !important;
+            display: flex;
+            width: 35px !important;
+          }
+          .continue {
+            padding: 20px !important;
+
+          }
+          .continue img {
+            width: 2.3rem !important;  
+            height: 2.3rem !important;
+            position: relative !important;
+            left: 0px !important;
+            margin-top: 8px;
+            margin-right: 16px;
+          }
+          .continue p {
+            margin-top: 0px;
+            margin-left: 20px;
+          }
+          .Quiz  {
+            gap: 25px !important;
+            padding-left: 18px !important;
+          }
+          
+          .Quiz p {
+            margin-top: 10px;
+            margin-left: 12px;
+          }
+          .Quiz img {
+            width: 3.3rem !important;  
+
+            height: 3.3rem !important;
+            
+          }
         }
 
       `}</style>
