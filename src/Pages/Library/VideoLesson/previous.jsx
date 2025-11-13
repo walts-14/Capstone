@@ -3,7 +3,7 @@
   import Back from "../../../assets/BackButton.png";
   import leftArrow from "../../../assets/leftArrow.png";
   import rightArrow from "../../../assets/rightArrow.png";
-  import "../../../css/lesoneContent.css";
+  import "../../../css/LesoneContent.css";
   import { useParams, useNavigate, useLocation } from "react-router-dom";
   import { ProgressContext } from "../../../Pages/Dashboard/ProgressContext";
 

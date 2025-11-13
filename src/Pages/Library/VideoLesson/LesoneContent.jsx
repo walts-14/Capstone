@@ -4,7 +4,7 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import Back from "../../../assets/BackButton.png";
 import leftArrow from "../../../assets/leftArrow.png";
 import rightArrow from "../../../assets/rightArrow.png";
-import "../../../css/lesoneContent.css";
+import "../../../css/LesoneContent.css";
 import { ProgressContext } from "../../../Pages/Dashboard/ProgressContext";
 import TrimmedVideo from "./TrimmedVideo";
 
