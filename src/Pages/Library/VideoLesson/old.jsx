@@ -207,14 +207,14 @@ const LesoneContent = () => {
           </video>
         </div>
 
-        <div className="text-container d-flex flex-column align-items-center justify-content-center gap-5 mt-4">
+        <div className="text-container d-flex flex-column align-items-center justify-content-center gap-5">
           <div className="letter-container">
             <button onClick={() => handleNavigation("prev")}>
               <img src={leftArrow} alt="Left Arrow" className="arrow" />
             </button>
 
-            <div className="textOne">
-              <p className="m-0">{terms}</p>
+            <div className="textOne align-center text-center">
+              <p>{terms}</p>
             </div>
 
             {/* Remove the disabled attribute from the next button so it remains clickable even at the end */}
