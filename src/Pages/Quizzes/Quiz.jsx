@@ -403,7 +403,7 @@ function Quiz() {
   const displayTotalPoints = backendTotalPoints ?? "-";
     return (
       <div className="d-flex flex-column align-items-center justify-content-center gap-2" style={{ minHeight: "100vh", backgroundColor: "var(--background)" }}>
-        <img src={failed} alt="" className="mb-4" />
+        <img className="failedIcon mb-4" src={failed} alt=""  />
 
         <div className="stats-quiz d-flex flex-row gap-2 text-center fs-1 ">
           <img src={check} className="tama img-fluid p-1" alt="check img" />
@@ -446,61 +446,204 @@ function Quiz() {
         {/* Responsive styles for smooth transition */}
       <style>{`
         /* Tablet sidenav and logo - show between 640px-1024px */
-        @media (min-width: 640px) and (max-width: 1023px) {
-         
-        }
-        
-        /* Mobile sidenav - only show below 640px */
-        @media (max-width: 639px) {
-          .applause {
-            width: 210px !important;  
-            height: auto !important;          
-          }
-          .textFinished {
-            font-size: 3rem !important;  
-          }
-          .stats-quiz img {
-            width: 5rem !important;  
-            height: 5rem !important;          
-          }
-          
-          .stats-quiz p {
-            font-size: 3rem !important;
-
-          }
-         
-          .finishbuttons {
-            width: 190vw !important;
-            height: 20vh !important;
-            margin-left: 3px !important;
-          }
-            
-          .finishbuttons button {
-            font-size: 2rem !important;
-            width: 88vw !important;
-            height: 14vh !important;
-          }
-          .retry-button p {
-            font-size: 2rem !important;
-            margin-left: 10px !important;
-          }
-          .retry-button img {
-            width: 3.5rem !important;  
-            height: 3.5rem !important;
+        @media (min-width: 640px) and (max-width: 768px) {
+          .failedIcon {
+            width: 100px !important;  
+            height: auto !important;                 
           }
           .failedText {
             width: 100%;         /* use container width instead of huge vw */
             max-width: 800px;    /* optional cap so text line length stays readable */
-            margin: 0 auto;      /* centers the block horizontally */
+            margin: 0 0 0 0;      /* centers the block horizontally */
             text-align: center;  /* centers inline text inside the block */
             box-sizing: border-box;
+            font-size: 1.5rem !important;
           }
+          .failedText h1 {
+            font-size: 1.6rem !important;
+          }
+          .failedText h2{
+            font-size: 1.3rem !important;
+          }
+          .stats-quiz img {
+            width: 2rem !important;  
+            height: 2rem !important;      
+          }
+          
+          .stats-quiz p {
+            font-size: 1.5rem !important;
 
+          }
+         
+          .finishbuttons {
+            width: 56vw !important;
+            height: 12vh !important;
+            margin-left: 2px !important;
+            gap: 2px !important;
+          }
+            
+          .finishbuttons button {
+            font-size: 1.1rem !important;
+            width: 95vw !important;
+            height: 10vh !important;
+            margin-left: 6px !important;
+            margin-right: 6px !important;
+            gap: 0px !important;
+            border-radius: 12px !important;
+            padding: 2px !important;
+          }
+          .dashboard-button img {
+            width: 2.3rem !important;  
+            height: 2.3rem !important;
+            margin-bottom: 6px !important;
+          }
+          .retry-button {
+            width: 44vw !important;
+            height: 8vh !important;
+          }
+          .retry-button p {
+            font-size: 1.1rem !important;
+            width: 100px !important;
+          }
+          .retry-button img {
+            width: 2.3rem !important;  
+            height: 2.3rem !important;
+            margin-top: 4px !important;
+          }
+        }
+        
+        /* Mobile sidenav - only show below 640px */
+        @media (max-width: 639px) {
+          .failedIcon {
+            width: 100px !important;  
+            height: auto !important;                 
+          }
+          .failedText {
+            width: 100%;         /* use container width instead of huge vw */
+            max-width: 800px;    /* optional cap so text line length stays readable */
+            margin: 0 0 0 0;      /* centers the block horizontally */
+            text-align: center;  /* centers inline text inside the block */
+            box-sizing: border-box;
+            font-size: 1.5rem !important;
+          }
+          .failedText h1 {
+            font-size: 1.5rem !important;
+          }
+          .failedText h2{
+            font-size: 1.2rem !important;
+          }
+          .stats-quiz img {
+            width: 2rem !important;  
+            height: 2rem !important;      
+          }
+          
+          .stats-quiz p {
+            font-size: 1.5rem !important;
+
+          }
+         
+          .finishbuttons {
+            width: 95vw !important;
+            height: 12vh !important;
+            margin-left: 2px !important;
+            gap: 2px !important;
+          }
+            
+          .finishbuttons button {
+           font-size: 1.1rem !important;
+            width: 44vw !important;
+            height: 8vh !important;
+            margin-left: 6px !important;
+            margin-right: 6px !important;
+            gap: 0px !important;
+            border-radius: 12px !important;
+            padding: 2px !important;
+          }
+          .dashboard-button img {
+            width: 2.3rem !important;  
+            height: 2.3rem !important;
+            margin-bottom: 6px !important;
+          }
+          .retry-button {
+            width: 44vw !important;
+            height: 8vh !important;
+          }
+          .retry-button p {
+            font-size: 1.1rem !important;
+          
+          }
+          .retry-button img {
+            width: 2.3rem !important;  
+            height: 2.3rem !important;
+            margin-top: 4px !important;
+          }
         }
         
         /* Desktop sidenav - show above 1024px */
         @media (min-width: 1024px) {
+               .failedIcon {
+            width: 100px !important;  
+            height: auto !important;                 
+          }
+          .failedText {
+            width: 100%;         /* use container width instead of huge vw */
+            max-width: 800px;    /* optional cap so text line length stays readable */
+            margin: 0 0 0 0;      /* centers the block horizontally */
+            text-align: center;  /* centers inline text inside the block */
+            box-sizing: border-box;
+            font-size: 1.5rem !important;
+          }
+          .failedText h1 {
+            font-size: 1.6rem !important;
+          }
+          .failedText h2{
+            font-size: 1.3rem !important;
+          }
+          .stats-quiz img {
+            width: 2.8rem !important;  
+            height: 2.8rem !important;           
+          }
           
+          .stats-quiz p {
+            font-size: 2rem !important;
+
+          }
+         
+          .finishbuttons {
+            width: 56vw !important;
+            height: 12vh !important;
+            margin-left: 2px !important;
+            gap: 2px !important;
+          }
+            
+          .finishbuttons button {
+            font-size: 1.1rem !important;
+            width: 95vw !important;
+            height: 10vh !important;
+            margin-left: 6px !important;
+            margin-right: 6px !important;
+            gap: 0px !important;
+            border-radius: 12px !important;
+            padding: 2px !important;
+          }
+          .dashboard-button img {
+            width: 2.4rem !important;  
+            height: 2.4rem !important;
+            margin-bottom: 6px !important;
+          }
+          .retry-button {
+            width: 44vw !important;
+            height: 8vh !important;
+          }
+          .retry-button p {
+            font-size: 1.1rem !important;
+            width: 100px !important;
+          }
+          .retry-button img {
+            width: 2.3rem !important;  
+            height: 2.3rem !important;
+            margin-top: 4px !important;
+          }
         }
 
       `}</style>
@@ -597,7 +740,7 @@ function Quiz() {
             onClick={handleNext}
             disabled={lives <= 0}
           >
-            Next
+            <p>Next</p>
             <img
               src={arrow}
               className="img-fluid d-flex ms-auto p-1 mt-1"
@@ -612,51 +755,197 @@ function Quiz() {
         
         /* Mobile sidenav - only show below 640px */
         @media (max-width: 639px) {
-          .progress {
-            margin-left: 30px !important;
-            margin-top: 15vh !important;
-            align-items: center !important;          
-            width: 185vw !important; 
-            height: 30px !important;
-            border-radius: 50px !important;
+       .progress {
+          margin-left: 14px !important;
+          margin-top: 10vh !important;
+          align-items: center !important;
+          width: 92vw !important;
+          height: 18px !important;
+          border-radius: 50px !important;
+        }
+
+        .grid {
+          height: 200vh !important;
+          width: 100vw !important;
+          border-radius: 0px !important;
+          gap: 60px 68px !important;
+          margin-top: 15px !important;
+        }
+
+        .choices {
+          height: 22vh !important;
+          width: 46vw !important;
+          position: relative !important;
+          top: 8vh !important;
+          right: 29px !important;
+          margin: 0 auto !important;
+        }
+
+        .choice-a, .choice-b, .choice-c, .choice-d {
+          height: 5vh !important;
+          width: 50vw !important;
+          position: relative !important;
+          bottom: 6vh !important;
+          right: 0 !important;
+          margin: 8px auto !important;
+          border-radius: 12px !important;
+        }
+        
+        .choice-a strong, .choice-b strong, .choice-c strong, .choice-d strong {
+          margin-top: 2px !important;
+          font-size: 1rem !important;
+        }
+
+        .choice-a video, .choice-b video, .choice-c video, .choice-d video {
+          width: 41vw !important;
+          height: auto !important;
+          max-width: 300px !important;
+          max-height: 45vh !important;
+          object-fit: contain !important;
+          display: block !important;
+          border: 2px solid #7338A0 !important;
+          border-radius: 12px !important;
+          margin: 0 auto !important;
+          position: absolute !important;
+          top: 6.5vh !important;
+          left: 50% !important;
+          transform: translateX(-50%) !important;
+          z-index: 1 !important;
+        }
+
+        .continue {
+          display: flex !important;
+          justify-content: center !important;
+          align-items: center !important;
+          position: absolute !important;
+          top: 91vh !important;
+          left: 12px !important;
+          height: 6vh !important;
+          width: 92vw !important;
+          font-size: 1.6rem !important;
+          padding-top: 10px !important;
+          border-radius: 12px !important;
+        }
+
+        .continue img {
+          margin: 0px !important;
+          margin-top: 10px !important;
+          margin-left: 8px !important;
+          width: 2.2rem !important;
+          height: 2rem !important;
+        }
+        .continue p {
+          margin-bottom: 0px !important;
+          margin-top: 4px !important;
+        }      
+        .quiz-question {
+          display: block !important;
+          font-size: 1.3rem !important;
+          position: fixed !important;
+          left: 50% !important;
+          top: 8rem !important;
+          transform: translateX(-50%) !important;
+          width: 92vw !important;
+          text-align: center !important;
+        }
+
+         .back {
+            display: flex !important;
+            justify-content: center !important;
+            position: fixed !important;
+            left: 0.5rem !important;
+            top: 0.5rem !important;
+            font-size: 1.5rem !important;
+          }
+          .back img {
+            width: 2rem !important;
+            height: 1.5rem !important;
+          }
+
+        .lives-quizz {
+          display: flex !important;
+          position: absolute !important;
+          top:  0.5rem !important;
+          left: 16.5rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
+          transform: scale(1) !important;
+        }
+           
+        }
+        
+         /* Tablet sidenav and logo - show between 640px-1024px */
+        @media (min-width: 640px) and (max-width: 768px) {
+           .back {
+            display: flex !important;
+            justify-content: center !important;
+            position: fixed !important;
+            left: 0.5rem !important;
+            top: 0.5rem !important;
+            font-size: 1.5rem !important;
+          }
+          .lives-quizz {
+          display: flex !important;
+          position: absolute !important;
+          top:  7rem !important;
+          right: 4rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
+          
+         }
+          .back img {
+            width: 2rem !important;
+            height: 1.5rem !important;
           }
           .grid {
-            height: 530vh !important;
-            width: 203.5vw !important;
-            border-radius: 0px !important;
-            gap: 170px 225px !important;
+            height: 60vh !important;
+            width: 90vw !important;
+            border-radius: 18px !important;
+            gap: 56px 102px !important;
+            margin-top: 15px !important;
+          }
+
+          .quiz-question {
+            display: block !important;
+            font-size: 1.7rem !important;
+            position: fixed !important;
+            left: 50% !important;
+            top: 10rem !important;
+            transform: translateX(-50%) !important;
+            width: 80vw !important;
+            text-align: center !important;
           }
           .choices {
-            height: 40vh !important;
-            width: 95vw !important;
-            border-radius: 20px !important;
+            height: 20vh !important;
+            width: 38vw !important;
             position: relative !important;
-            top: 45vh !important;
-            right: 155px !important;
-          }
+            top: 8vh !important;
+            right: 38px !important;
+            margin: 0 auto !important;
+           }
           .choice-a, .choice-b, .choice-c, .choice-d {
-            height: 10vh !important;
-            width: 20vw !important;
-            position: relative !important;
-            bottom: 13vh !important;
-            right: 35px !important;
+            height: 7vh !important;
+            width: 7vw !important;
+            position: absolute !important;
+            bottom: 6vh !important;
+            left: 7px !important;
+            margin: 0px auto !important;
+            border-radius: 12px !important;
           }
           .choice-a strong, .choice-b strong, .choice-c strong, .choice-d strong {
-            margin-top: 8px !important;
+            margin-top: 2px !important;
+            font-size: 1.5rem !important;
           }
           .choice-a video, .choice-b video, .choice-c video, .choice-d video {
-            width: 85vw !important;
+            width: 41vw !important;
             height: auto !important;
-            max-width: 720px !important;
-            max-height: 60vh !important;
+            max-width: 180px !important;
+            max-height: 30vh !important;
             object-fit: contain !important;
             display: block !important;
             border: 2px solid #7338A0 !important;
-            border-radius: 15px !important;
-            margin: 0 0 0 0 !important;
+            border-radius: 12px !important;
+            margin: 0 auto !important;
             position: absolute !important;
-            top: 11vh !important;
-            left: 8.5rem !important;
+            bottom: -2rem !important;
+            
+            left: 10.7rem !important;
             transform: translateX(-50%) !important;
             z-index: 1 !important;
           }
@@ -665,60 +954,119 @@ function Quiz() {
             display: flex !important;
             justify-content: center !important;
             align-items: center !important;
-            position: absolute !important;
-            top: 185vh !important;
-            left: 35px !important;
-            height: 15vh !important;
-            width: 180vw !important;
-            font-size: 4rem !important;
-            padding-top: 20px !important;
-          }
+            font-size: 1.6rem !important;
+            padding-top: 10px !important;
+            
+          } 
           .continue img {
             margin: 0px !important;
-            margin-left: 10px !important;
-            width: 4.3rem !important;
-            height: 4rem !important;
+            margin-top: 10px !important;
+            margin-left: 8px !important;
+            width: 2.5rem !important;
+            height: 2.3rem !important;
           }
-          .quiz-question {
-            display: block !important;
-            font-size: 3.4rem !important;
-            position: fixed !important;
-            left: 50% !important;
-            top: 13rem !important;
-            transform: translateX(-50%) !important;
-            width: 190vw !important;
-        
-          }
-          .back {
-            display: flex !important;
-            justify-content: center !important;
-            position: fixed !important;
-            left: 1rem !important;
-            font-size: 3rem !important;
-          }
-          .back img {
-            margin-top: 0.8rem !important;  
-            width: 3rem !important;
-            height: 2.5rem !important;
-          }
-          .lives-quizz {
-            display: flex !important;
-            position: absolute !important;
-            top: 1.7rem !important;
-            left: 32rem !important;
-          }
-
-           
-        }
-        
-         /* Tablet sidenav and logo - show between 640px-1024px */
-        @media (min-width: 640px) and (max-width: 1023px) {
-
+          .continue p {
+            margin-bottom: 0px !important;
+            margin-top: 4px !important;
+          }      
         }
 
         /* Desktop sidenav - show above 1024px */
         @media (min-width: 1024px) {
-         
+            .back {
+            display: flex !important;
+            justify-content: center !important;
+            position: fixed !important;
+            left: 0.5rem !important;
+            top: 0.5rem !important;
+            font-size: 1.5rem !important;
+          }
+          .lives-quizz {
+          display: flex !important;
+          position: absolute !important;
+          top:  6.6rem !important;
+          right: 4rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
+          
+         }
+          .back img {
+            width: 2rem !important;
+            height: 1.5rem !important;
+          }
+          .grid {
+            height: 60vh !important;
+            width: 90vw !important;
+            border-radius: 18px !important;
+            gap: 56px 102px !important;
+            margin-top: 15px !important;
+          }
+
+          .quiz-question {
+            display: block !important;
+            font-size: 1.7rem !important;
+            position: fixed !important;
+            left: 50% !important;
+            top: 11rem !important;
+            transform: translateX(-50%) !important;
+            width: 80vw !important;
+            text-align: center !important;
+          }
+          .choices {
+            height: 20vh !important;
+            width: 34vw !important;
+            position: relative !important;
+            top: 8vh !important;
+            right: 38px !important;
+            margin: 0 auto !important;
+           }
+          .choice-a, .choice-b, .choice-c, .choice-d {
+            height: 7vh !important;
+            width: 5vw !important;
+            position: absolute !important;
+            bottom: 6vh !important;
+            left: 22px !important;
+            margin: 0px auto !important;
+            border-radius: 12px !important;
+          }
+          .choice-a strong, .choice-b strong, .choice-c strong, .choice-d strong {
+            margin-top: 2px !important;
+            font-size: 1.5rem !important;
+          }
+          .choice-a video, .choice-b video, .choice-c video, .choice-d video {
+            width: 41vw !important;
+            height: auto !important;
+            max-width: 198px !important;
+            max-height: 35vh !important;
+            object-fit: contain !important;
+            display: block !important;
+            border-radius: 12px !important;
+            margin: 0 auto !important;
+            position: absolute !important;
+            bottom: -2.4rem !important;
+            
+            left: 13.2rem !important;
+            transform: translateX(-50%) !important;
+            z-index: 1 !important;
+          }
+          
+          .continue {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            font-size: 1.6rem !important;
+            padding-top: 10px !important;
+            
+          } 
+          .continue img {
+            margin: 0px !important;
+            margin-top: 10px !important;
+            margin-left: 8px !important;
+            width: 2.5rem !important;
+            height: 2.3rem !important;
+          }
+          .continue p {
+            margin-bottom: 0px !important;
+            margin-top: 4px !important;
+          }      
         }
 
       `}</style>

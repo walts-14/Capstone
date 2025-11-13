@@ -83,6 +83,7 @@
 .quiz-outer {
   height: 28vh;
   background-color: #f4d03f;
+  color:  var(--dark-purple);
 }
 
 .practice-outer {

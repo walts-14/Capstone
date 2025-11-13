@@ -135,70 +135,235 @@ function FinishLecture() {
             className="img-fluid d-flex p-2 mb-1 "
             alt="dashboard"
           />
-          {numericStep === 1 ? "1 Quiz" : "2 Quiz"}
+           <p> {numericStep === 1 ? "1 Quiz" : "2 Quiz"} </p>
         </button>
       </div>
       
       {/* Responsive styles for smooth transition */}
       <style>{`
         /* Tablet sidenav and logo - show between 640px-1024px */
-        @media (min-width: 640px) and (max-width: 1023px) {
+        @media (min-width: 640px) and (max-width: 768px) {
+          .finishtext {
+            top: 130px !important;
+          }
 
-        }
-
-        /* Mobile sidenav - only show below 640px */
-        @media (max-width: 639px) {
           .applause {
-            width: 210px !important;  
+            width: 100px !important;  
             height: auto !important;          
           }
           .finishtext p {
-            font-size: 3rem !important;
+            font-size: 1.5rem !important;
             margin-bottom: 0px !important;  
           }
           .dia-reward {
             margin-bottom: 15px !important;
           }
           .dia-reward img {
-            width: 4rem !important;  
-            height: 4rem !important;          
+            width: 2rem !important;  
+            height: 2rem !important;          
           }
           
           .dia-reward p {
-            font-size: 3rem !important;
-
+            font-size: 1.5rem !important;
+            margin-left: 2px !important;
+          }
+          .${level}tracker {
+            width: 60vw !important;
+            gap: 4px !important;
+            margin-top: 10px !important;
           }
           .${level}tracker span {
-            font-size: 3rem !important;
+            font-size: 1.5rem !important;
             
           }
           .finishbuttons {
-            width: 180vw !important;
-            height: 20vh !important;
-            margin-left: 20px !important;
+            width: 56vw !important;
+            height: 12vh !important;
+            margin-left: 15px !important;
+            gap: 2px !important;
+            margin-top: 150px !important;
           }
             
           .finishbuttons button {
-            font-size: 2rem !important;
+            font-size: 1.4rem !important;
+            width: 95vw !important;
+            height: 10vh !important;
+            margin-left: 6px !important;
+            margin-right: 6px !important;
+            gap: 0px !important;
+            
+          }
+          
+          .Quiz  {
+            gap: 25px !important;
+            
+          }
+          .dashboard-button {
+            margin-top: 4px !important;
+          }
+          .dashboard-button img {
+            margin-right: 5px !important;
+          }
+          .Quiz img {
+            width: 3.8rem !important;  
+            height: 3.8rem !important;
+            position: relative !important;
+            left: 10px !important;
+          }
+          .Quiz p {
+            margin-top: 10px;
+            margin-left: 20px;
+          }
+
+        }
+
+        /* Mobile sidenav - only show below 640px */
+        @media (max-width: 639px) {
+          .finishtext {
+            top: 130px !important;
+          }
+
+          .applause {
+            width: 100px !important;  
+            height: auto !important;          
+          }
+          .finishtext p {
+            font-size: 1.5rem !important;
+            margin-bottom: 0px !important;  
+          }
+          .dia-reward {
+            margin-bottom: 15px !important;
+          }
+          .dia-reward img {
+            width: 2rem !important;  
+            height: 2rem !important;          
+          }
+          
+          .dia-reward p {
+            font-size: 1.5rem !important;
+            margin-left: 2px !important;
+          }
+          .${level}tracker {
             width: 90vw !important;
-            height: 14vh !important;
+            gap: 4px !important;
+          }
+          .${level}tracker span {
+            font-size: 1.5rem !important;
+            
+          }
+          .finishbuttons {
+            width: 95vw !important;
+            height: 12vh !important;
+            margin-left: 0px !important;
+            gap: 2px !important;
+            margin-top: 150px !important;
+          }
+            
+          .finishbuttons button {
+            font-size: 1.1rem !important;
+            width: 95vw !important;
+            height: 8vh !important;
+            margin-left: 6px !important;
+            margin-right: 6px !important;
+            gap: 0px !important;
             
           }
           .Quiz  {
             gap: 25px !important;
+            
           }
           .Quiz img {
-            width: 4.9rem !important;  
-            height: 4.9rem !important;
+            width: 3rem !important;  
+            height: 3rem !important;
+            position: fixed !important;
+            right: 100px !important;
           }
-
+          .Quiz p {
+            margin-top: 10px;
+            margin-left: 20px;
+          }
 
         }
         
         /* Desktop sidenav - show above 1024px */
         @media (min-width: 1024px) {
+             .finishtext {
+            top: 130px !important;
+          }
+
+          .applause {
+            width: 100px !important;  
+            height: auto !important;          
+          }
+          .finishtext p {
+            font-size: 1.5rem !important;
+            margin-bottom: 0px !important;  
+          }
+          .dia-reward {
+            margin-bottom: 15px !important;
+          }
+          .dia-reward img {
+            width: 2rem !important;  
+            height: 2rem !important;          
+          }
           
-        }
+          .dia-reward p {
+            font-size: 1.5rem !important;
+            margin-left: 2px !important;
+          }
+          .${level}tracker {
+            width: 60vw !important;
+            gap: 4px !important;
+            margin-top: 10px !important;
+          }
+          .${level}tracker span {
+            font-size: 1.5rem !important;
+            
+          }
+          .finishbuttons {
+            width: 56vw !important;
+            height: 12vh !important;
+            margin-left: 15px !important;
+            gap: 2px !important;
+            margin-top: 150px !important;
+          }
+            
+          .finishbuttons button {
+            font-size: 1.4rem !important;
+            width: 95vw !important;
+            height: 10vh !important;
+            margin-left: 6px !important;
+            margin-right: 6px !important;
+            gap: 0px !important;
+            
+          }
+          
+          .Quiz  {
+            gap: 25px !important;
+            
+          }
+          .dashboard-button {
+            margin-top: 4px !important;
+          }
+          .dashboard-button img {
+            /* override Bootstrap's .img-fluid which sets max-width:100% */
+            display: inline-block !important;
+            width: 43px !important;
+            max-width: none !important;
+            height: auto !important;
+            margin-right: 5px !important;
+          }
+          .Quiz img {
+            width: 3.8rem !important;  
+            height: 3.8rem !important;
+            position: relative !important;
+            left: 10px !important;
+          }
+          .Quiz p {
+            margin-top: 10px;
+            margin-left: 20px;
+          }
+        } 
 
       `}</style>
     </>
