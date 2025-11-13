@@ -6,19 +6,81 @@
     height: 3rem;
     width: 3rem;
   }
+  
+  /* Mobile-specific modal sizing */
+  .modal-content {
+    max-width: 95vw;
+    max-height: 90vh;
+    left: 0;
+    margin: 0 auto;
+  }
+  
+  .slideshow-container {
+    height: 75vh;
+    padding: 15px 20px;
+  }
+  
+  .slideshow-controls {
+    gap: 2rem;
+    flex-direction: column;
+  }
+  
+  .slideshow-controls .btn {
+    width: 80vw;
+    font-size: 1.8rem;
+  }
 }
+
 @media (min-width: 768px) {
   .question-button img {
     height: 4.2rem;
     width: 4.2rem;
   }
+  
+  /* Tablet adjustments */
+  .modal-content {
+    max-width: 90vw;
+    left: 5%;
+  }
+  
+  .slideshow-controls {
+    gap: 20rem;
+    flex-direction: row;
+  }
+  
+  .slideshow-controls .btn {
+    width: 25vw;
+    font-size: 2rem;
+  }
 }
+
 @media (min-width: 1024px) {
   .question-button img {
     height: 4.2rem;
     width: 4.2rem;
   }
+  
+  /* Desktop - original sizing */
+  .modal-content {
+    max-width: 75vw;
+    left: 10%;
+  }
+  
+  .slideshow-container {
+    height: 70vh;
+    padding: 0px 55px;
+  }
+  
+  .slideshow-controls {
+    gap: 51rem;
+  }
+  
+  .slideshow-controls .btn {
+    width: 15vw;
+    font-size: 2.5rem;
+  }
 }
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -30,21 +92,15 @@
   justify-content: center;
   align-items: center;
   z-index: 9999;
-  /* sit above everything */
 }
 
-/* Centered modal box */
 .modal-content {
-  max-width: 75vw;
-  max-height: 90vh;
   overflow-y: auto;
   position: relative;
-  left: 10%;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
 
-/* Close “X” button */
 .modal-close-btn {
   position: absolute;
   top: -1.5rem;
@@ -63,18 +119,10 @@
   justify-content: center;
   align-items: center;
   border-radius: 30px;
-  height: 65vh;
-  padding: 0px 55px 0px 55px;
-}
-
-.slideshow-controls {
-  gap: 51rem;
 }
 
 .slideshow-controls .btn {
   background-color: #4a2574;
-  width: 15vw;
   color: #100429;
-  font-size: 2.5rem;
   text-align: center;
 }
