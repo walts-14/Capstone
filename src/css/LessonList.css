@@ -95,74 +95,57 @@
 @media (min-width: 640px) and (max-width: 768px){
   .terms-list {
     max-width: 768px;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
+   
   }
   .lessonTitle {
     max-width: 768px;
     padding: 10px 16px;
     position: absolute;
     top: 120px;
-    left: 124px;
-    width: 68%;
+    left: 75px;
+    width: 80%;
     height: 12%;
     min-height: 0;
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+   
+  }
+  .lessonTitle h1 {
+    font-size: 2rem;
+    width: 45vw;
   }
   .lessonTitle h2 {
-    font-size: 1.4rem;
-   
+    font-size: 1.5rem;
+    width: 150vw;
   }
 }
 
 /* Desktop */
 @media (min-width: 1024px) {
-  .terms-section {
-    margin-left: 15rem;
-    margin-top: 1.2rem;
-    max-width: 900px;
-    min-height: calc(100vh - 8rem);
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    height: 60vh;
-    overflow-y: auto;
-    padding-bottom: 2rem;
+    .terms-list {
+    max-width: 768px;
+   
   }
   .lessonTitle {
-    max-width: 900px;
-    margin: 0 auto 1.2rem auto;
-    padding: 16px 24px;
-    font-size: 2.2rem;
-    border-radius: 16px;
-    background-color: var(--semidark-blue);
-    position: relative;
-    left: 0;
-    top: 0;
-    width: 100%;
-    box-sizing: border-box;
-  }
-  .terms-list {
-    max-width: 900px;
-    width: 100%;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 2rem;
-    margin: 0 auto;
-    box-sizing: border-box;
-    justify-items: center;
-    align-items: start;
-  }
-  .terms-list .term-card {
-    min-width: 180px;
-    max-width: 220px;
-    height: 90px;
-    font-size: 2rem;
-    margin: 0 auto;
+    max-width: 768px;
+    padding: 10px 16px;
+    position: absolute;
+    top: 120px;
+    left: 130px;
+    width: 80%;
+    height: 8%;
+    min-height: 0;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: row;
+   
+  }
+  .lessonTitle h1 {
+    font-size: 2rem;
+    width: 38vw;
+  }
+  .lessonTitle h2 {
+    font-size: 1.5rem;
+    width: 150vw;
   }
 }
+

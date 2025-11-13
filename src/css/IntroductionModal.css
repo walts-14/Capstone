@@ -73,6 +73,13 @@
     width: 3rem;
   }
 }
+
+@media (min-width: 1024px) {
+  .question-button img {
+    height: 3rem;
+    width: 3rem;
+  }
+}
 .modal-overlay {
   position: fixed;
   top: 0;

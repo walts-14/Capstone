@@ -538,14 +538,100 @@ function LectureorQuiz() {
 
            /* Desktop sidenav - show above 1024px */
         @media (min-width: 1024px) {
-           .MobileIntroduction {
+          .MobileIntroduction {
               display: none !important;
             } 
           .Introduction {
               display: flex !important;
             }
+          .Difficulty {
+            display: flex !important;
+            height: 47px;
+            font-size: 1.5rem;
+            padding-inline: 10px !important;
+            border-radius: 1rem !important;
+          }
+          .status-bar {
+            display: flex !important;
+            position: absolute !important;
+            top: 4rem !important;
+          }
+           .back {
+            display: flex !important;
+            justify-content: center !important;
+            position: fixed !important;
+            left: 0.5rem !important;
+            top: 0.5rem !important;
+            font-size: 1.5rem !important;
+            }
+            .back img {
+              width: 2rem !important;
+              height: 1.5rem !important;
+            }    
+            
+
+            .progress-bar-container {
+            margin-top: 6rem !important;
+            width:28% !important;
+          }
+          .container {
+            display: flex !important;
+            gap: 1rem !important;
+       
+          }
+          .progress-step{
+            width: 3rem !important;    
+            height: 3rem!important;
+            font-size: 1.5rem !important;
+          }
+          .progress-line {
+            height: 0.8rem !important;
+            width: 65% !important;
+          }  
+          .lecture-quiz-container {
+            display: flex !important;
+            flex-direction: row !important;
+            font-size: 1rem !important;
+            width: 48rem !important;
+            gap: 2rem !important;
+          }
+          .lecture-quiz-container p{
+            font-size: 2rem !important;
+          } 
           
+          .lecture-outer {
+            width: 17.5rem !important;
+            height: 23rem !important;
+            border-radius: 1.5rem !important;
+
+          }
+            
+          .lecture-inner {
+            width: 17rem !important;
+            height: 18.5rem !important;
+            border-radius: 1.5rem !important;
+          }
+         
+          .quiz-outer, .practice-outer {
+            width: 17.5rem !important;
+            height: 10.5rem !important;
+            padding: 0px !important;
+            border-radius: 1.5rem !important;
         
+         }
+          .quiz-inner img, .practice-inner img {
+            height:  50% !important;
+          }
+          .quiz-inner, .practice-inner {
+            width: 17rem !important;
+            height: 16.5vh !important;
+            margin-top: 1.8rem !important;
+            border-radius: 1.5rem !important;
+         }
+           .quiz-outer p, .practice-outer p{
+            margin-bottom: 0rem !important;
+            margin-top: .2rem !important;
+         }
             
         }
         
