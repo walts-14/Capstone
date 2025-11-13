@@ -1,6 +1,6 @@
 import React from "react";
 import Lessonscard from "./Lessonscard";
-import "../css/Lessonlist.css";
+import "../css/LessonList.css";
 
 function Lessonlist({ Lessons }) {
   return (
