@@ -57,8 +57,6 @@ const LesoneContent = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [hasUpdated, setHasUpdated] = useState(false);
-  const [isTermFlipped, setIsTermFlipped] = useState(false);
-  const [isDefFlipped, setIsDefFlipped] = useState(false);
 
   // helper to match TermsCard coloring logic
   const getOverrideStyle = () => {
@@ -211,36 +209,11 @@ const LesoneContent = () => {
     }
   };
 
-  // Split term
-  let englishTerm = currentTerm.word;
-  let filipinoTerm = "";
-  const parenMatch = /^(.*?)\s*\((.*?)\)$/.exec(currentTerm.word);
-  if (parenMatch) {
-    englishTerm = parenMatch[1].trim();
-    filipinoTerm = parenMatch[2].trim();
-  } else if (currentTerm.word && currentTerm.word.includes(" - ")) {
-    [englishTerm, filipinoTerm] = currentTerm.word.split(" - ");
-    englishTerm = englishTerm.trim();
-    filipinoTerm = filipinoTerm.trim();
-  }
-
-  // Split definition
+  // **Split definition into English and Tagalog**
   const rawDef = currentTerm.definition || "";
-  let englishDef = rawDef;
-  let filipinoDef = "";
-  if (rawDef.includes("Filipino:") && rawDef.includes("English:")) {
-    const engMatch = /English:\s*([^]*)Filipino:/.exec(rawDef);
-    const filMatch = /Filipino:\s*([^]*)$/.exec(rawDef);
-    englishDef = engMatch ? engMatch[1].trim() : "";
-    filipinoDef = filMatch ? filMatch[1].trim() : "";
-  } else if (rawDef.includes("Tagalog:")) {
-    [englishDef, filipinoDef] = rawDef.split(/Tagalog:/);
-    englishDef = englishDef.replace(/^English:/i, "").trim();
-    filipinoDef = filipinoDef.trim();
-  } else {
-    englishDef = rawDef.trim();
-    filipinoDef = "";
-  }
+  const [englishPart, tagalogPart] = rawDef.includes("Tagalog:")
+    ? rawDef.split(/Tagalog:/)
+    : [rawDef, ""];
 
   const handleBack = () => {
     if (location.state?.fromLecture) {
@@ -265,95 +238,34 @@ const LesoneContent = () => {
 
       <div className="container-lecture d-flex flex-column align-items-center justify-content-center">
         <div className="tryone-container">
-          <TrimmedVideo
-            src={currentTerm.video}
-            width={200}
-            height={150}
-            start={0.5} // cut off the first 1 second
-            end={11} // when it reaches 8s, loop back to 1s
-            playbackRate={1.3}
+       <TrimmedVideo
+          src={currentTerm.video}
+          width={200}
+          height={150}
+          start={.5}    // cut off the first 1 second
+          end={11}      // when it reaches 8s, loop back to 1s
+          playbackRate={1.3}
           />
         </div>
 
-        <div className="text-container d-flex flex-column align-items-center justify-content-center gap-5">
-          {/* Term Card: static for termsone, flip for others */}
+        <div className="text-container d-flex flex-column align-items-center justify-content-center gap-5 mt-4">
           <div className="letter-container">
             <button onClick={() => handleNavigation("prev")}>
               <img src={leftArrow} alt="Left Arrow" className="arrow" />
             </button>
-            {lessonKey === "termsone" ? (
-              <div className="textOne" style={navStyle}>
-                <p
-                  style={{
-                    width: "100%",
-                    textAlign: "center",
-                    marginTop: "-2rem",
-                  }}
-                >
-                  {englishTerm}
-                </p>
-              </div>
-            ) : (
-              <div
-                className={`textOne flip-card${
-                  isTermFlipped ? " flipped" : ""
-                }`}
-                style={navStyle}
-                onClick={() => setIsTermFlipped((prev) => !prev)}
-                tabIndex={0}
-                role="button"
-                aria-pressed={isTermFlipped}
-              >
-                <div className="flip-card-inner">
-                  <div className="flip-card-front">
-                    <p>{englishTerm}</p>
-                  </div>
-                  <div className="flip-card-back">
-                    <p>{filipinoTerm ? filipinoTerm : "Filipino"}</p>
-                  </div>
-                </div>
-              </div>
-            )}
+            <div className="textOne" style={navStyle}>
+              <p className="m-0">{currentTerm.word}</p>
+            </div>
             <button onClick={() => handleNavigation("next")}>
               <img src={rightArrow} alt="Right Arrow" className="arrow" />
             </button>
           </div>
-          {/* Definition Card: static for termsone, flip for others */}
-          {lessonKey === "termsone" ? (
-            <div className="textOne" style={navStyle}>
-              <p
-                style={{
-                  width: "100%",
-                  textAlign: "center",
-                  marginTop: "-2rem",
-                }}
-              >
-                {englishDef}
-              </p>
-            </div>
-          ) : (
-            <div
-              className={`textOne flip-card${isDefFlipped ? " flipped" : ""}`}
-              style={navStyle}
-              onClick={() => setIsDefFlipped((prev) => !prev)}
-              tabIndex={0}
-              role="button"
-              aria-pressed={isDefFlipped}
-            >
-              <div className="flip-card-inner">
-                <div className="flip-card-front">
-                  <p className="m-0">{englishDef}</p>
-                </div>
-                <div className="flip-card-back">
-                  <p className="m-0">
-                    {filipinoDef
-                      ? filipinoDef
-                      : "Filipino definition not available."}
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
+          <div className="textOne" style={navStyle}>
+            <p className="m-0">{englishPart.trim()}</p>
+            {tagalogPart.trim() && (
+              <p className="m-0">Filipino: {tagalogPart.trim()}</p>
+            )}
+          </div>
         </div>
       </div>
     </>

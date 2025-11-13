@@ -88,9 +88,9 @@
     max-width: 768px;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    padding-left: 5rem;
+    padding-left: 9rem;
     margin-top: 8rem;
-    margin-left: auto;
+    margin-left: -2.5rem;
     width: 100%;
     max-height: calc(100vh - 12rem);
     overflow-y: auto; /* make grid scrollable */
