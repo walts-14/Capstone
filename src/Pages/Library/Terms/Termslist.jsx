@@ -1,7 +1,7 @@
 // Termslist.jsx
 import React from "react";
 import TermsCard from "./TermsCard";
-import "../../../css/Lessonlist.css";
+import "../../../css/LessonList.css";
 
 function Termslist({ LessonTerms, lessonKey }) {
   return (
