@@ -2,7 +2,7 @@ import React from "react";
 import LectureorQuiz from "./LessonorQuiz";
 import { useParams } from "react-router-dom";
 import Lessons from "../../Components/dataLessons";
-import Lessonlist from "../../Components/lessonlist";
+import Lessonlist from "../../Components/Lessonlist";
 import LessonTerms from "../../../src/Pages/Library/Terms/LessonTerms";
 
 function Page() {
