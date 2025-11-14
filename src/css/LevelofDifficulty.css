@@ -226,17 +226,20 @@ a {
 @media (min-width: 1024px) {
   .level-container {
     display: grid;
-    grid-template-columns: repeat(1, 2fr);
-    gap: 1rem;
-    width: 100%;
-    height: calc(100vh - 5rem);
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+    height: calc(100vh - 1rem);
     box-sizing: border-box;
-    padding-left: 7rem;
+    padding-left: 16rem;
     margin-right: 0;
     margin-bottom: 0;
     margin-top: auto;
     padding-top: 6rem;
     overflow-x: hidden;
+    max-width: 1200px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
   }
   .level-container .level-content {
     background: linear-gradient(
@@ -247,9 +250,11 @@ a {
     background-repeat: no-repeat;
     border-radius: 16px;
     color: var(--white);
+    width: 70vw;
+    max-width: 100%;
   }
   .level-content {
-    height: 100%;
+    height: 80%;
   }
   .level-content span {
     font-size: 1.9rem;
