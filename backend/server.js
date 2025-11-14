@@ -39,12 +39,23 @@ app.use(
   })
 );
 
+const corsOptions = {
+  origin: [
+    "https://wesign.games",
+    "http://localhost:5173",
+    "http://localhost:3000",
+  ],
+  credentials: true,
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
+
 //security headers
 app.use(helmet());
 
-app.get('/health', (_req, res) => res.json({ ok: true }));
+app.get("/health", (_req, res) => res.json({ ok: true }));
 
-app.use('/comm', commRoutes);
+app.use("/comm", commRoutes);
 app.use(cookieParser());
 
 app.use("/api", userRoutes);
