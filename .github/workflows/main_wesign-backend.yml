@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     permissions:
       contents: read #This is required for actions/checkout
 
@@ -28,7 +28,7 @@ jobs:
           npm install
           npm run build --if-present
           npm run test --if-present
-      
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
@@ -51,13 +51,13 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_8D154E3DAC964A23A69F8D96ECC396BE }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_39F6F4BC9E0B46DDA559F14450B6A1A3 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_DCC5DCADD1E3480B9E194A423336AEED }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_9678885CD74B43529C1EFE01DACC7B5B }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_26E015D08FA94F55A0AD6038BEE6B8E4 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_F5F07278E0A8418598F488DBCE22A22A }}
 
       - name: 'Deploy to Azure Web App'
-        uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
+        uses: azure/webapps-deploy@v3
         with:
           app-name: 'WeSign-Backend'
           slot-name: 'Production'
