@@ -65,6 +65,12 @@ app.use("/api/messages", messageRoutes); // Message feature API
 
 connectDB();
 //verifySmtp();
+
+app.use(express.static("./build"));
+app.get("*", (_req, res) => {
+  res.sendFile("index.html", { root: "./build" });
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
