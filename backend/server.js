@@ -19,9 +19,6 @@ import streakRoutes from "./routes/streakRoutes.js";
 import pointsRoutes from "./routes/pointsRoutes.js";
 import messageRoutes from "./routes/messageRoute.js"; // Import message feature
 import compression from "compression";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
 
 //configuring dotenv
 dotenv.config();
@@ -69,32 +66,9 @@ app.use("/api/messages", messageRoutes); // Message feature API
 connectDB();
 //verifySmtp();
 
-// Serve frontend static files.
-// The project may put the built frontend in different locations depending on CI/config:
-// - backend/build (older setups)
-// - backend/dist (if Vite output moved into backend)
-// - ../dist (root/dist) when frontend is built at repo root
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const possibleStaticDirs = [
-  path.join(__dirname, 'build'),
-  path.join(__dirname, 'dist'),
-  path.join(__dirname, '..', 'dist'),
-  path.join(__dirname, '..', 'build'),
-];
-
-const staticDir = possibleStaticDirs.find((d) => fs.existsSync(d)) || path.join(__dirname, 'build');
-
-app.use(express.static(staticDir));
-
-app.get('*', (_req, res) => {
-  const indexPath = path.join(staticDir, 'index.html');
-  if (fs.existsSync(indexPath)) {
-    res.sendFile(indexPath);
-  } else {
-    res.status(404).json({ error: 'Client build not found on server. Looked for: ' + indexPath });
-  }
+app.use(express.static("./build"));
+app.get("*", (_req, res) => {
+  res.sendFile("index.html", { root: "./build" });
 });
 
 const PORT = process.env.PORT || 5000;
