@@ -35,7 +35,7 @@ function Settings() {
       const token = localStorage.getItem("token");
       const email = localStorage.getItem("userEmail");
       const { data } = await axios.get(
-        `http://localhost:5000/api/user?email=${email}`,
+        `/api/user?email=${email}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       const d = data.data;
@@ -78,7 +78,7 @@ function Settings() {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.post(
-        "http://localhost:5000/api/upload-profile-pic",
+        "/api/upload-profile-pic",
         formData,
         {
           headers: {
@@ -117,7 +117,7 @@ function Settings() {
     try {
       const token = localStorage.getItem("token");
       // 2) correct endpoint
-      await axios.delete("http://localhost:5000/api/delete-profile-pic", {
+      await axios.delete("/api/delete-profile-pic", {
         headers: { Authorization: `Bearer ${token}` },
       });
       // 3) re-fetch to pick up default from server

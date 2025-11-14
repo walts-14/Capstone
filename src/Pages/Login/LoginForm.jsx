@@ -19,7 +19,7 @@ function LoginForm() {
     e.preventDefault();
   
     try {
-     const response = await axios.post("http://localhost:5000/api/login", {
+     const response = await axios.post("/api/login", {
      email: data.email.trim(),
      password: data.password.trim(),
 });
@@ -73,7 +73,7 @@ function LoginForm() {
         if (!token) return; // No token, no redirection
     
         try {
-          const response = await axios.get("http://localhost:5000/api/verify-token", {
+          const response = await axios.get("/api/verify-token", {
             headers: { Authorization: `Bearer ${token}` },
           });
     

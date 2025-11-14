@@ -17,7 +17,7 @@ const VideoList = () => {
     }
 
     setLoading(true);
-    fetch("http://localhost:5000/api/videos")
+    fetch("/api/videos")
       .then((res) => res.json())
       .then((data) => {
         const transformed = data.map((v) => ({

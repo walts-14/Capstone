@@ -146,7 +146,7 @@ const SuperAdmin = () => {
       // Use the 'sent' endpoint which returns messages created by the logged-in sender
       // (the previous endpoint was for admin recipients and rejects non-admin roles)
       const res = await axios.get("/api/messages/sent", {
-        baseURL: "http://localhost:5000",
+        baseURL: "",
       });
       const raw = Array.isArray(res.data) ? res.data : res.data || [];
       // Map server message objects into the UI-friendly shape
@@ -460,7 +460,7 @@ const SuperAdmin = () => {
         activeTab === "Users"
           ? `/api/superadmin/users/${encodeURIComponent(email)}`
           : `/api/superadmin/admins/${encodeURIComponent(email)}`;
-      await axios.delete(url, { baseURL: "http://localhost:5000" });
+      await axios.delete(url, { baseURL: "" });
       toast.success("Deleted successfully");
       fetchUsers(selectedGrade);
       fetchTeachers(selectedGrade);
@@ -538,7 +538,7 @@ const SuperAdmin = () => {
         return;
       }
 
-      const url = `http://localhost:5000/api/messages/edit/${encodeURIComponent(
+      const url = `/api/messages/edit/${encodeURIComponent(
         editingMsgId
       )}`;
 
@@ -661,7 +661,7 @@ const SuperAdmin = () => {
         return;
       }
 
-      const url = `http://localhost:5000/api/messages/${encodeURIComponent(
+      const url = `/api/messages/${encodeURIComponent(
         editingMsgId
       )}`;
       const headers = {

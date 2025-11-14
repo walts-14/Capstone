@@ -438,7 +438,7 @@ export default function ProgressTracker({ student }) {
     (async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/progress/email/${encodeURIComponent(studentEmail)}`,
+          `/api/progress/email/${encodeURIComponent(studentEmail)}`,
           { headers: axios.defaults.headers.common }
         );
         // guard against module wrappers:

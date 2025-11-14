@@ -45,7 +45,7 @@ function Termspage() {
     setLoading(true);
     // Build the query string with level & lessonNumber
     fetch(
-      `http://localhost:5000/api/videos?level=${level}&lessonNumber=${lessonNumber}`
+      `/api/videos?level=${level}&lessonNumber=${lessonNumber}`
     )
       .then((response) => response.json())
       .then((data) => {

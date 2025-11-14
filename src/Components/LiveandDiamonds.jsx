@@ -18,7 +18,7 @@ function LivesandDiamonds({ showDiamonds = true, showLives = true }) {
           return;
         }
         const response = await axios.get(
-          `http://localhost:5000/api/lives/email/${userEmail}`
+          `/api/lives/email/${userEmail}`
         );
         setLives(response.data.lives);
       } catch (error) {
@@ -42,7 +42,7 @@ function LivesandDiamonds({ showDiamonds = true, showLives = true }) {
         // Add a short cache-busting timestamp to avoid 304 / cached responses
         const ts = Date.now();
         const response = await axios.get(
-          `http://localhost:5000/api/points/email/${userEmail}?_=${ts}`
+          `/api/points/email/${userEmail}?_=${ts}`
         );
         setPoints(response.data.points);
       } catch (error) {

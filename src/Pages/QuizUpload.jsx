@@ -32,7 +32,7 @@ function QuizUpload() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/quizzes/uploadquiz", {
+      await axios.post("/api/quizzes/uploadquiz", {
         question,
         level,
         lessonNumber,

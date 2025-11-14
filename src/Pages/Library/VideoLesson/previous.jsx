@@ -43,7 +43,7 @@
 
     // fetch videos once
     useEffect(() => {
-      fetch("http://localhost:5000/api/videos")
+      fetch("/api/videos")
         .then(res => res.json())
         .then(data => {
           setTermsArray(data.map(v => ({

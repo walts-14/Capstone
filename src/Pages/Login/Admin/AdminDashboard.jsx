@@ -63,7 +63,7 @@ const fetchAdminMessages = async (grade = "") => {
     const headers = tokenLocal ? { Authorization: `Bearer ${tokenLocal}` } : {};
 
     const res = await axios.get("/api/messages/for-admin", {
-      baseURL: "http://localhost:5000", // use your backend host (adjust if different)
+      baseURL: "", // use your backend host (adjust if different)
       headers,
       params: grade ? { grade } : {},
     });
@@ -166,7 +166,7 @@ const fetchAdminMessages = async (grade = "") => {
         ? `/api/admin/students/year/${encodeURIComponent(yearLevel)}`
         : `/api/admin/students`;
       const res = await axios.get(url, {
-        baseURL: "http://localhost:5000",
+        baseURL: "",
         headers: { Authorization: `Bearer ${token}` },
       });
       setUsers(res.data.data);
@@ -183,7 +183,7 @@ const fetchAdminMessages = async (grade = "") => {
     const fetchLeaderboard = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/leaderboard",
+          "/api/leaderboard",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -294,7 +294,7 @@ const fetchAdminMessages = async (grade = "") => {
   const handleDeleteUser = async (email) => {
     try {
       await axios.delete(`/api/admin/students/${encodeURIComponent(email)}`, {
-        baseURL: "http://localhost:5000",
+        baseURL: "",
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("User deleted!");

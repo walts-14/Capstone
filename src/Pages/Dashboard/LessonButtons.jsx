@@ -134,10 +134,10 @@ function LessonButtons() {
           return;
         }
         await axios.post(
-          `http://localhost:5000/api/lives/email/${userEmail}/regenerate`
+          `/api/lives/email/${userEmail}/regenerate`
         );
         const response = await axios.get(
-          `http://localhost:5000/api/lives/email/${userEmail}`
+          `/api/lives/email/${userEmail}`
         );
         setLives(response.data.lives);
       } catch (error) {
@@ -160,7 +160,7 @@ function LessonButtons() {
         }
         const ts = Date.now();
         const response = await axios.get(
-          `http://localhost:5000/api/points/email/${userEmail}?_=${ts}`
+          `/api/points/email/${userEmail}?_=${ts}`
         );
       } catch (error) {
         console.error("Error fetching points:", error);

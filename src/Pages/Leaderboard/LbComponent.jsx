@@ -22,7 +22,7 @@ function LbComponent() {
     const fetchLeaderboard = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/leaderboard"
+          "/api/leaderboard"
         );
         setLeaderboard(response.data);
       } catch (error) {

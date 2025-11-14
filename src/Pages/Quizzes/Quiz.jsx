@@ -73,7 +73,7 @@ function Quiz() {
 
   const [lives, setLives] = useState(5);
 
-  const backendURL = "http://localhost:5000";
+  const backendURL = "";
 
   const { updateProgress, incrementStreak, resetStreak, streakData } = useContext(ProgressContext);
 

@@ -46,7 +46,7 @@ function Practice() {
   const [isCorrect, setIsCorrect] = useState(false);
   const [quizFinished, setQuizFinished] = useState(false);
 
-  const backendURL = "http://localhost:5000";
+  const backendURL = "";
 
   useEffect(() => {
     const fetchQuizQuestions = async () => {
