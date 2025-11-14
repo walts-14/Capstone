@@ -2,6 +2,7 @@
   font-family: "Baloo";
   src: url("/src/font/Baloo-Regular.ttf") format("truetype");
   font-style: normal;
+  font-display: swap;
 }
 
 :root {
@@ -29,7 +30,8 @@
   --midblue: #04aae0;
 }
 
-body {}
+body {
+}
 
 .library-contents {
   display: flex;
@@ -50,7 +52,7 @@ body {}
   height: 9vh;
   justify-content: center;
   background-color: var(--basic-blue);
-  border: 3px solid #A6DCFF;
+  border: 3px solid #a6dcff;
   transition: all 0.3s ease;
   cursor: pointer;
   font-size: 2rem;
@@ -59,7 +61,7 @@ body {}
 
 .library-contents .btns-content:nth-child(2):hover {
   background-color: #1e5f85;
-  border-color: #B8E6FF;
+  border-color: #b8e6ff;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(46, 134, 193, 0.3);
 }
@@ -74,7 +76,7 @@ body {}
   height: 9vh;
   justify-content: center;
   background-color: var(--intermediate-yellow);
-  border: 3px solid #FFFEA6;
+  border: 3px solid #fffea6;
   transition: all 0.3s ease;
   cursor: pointer;
   font-size: 2rem;
@@ -83,7 +85,7 @@ body {}
 
 .library-contents .btns-content:nth-child(3):hover {
   background-color: #b8940b;
-  border-color: #FFF;
+  border-color: #fff;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(212, 172, 13, 0.3);
 }
@@ -98,7 +100,7 @@ body {}
   height: 9vh;
   justify-content: center;
   background-color: var(--advance-red);
-  border: 3px solid #FF7D6F;
+  border: 3px solid #ff7d6f;
   transition: all 0.3s ease;
   cursor: pointer;
   font-size: 2rem;
@@ -107,7 +109,7 @@ body {}
 
 .library-contents .btns-content:last-child:hover {
   background-color: #a83225;
-  border-color: #FF9D90;
+  border-color: #ff9d90;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(192, 57, 43, 0.3);
 }

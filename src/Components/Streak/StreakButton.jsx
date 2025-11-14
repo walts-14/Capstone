@@ -69,7 +69,8 @@ export default function StreakButton() {
 
   const [isOpen, setIsOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [modalShownDate, setModalShownDate] = useState(null);
+  // use empty string when not set so dependent effects run predictably
+  const [modalShownDate, setModalShownDate] = useState("");
   const MODAL_SHOWN_KEY = (email) => `streakModalShownDate_${email}`;
 
   // Convert the shapes your ProgressContext promises into local safe primitives.
@@ -128,14 +129,13 @@ export default function StreakButton() {
 
   // Load last shown date for current user from localStorage when user changes
   useEffect(() => {
-    if (!currentUserEmail) { setModalShownDate(null); return; }
+    if (!currentUserEmail) { setModalShownDate(""); return; }
     try {
       const stored = localStorage.getItem(MODAL_SHOWN_KEY(currentUserEmail));
-      if (stored) setModalShownDate(stored);
-      else setModalShownDate(null);
+      setModalShownDate(stored ?? "");
     } catch (e) {
       console.warn("StreakButton: failed to read modalShownDate", e);
-      setModalShownDate(null);
+      setModalShownDate("");
     }
   }, [currentUserEmail]);
 
@@ -163,15 +163,18 @@ export default function StreakButton() {
       console.warn("StreakButton: failed to read modalShownDate from localStorage", e);
     }
 
-    const updateStreak = (reset = false) => {
+    const updateStreak = async (reset = false) => {
       try {
         if (typeof incrementStreak === "function") {
-          incrementStreak(reset);
+          const r = await incrementStreak(reset);
+          return r;
         } else {
           console.warn("StreakButton: incrementStreak not available from context; skipping server call.");
+          return null;
         }
       } catch (e) {
         console.error("StreakButton: incrementStreak failed", e);
+        return null;
       }
     };
 
@@ -179,12 +182,14 @@ export default function StreakButton() {
     const now = new Date();
 
     if (!lastDate) {
-      updateStreak(true);
-      setShowModal(true);
-      setModalShownDate(todayStr);
-      try {
-        localStorage.setItem(key, todayStr);
-      } catch (e) {}
+      (async () => {
+        const r = await updateStreak(true);
+        if (r?.streak) {
+          setShowModal(true);
+          setModalShownDate(todayStr);
+          try { localStorage.setItem(key, todayStr); } catch (e) {}
+        }
+      })();
       return;
     }
 
@@ -192,19 +197,23 @@ export default function StreakButton() {
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
     if (diffDays === 1) {
-      updateStreak(false);
-      setShowModal(true);
-      setModalShownDate(todayStr);
-      try {
-        localStorage.setItem(key, todayStr);
-      } catch (e) {}
+      (async () => {
+        const r = await updateStreak(false);
+        if (r?.streak) {
+          setShowModal(true);
+          setModalShownDate(todayStr);
+          try { localStorage.setItem(key, todayStr); } catch (e) {}
+        }
+      })();
     } else if (diffDays > 1) {
-      updateStreak(true);
-      setShowModal(true);
-      setModalShownDate(todayStr);
-      try {
-        localStorage.setItem(key, todayStr);
-      } catch (e) {}
+      (async () => {
+        const r = await updateStreak(true);
+        if (r?.streak) {
+          setShowModal(true);
+          setModalShownDate(todayStr);
+          try { localStorage.setItem(key, todayStr); } catch (e) {}
+        }
+      })();
     }
   }, [currentUserEmail, safeLastUpdatedDate, incrementStreak]);
 

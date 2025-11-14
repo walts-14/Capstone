@@ -62,7 +62,9 @@ const LesoneContent = () => {
   }, [step, currentIndex, currentStepTerms, lessonKey, navigate, showButton, fromLecture]);
 
   useEffect(() => {
+    // Only auto-complete the lecture when we arrived via the lecture flow.
     if (
+      fromLecture &&
       !hasUpdated &&
       currentIndex === currentStepTerms.length - 1 &&
       currentStepTerms.length > 0
@@ -76,7 +78,7 @@ const LesoneContent = () => {
       }
       setHasUpdated(true);
     }
-  }, [hasUpdated, currentIndex, currentStepTerms, step, updateProgress, lessonKey, level]);
+  }, [fromLecture, hasUpdated, currentIndex, currentStepTerms, step, updateProgress, lessonKey, level]);
 
   useEffect(() => {
     setHasUpdated(false);

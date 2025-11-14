@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import { ProgressProvider } from "./Pages/Dashboard/ProgressContext";
+import { ProgressProvider } from "./Pages/Dashboard/ProgressContext.jsx";
 
 function App() {
   const [userId, setUserId] = useState(null);
@@ -15,7 +15,7 @@ function App() {
   }, []);
 
   return (
-    <ProgressProvider initialUserId={userId} initialUserName={userName}>
+  <ProgressProvider initialUserEmail={userId} initialUserName={userName}>
       <div className="App">
         <h1>Sign Language Learning System</h1>
         <Outlet context={{ setUserId, setUserName }} /> {/* Pass setters via context */}

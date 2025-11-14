@@ -34,7 +34,7 @@ import VideoUpload from "./Pages/VideoUpload.jsx";
 import SuperAdmin from "./Pages/Login/Admin/SuperAdmin.jsx";
 import Admin from "./Pages/Login/Admin/AdminDashboard.jsx";
 import ProgressTracker from "./Pages/Dashboard/ProgressTracker.jsx";
-import { ProgressProvider } from "../src/Pages/Dashboard/ProgressContext.jsx"; // adjust the path accordingly
+import { ProgressProvider } from "./Pages/Dashboard/ProgressContext.jsx";
 import VideoList from "./Components/VideoList.jsx"; // adjust the path accordingly
 import QuizUpload from "./Pages/QuizUpload.jsx"; // adjust the path accordingly
 import IntroductionModal from "./Components/IntroductionModal.jsx"; // adjust the path accordingly

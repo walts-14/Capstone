@@ -8,7 +8,7 @@ import diamond from "../../assets/diamond.png";
 import "../../css/Quiz.css";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { ProgressContext } from "../../../src/Pages/Dashboard/ProgressContext";
+import { ProgressContext } from "../Dashboard/ProgressContext.jsx";
 import LivesandDiamonds from "../../Components/LiveandDiamonds";
 import ResultBanner from "./ResultBanner";
 import dashboardlogo from "../../assets/dashboardlogo.png";
@@ -72,11 +72,10 @@ function Quiz() {
   const [backendTotalPoints, setBackendTotalPoints] = useState(null);
 
   const [lives, setLives] = useState(5);
-  const [streak, setStreak] = useState(0);
 
   const backendURL = "http://localhost:5000";
 
-  const { updateProgress } = useContext(ProgressContext);
+  const { updateProgress, incrementStreak, resetStreak, streakData } = useContext(ProgressContext);
 
   useEffect(() => {
     const fetchLives = async () => {
@@ -183,18 +182,28 @@ function Quiz() {
             `${backendURL}/api/lives/email/${userEmail}/lose-life`
           );
           setLives((prev) => Math.max(0, prev - 1));
-          setStreak(0);
+          // Reset shared streak (persist to backend)
+          try { await resetStreak(); } catch (e) { console.error('resetStreak failed', e); }
           setWrongAnswers((prev) => prev + 1);
           return; // Early return to prevent points awarding
         }
         setCorrectAnswers((prev) => prev + 1);
-        setStreak((prev) => prev + 1);
-        if ((streak + 1) % 3 === 0) {
-          await axios.post(
-            `${backendURL}/api/lives/email/${userEmail}/gain-life`
-          );
-          setLives((prev) => prev + 1);
-          toast.success("Streak bonus! +1 life");
+        // Increment the shared streak (persisted by context) and use authoritative value
+        let newStreakValue = (Number(streakData?.currentStreak) || 0) + 1;
+        try {
+          const incRes = await incrementStreak();
+          if (incRes?.streak?.currentStreak != null) {
+            newStreakValue = Number(incRes.streak.currentStreak);
+          }
+        } catch (e) { console.error('incrementStreak failed', e); }
+        if (newStreakValue % 3 === 0) {
+          try {
+            await axios.post(`${backendURL}/api/lives/email/${userEmail}/gain-life`);
+            setLives((prev) => prev + 1);
+            toast.success("Streak bonus! +1 life");
+          } catch (e) {
+            console.error('Failed to award life on streak bonus', e);
+          }
         }
         // Track per-question attempts locally for UI (won't affect server-side persisted quizAttempts)
         const questionId = currentQuestion._id || currentQuestion.question; // fallback to question text if no id
@@ -406,9 +415,9 @@ function Quiz() {
         <img src={failed} alt="" className="mb-4" />
 
         <div className="stats-quiz d-flex flex-row gap-2 text-center fs-1 ">
-          <img src={check} className="tama img-fluid p-1" alt="check img" />
+          <img src={check} className="tama img-fluid img-icon p-1" alt="check img" />
           <p className="check-number " style={{ color: "#20BF55" }}>{correctAnswers}</p>
-          <img src={ekis} className="mali img-fluid p-1 ms-5" alt="ekis img" />
+          <img src={ekis} className="mali img-fluid img-icon p-1 ms-5" alt="ekis img" />
           <p className="ekis-number " style={{ color: "#F44336" }}>{wrongAnswers}</p>
         </div>
 
@@ -433,7 +442,7 @@ function Quiz() {
           >
             <img
               src={dashboardlogo}
-              className="img-fluid d-flex p-1 mt-1"
+              className="img-fluid d-flex img-icon--medal p-1 mt-1"
               alt="dashboard img"
             />
             Dashboard
@@ -443,7 +452,7 @@ function Quiz() {
             className="retry-button d-flex flex-direction-row justify-content-center align-items-center"
             onClick={handleRetry}
           >
-            <img src={retry} className="img-fluid " alt="retry img" />
+            <img src={retry} className="img-fluid img-icon" alt="retry img" />
             <p style={{ color: "white" }}>Try again</p>
           </button>
         </div>
@@ -454,7 +463,7 @@ function Quiz() {
   return (
     <>
       <div className="back fs-1 fw-bold d-flex" onClick={handleBack}>
-        <img src={backkpoint} className="img-fluid p-1 mt-1" alt="Back" />
+        <img src={backkpoint} className="img-fluid img-icon p-1 mt-1" alt="Back" />
         <p>Back</p>
       </div>
       <div className="lives-quizz d-flex position-absolute gap-4">
@@ -543,7 +552,7 @@ function Quiz() {
             Next
             <img
               src={arrow}
-              className="img-fluid d-flex ms-auto p-1 mt-1"
+              className="img-fluid d-flex ms-auto img-icon p-1 mt-1"
               alt="Next"
             />
           </button>

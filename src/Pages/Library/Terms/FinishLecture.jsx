@@ -5,7 +5,7 @@ import Applause from "../../../assets/Applause.png";
 import diamond from "../../../assets/diamond.png";
 import dashboardlogo from "../../../assets/dashboardlogo.png";
 import quiz from "../../../assets/quiz.png";
-import { ProgressContext } from "../../../../src/Pages/Dashboard/ProgressContext";
+import { ProgressContext } from "../../Dashboard/ProgressContext.jsx";
 
 function FinishLecture() {
   const navigate = useNavigate();

@@ -2,6 +2,7 @@
   font-family: "Baloo";
   src: url("/src/font/Baloo-Regular.ttf") format("truetype");
   font-style: normal;
+  font-display: swap;
 }
 
 :root {
@@ -31,7 +32,7 @@
 .finishtext {
   justify-content: space-between;
   width: 100%;
-  top: -.7em;
+  top: -0.7em;
 }
 .finishtext p {
   font-family: "Baloo", sans-serif;
@@ -43,7 +44,7 @@
 }
 .dia-reward img,
 .dia-reward p {
-  color: #FFCB5B;
+  color: #ffcb5b;
   width: auto;
   height: 6vh;
 }
@@ -67,8 +68,7 @@
   width: 12vw;
   font-family: "Baloo", sans-serif;
   color: var(--white);
-  padding: 0% 0% 0% 0%; 
-  
+  padding: 0% 0% 0% 0%;
 }
 .finishbuttons .dashboard-button:hover {
   background-color: #100429;
@@ -81,7 +81,7 @@
   align-items: center; /* Center vertically */
   justify-content: center;
 }
-.finishbuttons button:nth-child(1){
+.finishbuttons button:nth-child(1) {
   width: 16vw;
   height: 10vh;
   border: 5px solid var(--mid-purple);
@@ -108,8 +108,6 @@
   padding: 10px;
   gap: 40px;
   color: var(--background);
-
-  
 }
 
 .Quiz img {

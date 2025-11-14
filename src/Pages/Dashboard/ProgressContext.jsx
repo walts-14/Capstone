@@ -246,7 +246,7 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
 
       // Debug: print payload before sending
       try { console.debug("incrementStreak: PUT payload ->", { email: currentUserEmail, streak: newStreak }); } catch (e) {}
-  const res = await axios.put(`/api/streak/email/${currentUserEmail}`, { streak: newStreak });
+  const res = await axios.put(`/api/streak/email/${encodeURIComponent(currentUserEmail)}`, { streak: newStreak });
       // Debug: print backend response for diagnosis
       try { console.debug("incrementStreak: backend response ->", res?.data); } catch (e) {}
 
@@ -263,9 +263,11 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
         setStreakData(normalized);
         // update lastSentStreakRef so the sync effect doesn't immediately re-send identical streak
         try { lastSentStreakRef.current = JSON.stringify(normalized); } catch (e) {}
+        return { streak: normalized, points: res?.data?.points, pointsAdded: res?.data?.pointsAdded };
       } else {
         console.log("incrementStreak: backend did not return streak — using optimistic newStreak:", newStreak);
         setStreakData(sanitizeDeep(newStreak));
+        return { streak: sanitizeDeep(newStreak), points: res?.data?.points, pointsAdded: res?.data?.pointsAdded };
       }
 
       // Use authoritative points value returned by backend (if present)
@@ -283,6 +285,37 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
     }
   };
 
+  // Reset streak (set to 0) and persist to backend
+  const resetStreak = async () => {
+    if (!currentUserEmail) return;
+    if (currentUserEmail.toLowerCase().includes('superadmin')) return;
+    try {
+      const newStreak = { ...streakData, currentStreak: 0, lastUpdated: new Date().toISOString() };
+      const res = await axios.put(`/api/streak/email/${encodeURIComponent(currentUserEmail)}`, { streak: newStreak });
+      const backendStreak = sanitizeDeep(res?.data?.streak) || res?.data?.streak || null;
+      if (backendStreak) {
+        const normalized = {
+          currentStreak: backendStreak.currentStreak == null ? Number(newStreak.currentStreak) : Number(backendStreak.currentStreak),
+          lastUpdated: backendStreak.lastUpdated ? String(backendStreak.lastUpdated) : String(newStreak.lastUpdated),
+          streakFreeze: !!backendStreak.streakFreeze,
+          ...backendStreak,
+        };
+        setStreakData(normalized);
+        try { lastSentStreakRef.current = JSON.stringify(normalized); } catch (e) {}
+        return { streak: normalized, points: res?.data?.points, pointsAdded: res?.data?.pointsAdded };
+      } else {
+        setStreakData(sanitizeDeep(newStreak));
+        return { streak: sanitizeDeep(newStreak), points: res?.data?.points, pointsAdded: res?.data?.pointsAdded };
+      }
+
+      if (res?.data?.points != null) {
+        setPoints(Number(res.data.points));
+      }
+    } catch (err) {
+      console.error("Error resetting streak:", err);
+    }
+  };
+
   return (
     <ProgressContext.Provider
       value={{
@@ -295,7 +328,8 @@ export const ProgressProvider = ({ children, initialUserEmail = "", initialUserN
         progressData,
         updateProgress,
         streakData,
-        incrementStreak,
+  incrementStreak,
+  resetStreak,
         points,
         setPoints,
       }}

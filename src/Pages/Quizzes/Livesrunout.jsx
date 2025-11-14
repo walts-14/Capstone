@@ -25,7 +25,7 @@ export default function LivesRunOut() {
           className="lro-button"
           onClick={() => navigate('/dashboard')}
         >
-          <img src={dashboardIcon} alt="" className="lro-btn-icon" />
+          <img src={dashboardIcon} alt="" className="lro-btn-icon img-icon" />
           Dashboard
         </button>
       </div>

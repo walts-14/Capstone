@@ -2,6 +2,7 @@
   font-family: "Baloo";
   src: url("/src/font/Baloo-Regular.ttf") format("truetype");
   font-style: normal;
+  font-display: swap;
 }
 
 :root {

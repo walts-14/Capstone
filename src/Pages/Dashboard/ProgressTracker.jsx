@@ -89,13 +89,15 @@ const calculateOverallProgress = (progressData) => {
     const { streakData, incrementStreak } = useContext(ProgressContext);
     const [isOpen, setIsOpen] = useState(false);
     const [showModal, setShowModal] = useState(false);
-    const [modalShownDate, setModalShownDate] = useState(null);
+  // store an empty string if not set so the reward effect will run after load
+  const [modalShownDate, setModalShownDate] = useState("");
     const MODAL_SHOWN_KEY = "streakModalShownDate";
 
     // On mount, load last shown date from localStorage
     useEffect(() => {
       const stored = localStorage.getItem(MODAL_SHOWN_KEY);
-      if (stored) setModalShownDate(stored);
+      // set to empty string when not present so dependent effect runs once load completes
+      setModalShownDate(stored ?? "");
     }, []);
 
     const toggle = () => {
@@ -112,7 +114,7 @@ const calculateOverallProgress = (progressData) => {
 
     // Only run reward modal logic after modalShownDate is loaded
     useEffect(() => {
-      if (modalShownDate === null) return; // Wait until loaded from localStorage
+      if (modalShownDate === "") return; // Wait until loaded from localStorage
       const today = new Date().toDateString();
       if (modalShownDate === today) return; // Already shown today
       if (isOpen) return; // Don't show reward modal if info modal is open
@@ -130,10 +132,18 @@ const calculateOverallProgress = (progressData) => {
 
       // If no lastUpdated and streak is less than 1, increment and show modal (first ever login)
       if (!streakData.lastUpdated && streakData.currentStreak < 1) {
-        incrementStreak();
-        setShowModal(true);
-        setModalShownDate(today);
-        localStorage.setItem(MODAL_SHOWN_KEY, today);
+        (async () => {
+          try {
+            const r = await incrementStreak();
+            if (r?.streak) {
+              setShowModal(true);
+              setModalShownDate(today);
+              localStorage.setItem(MODAL_SHOWN_KEY, today);
+            }
+          } catch (e) {
+            console.error('incrementStreak error', e);
+          }
+        })();
         return;
       }
 
@@ -144,10 +154,18 @@ const calculateOverallProgress = (progressData) => {
         const diffTime = now.getTime() - lastDate.getTime();
         const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
         if (diffDays >= 1) {
-          incrementStreak();
-          setShowModal(true);
-          setModalShownDate(today);
-          localStorage.setItem(MODAL_SHOWN_KEY, today);
+          (async () => {
+            try {
+              const r = await incrementStreak();
+              if (r?.streak) {
+                setShowModal(true);
+                setModalShownDate(today);
+                localStorage.setItem(MODAL_SHOWN_KEY, today);
+              }
+            } catch (e) {
+              console.error('incrementStreak error', e);
+            }
+          })();
         }
       }
       // Add modalShownDate to dependencies so effect only runs after it's loaded

@@ -61,7 +61,7 @@ const Sidebar = ({
             }`}
             onClick={handleDashboardClick}
           >
-            <img src={DashboardIcon} alt="Dashboard" className="sidebar-icon" />
+            <img src={DashboardIcon} alt="Dashboard" className="sidebar-icon img-icon" />
             <span>Dashboard</span>
           </div>
 
@@ -74,7 +74,7 @@ const Sidebar = ({
             <img
               src={LeaderboardIcon}
               alt="Leaderboard"
-              className="sidebar-icon"
+              className="sidebar-icon img-icon"
             />
             <span>Leaderboard</span>
           </div>

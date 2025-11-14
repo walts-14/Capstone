@@ -157,11 +157,11 @@ useEffect(() => {
   }, [currentIndex, currentPageTerms]);
 
   // 6. Progress
-  // 6. Progress
+  // Only update progress when user explicitly came from the lecture flow.
+  // This prevents marking progress when a user simply browses the lesson from the Library/sidebar.
   useEffect(() => {
-    // Only auto-update here if we did NOT come from lecture.
     if (
-      !fromLecture &&
+      fromLecture &&
       !hasUpdated &&
       currentIndex === currentPageTerms.length - 1
     ) {
@@ -172,7 +172,7 @@ useEffect(() => {
       );
       setHasUpdated(true);
     }
-  }, [hasUpdated, currentIndex, step]);
+  }, [hasUpdated, currentIndex, step, fromLecture]);
 
   useEffect(() => {
     setHasUpdated(false);

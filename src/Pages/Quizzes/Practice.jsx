@@ -155,7 +155,7 @@ function Practice() {
   return (
     <div className="practice-mode">
       <div className="back fs-1 fw-bold d-flex" onClick={handleBack}>
-        <img src={backkpoint} className="img-fluid p-1 mt-1" alt="Back" />
+        <img src={backkpoint} className="img-fluid img-icon p-1 mt-1" alt="Back" />
         <p>Back</p>
       </div>
       <div className="lives-quizz d-flex position-absolute gap-4">
@@ -202,7 +202,7 @@ function Practice() {
           )}
           <button type="button" className="continue d-flex rounded-4 p-3 pt-2 ms-auto" onClick={handleNext}>
             Next
-            <img src={arrow} className="img-fluid d-flex ms-auto p-1 mt-1" alt="Next" />
+            <img src={arrow} className="img-fluid d-flex ms-auto img-icon p-1 mt-1" alt="Next" />
           </button>
         </>
       )}
