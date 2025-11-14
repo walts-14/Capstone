@@ -1,6 +1,7 @@
 @font-face {
   font-family: "Baloo";
   src: url("/src/font/Baloo-Regular.ttf") format("truetype");
+  font-display: swap; /* Improves font loading behavior */
   font-style: normal;
 }
 

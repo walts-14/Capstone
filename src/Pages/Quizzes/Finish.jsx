@@ -9,7 +9,7 @@ import repeatLogo from "../../assets/repeat logo.png";
 import arrow from "../../assets/arrow.png";
 import dashboardlogo from "../../assets/dashboardlogo.png";
 import quiz from "../../assets/quiz.png";
-import { ProgressContext } from "../../../src/Pages/Dashboard/ProgressContext";
+import { ProgressContext } from "../Dashboard/ProgressContext.jsx";
 
 const levelMapping = {
   termsone: "basic",
@@ -100,13 +100,13 @@ function Finish() {
   return (
     <>
       <div className="finishtext d-flex flex-column align-items-center position-relative fw-bold fs-1">
-        <img src={Applause} className="img-fluid p-1 mb-3" alt="applause img" />
+  <img src={Applause} className="img-fluid img-large p-1 mb-3" alt="applause img" />
         <p> {mode === "practice" ? "You've Finished the Practice Quiz" : "You've Finished the Quiz"} </p>
 
         <div className="stats-quiz d-flex flex-row gap-1 text-center ">
           {mode === "practice" ? null : (
               <div className="dia-reward d-flex ">
-                <img src={diamond} className="img-fluid p-1 " alt="diamond img" />
+                <img src={diamond} className="img-fluid img-icon--medal p-1 " alt="diamond img" />
                 <p className="dia-number ms-3  me-5">
                   {/* Prefer backend-provided pointsEarned when available. Otherwise compute based on level and attemptNumber. */}
                   {(() => {
@@ -128,9 +128,9 @@ function Finish() {
                 </p>
               </div>
             )}
-          <img src={check} className="tama img-fluid p-1" alt="check img" />
+          <img src={check} className="tama img-fluid img-icon p-1" alt="check img" />
           <p className="check-number ms-2" style={{ color: "#20BF55" }}>{correctAnswers}</p>
-          <img src={ekis} className="mali img-fluid p-1 ms-5" alt="ekis img" />
+          <img src={ekis} className="mali img-fluid img-icon p-1 ms-5" alt="ekis img" />
           <p className="ekis-number ms-2" style={{ color: "#F44336" }}>{wrongAnswers}</p>
         </div>
         {/* Render dynamic progress tracker line for the finished lesson */}

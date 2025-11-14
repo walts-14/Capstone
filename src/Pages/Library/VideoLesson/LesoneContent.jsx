@@ -8,6 +8,8 @@ import "../../../css/LesoneContent.css";
 import { ProgressContext } from "../../../Pages/Dashboard/ProgressContext";
 import TrimmedVideo from "./TrimmedVideo";
 
+const CLOUD_NAME = "deohrrkw9";
+
 const levelMapping = {
   termsone: "basic",
   termstwo: "basic",
@@ -84,32 +86,52 @@ const LesoneContent = () => {
   };
 
   // 1. Fetch and sort
-  useEffect(() => {
-    const qs = new URLSearchParams({
-      level,
-      lessonNumber: lessonNumber.toString(),
+useEffect(() => {
+  const cacheKey = `lesson-${lessonKey}`; // unique key per lesson
+  const cached = localStorage.getItem(cacheKey);
+
+  if (cached) {
+    const cachedData = JSON.parse(cached);
+    setTermsArray(cachedData);
+    setLoading(false);
+    return;
+  }
+
+  const qs = new URLSearchParams({
+    level,
+    lessonNumber: lessonNumber.toString(),
+  });
+
+  setLoading(true);
+
+  fetch(`http://localhost:5000/api/videos?${qs}`)
+    .then((res) => res.json())
+    .then((data) => {
+      data.sort((a, b) => a.termNumber - b.termNumber);
+
+      const transformed = data.map((v) => ({
+        id: v._id,
+        word: v.word,
+        definition: v.description,
+        video:
+          v.videoUrl ||
+          (v.publicId
+            ? `https://res.cloudinary.com/${CLOUD_NAME}/video/upload/f_mp4,q_100/${v.publicId}.mp4`
+            : null),
+        termNumber: v.termNumber,
+      }));
+
+      setTermsArray(transformed);
+      localStorage.setItem(cacheKey, JSON.stringify(transformed));
+      setLoading(false);
+    })
+    .catch((err) => {
+      console.error("Error fetching videos:", err);
+      setError(err);
+      setLoading(false);
     });
-    setLoading(true);
-    fetch(`http://localhost:5000/api/videos?${qs}`)
-      .then((res) => res.json())
-      .then((data) => {
-        data.sort((a, b) => a.termNumber - b.termNumber);
-        setTermsArray(
-          data.map((v) => ({
-            id: v._id,
-            word: v.word,
-            definition: v.description,
-            video: v.videoUrl,
-            termNumber: v.termNumber,
-          }))
-        );
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err);
-        setLoading(false);
-      });
-  }, [lessonKey]);
+}, [lessonKey]);
+
 
   // 2. Partition
   const firstPageTerms = termsArray.slice(0, 15);
@@ -135,11 +157,11 @@ const LesoneContent = () => {
   }, [currentIndex, currentPageTerms]);
 
   // 6. Progress
-  // 6. Progress
+  // Only update progress when user explicitly came from the lecture flow.
+  // This prevents marking progress when a user simply browses the lesson from the Library/sidebar.
   useEffect(() => {
-    // Only auto-update here if we did NOT come from lecture.
     if (
-      !fromLecture &&
+      fromLecture &&
       !hasUpdated &&
       currentIndex === currentPageTerms.length - 1
     ) {
@@ -150,7 +172,7 @@ const LesoneContent = () => {
       );
       setHasUpdated(true);
     }
-  }, [hasUpdated, currentIndex, step]);
+  }, [hasUpdated, currentIndex, step, fromLecture]);
 
   useEffect(() => {
     setHasUpdated(false);
@@ -243,6 +265,7 @@ const LesoneContent = () => {
           start={.5}    // cut off the first 1 second
           end={11}      // when it reaches 8s, loop back to 1s
           playbackRate={1.3}
+          preload="auto"
           />
         </div>
 

@@ -17,6 +17,22 @@
 * {
   font-family: "Baloo", sans-serif;
 }
+@font-face {
+  font-family: "Baloo";
+  /* Prefer WOFF2 for better compression/decoding. Add TTF as a fallback. */
+  src: url("/fonts/Baloo-Regular.woff2") format("woff2"),
+    url("/src/font/Baloo-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+html,
+body {
+  font-family: "Baloo", system-ui, -apple-system, "Segoe UI", Roboto, Arial,
+    sans-serif;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -29,7 +45,8 @@ a:hover {
 body {
   margin: 0;
   display: flex;
-  place-items: center;
+  align-items: flex-start;
+  justify-content: center;
   min-width: 320px;
   min-height: 100vh;
 }
@@ -69,4 +86,25 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+/* Utility image sizing to prevent layout shifts */
+.img-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  display: inline-block;
+}
+.img-icon--medal {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  display: inline-block;
+}
+.img-large {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
 }

@@ -1,5 +1,19 @@
 // backend/controllers/messageController.js
 
+// safe helper to get an ObjectId instance or null (works across mongoose/bson versions)
+const toObjectId = (v) => {
+  try {
+    if (!v && v !== 0) return null;
+    const s = String(v);
+    if (!mongoose.Types.ObjectId.isValid(s)) return null;
+    // use `new` to avoid "cannot be invoked without 'new'" errors
+    return new mongoose.Types.ObjectId(s);
+  } catch (e) {
+    return null;
+  }
+};
+
+
 import Message from "../models/message.js";
 import User from "../models/user.js";
 import mongoose from "mongoose";
@@ -130,6 +144,22 @@ export const createMessage = async (req, res) => {
 
     await msg.populate("senderId", "name email role");
 
+    // Debug log: created message summary
+    try {
+      console.log("createMessage: created message", {
+        id: String(msg._id),
+        senderId: String(msg.senderId?._id || msg.senderId),
+        senderRole: msg.senderRole,
+        isBroadcast: msg.isBroadcast,
+        recipientRole: msg.recipientRole,
+        recipientIds: msg.recipientIds,
+        grade: msg.grade,
+        title: msg.title,
+      });
+    } catch (e) {
+      /* ignore logging errors */
+    }
+
     // Socket emit (optional) - emits to 'admins' room for broadcast or admin_<id> for specific
     try {
       const io = req.app.get("io");
@@ -163,32 +193,74 @@ export const getMessagesForAdmin = async (req, res) => {
   try {
     const user = req.user;
     if (!user) return res.status(401).json({ message: "Unauthorized" });
-    if (user.role !== "admin") return res.status(403).json({ message: "Forbidden" });
+    const role = String(user.role || "").toLowerCase();
+    if (!role.includes("admin")) return res.status(403).json({ message: "Forbidden" });
 
-    const query = {
-      $or: [{ isBroadcast: true, recipientRole: "admin" }, { recipientIds: user._id }],
-    };
+    // Prepare both string and ObjectId forms for matching
+    const userIdStr = String(user._id || user.id || user.userId || "");
+    const userIdObj = toObjectId(userIdStr);
+
+    // Build flexible OR conditions:
+    const orConditions = [{ isBroadcast: true, recipientRole: "admin" }];
+
+    if (userIdObj) {
+      orConditions.push({ recipientIds: userIdObj });
+    }
+    // match string-stored ids
+    orConditions.push({ recipientIds: userIdStr });
+
+    // match embedded objects such as { value: "..."} or { _id: "..." }
+    orConditions.push({
+      recipientIds: {
+        $elemMatch: {
+          $or: [
+            { _id: userIdObj || userIdStr },
+            { id: userIdObj || userIdStr },
+            { value: userIdObj || userIdStr },
+          ],
+        },
+      },
+    });
+
+    const query = { $or: orConditions };
+
+    // Exclude messages soft-deleted for this user (both ObjectId and string)
+    const norArr = [];
+    if (userIdObj) norArr.push({ deletedFor: userIdObj });
+    norArr.push({ deletedFor: userIdStr });
+    if (norArr.length) query.$nor = norArr;
 
     if (req.query.grade) {
       query.$and = [{ grade: req.query.grade }];
     }
+
+    // Logging for debugging
+    const queryForLog = JSON.parse(JSON.stringify(query, (k, v) => {
+      if (v && v._bsontype === "ObjectID") return String(v);
+      return v;
+    }));
+   //console.log("getMessagesForAdmin - built query:", JSON.stringify(queryForLog, null, 2));
 
     const messages = await Message.find(query)
       .sort({ createdAt: -1 })
       .populate("senderId", "name email role")
       .lean();
 
+    console.log("getMessagesForAdmin - found:", Array.isArray(messages) ? messages.length : 0);
+
     const data = messages.map((m) => {
-      const isRead = (m.readBy || []).some((r) => String(r.userId) === String(user._id));
+      const isRead = (m.readBy || []).some((r) => String(r.userId) === userIdStr);
       return { ...m, isRead };
     });
 
     return res.json(data);
   } catch (err) {
-    console.error("getMessagesForAdmin error", err);
-    return res.status(500).json({ message: "Server error" });
+    console.error("getMessagesForAdmin error:", err && err.stack ? err.stack : err);
+    return res.status(500).json({ message: "Server error", error: err?.message || String(err) });
   }
 };
+
+
 
 /**
  * Mark a message as read by the logged-in user
@@ -206,8 +278,9 @@ export const markAsRead = async (req, res) => {
     const msg = await Message.findById(id);
     if (!msg) return res.status(404).json({ message: "Message not found" });
 
+    const role = String(user.role || "").toLowerCase();
     const isRecipient =
-      (msg.isBroadcast && user.role === "admin") ||
+      (msg.isBroadcast && role.includes("admin")) ||
       (msg.recipientIds || []).some((rid) => String(rid) === String(user._id));
 
     if (!isRecipient) return res.status(403).json({ message: "Not authorized" });
@@ -245,23 +318,25 @@ export const getMessagesSentBySender = async (req, res) => {
     if (!["superadmin", "super_admin"].includes(role))
       return res.status(403).json({ message: "Forbidden" });
 
-    // ✅ Instead of user._id, use user.email
-    if (!user.email) {
-      console.warn("getMessagesSentBySender: req.user.email missing", user);
-      return res.status(400).json({ message: "Bad request: user email missing in token" });
+    // Build query conditions: prefer matching by senderId (token id), fallback to senderEmail and senderRole
+    const orConditions = [];
+
+    // If token contains a usable _id, use it to match senderId exactly
+    try {
+      if (user._id && mongoose.Types.ObjectId.isValid(String(user._id))) {
+        orConditions.push({ senderId: mongoose.Types.ObjectId(String(user._id)) });
+      }
+    } catch (e) {
+      // ignore coercion issues
     }
 
-    const emailStr = String(user.email).trim();
-    if (!emailStr) {
-      console.warn("getMessagesSentBySender: empty email string");
-      return res.status(400).json({ message: "Bad request: empty email" });
+    // If token contains an email, include it as a match
+    if (user.email && String(user.email).trim()) {
+      orConditions.push({ senderEmail: String(user.email).trim() });
     }
 
-    // ✅ Build query conditions
-    const orConditions = [
-      { senderEmail: emailStr }, // main match
-      { senderRole: { $regex: new RegExp(`^${escapeRegExp(role)}$`, "i") } } // also match by role
-    ];
+    // Also allow matching by sender role (case-insensitive)
+    orConditions.push({ senderRole: { $regex: new RegExp(`^${escapeRegExp(role)}$`, "i") } });
 
     const messages = await Message.find({ $or: orConditions })
       .sort({ createdAt: -1 })
@@ -389,12 +464,29 @@ export const deleteMessage = async (req, res) => {
     const isSenderByEmail = userEmail && message.senderEmail && String(message.senderEmail) === String(userEmail);
     const isSuperAdmin = ["superadmin", "super_admin"].includes(role);
 
-    if (!isSenderById && !isSenderByEmail && !isSuperAdmin) {
-      return res.status(403).json({ message: "Forbidden: You can't delete this message" });
+    // If sender or superadmin -> delete message globally
+    if (isSenderById || isSenderByEmail || isSuperAdmin) {
+      await Message.findByIdAndDelete(id);
+      return res.json({ message: "Message deleted" });
     }
 
-    await Message.findByIdAndDelete(id);
-    return res.json({ message: "Message deleted" });
+    // Otherwise, if the requester is a recipient, soft-delete for that user only
+    const isRecipientForThis =
+      (message.isBroadcast && role.includes("admin")) ||
+      (message.recipientIds || []).some((rid) => String(rid) === String(user._id));
+
+    if (isRecipientForThis) {
+      // add to deletedFor if not present
+      const already = (message.deletedFor || []).some((d) => String(d) === String(user._id));
+      if (!already) {
+        message.deletedFor = message.deletedFor || [];
+        message.deletedFor.push(user._id);
+        await message.save();
+      }
+      return res.json({ message: "Message removed for user" });
+    }
+
+    return res.status(403).json({ message: "Forbidden: You can't delete this message" });
   } catch (err) {
     console.error("deleteMessage error", err);
     return res.status(500).json({ message: "Server error" });

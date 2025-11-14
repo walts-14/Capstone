@@ -18,6 +18,7 @@ import progressRoutes from "./routes/progressRoutes.js";
 import streakRoutes from "./routes/streakRoutes.js";
 import pointsRoutes from "./routes/pointsRoutes.js";
 import messageRoutes from "./routes/messageRoute.js"; // Import message feature
+import compression from "compression";
 
 //configuring dotenv
 dotenv.config();
@@ -26,6 +27,8 @@ dotenv.config();
 const app = express();
 //middleware
 app.use(express.json());
+
+app.use(compression());
 
 app.use(
   cors({
@@ -58,8 +61,8 @@ app.use("/api/streak", streakRoutes);
 app.use("/api/points", pointsRoutes);
 app.use("/api/messages", messageRoutes); // Message feature API
 
+connectDB();
+//verifySmtp();
 app.listen(5000, () => {
-  connectDB();
-  //verifySmtp();
   console.log("Server is running on port 5000");
 });

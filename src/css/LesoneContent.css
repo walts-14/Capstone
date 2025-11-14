@@ -30,6 +30,7 @@
   font-family: "Baloo";
   src: url("/src/font/Baloo-Regular.ttf") format("truetype");
   font-style: normal;
+  font-display: swap;
 }
 
 body {
@@ -60,7 +61,6 @@ body {
   /* Adds a white border */
   border-radius: 50px;
   /* Rounds the corners */
-
 }
 
 .back {
@@ -107,17 +107,15 @@ body {
 }
 
 .letter-container button {
-  background: #271D3E;
+  background: #271d3e;
   border-radius: 22px;
   padding: 10px 20px;
   text-decoration: none;
-  box-shadow: 0 5px 1px 8px #4A2574;
+  box-shadow: 0 5px 1px 8px #4a2574;
   width: fit-content;
   font-weight: bold;
   color: white;
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
+  transition: transform 0.2s ease, box-shadow 0.2s ease,
     background-color 0.2s ease;
 }
 
@@ -125,16 +123,15 @@ body {
   width: 70px;
   height: auto;
   cursor: pointer;
-
 }
 
 .letter-container button:hover {
   transform: translateY(-4px) scale(1.03);
   /* We use the same inline box-shadow color, so you only need to change the spread */
-  box-shadow: 0 8px 2px 10px #4A2574;
+  box-shadow: 0 8px 2px 10px #4a2574;
 }
 
 .letter-container button:active {
   transform: translateY(0) scale(0.98);
-  box-shadow: 0 3px 1px 6px #4A2574;
+  box-shadow: 0 3px 1px 6px #4a2574;
 }

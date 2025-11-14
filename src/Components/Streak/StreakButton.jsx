@@ -65,11 +65,12 @@ const normalizeAsset = (imp) =>
   imp && typeof imp === "object" && Object.prototype.hasOwnProperty.call(imp, "default") ? imp.default : imp;
 
 export default function StreakButton() {
-  const { streakData = {}, incrementStreak } = useContext(ProgressContext) || {};
+  const { streakData = {}, incrementStreak, currentUserEmail } = useContext(ProgressContext) || {};
 
   const [isOpen, setIsOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [modalShownDate, setModalShownDate] = useState(null);
+  // use empty string when not set so dependent effects run predictably
+  const [modalShownDate, setModalShownDate] = useState("");
   const MODAL_SHOWN_KEY = (email) => `streakModalShownDate_${email}`;
 
   // Convert the shapes your ProgressContext promises into local safe primitives.
@@ -128,14 +129,13 @@ export default function StreakButton() {
 
   // Load last shown date for current user from localStorage when user changes
   useEffect(() => {
-    if (!currentUserEmail) { setModalShownDate(null); return; }
+    if (!currentUserEmail) { setModalShownDate(""); return; }
     try {
       const stored = localStorage.getItem(MODAL_SHOWN_KEY(currentUserEmail));
-      if (stored) setModalShownDate(stored);
-      else setModalShownDate(null);
+      setModalShownDate(stored ?? "");
     } catch (e) {
       console.warn("StreakButton: failed to read modalShownDate", e);
-      setModalShownDate(null);
+      setModalShownDate("");
     }
   }, [currentUserEmail]);
 
@@ -148,108 +148,75 @@ export default function StreakButton() {
     setIsOpen(false);
   };
 
-  // Reward modal logic — fixed for streak reset and increment
-  useEffect(() => {
-    if (modalShownDate === null) return;
-    const today = new Date();
-    const todayStr = today.toDateString();
-    if (modalShownDate === todayStr) return;
-    if (isOpen) return;
-
-    // Helper to call backend for streak update
-    const updateStreak = (reset = false) => {
-      try {
-        if (typeof incrementStreak === "function") incrementStreak(reset);
-        else console.warn("StreakButton: incrementStreak not available from context; skipping server call.");
-      } catch (e) {
-        console.error("StreakButton: incrementStreak failed", e);
-      }
-    };
-
-    if (!lastUpdatedStrSafe || lastUpdatedStrSafe === "") {
-      // First time or streak is 0. Call with reset=true so backend treats this as Day 1 reset
-      // (prevents client-side increment + backend reset mismatch which can look like a duplicate award)
-      updateStreak(true); // reset/start streak as Day 1
-      setShowModal(true);
-      setModalShownDate(todayStr);
-      try { localStorage.setItem(MODAL_SHOWN_KEY, todayStr); } catch (e) {}
-      return;
-    }
-
-    const lastDate = new Date(String(lastUpdatedStrSafe));
-    if (!isNaN(lastDate.getTime())) {
-      const diffTime = today.getTime() - lastDate.getTime();
-      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-      if (diffDays === 1) {
-        // Consecutive day, increment streak
-        updateStreak(false);
-        setShowModal(true);
-        setModalShownDate(todayStr);
-        try { localStorage.setItem(MODAL_SHOWN_KEY, todayStr); } catch (e) {}
-        return;
-      } else if (diffDays > 1) {
-        // Missed a day, reset streak
-        updateStreak(true);
-        setShowModal(true);
-        setModalShownDate(todayStr);
-        try { localStorage.setItem(MODAL_SHOWN_KEY, todayStr); } catch (e) {}
-        return;
-      } else if (diffDays === 0) {
-        // Already claimed today, just show modal if needed
-        setShowModal(true);
-        setModalShownDate(todayStr);
-        try { localStorage.setItem(MODAL_SHOWN_KEY, todayStr); } catch (e) {}
-        return;
-      }
-    }
-  }, [lastUpdatedStrSafe, displayStreakNum, modalShownDate, isOpen]);
-
-  // Auto-show streak modal on first login of the day for the current user
+  // Combined reward modal and auto-show logic
   useEffect(() => {
     if (!currentUserEmail) return;
+
     const key = MODAL_SHOWN_KEY(currentUserEmail);
     const today = new Date();
     const todayStr = today.toDateString();
-    // If we've already shown modal for this user today, skip
+
     try {
       const stored = localStorage.getItem(key);
       if (stored === todayStr) return;
-    } catch (e) {}
+    } catch (e) {
+      console.warn("StreakButton: failed to read modalShownDate from localStorage", e);
+    }
 
-    // Decide whether to claim/increment streak now — use safeLastUpdatedDate computed above
+    const updateStreak = async (reset = false) => {
+      try {
+        if (typeof incrementStreak === "function") {
+          const r = await incrementStreak(reset);
+          return r;
+        } else {
+          console.warn("StreakButton: incrementStreak not available from context; skipping server call.");
+          return null;
+        }
+      } catch (e) {
+        console.error("StreakButton: incrementStreak failed", e);
+        return null;
+      }
+    };
+
     const lastDate = safeLastUpdatedDate;
     const now = new Date();
-    // If lastUpdated is missing -> first ever claim: reset to Day 1
+
     if (!lastDate) {
-      try {
-        updateStreak(true);
-      } catch (e) {}
-      setShowModal(true);
-      setModalShownDate(todayStr);
-      try { localStorage.setItem(key, todayStr); } catch (e) {}
+      (async () => {
+        const r = await updateStreak(true);
+        if (r?.streak) {
+          setShowModal(true);
+          setModalShownDate(todayStr);
+          try { localStorage.setItem(key, todayStr); } catch (e) {}
+        }
+      })();
       return;
     }
 
-    const diffTime = now.getTime() - lastDate.getTime();
+    const diffTime = now.setHours(0, 0, 0, 0) - lastDate.setHours(0, 0, 0, 0);
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
     if (diffDays === 1) {
-      // Consecutive day, increment streak
-      updateStreak(false);
-      setShowModal(true);
-      setModalShownDate(todayStr);
-      try { localStorage.setItem(key, todayStr); } catch (e) {}
-      return;
+      (async () => {
+        const r = await updateStreak(false);
+        if (r?.streak) {
+          setShowModal(true);
+          setModalShownDate(todayStr);
+          try { localStorage.setItem(key, todayStr); } catch (e) {}
+        }
+      })();
+    } else if (diffDays > 1) {
+      (async () => {
+        const r = await updateStreak(true);
+        if (r?.streak) {
+          setShowModal(true);
+          setModalShownDate(todayStr);
+          try { localStorage.setItem(key, todayStr); } catch (e) {}
+        }
+      })();
     }
-    if (diffDays > 1) {
-      // Missed a day, reset streak
-      updateStreak(true);
-      setShowModal(true);
-      setModalShownDate(todayStr);
-      try { localStorage.setItem(key, todayStr); } catch (e) {}
-      return;
-    }
-    // diffDays === 0 -> already claimed today; do not auto-show
-  }, [currentUserEmail, safeLastUpdatedDate]);
+  }, [currentUserEmail, safeLastUpdatedDate, incrementStreak]);
+
 
   const calcReward = (day) => {
     const d = Number(day) || 1;
@@ -270,7 +237,7 @@ export default function StreakButton() {
   return (
     <>
       <button className="streak-btn" onClick={toggle} type="button">
-        {typeof fireSrc === "string" ? <img src={fireSrc} alt="streak" className="streak-icon" /> : fireSrc}
+        {typeof fireSrc === "string" ? <img src={fireSrc} alt="streak" className="streak-icon" width={28} height={28} loading="eager" /> :  fireSrc}
         <div className="streak-info">
           <div className="streak-num">{String(displayStreakNumber)}</div>
           <span className="streak-label">Day <br /> Streak</span>
@@ -282,12 +249,12 @@ export default function StreakButton() {
           <div className="streak-modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="streak-modal-header">
               <div className="streak-header-number">{String(displayStreakNumber)}</div>
-              {typeof fireSrc === "string" ? <img src={fireSrc} alt="flame" className="streak-header-flame" /> : fireSrc}
+              {typeof fireSrc === "string" ? <img src={fireSrc} alt="flame" className="streak-header-flame" width={28} height={28} loading="eager"/> : fireSrc}
             </div>
             <h2 className="streak-modal-title">DAY STREAK!</h2>
             <p className="streak-modal-subtitle">Learn new FSL to earn points and build streak</p>
             <div className="streak-modal-reward">
-              {typeof medalSrc === "string" ? <img src={medalSrc} alt="medal" className="streak-reward-icon" /> : medalSrc}
+              {typeof medalSrc === "string" ? <img src={medalSrc} alt="medal" className="streak-reward-icon" width={36} height={36} loading="eager"/> : medalSrc}
               <span className="streak-reward-text">+{String(calcReward(displayStreakNumber))}</span>
             </div>
             <button className="streak-close-btn" onClick={closeModal}>Close</button>
@@ -300,12 +267,12 @@ export default function StreakButton() {
           <div className="streak-modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="streak-modal-header">
               <div className="streak-header-number">{String(displayStreakNumber)}</div>
-              {typeof fireSrc === "string" ? <img src={fireSrc} alt="flame" className="streak-header-flame" /> : fireSrc}
+              {typeof fireSrc === "string" ? <img src={fireSrc} alt="flame" className="streak-header-flame"  width={28} height={28} loading="eager"/> : fireSrc}
             </div>
             <h2 className="streak-modal-title">DAY STREAK!</h2>
             <p className="streak-modal-subtitle">Learn new FSL to earn points and build streak</p>
             <div className="streak-modal-reward">
-              {typeof medalSrc === "string" ? <img src={medalSrc} alt="medal" className="streak-reward-icon" /> : medalSrc}
+              {typeof medalSrc === "string" ? <img src={medalSrc} alt="medal" className="streak-reward-icon" width={36} height={36} loading="eager"/> : medalSrc}
               <span className="streak-reward-text">+{String(calcReward(displayStreakNumber))}</span>
             </div>
             <button className="streak-close-btn" onClick={closeModal}>Close</button>

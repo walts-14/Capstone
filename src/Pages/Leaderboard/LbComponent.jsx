@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 
 import medal1 from "../../assets/medal1.png";
@@ -13,9 +13,10 @@ import diamond from "../../assets/diamond.png";
 
 function LbComponent() {
   const [leaderboard, setLeaderboard] = useState([]);
-  const sortedLeaderboard = [...leaderboard].sort(
-    (a, b) => b.points - a.points
-  );
+  // Memoize the sorted leaderboard to avoid re-sorting on every render.
+  const sortedLeaderboard = useMemo(() => {
+    return [...leaderboard].sort((a, b) => b.points - a.points);
+  }, [leaderboard]);
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
@@ -38,6 +39,35 @@ function LbComponent() {
   const picFor = (idx, fallback) =>
     sortedLeaderboard[idx]?.profilePic || fallback;
 
+  // Separate row component to avoid re-rendering list rows unnecessarily.
+  const LeaderboardRow = React.memo(function LeaderboardRow({ user, index }) {
+    return (
+      <div
+        className="user-rank text-4xl rounded-2xl flex items-center whitespace-nowrap px-4 py-2"
+        key={user._id || index}
+      >
+        {/* Column 1: Rank, Avatar, Name */}
+        <div
+          className="flex items-center"
+          style={{ minWidth: "300px", gap: "2rem" }}
+        >
+          <span className="number-label text-white">{index + 1}.</span>
+          <img src={user.profilePic || profile3} alt="profile" className="user-avatar" />
+          <span className="user-name text-white text-2xl">{user.name || "No Name"}</span>
+        </div>
+
+        {/* Column 2: Grade Level */}
+        <div className="gradelevels text-center text-white text-2xl">{user.yearLevel || "N/A"}</div>
+
+        {/* Column 3: Points */}
+        <div className="points-wrapper flex items-center justify-end">
+          <img src={diamond} alt="diamonds" className="mr-4" />
+          <span className="text-2xl mr-5">{user.points > 0 ? user.points : 0}</span>
+        </div>
+      </div>
+    );
+  });
+
   return (
     <>
       <div className="flex flex-row items-center justify-center">
@@ -48,7 +78,7 @@ function LbComponent() {
             <div className="flex items-center gap-2">
               <img
                 src={picFor(1, profile2)}
-                className="max-w-full h-auto user-avatar"
+                className="w-20 h-20 user-avatar"
                 alt="profile img"
               />
               <p className="text-gray-500 text-4xl">
@@ -58,7 +88,7 @@ function LbComponent() {
             <div className="flex items-center text-gray-500">
               <img
                 src={diamond}
-                className="max-w-full h-auto mr-2"
+                className="max-w-full h-auto mr-2 img-icon"
                 alt="diamond img"
               />
               <p className="text-2xl mt-2 ml-2">
@@ -78,7 +108,7 @@ function LbComponent() {
             <div className="flex items-center gap-2">
               <img
                 src={picFor(0, profile1)}
-                className="max-w-full h-auto user-avatar"
+                className="w-20 h-20 user-avatar"
                 alt="profile img"
               />
               <p className="text-gray-500 text-4xl">
@@ -88,7 +118,7 @@ function LbComponent() {
             <div className="flex items-center text-gray-500">
               <img
                 src={diamond}
-                className="max-w-full h-auto mr-2"
+                className="max-w-full h-auto mr-2 img-icon"
                 alt="diamond img"
               />
               <p className="text-2xl mt-2 ml-2">
@@ -105,7 +135,7 @@ function LbComponent() {
             <div className="flex items-center gap-2">
               <img
                 src={picFor(2, profile3)}
-                className="max-w-full h-auto user-avatar"
+                className="w-20 h-20 user-avatar"
                 alt="profile img"
               />
               <p className="text-gray-500 text-4xl">
@@ -138,39 +168,7 @@ function LbComponent() {
         {sortedLeaderboard.length > 0 ? (
           <ul className="list-none mt-3 text-white font-bold">
             {sortedLeaderboard.map((user, index) => (
-              <div
-                className="user-rank text-4xl rounded-2xl flex items-center whitespace-nowrap px-4 py-2"
-                key={user._id || index}
-              >
-                {/* Column 1: Rank, Avatar, Name */}
-                <div
-                  className="flex items-center"
-                  style={{ minWidth: "300px", gap: "2rem" }}
-                >
-                  <span className="number-label text-white">{index + 1}.</span>
-                  <img
-                    src={user.profilePic || profile3}
-                    alt="profile"
-                    className="user-avatar max-w-full h-auto"
-                  />
-                  <span className="user-name text-white text-2xl">
-                    {user.name || "No Name"}
-                  </span>
-                </div>
-
-                {/* Column 2: Grade Level */}
-                <div className="gradelevels text-center text-white text-2xl">
-                  {user.yearLevel || "N/A"}
-                </div>
-
-                {/* Column 3: Points */}
-                <div className="points-wrapper flex items-center justify-end">
-                  <img src={diamond} alt="diamonds" className="mr-4" />
-                  <span className="text-2xl mr-5">
-                    {user.points > 0 ? user.points : 0}
-                  </span>
-                </div>
-              </div>
+              <LeaderboardRow user={user} index={index} key={user._id || index} />
             ))}
           </ul>
         ) : (

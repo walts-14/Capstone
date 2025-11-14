@@ -89,13 +89,15 @@ const calculateOverallProgress = (progressData) => {
     const { streakData, incrementStreak } = useContext(ProgressContext);
     const [isOpen, setIsOpen] = useState(false);
     const [showModal, setShowModal] = useState(false);
-    const [modalShownDate, setModalShownDate] = useState(null);
+  // store an empty string if not set so the reward effect will run after load
+  const [modalShownDate, setModalShownDate] = useState("");
     const MODAL_SHOWN_KEY = "streakModalShownDate";
 
     // On mount, load last shown date from localStorage
     useEffect(() => {
       const stored = localStorage.getItem(MODAL_SHOWN_KEY);
-      if (stored) setModalShownDate(stored);
+      // set to empty string when not present so dependent effect runs once load completes
+      setModalShownDate(stored ?? "");
     }, []);
 
     const toggle = () => {
@@ -112,7 +114,7 @@ const calculateOverallProgress = (progressData) => {
 
     // Only run reward modal logic after modalShownDate is loaded
     useEffect(() => {
-      if (modalShownDate === null) return; // Wait until loaded from localStorage
+      if (modalShownDate === "") return; // Wait until loaded from localStorage
       const today = new Date().toDateString();
       if (modalShownDate === today) return; // Already shown today
       if (isOpen) return; // Don't show reward modal if info modal is open
@@ -130,10 +132,18 @@ const calculateOverallProgress = (progressData) => {
 
       // If no lastUpdated and streak is less than 1, increment and show modal (first ever login)
       if (!streakData.lastUpdated && streakData.currentStreak < 1) {
-        incrementStreak();
-        setShowModal(true);
-        setModalShownDate(today);
-        localStorage.setItem(MODAL_SHOWN_KEY, today);
+        (async () => {
+          try {
+            const r = await incrementStreak();
+            if (r?.streak) {
+              setShowModal(true);
+              setModalShownDate(today);
+              localStorage.setItem(MODAL_SHOWN_KEY, today);
+            }
+          } catch (e) {
+            console.error('incrementStreak error', e);
+          }
+        })();
         return;
       }
 
@@ -144,10 +154,18 @@ const calculateOverallProgress = (progressData) => {
         const diffTime = now.getTime() - lastDate.getTime();
         const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
         if (diffDays >= 1) {
-          incrementStreak();
-          setShowModal(true);
-          setModalShownDate(today);
-          localStorage.setItem(MODAL_SHOWN_KEY, today);
+          (async () => {
+            try {
+              const r = await incrementStreak();
+              if (r?.streak) {
+                setShowModal(true);
+                setModalShownDate(today);
+                localStorage.setItem(MODAL_SHOWN_KEY, today);
+              }
+            } catch (e) {
+              console.error('incrementStreak error', e);
+            }
+          })();
         }
       }
       // Add modalShownDate to dependencies so effect only runs after it's loaded
@@ -177,7 +195,13 @@ const calculateOverallProgress = (progressData) => {
           onClick={toggle}
         >
           <div className="flex flex-row items-center justify-center">
-            <img src={fire} alt="streak" className="h-auto w-12 mb-1" />
+            <img
+              src={fire}
+              alt="streak"
+              className="h-auto w-12 mb-1"
+              width="48"
+              height="48"
+            />
             <div className="flex flex-col ">
                <div className="text-white text-4xl mx-0 h-[45px] flex items-center justify-center">
               {currentStreakValue}
@@ -206,14 +230,26 @@ const calculateOverallProgress = (progressData) => {
                 <div className="text-[6.5rem] font-bold">
                   {currentStreakValue}
                 </div>
-                <img src={fire} alt="flame" className="w-20 h-auto mb-4" />
+                <img
+                  src={fire}
+                  alt="flame"
+                  className="w-20 h-auto mb-4"
+                  width="80"
+                  height="80"
+                />
               </div>
               <h2 className="text-3xl mb-4 uppercase">DAY STREAK!</h2>
               <p className="text-2xl mb-4 opacity-80">
                 Learn new FSL to earn points and build streak
               </p>
               <div className="flex items-center justify-center gap-2 mb-10 h-[50px]">
-                <img src={medal} alt="medal" className="w-14 h-auto" />
+                <img
+                  src={medal}
+                  alt="medal"
+                  className="w-14 h-auto"
+                  width="56"
+                  height="56"
+                />
                 <span className="text-6xl font-bold text-yellow-400">
                   +{getStreakReward(currentStreakValue)}
                 </span>
@@ -245,14 +281,26 @@ const calculateOverallProgress = (progressData) => {
                 <div className="text-[6.5rem] font-bold">
                   {currentStreakValue}
                 </div>
-                <img src={fire} alt="flame" className="w-20 h-auto mb-4" />
+                <img
+                  src={fire}
+                  alt="flame"
+                  className="w-20 h-auto mb-4"
+                  width="80"
+                  height="80"
+                />
               </div>
               <h2 className="text-3xl mb-4 uppercase">DAY STREAK!</h2>
               <p className="text-2xl mb-4 opacity-80">
                 Learn new FSL to earn points and build streak
               </p>
               <div className="flex items-center justify-center gap-2 mb-10 h-[50px]">
-                <img src={medal} alt="medal" className="w-14 h-auto" />
+                <img
+                  src={medal}
+                  alt="medal"
+                  className="w-14 h-auto"
+                  width="56"
+                  height="56"
+                />
                 <span className="text-6xl font-bold text-yellow-400">
                   +{getStreakReward(currentStreakValue)}
                 </span>
@@ -431,6 +479,8 @@ export default function ProgressTracker({ student }) {
             src={trophySrc}
             className="h-10 w-auto me-2"
             alt="trophy"
+            width="40"
+            height="40"
             style={{ display: 'block' }}
           />
           <div className="flex flex-col justify-center">

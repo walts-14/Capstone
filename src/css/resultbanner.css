@@ -2,6 +2,7 @@
   font-family: "Baloo";
   src: url("/src/font/Baloo-Regular.ttf") format("truetype");
   font-style: normal;
+  font-display: swap;
 }
 
 :root {
@@ -22,7 +23,7 @@
   --dark-blue: #174360;
   --semidark-blue: #205d87;
   --dark-yellow: #6a5606;
-  --semidark-yellow: #947809; 
+  --semidark-yellow: #947809;
   --dark-red: #601c15;
   --semidark-red: #86271e;
   --midlight-red: #d7443e;
@@ -77,13 +78,13 @@
   /* abrupt cut at 50% */
   background: linear-gradient(
     to bottom,
-    #BF2020 0%,
-    #BF2020 50%,
+    #bf2020 0%,
+    #bf2020 50%,
     #992222 50%,
     #992222 100%
   );
   color: #100429;
-  
+
   height: 13vh;
   width: 30rem;
   border-radius: 1rem 1rem 1rem 0;
@@ -92,13 +93,13 @@
   /* abrupt cut at 50% */
   background: linear-gradient(
     to bottom,
-    #20BF55 0%,
-    #20BF55 50%,
-    #22994A 50%,
-    #22994A 100%
+    #20bf55 0%,
+    #20bf55 50%,
+    #22994a 50%,
+    #22994a 100%
   );
   color: #100429;
-  
+
   height: 13vh;
   width: 30rem;
   border-radius: 1rem 0.5rem 1rem 0;

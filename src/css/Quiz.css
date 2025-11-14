@@ -2,6 +2,7 @@
   font-family: "Baloo";
   src: url("/src/font/Baloo-Regular.ttf") format("truetype");
   font-style: normal;
+  font-display: swap;
 }
 
 :root {
@@ -49,7 +50,6 @@
   text-align: left;
   left: 1rem;
   top: 15rem;
-
 }
 
 .quiz-container p {
@@ -84,7 +84,6 @@
   right: 7rem;
   cursor: pointer;
   padding: 10px 20px;
-
 }
 
 .choices video {
@@ -223,14 +222,10 @@
   font-family: "Baloo", sans-serif;
 }
 
-
-
 .lives-quizz {
   right: 15rem;
   top: 10rem;
-
 }
-
 
 /* user-picked correct */
 .choices.selected.correct {
@@ -247,7 +242,6 @@
 /* actual correct when user was wrong */
 .choices.correct {
   border: 6px solid #2ecc71 !important;
-
 }
 
 .retry-button {
@@ -282,9 +276,9 @@
 
 /* Practice mode specific styles */
 .practice-mode .grid {
-  background-color: #574F69;
+  background-color: #574f69;
 }
 
 .practice-mode .choices {
-  background-color: #271D3E;
+  background-color: #271d3e;
 }

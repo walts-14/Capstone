@@ -79,12 +79,13 @@
    
 
     // auto-update progress at end of step
+    // Only mark progress when user arrived via the lecture flow (fromLecture === true).
     useEffect(() => {
-      if (!hasUpdated && currentIndex === currentStepTerms.length - 1) {
+      if (fromLecture && !hasUpdated && currentIndex === currentStepTerms.length - 1) {
         updateProgress(level, lessonKey, step === 1 ? "step1Lecture" : "step2Lecture");
         setHasUpdated(true);
       }
-    }, [hasUpdated, currentIndex, currentStepTerms, level, lessonKey, step, updateProgress]);
+    }, [fromLecture, hasUpdated, currentIndex, currentStepTerms, level, lessonKey, step, updateProgress]);
 
     // reset the “hasUpdated” when step changes
     useEffect(() => { setHasUpdated(false); }, [step]);

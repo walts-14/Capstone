@@ -50,14 +50,18 @@ export default function ResultBanner({ isCorrect }) {
         {isCorrect ? (
           <img
             src={check}
-            className="check-icon"
+            className="check-icon img-icon"
             alt="Correct"
+            width="28"
+            height="28"
           />
         ) : (
           <img
             src={ekis}
-            className="ekis-icon"
+            className="ekis-icon img-icon"
             alt="Wrong"
+            width="28"
+            height="28"
           />
         )}
       </div>

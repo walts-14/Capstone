@@ -2,6 +2,7 @@
   font-family: "Baloo";
   src: url("/src/font/Baloo-Regular.ttf") format("truetype");
   font-style: normal;
+  font-display: swap;
 }
 
 :root {
@@ -29,12 +30,12 @@
   --midblue: #04aae0;
   --lightblue: #5dade2;
   --shadowblue: #2e86c1;
-  --lightblue: #E3F2FD;
+  --lightblue: #e3f2fd;
   --shadowblue: rgba(30, 136, 229, 0.5);
-  --intermediate-yellow: #DCBC3D;
-  --intermediate-shadow: #A9890A;
-  --advance-red: #CC6055;
-  --advance-shadow: #992D22;
+  --intermediate-yellow: #dcbc3d;
+  --intermediate-shadow: #a9890a;
+  --advance-red: #cc6055;
+  --advance-shadow: #992d22;
 }
 body {
   width: 100%;
@@ -56,7 +57,6 @@ body {
   color: white;
   font-family: "Baloo";
 }
-
 
 .terms-card:hover {
   transform: translateY(-4px) scale(1.03);

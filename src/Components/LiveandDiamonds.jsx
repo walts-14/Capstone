@@ -93,7 +93,7 @@ function LivesandDiamonds({ showDiamonds = true, showLives = true }) {
         </div>
       )}
 
-      <style jsx>{`
+      <style>{`
         /* Tablet responsive styles - ONLY activate at breakpoint */
         @media (max-width: 1024px) {
           .lives-container {

@@ -35,6 +35,8 @@ const MessageSchema = new Schema({
   isBroadcast: { type: Boolean, default: false },
 
   readBy: { type: [ReadBySchema], default: [] },
+  // per-user soft-delete: messages hidden for specific users
+  deletedFor: [{ type: Schema.Types.ObjectId, ref: "User" }],
 
   createdAt: { type: Date, default: Date.now },
 });
