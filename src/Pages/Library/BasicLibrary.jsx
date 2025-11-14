@@ -12,7 +12,7 @@ function BasicLibrary() {
         <div className="library-buttons-top">
           <LibraryButtons />
         </div>
-        <div className="level-container font-bold mb-1">
+        <div className="level-container font-bold">
           <Link to="/terms/termsone">
             <div className="level-content rounded-xl">
               <span className="text-3xl">Lesson 1</span>
@@ -47,9 +47,6 @@ function BasicLibrary() {
           </Link>
         </div>
       </div>
-      <style>{`
-        
-      `}</style>
     </div>
   );
 }

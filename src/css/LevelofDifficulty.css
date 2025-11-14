@@ -35,7 +35,7 @@
   gap: 0.75rem;
   color: var(--white);
   font-family: "Baloo", sans-serif;
-  padding: 0.75rem 1rem 9rem; /* bottom padding for mobile bottom nav */
+  padding: 0.75rem 1rem 0;
   margin: 0 auto;
   max-width: 640px;
 }
@@ -61,16 +61,73 @@ a {
 }
 
 /*Mobile*/
-@media (min-width: 320px) {
+@media (min-width: 375px) {
   .level-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 1rem;
-    width: 100%;
-    margin-top: -1.5rem;
-    padding-bottom: 10rem;
+    width: 82%;
+    height: calc(100vh - 9rem); /* prevent overlap with mobile sidenav */
     scrollbar-width: none;
     -ms-overflow-style: none;
+    margin-bottom: 0;
+    box-sizing: border-box;
+    padding-left: 0;
+    margin-right: 0;
+  }
+
+  .level-container::-webkit-scrollbar {
+    display: none;
+  }
+  .level-content span {
+    font-size: 1.3rem;
+    font-weight: 550;
+    padding-bottom: 0.5rem;
+  }
+  .level-content p {
+    font-size: 1.3rem;
+    font-weight: 550;
+  }
+  .lessonTitle {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: "Baloo";
+    color: var(--white);
+    padding: 12px 16px;
+    width: 100%;
+    margin: 0.75rem auto 0;
+    background-color: var(--semidark-blue);
+    border-radius: 10px;
+    position: absolute;
+    top: -8.3rem;
+    width: 100%;
+    z-index: 5;
+  }
+  .lessonTitle h1 {
+    width: 100%;
+    font-size: 1.5rem;
+  }
+  .lessonTitle h2 {
+    font-size: 1.3rem;
+  }
+}
+/*mobile large*/
+@media (min-width: 425px) {
+  .level-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+    width: 86%;
+    height: calc(100vh - 9rem); /* prevent overlap with mobile sidenav */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    margin-bottom: 0;
+    box-sizing: border-box;
+    padding-left: 0;
+    margin-right: 0;
   }
 
   .level-container::-webkit-scrollbar {
@@ -176,7 +233,7 @@ a {
 @media (min-width: 1024px) {
   .library-main-layout {
     margin-left: 290px;
-    margin-top: -5.2rem;
+    margin-top: -7.2rem;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
