@@ -98,7 +98,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 40px;
+  gap: 20px;
   /* Space between arrows and the letter */
 }
 
@@ -161,20 +161,20 @@ body {
   cursor: pointer;
 }
 
-@media (min-width: 320px) {
+@media (min-width: 375px) {
   .container-lecture video {
     width: 95vw;
     border: 5px solid var(--grey-purple);
     border-radius: 15px;
     height: auto;
     position: relative;
-    top: 10rem;
+    top: 2rem;
   }
   .text-container {
     width: 90vw;
     height: auto;
     position: relative;
-    top: 16rem;
+    top: 5rem;
     align-items: flex-start;
   }
   .text-container .textOne {
@@ -245,7 +245,7 @@ body {
     height: 50vw;
     width: 100vw;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: -3rem;
     left: auto;
     top: auto;
     padding-left: 8rem;

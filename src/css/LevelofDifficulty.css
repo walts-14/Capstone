@@ -125,7 +125,6 @@ a {
     margin-bottom: 0;
     overflow-x: hidden;
   }
-
   .level-container::-webkit-scrollbar {
     display: none;
   }
@@ -139,10 +138,8 @@ a {
     font-weight: 550;
   }
   .lessonTitle {
-    display: flex;
+    display: grid;
     justify-content: flex-start;
-    flex-direction: column;
-    align-items: center;
     gap: 0.5rem;
     font-family: "Baloo";
     color: var(--white);
@@ -168,17 +165,17 @@ a {
 @media (min-width: 768px) {
   .level-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
     width: 100%;
-    overflow: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    height: calc(100vh - 10px); /* adjust 80px based on your navbar height */
-    padding-bottom: 10rem;
-    position: absolute;
-    top: 10rem;
-    left: 7rem;
+    height: calc(100vh - 5rem);
+    box-sizing: border-box;
+    padding-left: 7rem;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-top: auto;
+    padding-top: 6rem;
+    overflow-x: hidden;
   }
   .level-container .level-content {
     background: linear-gradient(
@@ -226,52 +223,63 @@ a {
 }
 /*Desktop*/
 /* Desktop layout for library pages */
-@media (min-width: 1024px) {
-  .library-main-layout {
-    margin-left: 290px;
-    margin-top: -7.2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: calc(100vw - 320px);
-    min-height: 100vh;
-    justify-content: flex-start;
-  }
-  .library-buttons-top {
-    width: 100%;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    position: relative;
-    bottom: 27rem;
-  }
+@media (min-width: 768px) {
   .level-container {
-    width: 100%;
-    max-width: 900px;
-    margin: 0 auto;
-    position: relative;
-    bottom: 27.2rem;
-    left: 0;
-    padding-bottom: 5rem;
     display: grid;
-    grid-template-columns: 1fr !important;
+    grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
+    width: 100%;
+    height: calc(100vh - 5rem);
+    box-sizing: border-box;
+    padding-left: 7rem;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-top: auto;
+    padding-top: 6rem;
+    overflow-x: hidden;
+  }
+  .level-container .level-content {
+    background: linear-gradient(
+      to bottom,
+      var(--level-bg-start) 50px,
+      var(--level-bg-end) 34px
+    );
+    background-repeat: no-repeat;
+    border-radius: 16px;
+    color: var(--white);
   }
   .level-content {
-    min-height: 7.5rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 100%;
-    max-width: 900px;
-    margin: 0 auto;
-    box-sizing: border-box;
+    height: 90%;
   }
   .level-content span {
-    font-size: 2rem;
+    font-size: 1.9rem;
   }
   .level-content p {
-    font-size: 2rem;
+    font-size: 1.9rem;
+  }
+  .lessonTitle {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: "Baloo";
+    color: var(--white);
+    padding: 12px 16px;
+    width: 80%;
+    background-color: var(--semidark-blue);
+    border-radius: 10px;
+    position: absolute;
+    top: -7rem;
+    left: 8rem;
+    z-index: 5;
+  }
+  .lessonTitle h1 {
+    width: 100%;
+    font-size: 1.7rem;
+  }
+  .lessonTitle h2 {
+    font-size: 1.8rem;
   }
 }
 @media (min-width: 2560px) {

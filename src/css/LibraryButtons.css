@@ -30,7 +30,7 @@
 }
 
 /* Mobile-first layout for Library header */
-@media (min-width: 320px) {
+@media (min-width: 375px) {
   .library-contents {
     display: flex;
     align-items: center;
@@ -63,9 +63,19 @@
 /* Tablet */
 @media (min-width: 768px) {
   .library-contents {
-    gap: 1.25rem;
-    padding-top: 1.25rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
     max-width: 768px;
+    gap: 1.25rem;
+    padding: 1rem 0 0.5rem 0;
+    z-index: 100;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
   }
   .difficulty-select select {
     font-size: 1.7rem;
