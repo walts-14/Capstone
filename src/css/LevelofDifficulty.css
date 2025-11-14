@@ -223,10 +223,10 @@ a {
 }
 /*Desktop*/
 /* Desktop layout for library pages */
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .level-container {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(1, 2fr);
     gap: 1rem;
     width: 100%;
     height: calc(100vh - 5rem);
@@ -249,7 +249,7 @@ a {
     color: var(--white);
   }
   .level-content {
-    height: 90%;
+    height: 100%;
   }
   .level-content span {
     font-size: 1.9rem;

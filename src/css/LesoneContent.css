@@ -307,10 +307,6 @@ body {
     font-size: 1.5rem;
     padding: 0 18px;
   }
-  .back img {
-    height: 7vh;
-    margin-left: -1.5rem;
-  }
   .definition-text {
     font-size: 1.3rem;
     padding: 16px 28px;
@@ -318,8 +314,14 @@ body {
     margin-top: 1.5rem;
   }
   .textOne p {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     margin: -0.5rem auto auto auto;
+  }
+  .back {
+    height: 5vh !important;
+    width: 15vw !important;
+    position: relative;
+    left: 13rem;
   }
 }
 @media (min-width: 900px) {
