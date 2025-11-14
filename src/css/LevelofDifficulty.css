@@ -63,17 +63,16 @@ a {
 /*Mobile*/
 @media (min-width: 375px) {
   .level-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    display: flex;
+    flex-direction: column;
     gap: 1rem;
-    width: 82%;
-    height: calc(100vh - 9rem); /* prevent overlap with mobile sidenav */
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    margin-bottom: 0;
+    width: 90%;
+    height: calc(90vh - 1rem);
     box-sizing: border-box;
-    padding-left: 0;
-    margin-right: 0;
+    padding-left: auto;
+    margin-right: 1em;
+    margin-top: -1.5rem;
+    overflow-x: hidden;
   }
 
   .level-container::-webkit-scrollbar {
@@ -117,17 +116,15 @@ a {
 /*mobile large*/
 @media (min-width: 425px) {
   .level-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    display: flex;
+    flex-direction: column;
     gap: 1rem;
-    width: 86%;
-    height: calc(100vh - 9rem); /* prevent overlap with mobile sidenav */
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    margin-bottom: 0;
+    width: 100%;
     box-sizing: border-box;
     padding-left: 0;
     margin-right: 0;
+    margin-bottom: 0;
+    overflow-x: hidden;
   }
 
   .level-container::-webkit-scrollbar {
