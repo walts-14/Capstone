@@ -17,28 +17,21 @@ import quizRoutes from "./routes/quizRoutes.js";
 import progressRoutes from "./routes/progressRoutes.js";
 import streakRoutes from "./routes/streakRoutes.js";
 import pointsRoutes from "./routes/pointsRoutes.js";
-import messageRoutes from "./routes/messageRoute.js"; // Import message feature
+import messageRoutes from "./routes/messageRoute.js";
 import compression from "compression";
 
 //configuring dotenv
 dotenv.config();
-//console.log('ENV: SMTP_HOST=%s SMTP_PORT=%s', process.env.SMTP_HOST, process.env.SMTP_PORT);
+
 //initializing express
 const app = express();
+
 //middleware
 app.use(express.json());
-
 app.use(compression());
+app.use(cookieParser());
 
-const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
-
-app.use(
-  cors({
-    credentials: true,
-    origin: FRONTEND_URL,
-  })
-);
-
+// CORS configuration - single unified config
 const corsOptions = {
   origin: [
     "https://wesign.games",
@@ -53,11 +46,11 @@ app.use(cors(corsOptions));
 //security headers
 app.use(helmet());
 
+// Health check endpoint
 app.get("/health", (_req, res) => res.json({ ok: true }));
 
+// API routes
 app.use("/comm", commRoutes);
-app.use(cookieParser());
-
 app.use("/api", userRoutes);
 app.use("/api", authRoutes);
 app.use("/api", leaderboardRoutes);
@@ -66,17 +59,17 @@ app.use("/api", pointsRoutes);
 app.use("/api", videoRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/superadmin", superadminRoutes);
-
 app.use("/api/videos", videoRoutes);
 app.use("/api/quizzes", quizRoutes);
 app.use("/api/progress", progressRoutes);
 app.use("/api/streak", streakRoutes);
 app.use("/api/points", pointsRoutes);
-app.use("/api/messages", messageRoutes); // Message feature API
+app.use("/api/messages", messageRoutes);
 
+// Connect to database
 connectDB();
-//verifySmtp();
 
+// Serve static files (only needed if you're serving frontend from backend)
 app.use(express.static("./build"));
 app.get("*", (_req, res) => {
   res.sendFile("index.html", { root: "./build" });
