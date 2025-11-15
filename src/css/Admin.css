@@ -1091,6 +1091,62 @@
     width: 97%;
   }
 
+  /* --- Notification Modal --- */
+  .notification-modal {
+    width: 90vw !important;
+    min-width: auto !important;
+    max-width: 90vw !important;
+    top: 8% !important;
+    padding: 2rem 1.5rem !important;
+    max-height: 85vh !important;
+  }
+
+  .notification-close-btn {
+    top: 15px !important;
+    right: 15px !important;
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 1.4rem !important;
+  }
+
+  .notification-title {
+    font-size: 2rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  .notification-card {
+    flex-direction: column !important;
+    padding: 1rem !important;
+    gap: 0.75rem !important;
+  }
+
+  .notification-tags {
+    flex-wrap: wrap !important;
+  }
+
+  .notification-tag {
+    font-size: 0.95rem !important;
+  }
+
+  .notification-body {
+    font-size: 1rem !important;
+  }
+
+  .notification-time {
+    font-size: 0.85rem !important;
+  }
+
+  .notification-actions {
+    flex-direction: row !important;
+    justify-content: flex-end !important;
+    margin-left: 0 !important;
+  }
+
+  .notification-mark-read-btn {
+    font-size: 0.95rem !important;
+    padding: 0.45rem 0.75rem !important;
+  }
+
 }
 
 /* ========================================
@@ -1447,6 +1503,69 @@
 }
 
 /* ========================================
+   MEDIUM SMALL MOBILE (max-width: 425px)
+   ======================================== */
+@media (max-width: 425px) {
+  /* --- Notification Modal --- */
+  .notification-modal {
+    width: 95vw !important;
+    min-width: auto !important;
+    max-width: 95vw !important;
+    top: 5% !important;
+    padding: 1.75rem 1.25rem !important;
+    max-height: 88vh !important;
+    border-radius: 14px !important;
+  }
+
+  .notification-close-btn {
+    top: 12px !important;
+    right: 12px !important;
+    width: 34px !important;
+    height: 34px !important;
+    font-size: 1.3rem !important;
+  }
+
+  .notification-title {
+    font-size: 1.75rem !important;
+    margin-bottom: 1.25rem !important;
+  }
+
+  .notification-card {
+    flex-direction: column !important;
+    padding: 0.85rem !important;
+    gap: 0.65rem !important;
+  }
+
+  .notification-tags {
+    flex-wrap: wrap !important;
+  }
+
+  .notification-tag {
+    font-size: 0.9rem !important;
+    padding: 0.25rem 0.65rem !important;
+  }
+
+  .notification-body {
+    font-size: 0.95rem !important;
+  }
+
+  .notification-time {
+    font-size: 0.8rem !important;
+  }
+
+  .notification-actions {
+    flex-direction: row !important;
+    justify-content: flex-end !important;
+    margin-left: 0 !important;
+  }
+
+  .notification-mark-read-btn {
+    font-size: 0.9rem !important;
+    padding: 0.45rem 0.7rem !important;
+  }
+}
+
+/* ========================================
    EXTRA SMALL MOBILE (max-width: 375px)
    ======================================== */
 @media (max-width: 375px) {
@@ -1616,5 +1735,63 @@
 
   .progress-section h4 {
     font-size: 1.2rem !important;
+  }
+
+  /* --- Notification Modal --- */
+  .notification-modal {
+    width: 95vw !important;
+    min-width: auto !important;
+    max-width: 95vw !important;
+    top: 5% !important;
+    padding: 1.5rem 1rem !important;
+    max-height: 90vh !important;
+    border-radius: 12px !important;
+  }
+
+  .notification-close-btn {
+    top: 10px !important;
+    right: 10px !important;
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 1.2rem !important;
+  }
+
+  .notification-title {
+    font-size: 1.5rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .notification-card {
+    flex-direction: column !important;
+    padding: 0.75rem !important;
+    gap: 0.5rem !important;
+  }
+
+  .notification-tags {
+    flex-wrap: wrap !important;
+  }
+
+  .notification-tag {
+    font-size: 0.85rem !important;
+    padding: 0.2rem 0.6rem !important;
+  }
+
+  .notification-body {
+    font-size: 0.9rem !important;
+  }
+
+  .notification-time {
+    font-size: 0.75rem !important;
+  }
+
+  .notification-actions {
+    flex-direction: row !important;
+    justify-content: flex-end !important;
+    margin-left: 0 !important;
+  }
+
+  .notification-mark-read-btn {
+    font-size: 0.85rem !important;
+    padding: 0.4rem 0.6rem !important;
   }
 }

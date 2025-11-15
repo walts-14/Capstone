@@ -668,12 +668,13 @@ const DashboardAdmin = () => {
               {/* Notification Modal */}
               {showNotificationModal && (
                 <div
+                  className="notification-modal"
                   style={{
                     position: "fixed",
                     top: "12%",
                     left: "50%",
                     transform: "translateX(-50%)",
-                    width: "70vw", // wider modal like second image
+                    width: "70vw",
                     minWidth: "700px",
                     maxWidth: "1100px",
                     zIndex: 5000,
@@ -692,6 +693,7 @@ const DashboardAdmin = () => {
                 >
                   {/* Close button in top right */}
                   <button
+                    className="notification-close-btn"
                     style={{
                       position: "absolute",
                       top: "18px",
@@ -717,6 +719,7 @@ const DashboardAdmin = () => {
                   </button>
 
                   <h1
+                    className="notification-title"
                     style={{
                       fontWeight: "bold",
                       fontSize: "2.5rem",
@@ -740,6 +743,7 @@ const DashboardAdmin = () => {
                       messages.map((msg) => (
                         <div
                           key={msg._id}
+                          className="notification-card"
                           style={{
                             background: "#6C7294",
                             border: "1px solid #e0e0e0",
@@ -756,6 +760,7 @@ const DashboardAdmin = () => {
                         >
                           <div style={{ flex: 1 }}>
                             <div
+                              className="notification-tags"
                               style={{
                                 display: "flex",
                                 gap: "0.5rem",
@@ -764,6 +769,7 @@ const DashboardAdmin = () => {
                               }}
                             >
                               <span
+                                className="notification-tag"
                                 style={{
                                   background: "#fff",
                                   color: "#6C7294",
@@ -777,6 +783,7 @@ const DashboardAdmin = () => {
                               </span>
 
                               <span
+                                className="notification-tag"
                                 style={{
                                   background: "#e0e0e0",
                                   color: "#6C7294",
@@ -793,6 +800,7 @@ const DashboardAdmin = () => {
 
                               {msg.studentName && (
                                 <span
+                                  className="notification-tag"
                                   style={{
                                     background: "#bdbdbd",
                                     color: "#6C7294",
@@ -806,11 +814,15 @@ const DashboardAdmin = () => {
                               )}
                             </div>
 
-                            <div style={{ color: "#fff", fontSize: "1rem" }}>
+                            <div
+                              className="notification-body"
+                              style={{ color: "#fff", fontSize: "1rem" }}
+                            >
                               {msg.body}
                             </div>
 
                             <div
+                              className="notification-time"
                               style={{
                                 marginTop: "0.5rem",
                                 color: "#e0e0e0",
@@ -824,6 +836,7 @@ const DashboardAdmin = () => {
                           </div>
 
                           <div
+                            className="notification-actions"
                             style={{
                               display: "flex",
                               flexDirection: "column",
@@ -834,6 +847,7 @@ const DashboardAdmin = () => {
                             {!msg.isRead && (
                               <button
                                 onClick={() => markMessageAsRead(msg._id)}
+                                className="notification-mark-read-btn"
                                 style={{
                                   background: "#4f46e5",
                                   color: "#fff",

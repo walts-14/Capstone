@@ -843,6 +843,7 @@ const SuperAdmin = () => {
                   {/* Messages Popup Modal */}
                   {showMessagesPopup && (
                     <div
+                      className="message-popup-modal"
                       style={{
                         position: "fixed",
                         top: "50%",
@@ -866,6 +867,7 @@ const SuperAdmin = () => {
                         type="button"
                         onClick={handleCloseMessagesPopup}
                         aria-label="Close"
+                        className="message-close-btn"
                         style={{
                           position: "absolute",
                           top: "32px",
@@ -902,6 +904,7 @@ const SuperAdmin = () => {
                       <button
                         type="button"
                         aria-label="Add Message"
+                        className="message-add-btn"
                         style={{
                           position: "absolute",
                           top: "32px",
@@ -927,6 +930,7 @@ const SuperAdmin = () => {
                         </span>
                       </button>
                       <h2
+                        className="message-title"
                         style={{
                           color: "#222",
                           fontWeight: "bold",
@@ -939,6 +943,7 @@ const SuperAdmin = () => {
                       {/* Message Form Popup */}
                       {showMessageForm && (
                         <div
+                          className="message-form-modal"
                           style={{
                             position: "fixed",
                             top: "50%",
@@ -960,6 +965,7 @@ const SuperAdmin = () => {
                             type="button"
                             onClick={handleMessageFormClose}
                             aria-label="Close"
+                            className="message-form-close-btn"
                             style={{
                               position: "absolute",
                               top: "18px",
@@ -981,7 +987,6 @@ const SuperAdmin = () => {
                             }}
                           >
                             <span
-                            
                               style={{
                                 display: "flex",
                                 alignItems: "center",
@@ -994,6 +999,7 @@ const SuperAdmin = () => {
                             </span>
                           </button>
                           <h2
+                            className="message-form-title"
                             style={{
                               color: "#222",
                               fontWeight: "bold",
@@ -1150,6 +1156,7 @@ const SuperAdmin = () => {
                             messages.map((msg) => (
                               <div
                                 key={msg.id}
+                                className="message-card"
                                 style={{
                                   background: "#2d2342",
                                   borderRadius: "15px",
@@ -1160,8 +1167,12 @@ const SuperAdmin = () => {
                                 }}
                                 onClick={() => handleEditMsg(msg)}
                               >
-                                <div style={{ marginBottom: "0.5rem" }}>
+                                <div
+                                  className="message-tags"
+                                  style={{ marginBottom: "0.5rem" }}
+                                >
                                   <span
+                                    className="message-tag"
                                     style={{
                                       background: "#f7c948",
                                       color: "#222",
@@ -1174,6 +1185,7 @@ const SuperAdmin = () => {
                                     {msg.sender}
                                   </span>
                                   <span
+                                    className="message-tag"
                                     style={{
                                       background: "#7c6ae3",
                                       color: "#fff",
@@ -1186,6 +1198,7 @@ const SuperAdmin = () => {
                                     {msg.grade}
                                   </span>
                                   <span
+                                    className="message-tag"
                                     style={{
                                       background: "#bdbdbd",
                                       color: "#222",
@@ -1198,6 +1211,7 @@ const SuperAdmin = () => {
                                   </span>
                                 </div>
                                 <div
+                                  className="message-content"
                                   style={{ color: "#fff", fontSize: "1rem" }}
                                 >
                                   {msg.content}
@@ -1467,7 +1481,6 @@ const SuperAdmin = () => {
                                     style={{
                                       backgroundColor: "#2E86C1",
                                       border: "none",
-                    
                                     }}
                                   >
                                     Progress
