@@ -1,0 +1,42 @@
+name: Deploy Node backend to Azure
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build (if you have no build step, this will skip)
+        run: npm run build || echo "No build step"
+
+      - name: Zip backend
+        run: |
+          mkdir deploy
+          cp -R package.json package-lock.json deploy/
+          cp -R src deploy/ || true
+          cp server.js deploy/ || true
+          cp index.js deploy/ || true
+          cd deploy
+          zip -r ../app.zip .
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: "WeSign-Backend"
+          package: "./app.zip"
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
