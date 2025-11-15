@@ -35,6 +35,7 @@ app.use(cookieParser());
 const corsOptions = {
   origin: [
     "https://wesign.games",
+    "https://www.wesign.games",
     "http://localhost:5173",
     "http://localhost:3000",
   ],
@@ -123,6 +124,10 @@ if (serveFrontend) {
 }
 
 const PORT = process.env.PORT || 5000;
+if (!serveFrontend) {
+  console.log('Backend-only mode: static frontend serving is disabled.');
+}
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
