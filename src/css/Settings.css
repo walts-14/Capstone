@@ -40,8 +40,8 @@ body {
 
 .settings-container {
   background-color: #271d3e;
-  width: 90vw;
-  max-width: 767px;
+  width: 95vw;
+  max-width: 900px;
   min-width: 0;
   margin: -5rem auto 0 auto;
   min-height: 83vh;
@@ -209,8 +209,8 @@ body {
 @media (min-width: 425px) {
   .settings-container {
     background-color: #271d3e;
-    width: 90vw;
-    max-width: 767px;
+    width: 95vw;
+    max-width: 900px;
     min-width: 0;
     margin: -5rem auto 0 auto;
     min-height: 83vh;
@@ -375,10 +375,11 @@ body {
   }
 }
 /* TABLET & DESKTOP */
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   .settings-container {
     background-color: #271d3e;
     width: 80vw;
+    max-width: 1100px;
     margin: 0 auto auto 6rem;
     padding: 1.2rem 0.5rem;
     border-radius: 1rem;
@@ -478,7 +479,7 @@ body {
   /* Hidden overlay by default */
   .camera-overlay {
     position: absolute;
-    top: -37.3rem;
+    top: -39.3rem;
     left: 0;
     width: 20vw;
     height: 20vw;
@@ -522,7 +523,7 @@ body {
     background-color: var(--midlight-red);
     font-size: 1.5rem;
     border-radius: 0.5rem;
-    left: -10rem;
+    left: -5rem;
   }
   .twobuttons button {
     background-color: #924dbf;
@@ -535,11 +536,9 @@ body {
 @media (min-width: 1024px) {
   .settings-container {
     background-color: #271d3e;
-    width: 72%;
-    max-width: 1439px;
-    min-width: 0;
-    margin: 5rem auto 0 16.7rem;
-    min-height: 80vh;
+    width: 70vw;
+    max-width: 1100px;
+    margin: 0 auto auto 15rem;
     padding: 1.2rem 0.5rem;
     border-radius: 1rem;
     box-sizing: border-box;
@@ -547,96 +546,156 @@ body {
     flex-direction: column;
     align-items: center;
   }
-  .profile-picture-wrapper {
-    width: 160px;
-    height: 160px;
-    max-width: 200px;
-    max-height: 200px;
-  }
-  .profile-picture-wrapper img {
-    width: 100%;
-    height: 100%;
-    min-width: 80px;
-    min-height: 80px;
-    max-width: 140px;
-    max-height: 140px;
-    object-fit: cover;
-    border-radius: 50%;
-    margin: -43rem auto 0.5rem auto;
-  }
-  .camera-overlay {
-    position: absolute;
-    top: -38rem;
-    left: 0.1rem;
-    width: 87%;
-    height: 87%;
-    border-radius: 50%;
-    background-color: rgba(0, 0, 0, 0.4);
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-    pointer-events: none;
-  }
   .change-pic {
     background-color: var(--input-gray);
-    width: 100%;
-    max-width: 260px;
+    width: auto;
     padding: 0.6rem 0.2rem;
-    margin: -65rem auto 0 -15rem;
-    font-size: 1.3rem;
+    margin: -62rem auto 0 -18rem;
+    font-size: 1.5rem;
     font-family: "Baloo", sans-serif;
     border-radius: 0.5rem;
     text-align: center;
     position: relative;
-  }
-  .deletee {
-    background-color: #d7443e;
-    width: auto;
-    height: 5.5vh;
-    max-width: 260px;
-    margin: -65rem auto 0 13rem;
-    font-size: 1.3rem;
-    font-weight: 400;
-    padding: 0.2rem 0.5rem;
-    text-align: center;
-    border-radius: 0.5rem;
-    position: absolute;
   }
   .students-information {
     width: 100%;
     position: relative;
     margin-top: 12rem;
+    padding-top: 2rem;
   }
-  .btns .btn {
-    display: flex;
+  .student-details {
+    width: 100%;
+    background-color: var(--background);
+    font-size: 1.4rem;
+    font-family: "Baloo", sans-serif;
+    margin: 0.7rem 0 0.5rem 0;
+    border-radius: 0.5rem;
+    padding: 0.4rem 0.9rem;
+    box-sizing: border-box;
+  }
+  .name-stud {
+    font-family: "Baloo", sans-serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin-bottom: 0.1rem;
+    margin-left: 0.5rem;
+    margin-top: 0.5rem;
+    color: #fff;
+    background: transparent;
+  }
+  .username-stud {
+    font-family: "Baloo", sans-serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin-bottom: 0.1rem;
+    margin-left: 0.5rem;
+    margin-top: 0.5em;
+    color: #fff;
+    background: transparent;
+  }
+  .username-stud-view {
+    width: 100%;
+    background-color: var(--background);
+    font-size: 1.4rem;
+    font-family: "Baloo", sans-serif;
+    margin: 0.7rem 0 0.5rem 0;
+    border-radius: 0.5rem;
+    padding: 0.4rem 0.9rem;
+    box-sizing: border-box;
+  }
+  .email-stud {
+    font-family: "Baloo", sans-serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    margin-bottom: 0.1rem;
+    margin-left: 0.5rem;
+    margin-top: 0.5rem;
+    color: #fff;
+    background: transparent;
+  }
+  .email-stud-view {
+    width: 100%;
+    background-color: var(--background);
+    font-size: 1.6rem;
+    font-family: "Baloo", sans-serif;
+    margin: 0.7rem 0 0.5rem 0;
+    border-radius: 0.5rem;
+    padding: 0.4rem 0.9rem;
+    box-sizing: border-box;
+  }
+  .profile-picture-wrapper img {
+    width: 100%;
+    height: 100%;
+    min-width: 80px;
+    min-height: 80px;
+    max-width: 150px;
+    max-height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin: -43rem auto 0.5rem auto;
+  }
+  /* Hidden overlay by default */
+  .camera-overlay {
+    position: absolute;
+    top: -39.3rem;
+    left: 0;
+    width: 15vw;
+    height: 15vw;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    pointer-events: none;
+  }
+  /* Show overlay only when hovering on "Change Profile" */
+  .change-pic:hover ~ .camera-overlay {
+    opacity: 1;
+  }
+  .deletee {
+    background-color: #d7443e;
     width: auto;
-    font-size: 1.8rem;
-    padding: 1rem;
+    height: 5.3vh;
+    max-width: 260px;
+    margin: -62rem auto 0 15rem;
+    font-size: 1.5rem;
+    font-weight: 400;
+    padding: 0.2rem 0.5rem;
+    text-align: center;
+    border-radius: 0.5rem;
+    position: fixed;
+  }
+  .btns {
+    display: flex;
+    width: 100%;
     justify-content: center;
     align-items: center;
     gap: 1em;
-    margin: -2rem 15rem 0 0;
+    margin: -5rem 10rem 0 0;
     position: static;
   }
-  .student-details,
-  .username-stud-view,
-  .email-stud-view {
+  .btns .btn {
+    font-family: "Baloo", sans-serif;
+    width: auto;
+    height: 3rem;
+    background-color: var(--midlight-red);
     font-size: 1.5rem;
-    padding: 0.7rem 1.2rem;
+    border-radius: 0.5rem;
+    left: -10rem;
   }
-  .name-stud,
-  .username-stud,
-  .email-stud {
-    font-size: 1.2rem;
+  .twobuttons button {
+    background-color: #924dbf;
+    padding: 0.2rem;
+  }
+  .twobuttons {
+    margin-top: 1.2rem;
   }
 }
 @media (min-width: 1440px) {
   .settings-container {
     background-color: #271d3e;
-    width: 72%;
-    max-width: 1439px;
-    min-width: 0;
-    margin: 5rem auto 0 22.7rem;
-    min-height: 80vh;
+    width: 70vw;
+    max-width: 1100px;
+    margin: 0 auto auto 22rem;
     padding: 1.2rem 0.5rem;
     border-radius: 1rem;
     box-sizing: border-box;
@@ -644,86 +703,147 @@ body {
     flex-direction: column;
     align-items: center;
   }
-  .profile-picture-wrapper {
-    width: 160px;
-    height: 160px;
-    max-width: 200px;
-    max-height: 200px;
+  .change-pic {
+    background-color: var(--input-gray);
+    width: auto;
+    padding: 0.6rem 0.2rem;
+    margin: -62rem auto 0 -18rem;
+    font-size: 1.5rem;
+    font-family: "Baloo", sans-serif;
+    border-radius: 0.5rem;
+    text-align: center;
+    position: relative;
+  }
+  .students-information {
+    width: 100%;
+    position: relative;
+    margin-top: 12rem;
+    padding-top: 2rem;
+  }
+  .student-details {
+    width: 100%;
+    background-color: var(--background);
+    font-size: 1.4rem;
+    font-family: "Baloo", sans-serif;
+    margin: 0.7rem 0 0.5rem 0;
+    border-radius: 0.5rem;
+    padding: 0.4rem 0.9rem;
+    box-sizing: border-box;
+  }
+  .name-stud {
+    font-family: "Baloo", sans-serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin-bottom: 0.1rem;
+    margin-left: 0.5rem;
+    margin-top: 0.5rem;
+    color: #fff;
+    background: transparent;
+  }
+  .username-stud {
+    font-family: "Baloo", sans-serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin-bottom: 0.1rem;
+    margin-left: 0.5rem;
+    margin-top: 0.5em;
+    color: #fff;
+    background: transparent;
+  }
+  .username-stud-view {
+    width: 100%;
+    background-color: var(--background);
+    font-size: 1.4rem;
+    font-family: "Baloo", sans-serif;
+    margin: 0.7rem 0 0.5rem 0;
+    border-radius: 0.5rem;
+    padding: 0.4rem 0.9rem;
+    box-sizing: border-box;
+  }
+  .email-stud {
+    font-family: "Baloo", sans-serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    margin-bottom: 0.1rem;
+    margin-left: 0.5rem;
+    margin-top: 0.5rem;
+    color: #fff;
+    background: transparent;
+  }
+  .email-stud-view {
+    width: 100%;
+    background-color: var(--background);
+    font-size: 1.6rem;
+    font-family: "Baloo", sans-serif;
+    margin: 0.7rem 0 0.5rem 0;
+    border-radius: 0.5rem;
+    padding: 0.4rem 0.9rem;
+    box-sizing: border-box;
   }
   .profile-picture-wrapper img {
     width: 100%;
     height: 100%;
     min-width: 80px;
     min-height: 80px;
-    max-width: 168px;
-    max-height: 168px;
+    max-width: 150px;
+    max-height: 150px;
     object-fit: cover;
     border-radius: 50%;
     margin: -43rem auto 0.5rem auto;
   }
+  /* Hidden overlay by default */
   .camera-overlay {
     position: absolute;
-    top: -38rem;
-    left: 0.1rem;
-    width: 11.6vw;
-    height: 19.3vh;
+    top: -39.3rem;
+    left: 0;
+    width: 10.5vw;
+    height: 10.5vw;
     border-radius: 50%;
     background-color: rgba(0, 0, 0, 0.4);
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
     pointer-events: none;
   }
-  .change-pic {
-    background-color: var(--input-gray);
-    width: auto;
-    max-width: 260px;
-    padding: 0.6rem 0.2rem;
-    margin: -63rem auto 0 -25rem;
-    font-size: 1.9rem;
-    font-family: "Baloo", sans-serif;
-    border-radius: 0.5rem;
-    text-align: center;
-    position: relative;
+  /* Show overlay only when hovering on "Change Profile" */
+  .change-pic:hover ~ .camera-overlay {
+    opacity: 1;
   }
   .deletee {
     background-color: #d7443e;
     width: auto;
-    height: 7vh;
+    height: 5.3vh;
     max-width: 260px;
-    margin: -63rem auto 0 25rem;
-    font-size: 1.9rem;
+    margin: -62rem auto 0 15rem;
+    font-size: 1.5rem;
     font-weight: 400;
     padding: 0.2rem 0.5rem;
     text-align: center;
     border-radius: 0.5rem;
-    position: absolute;
+    position: fixed;
   }
-  .students-information {
-    width: 100%;
-    position: relative;
-    margin-top: 13rem;
-    max-height: 350px;
-  }
-  .btns .btn {
+  .btns {
     display: flex;
-    width: auto;
-    font-size: 1.8rem;
-    padding: 1rem;
+    width: 100%;
     justify-content: center;
     align-items: center;
     gap: 1em;
-    margin: -2rem 0 0 -32rem;
+    margin: -5rem 10rem 0 0;
     position: static;
   }
-  .student-details,
-  .username-stud-view,
-  .email-stud-view {
+  .btns .btn {
+    font-family: "Baloo", sans-serif;
+    width: auto;
+    height: 3rem;
+    background-color: var(--midlight-red);
     font-size: 1.5rem;
-    padding: 0.7rem 1.2rem;
+    border-radius: 0.5rem;
+    left: -19rem;
   }
-  .name-stud,
-  .username-stud,
-  .email-stud {
-    font-size: 1.8rem;
+  .twobuttons button {
+    background-color: #924dbf;
+    padding: 0.2rem;
+  }
+  .twobuttons {
+    margin-top: 1.2rem;
   }
 }
