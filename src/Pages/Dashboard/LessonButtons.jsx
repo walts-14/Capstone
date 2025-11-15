@@ -396,7 +396,46 @@ function LessonButtons() {
               padding: 0.5rem !important;
             }
           }
-
+          
+            @media (min-width: 1440px) {
+            .headerlessbtn {
+              display: flex !important;
+              gap: 1rem !important;
+              margin-top: 8vh !important;
+              margin-right: 5rem !important;
+              z-index: -999;
+            }
+            .Difficulty {
+              display: flex !important;
+              height: 66px;
+              font-size: 2rem;
+              padding-inline: 12px !important;
+              border-radius: 1rem !important;
+            }
+            .livesDia {
+              display: flex !important;
+              gap: 14px;
+            }
+            .lesson-button {
+              height: 6rem !important;
+              width: 7rem !important;
+              font-size: 3.5rem !important;
+              border-radius: 1.5rem !important;
+            }
+            .lessons-grid .lesson-tile:nth-child(2n + 1) {
+              transform: translateY(-3rem);
+              margin-top: 3rem;
+            }
+            .lessons-grid .lesson-tile:nth-child(2n) {
+              transform: translateY(6rem);
+            }
+            .max-h-screen {
+              max-height: 79vh !important;
+              margin-top: 4vh !important;
+              margin-right: 5rem !important;
+              padding: 0.5rem !important;
+            }
+          }
           /* Mobile sidenav - only show below 640px */
           @media (min-width: 640px) and (max-width: 768px)  {
             .headerlessbtn {
