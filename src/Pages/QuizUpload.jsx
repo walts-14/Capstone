@@ -1,6 +1,6 @@
 // src/components/QuizSubmissionForm.js
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "./api.js";
 
 function QuizUpload() {
   const [question, setQuestion] = useState("");
@@ -13,7 +13,7 @@ function QuizUpload() {
   // 1) Fetch all videos once
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/videos")
+      .get("/api/videos")
       .then((res) => setAllVideos(res.data))
       .catch((err) => console.error("Error fetching videos:", err));
   }, []);

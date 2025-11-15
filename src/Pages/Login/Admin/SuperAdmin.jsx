@@ -131,7 +131,7 @@ const SuperAdmin = () => {
     if (!grade) return; // Do not call API if grade is not selected
     try {
       const url = `/api/messages/users/year/${encodeURIComponent(grade)}`;
-      const res = await axios.get(url, { baseURL: "http://localhost:5000" });
+      const res = await axios.get(url, { baseURL: import.meta.env.VITE_API_BASE || "https://wesign-backend-cef3encxhphtg0ds.eastasia-01.azurewebsites.net" });
       const raw = res.data.data || [];
       setMessageStudents(raw.map((u) => sanitizeObjectRecursive(u)));
     } catch (err) {
@@ -333,7 +333,7 @@ const SuperAdmin = () => {
       const url = grade
         ? `/api/superadmin/users/year/${encodeURIComponent(grade)}`
         : `/api/superadmin/users`;
-      const res = await axios.get(url, { baseURL: "http://localhost:5000" });
+      const res = await axios.get(url, { baseURL: import.meta.env.VITE_API_BASE || "https://wesign-backend-cef3encxhphtg0ds.eastasia-01.azurewebsites.net" });
       const raw = res.data.data || [];
       // Keep raw list but sanitize each user shallowly so UI renders safely
       setUsers(raw.map((u) => sanitizeObjectRecursive(u)));
@@ -348,7 +348,7 @@ const SuperAdmin = () => {
       const url = grade
         ? `/api/superadmin/admins/year/${encodeURIComponent(grade)}`
         : `/api/superadmin/admins`;
-      const res = await axios.get(url, { baseURL: "http://localhost:5000" });
+      const res = await axios.get(url, { baseURL: import.meta.env.VITE_API_BASE || "https://wesign-backend-cef3encxhphtg0ds.eastasia-01.azurewebsites.net" });
       const raw = res.data.data || [];
       setTeachers(raw.map((t) => sanitizeObjectRecursive(t)));
     } catch (err) {
@@ -580,7 +580,7 @@ const SuperAdmin = () => {
       );
 
       const res = await axios.put(url, payload, {
-        baseURL: "http://localhost:5000",
+        baseURL: import.meta.env.VITE_API_BASE || "https://wesign-backend-cef3encxhphtg0ds.eastasia-01.azurewebsites.net",
         headers,
       });
 
@@ -672,7 +672,7 @@ const SuperAdmin = () => {
       console.log("handleDeleteMsg: DELETE", url, "headers:", headers);
 
       const res = await axios.delete(url, {
-        baseURL: "http://localhost:5000",
+        baseURL: import.meta.env.VITE_API_BASE || "https://wesign-backend-cef3encxhphtg0ds.eastasia-01.azurewebsites.net",
         headers,
       });
 

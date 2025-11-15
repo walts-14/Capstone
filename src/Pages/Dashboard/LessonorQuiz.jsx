@@ -258,7 +258,8 @@ function LectureorQuiz() {
   useEffect(() => {
     const qs = new URLSearchParams({ level, lessonNumber });
     setLoading(true);
-    fetch(`http://localhost:5000/api/videos?${qs}`)
+    const API_BASE = import.meta.env.VITE_API_BASE || 'https://wesign-backend-cef3encxhphtg0ds.eastasia-01.azurewebsites.net';
+    fetch(`${API_BASE}/api/videos?${qs}`)
       .then((res) => res.json())
       .then((data) => {
         data.sort((a, b) => a.termNumber - b.termNumber);
