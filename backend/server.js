@@ -51,14 +51,14 @@ const cspDirectives = {
   // allow XHR/fetch/websocket connections to our backend and localhost during dev
   connectSrc: [
     "'self'",
-    "https://wesign-backend-cef3encxhphtq0ds.eastasia-01.azurewebsites.net",
-    "http://localhost:5173",
-    "http://localhost:3000",
+    'https://wesign-backend-cef3encxhphtq0ds.eastasia-01.azurewebsites.net',
+    'http://localhost:5173',
+    'http://localhost:3000',
   ],
   // allow scripts/styles/images from self and inline where Vite needs it
   scriptSrc: ["'self'", "'unsafe-inline'"],
   styleSrc: ["'self'", "'unsafe-inline'"],
-  imgSrc: ["'self'", "data:", "blob:"],
+  imgSrc: ["'self'", 'data:', 'blob:'],
   frameAncestors: ["'none'"],
 };
 
@@ -93,31 +93,22 @@ connectDB();
 
 // Serve static files (only needed if you're serving frontend from backend)
 // Vite outputs the production build to `dist` by default. Serve `dist`.
-// import fs from "fs";
-// // If `dist` exists (Vite default), serve it. Some deployment flows deploy
-// // the dist contents directly into `wwwroot` (no `dist` folder), so fall
-// // back to serving the app root when `dist` is missing.
-// if (fs.existsSync("./dist/index.html")) {
-//   app.use(express.static("./dist"));
-//   app.get("*", (_req, res) => {
-//     res.sendFile("index.html", { root: "./dist" });
-//   });
-// } else {
-//   // Serve from project root (wwwroot) where index.html may be placed directly
-//   app.use(express.static("./"));
-//   app.get("*", (_req, res) => {
-//     res.sendFile("index.html", { root: "./" });
-//   });
-// }
-
-// Add a catch-all for undefined API routes
-app.get("*", (_req, res) => {
-  res.status(404).json({
-    error: "API endpoint not found",
-    message:
-      "This is a backend API server. Frontend should be deployed separately.",
+import fs from "fs";
+// If `dist` exists (Vite default), serve it. Some deployment flows deploy
+// the dist contents directly into `wwwroot` (no `dist` folder), so fall
+// back to serving the app root when `dist` is missing.
+if (fs.existsSync("./dist/index.html")) {
+  app.use(express.static("./dist"));
+  app.get("*", (_req, res) => {
+    res.sendFile("index.html", { root: "./dist" });
   });
-});
+} else {
+  // Serve from project root (wwwroot) where index.html may be placed directly
+  app.use(express.static("./"));
+  app.get("*", (_req, res) => {
+    res.sendFile("index.html", { root: "./" });
+  });
+}
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
