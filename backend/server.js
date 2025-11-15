@@ -66,25 +66,59 @@ app.use("/api/streak", streakRoutes);
 app.use("/api/points", pointsRoutes);
 app.use("/api/messages", messageRoutes);
 
+// Explicit API 404 handler: return JSON for unknown API endpoints
+app.use('/api', (_req, res) => {
+  return res.status(404).json({
+    error: 'API endpoint not found',
+    message: 'This is a backend API server. Frontend should be deployed separately.'
+  });
+});
 // Connect to database
 connectDB();
 
 // Serve static files (only needed if you're serving frontend from backend)
 // Vite outputs the production build to `dist` by default. Serve `dist`.
-import fs from "fs";
-// If `dist` exists (Vite default), serve it. Some deployment flows deploy
-// the dist contents directly into `wwwroot` (no `dist` folder), so fall
-// back to serving the app root when `dist` is missing.
-if (fs.existsSync("./dist/index.html")) {
-  app.use(express.static("./dist"));
-  app.get("*", (_req, res) => {
-    res.sendFile("index.html", { root: "./dist" });
-  });
+// Serve static files only when explicitly enabled (frontend served from backend)
+// Set environment variable `SERVE_FRONTEND=true` when you want the backend
+// to serve the production frontend bundle (Vite `dist` or project root).
+import fs from 'fs';
+const serveFrontend = process.env.SERVE_FRONTEND === 'true';
+
+if (serveFrontend) {
+  // Prefer Vite default `dist` folder, fall back to project root.
+  const distIndex = './dist/index.html';
+  const rootIndex = './index.html';
+  if (fs.existsSync(distIndex)) {
+    app.use(express.static('./dist'));
+    app.get('*', (req, res) => {
+      // Only serve index.html for browser requests that accept html
+      if (req.accepts && req.accepts('html')) {
+        return res.sendFile('index.html', { root: './dist' });
+      }
+      return res.status(404).json({ error: 'Not found' });
+    });
+  } else if (fs.existsSync(rootIndex)) {
+    app.use(express.static('./'));
+    app.get('*', (req, res) => {
+      if (req.accepts && req.accepts('html')) {
+        return res.sendFile('index.html', { root: './' });
+      }
+      return res.status(404).json({ error: 'Not found' });
+    });
+  }
 } else {
-  // Serve from project root (wwwroot) where index.html may be placed directly
-  app.use(express.static("./"));
-  app.get("*", (_req, res) => {
-    res.sendFile("index.html", { root: "./" });
+  // If frontend is deployed separately, respond at root with a short JSON
+  // message and return JSON 404s for any other non-API paths.
+  app.get('/', (_req, res) => {
+    res.json({ ok: true, message: 'Backend API server running. Frontend is deployed separately.' });
+  });
+
+  // Non-API fallback: any unknown non-API route should return JSON 404.
+  app.use((req, res) => {
+    // If the request path begins with /api or /comm we already handled it above.
+    // For other paths, return a JSON 404 so clients (including fetch/XHR)
+    // receive a useful response instead of an HTML page.
+    return res.status(404).json({ error: 'Not found' });
   });
 }
 
