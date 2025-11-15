@@ -768,7 +768,7 @@ function Quiz() {
           height: 200vh !important;
           width: 100vw !important;
           border-radius: 0px !important;
-          gap: 60px 68px !important;
+          gap: 60px 78px !important;
           margin-top: 15px !important;
         }
 
@@ -777,7 +777,7 @@ function Quiz() {
           width: 46vw !important;
           position: relative !important;
           top: 8vh !important;
-          right: 29px !important;
+          right: 33px !important;
           margin: 0 auto !important;
         }
 
@@ -785,7 +785,7 @@ function Quiz() {
           height: 5vh !important;
           width: 50vw !important;
           position: relative !important;
-          bottom: 6vh !important;
+          bottom: 7vh !important;
           right: 0 !important;
           margin: 8px auto !important;
           border-radius: 12px !important;
@@ -803,11 +803,11 @@ function Quiz() {
           max-height: 45vh !important;
           object-fit: contain !important;
           display: block !important;
-          border: 2px solid #7338A0 !important;
+     
           border-radius: 12px !important;
           margin: 0 auto !important;
           position: absolute !important;
-          top: 6.5vh !important;
+          top: 5vh !important;
           left: 50% !important;
           transform: translateX(-50%) !important;
           z-index: 1 !important;
@@ -853,24 +853,56 @@ function Quiz() {
             display: flex !important;
             justify-content: center !important;
             position: fixed !important;
-            left: 0.5rem !important;
-            top: 0.5rem !important;
+            left: 4rem !important;
+            top: -0.5rem !important;
             font-size: 1.5rem !important;
           }
           .back img {
             width: 2rem !important;
             height: 1.5rem !important;
           }
-
+      }
         .lives-quizz {
           display: flex !important;
           position: absolute !important;
           top:  0.5rem !important;
-          left: 16.5rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
+          left: 18rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
           transform: scale(1) !important;
         }
-           
+           /* Mobile sidenav - only show below 640px */
+        @media (min-width: 425px) {
+          .lives-quizz {
+          display: flex !important;
+          position: absolute !important;
+          top:  0.5rem !important;
+          left: 21rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
+          transform: scale(1) !important;
         }
+          .choice-a video, .choice-b video, .choice-c video, .choice-d video {
+          width: 39vw !important;
+          height: auto !important;
+          max-width: 300px !important;
+          max-height: 45vh !important;
+          object-fit: contain !important;
+          display: block !important;
+          
+          border-radius: 12px !important;
+          margin: 0 auto !important;
+          position: absolute !important;
+          top: 5vh !important;
+          left: 50% !important;
+          transform: translateX(-50%) !important;
+          z-index: 1 !important;
+        }
+          .choices {
+          height: 23vh !important;
+          width: 44vw !important;
+          position: relative !important;
+          top: 4vh !important;
+          right: 33px !important;
+          margin: 0 auto !important;
+        }
+      }
         
          /* Tablet sidenav and logo - show between 640px-1024px */
         @media (min-width: 640px) and (max-width: 768px) {
@@ -939,7 +971,7 @@ function Quiz() {
             max-height: 30vh !important;
             object-fit: contain !important;
             display: block !important;
-            border: 2px solid #7338A0 !important;
+        
             border-radius: 12px !important;
             margin: 0 auto !important;
             position: absolute !important;

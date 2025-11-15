@@ -100,7 +100,7 @@ export default function ResultBanner({ isCorrect }) {
         @media (max-width: 639px) {
           .result-ans {
             height: 68px !important;
-            width: 100vw !important;
+            width: 99.9vw !important;
             top: 30vh !important;
             border-radius: 0px 0px   !important;
             text-align: center !important;
@@ -113,7 +113,10 @@ export default function ResultBanner({ isCorrect }) {
           .result-ans img{
             width: 30px !important;
             height: 30px !important;
-            margin-right: 1.2rem !important;
+            margin-right: 3.2rem !important;
+          }
+          .banner-label {
+            margin-right: 10rem !important;
           }
         }
         
