@@ -258,7 +258,7 @@ function LectureorQuiz() {
   useEffect(() => {
     const qs = new URLSearchParams({ level, lessonNumber });
     setLoading(true);
-    fetch(`http://localhost:5000/api/videos?${qs}`)
+    fetch(`/api/videos?${qs}`)
       .then((res) => res.json())
       .then((data) => {
         data.sort((a, b) => a.termNumber - b.termNumber);

@@ -131,7 +131,7 @@ const SuperAdmin = () => {
     if (!grade) return; // Do not call API if grade is not selected
     try {
       const url = `/api/messages/users/year/${encodeURIComponent(grade)}`;
-      const res = await axios.get(url, { baseURL: "http://localhost:5000" });
+      const res = await axios.get(url);
       const raw = res.data.data || [];
       setMessageStudents(raw.map((u) => sanitizeObjectRecursive(u)));
     } catch (err) {
@@ -145,9 +145,7 @@ const SuperAdmin = () => {
     try {
       // Use the 'sent' endpoint which returns messages created by the logged-in sender
       // (the previous endpoint was for admin recipients and rejects non-admin roles)
-      const res = await axios.get("/api/messages/sent", {
-        baseURL: "",
-      });
+      const res = await axios.get("/api/messages/sent");
       const raw = Array.isArray(res.data) ? res.data : res.data || [];
       // Map server message objects into the UI-friendly shape
       const mapped = raw.map((m) => mapMessage(m));
@@ -333,7 +331,7 @@ const SuperAdmin = () => {
       const url = grade
         ? `/api/superadmin/users/year/${encodeURIComponent(grade)}`
         : `/api/superadmin/users`;
-      const res = await axios.get(url, { baseURL: "http://localhost:5000" });
+      const res = await axios.get(url);
       const raw = res.data.data || [];
       // Keep raw list but sanitize each user shallowly so UI renders safely
       setUsers(raw.map((u) => sanitizeObjectRecursive(u)));
@@ -348,7 +346,7 @@ const SuperAdmin = () => {
       const url = grade
         ? `/api/superadmin/admins/year/${encodeURIComponent(grade)}`
         : `/api/superadmin/admins`;
-      const res = await axios.get(url, { baseURL: "http://localhost:5000" });
+      const res = await axios.get(url);
       const raw = res.data.data || [];
       setTeachers(raw.map((t) => sanitizeObjectRecursive(t)));
     } catch (err) {
@@ -460,7 +458,7 @@ const SuperAdmin = () => {
         activeTab === "Users"
           ? `/api/superadmin/users/${encodeURIComponent(email)}`
           : `/api/superadmin/admins/${encodeURIComponent(email)}`;
-      await axios.delete(url, { baseURL: "" });
+      await axios.delete(url);
       toast.success("Deleted successfully");
       fetchUsers(selectedGrade);
       fetchTeachers(selectedGrade);
@@ -580,7 +578,6 @@ const SuperAdmin = () => {
       );
 
       const res = await axios.put(url, payload, {
-        baseURL: "http://localhost:5000",
         headers,
       });
 
@@ -672,7 +669,6 @@ const SuperAdmin = () => {
       console.log("handleDeleteMsg: DELETE", url, "headers:", headers);
 
       const res = await axios.delete(url, {
-        baseURL: "http://localhost:5000",
         headers,
       });
 
