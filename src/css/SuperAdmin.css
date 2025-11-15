@@ -200,3 +200,17 @@
   position: relative;
   z-index: 1;
 }
+
+
+@media (max-width: 375px) {
+
+   .contentsuper {
+    max-width: 96%;
+    overflow-x: auto;
+  }
+
+
+  .supertitle{
+    font-size: 1rem !important;
+  }
+}

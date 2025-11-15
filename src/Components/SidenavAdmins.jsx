@@ -100,7 +100,7 @@ const Sidebar = ({
           }}
         >
           {String(role).toLowerCase() === "superadmin"
-            ? "Super Admin"
+            ? "WeSign"
             : "WeSign"}
         </h2>
         <div className="sidebar-box">
