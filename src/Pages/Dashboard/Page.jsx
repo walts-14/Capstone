@@ -46,7 +46,10 @@ function Page() {
         /* desktop */
         @media (min-width: 1024px) {
           .lecture-lessonlist-container {
-            
+            position: absolute;
+            right: 4vw;
+            top: 56px;
+            width: 110vw;
           }
         }
       `}</style>

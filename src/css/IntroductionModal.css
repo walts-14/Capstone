@@ -67,12 +67,6 @@
   text-align: center;
 }
 
-@media (min-width: 640px) and (max-width: 768px) {
-  .question-button img {
-    height: 3rem;
-    width: 3rem;
-  }
-}
 
 @media (min-width: 1024px) {
   .question-button img {
@@ -106,8 +100,8 @@
 
 @media (min-width: 768px) {
   .question-button img {
-    height: 4.2rem;
-    width: 4.2rem;
+    height: 3rem;
+    width: 3rem ;
   }
   
   /* Tablet adjustments */
@@ -129,8 +123,8 @@
 
 @media (min-width: 1024px) {
   .question-button img {
-    height: 4.2rem;
-    width: 4.2rem;
+    height: 3rem;
+    width: 3rem;
   }
   
   /* Desktop - original sizing */

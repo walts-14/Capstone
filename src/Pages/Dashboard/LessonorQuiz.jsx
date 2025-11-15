@@ -448,18 +448,18 @@ function LectureorQuiz() {
 
         /* Mobile sidenav - only show below 640px */
         @media (min-width: 375px) {
-           .back {
-            display: flex !important;
-            justify-content: center !important;
-            position: fixed !important;
-            left: 4rem !important;
-            top: 0rem !important;
-            font-size: 1.5rem !important;
-          }
-          .back img {
-            width: 2rem !important;
-            height: 1.5rem !important;
-          }
+            .back {
+              display: flex !important;
+              justify-content: center !important;
+              position: fixed !important;
+              left: 4rem !important;
+              top: 0rem !important;
+              font-size: 1.5rem !important;
+            }
+            .back img {
+              width: 2rem !important;
+              height: 1.5rem !important;
+            }
           .Difficulty {
             display: flex !important;
             height: 47px;
@@ -657,7 +657,7 @@ function LectureorQuiz() {
             display: flex !important;
             justify-content: center !important;
             position: fixed !important;
-            left: 0.5rem !important;
+            left: 2rem !important;
             top: 0.5rem !important;
             font-size: 1.5rem !important;
             }
@@ -748,11 +748,11 @@ function LectureorQuiz() {
             position: absolute !important;
             top: 4rem !important;
           }
-           .back {
+          .back {
             display: flex !important;
             justify-content: center !important;
             position: fixed !important;
-            left: 0.5rem !important;
+            left: 2rem !important;
             top: 0.5rem !important;
             font-size: 1.5rem !important;
             }
@@ -763,21 +763,21 @@ function LectureorQuiz() {
             
 
             .progress-bar-container {
-            margin-top: 6rem !important;
-            width:28% !important;
+            margin-top: 6.3rem !important;
+            width:34% !important;
           }
           .container {
             display: flex !important;
-            gap: 1rem !important;
+            gap: 0.5rem !important;
        
           }
           .progress-step{
-            width: 3rem !important;    
-            height: 3rem!important;
-            font-size: 1.5rem !important;
+            width: 3.5rem !important;    
+            height: 3.5rem!important;
+            font-size: 1.8rem !important;
           }
           .progress-line {
-            height: 0.8rem !important;
+            height: 1rem !important;
             width: 65% !important;
           }  
           .lecture-quiz-container {

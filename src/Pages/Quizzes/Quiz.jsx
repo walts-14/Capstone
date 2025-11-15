@@ -910,15 +910,16 @@ function Quiz() {
             display: flex !important;
             justify-content: center !important;
             position: fixed !important;
-            left: 0.5rem !important;
-            top: 0.5rem !important;
+            left: 2rem !important;
+            top: 0rem !important;
             font-size: 1.5rem !important;
-          }
+            }
+           
           .lives-quizz {
           display: flex !important;
           position: absolute !important;
           top:  7rem !important;
-          right: 4rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
+          left: 40rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
           
          }
           .back img {
@@ -975,7 +976,7 @@ function Quiz() {
             border-radius: 12px !important;
             margin: 0 auto !important;
             position: absolute !important;
-            bottom: -2rem !important;
+            top: -2rem !important;
             
             left: 10.7rem !important;
             transform: translateX(-50%) !important;
@@ -988,7 +989,7 @@ function Quiz() {
             align-items: center !important;
             font-size: 1.6rem !important;
             padding-top: 10px !important;
-            
+            margin-bottom: 45px !important;
           } 
           .continue img {
             margin: 0px !important;
@@ -1005,19 +1006,19 @@ function Quiz() {
 
         /* Desktop sidenav - show above 1024px */
         @media (min-width: 1024px) {
-            .back {
+           .back {
             display: flex !important;
             justify-content: center !important;
             position: fixed !important;
-            left: 0.5rem !important;
-            top: 0.5rem !important;
+            left: 1.3rem !important;
+            top: -0.5rem !important;
             font-size: 1.5rem !important;
-          }
+            }
           .lives-quizz {
           display: flex !important;
           position: absolute !important;
-          top:  6.6rem !important;
-          right: 4rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
+          top:  7rem !important;
+          left: 55rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
           
          }
           .back img {
@@ -1073,7 +1074,7 @@ function Quiz() {
             border-radius: 12px !important;
             margin: 0 auto !important;
             position: absolute !important;
-            bottom: -2.4rem !important;
+            top: -2.3rem !important;
             
             left: 13.2rem !important;
             transform: translateX(-50%) !important;
@@ -1086,7 +1087,7 @@ function Quiz() {
             align-items: center !important;
             font-size: 1.6rem !important;
             padding-top: 10px !important;
-            
+            margin-bottom: 45px !important;
           } 
           .continue img {
             margin: 0px !important;
@@ -1101,6 +1102,7 @@ function Quiz() {
           }      
         }
 
+        
       `}</style>
     </>
   );
