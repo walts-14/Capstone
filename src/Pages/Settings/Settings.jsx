@@ -159,17 +159,17 @@ function Settings() {
         {/* ——— STUDENT INFO (no design changes) ——— */}
         <div className="students-information">
           <span className="name-stud text-white">Name</span>
-          <div className="student-details rounded-4 position-relative p-1 pt-3 ps-4 text-left">
+          <div className="student-details rounded-4">
             <p className="text-white text-left">{userName}</p>
           </div>
 
           <span className="username-stud text-white">Username</span>
-          <div className="username-stud-view rounded-4 position-relative p-1 pt-3 ps-4 text-left">
+          <div className="username-stud-view rounded-4">
             <p className="text-white text-left">{userUsername}</p>
           </div>
 
           <span className="email-stud text-white">Email</span>
-          <div className="email-stud-view rounded-4 position-relative p-1 pt-3 ps-4 text-left">
+          <div className="email-stud-view rounded-4">
             <p className="text-white text-left">{userEmail}</p>
           </div>
         </div>
