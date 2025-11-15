@@ -34,10 +34,8 @@ app.use(cookieParser());
 // CORS configuration - single unified config
 const corsOptions = {
   origin: [
-    "https://wesign.games",
     "https://www.wesign.games",
     "http://localhost:5173",
-    "http://localhost:3000",
   ],
   credentials: true,
   optionsSuccessStatus: 200,
@@ -49,6 +47,9 @@ app.use(helmet());
 
 // Health check endpoint
 app.get("/health", (_req, res) => res.json({ ok: true }));
+
+// Also expose an API-prefixed health endpoint so callers using `/api` prefix succeed
+app.get("/api/health", (_req, res) => res.json({ ok: true }));
 
 // API routes
 app.use("/comm", commRoutes);
@@ -77,11 +78,7 @@ app.use('/api', (_req, res) => {
 // Connect to database
 connectDB();
 
-// Serve static files (only needed if you're serving frontend from backend)
-// Vite outputs the production build to `dist` by default. Serve `dist`.
-// Serve static files only when explicitly enabled (frontend served from backend)
-// Set environment variable `SERVE_FRONTEND=true` when you want the backend
-// to serve the production frontend bundle (Vite `dist` or project root).
+
 import fs from 'fs';
 const serveFrontend = process.env.SERVE_FRONTEND === 'true';
 
