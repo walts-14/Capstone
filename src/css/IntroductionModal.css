@@ -132,13 +132,44 @@
   }
 }
 
-/* Small tablets (640px to 768px) */
-@media (min-width: 640px) and (max-width: 768px) {
+
+@media (min-width: 1024px) {
   .question-button img {
     height: 3rem;
     width: 3rem;
   }
+  
+  /* Mobile-specific modal sizing */
+  .modal-content {
+    max-width: 95vw;
+    max-height: 90vh;
+    left: 0;
+    margin: 0 auto;
+  }
+  
+  .slideshow-container {
+    height: 75vh;
+    padding: 15px 20px;
+  }
+  
+  .slideshow-controls {
+    gap: 2rem;
+    flex-direction: column;
+  }
+  
+  .slideshow-controls .btn {
+    width: 80vw;
+    font-size: 1.8rem;
+  }
+}
 
+@media (min-width: 768px) {
+  .question-button img {
+    height: 3rem;
+    width: 3rem ;
+  }
+  
+  /* Tablet adjustments */
   .modal-content {
     max-width: 90vw;
   }
@@ -184,8 +215,8 @@
 /* Desktop (1024px and up) */
 @media (min-width: 1024px) {
   .question-button img {
-    height: 4.2rem;
-    width: 4.2rem;
+    height: 3rem;
+    width: 3rem;
   }
 
   .modal-content {
