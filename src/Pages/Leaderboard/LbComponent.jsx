@@ -35,7 +35,6 @@ function LbComponent() {
     fetchLeaderboard();
   }, []);
 
-  // helper to pick profilePic or fallback
   const picFor = (idx, fallback) =>
     sortedLeaderboard[idx]?.profilePic || fallback;
 
@@ -69,115 +68,96 @@ function LbComponent() {
   });
 
   return (
-    <>
-      <div className="flex flex-row items-center justify-center">
-        {/* Second Place */}
-        <div className="flex items-center gap-2">
-          <img src={medal2} className="max-w-full h-auto" alt="medal img" />
-          <div className="flex flex-col items-start">
-            <div className="flex items-center gap-2">
-              <img
-                src={picFor(1, profile2)}
-                className="w-20 h-20 user-avatar"
-                alt="profile img"
-              />
-              <p className="text-gray-500 text-4xl">
-                {sortedLeaderboard[1]?.name || "TBD"}
-              </p>
-            </div>
-            <div className="flex items-center text-gray-500">
-              <img
-                src={diamond}
-                className="max-w-full h-auto mr-2 img-icon"
-                alt="diamond img"
-              />
-              <p className="text-2xl mt-2 ml-2">
-                {sortedLeaderboard[1]?.points ?? 0}
-              </p>
-            </div>
-          </div>
-        </div>
-
+    <div className="w-full">
+      {/* Top 3 Podium */}
+      <div className="top-three-container">
         {/* First Place */}
-        <div
-          className="flex items-center gap-2 ml-5"
-          style={{ marginBottom: "5rem" }}
-        >
-          <img src={medal1} className="max-w-full h-auto" alt="medal img" />
-          <div className="flex flex-col items-start">
-            <div className="flex items-center gap-2">
-              <img
-                src={picFor(0, profile1)}
-                className="w-20 h-20 user-avatar"
-                alt="profile img"
-              />
-              <p className="text-gray-500 text-4xl">
-                {sortedLeaderboard[0]?.name || "TBD"}
-              </p>
-            </div>
-            <div className="flex items-center text-gray-500">
-              <img
-                src={diamond}
-                className="max-w-full h-auto mr-2 img-icon"
-                alt="diamond img"
-              />
-              <p className="text-2xl mt-2 ml-2">
-                {sortedLeaderboard[0]?.points ?? 0}
-              </p>
+        {sortedLeaderboard[0] && (
+          <div className="podium-position podium-first">
+            <img src={medal1} className="medal-image" alt="1st place" />
+            <img
+              src={picFor(0, profile1)}
+              className="podium-avatar"
+              alt="profile"
+            />
+            <p className="podium-name">{sortedLeaderboard[0].name}</p>
+            <div className="podium-points">
+              <img src={diamond} className="diamond-icon" alt="diamond" />
+              <span>{sortedLeaderboard[0].points}</span>
             </div>
           </div>
-        </div>
+        )}
+
+        {/* Second Place */}
+        {sortedLeaderboard[1] && (
+          <div className="podium-position podium-second">
+            <img src={medal2} className="medal-image" alt="2nd place" />
+            <img
+              src={picFor(1, profile2)}
+              className="podium-avatar"
+              alt="profile"
+            />
+            <p className="podium-name">{sortedLeaderboard[1].name}</p>
+            <div className="podium-points">
+              <img src={diamond} className="diamond-icon" alt="diamond" />
+              <span>{sortedLeaderboard[1].points}</span>
+            </div>
+          </div>
+        )}
 
         {/* Third Place */}
-        <div className="flex items-center gap-2">
-          <img src={medal3} className="max-w-full h-auto" alt="medal img" />
-          <div className="flex flex-col items-start">
-            <div className="flex items-center gap-2">
-              <img
-                src={picFor(2, profile3)}
-                className="w-20 h-20 user-avatar"
-                alt="profile img"
-              />
-              <p className="text-gray-500 text-4xl">
-                {sortedLeaderboard[2]?.name || "TBD"}
-              </p>
-            </div>
-            <div className="flex items-center text-gray-500">
-              <img
-                src={diamond}
-                className="max-w-full h-auto mr-2"
-                alt="diamond img"
-              />
-              <p className="text-2xl mt-2 ml-2">
-                {sortedLeaderboard[2]?.points ?? 0}
-              </p>
+        {sortedLeaderboard[2] && (
+          <div className="podium-position podium-third">
+            <img src={medal3} className="medal-image" alt="3rd place" />
+            <img
+              src={picFor(2, profile3)}
+              className="podium-avatar"
+              alt="profile"
+            />
+            <p className="podium-name">{sortedLeaderboard[2].name}</p>
+            <div className="podium-points">
+              <img src={diamond} className="diamond-icon" alt="diamond" />
+              <span>{sortedLeaderboard[2].points}</span>
             </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Table Header */}
-      <div className="user-points rounded-3xl flex text-center justify-between items-center pt-2 ml-8  sm:w-[90%] pl-3 text-sm  md:w-[80%] lg:w-[70%] xl:w-[60%]">
-        <span className="text-gray-500 text-2xl mr-auto ml-5">Users</span>
-        <span className="text-gray-500 text-2xl">Grade Level</span>
-        <span className="text-gray-500 text-2xl ml-auto mr-5">Points</span>
+      <div className="leaderboard-header">
+        <span className="header-text">User</span>
+        <span className="header-text">Points</span>
       </div>
 
       {/* User List */}
-      <div className="lb-users">
+      <div className="user-list">
         {sortedLeaderboard.length > 0 ? (
-          <ul className="list-none mt-3 text-white font-bold">
-            {sortedLeaderboard.map((user, index) => (
-              <LeaderboardRow user={user} index={index} key={user._id || index} />
-            ))}
-          </ul>
+          sortedLeaderboard.map((user, index) => (
+            <div className="user-rank" key={user._id || index}>
+              <div className="user-info">
+                <span className="rank-number">{index + 1}.</span>
+                <img
+                  src={user.profilePic || profile3}
+                  alt="profile"
+                  className="user-avatar"
+                />
+                <span className="user-name">{user.name || "No Name"}</span>
+              </div>
+              <div className="user-points-container">
+                <img src={diamond} alt="diamond" className="diamond-icon" />
+                <span className="points-text">
+                  {user.points > 0 ? user.points : 0}
+                </span>
+              </div>
+            </div>
+          ))
         ) : (
           <p className="text-white text-center mt-3">
             No leaderboard data available.
           </p>
         )}
       </div>
-    </>
+    </div>
   );
 }
 

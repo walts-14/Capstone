@@ -65,20 +65,23 @@ export default function IntroductionModal() {
           e.preventDefault();
           openModal();
         }}
-        className="question-button w-18 h-8 flex justify-center items-center -left-20 rounded-5 z-10 bg-transparent "
+        className="question-button flex justify-center items-center rounded-5 z-10 bg-transparent "
       >
-        <img src={showInterpreter ? Hand : question} alt={showInterpreter ? "Hand" : "Help"} className="w-21" />
+        <img
+          src={showInterpreter ? Hand : question}
+          alt={showInterpreter ? "Hand" : "Help"}
+        />
       </a>
 
       {/* Modal Overlay */}
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
-          <button
+          {/* <button
             onClick={() => setShowModal(false)}
             className="modal-close-btn"
           >
             ✕
-          </button>
+          </button> */}
           <div
             className="modal-content rounded-xl"
             onClick={(e) => e.stopPropagation()}

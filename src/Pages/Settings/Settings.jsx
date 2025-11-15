@@ -155,52 +155,39 @@ function Settings() {
       <MaintenanceModal show={showModal} onClose={() => setShowModal(false)} />
 
       <Sidenav />
-      <div className="settings-container rounded-4 position-absolute">
+      <div className="settings-container rounded-4">
         {/* ——— STUDENT INFO (no design changes) ——— */}
         <div className="students-information">
-          <span className="name-stud text-white fw-bold position-absolute">
-            Name
-          </span>
-          <div className="student-details rounded-4 position-relative p-1 pt-3 ps-4 text-left">
+          <span className="name-stud text-white">Name</span>
+          <div className="student-details rounded-4">
             <p className="text-white text-left">{userName}</p>
           </div>
 
-          <span className="username-stud text-white fw-bold position-absolute">
-            Username
-          </span>
-          <div className="username-stud-view rounded-4 position-relative p-1 pt-3 ps-4 text-left">
+          <span className="username-stud text-white">Username</span>
+          <div className="username-stud-view rounded-4">
             <p className="text-white text-left">{userUsername}</p>
           </div>
 
-          <span className="email-stud text-white fw-bold position-absolute">
-            Email
-          </span>
-          <div className="email-stud-view rounded-4 position-relative p-1 pt-3 ps-4 text-left">
+          <span className="email-stud text-white">Email</span>
+          <div className="email-stud-view rounded-4">
             <p className="text-white text-left">{userEmail}</p>
           </div>
         </div>
 
         {/* ——— PROFILE PICTURE (with loading states) ——— */}
-        <div
-          className="profile-picture-wrapper position-relative m-5 d-flex flex-column align-items-center"
-          style={{ width: "180px" }}
-        >
-          <div
-            className="position-relative"
-            style={{ width: "180px", height: "180px" }}
-          >
+        <div className="profile-picture-wrapper position-relative m-5">
+          <div className="position-relative">
             <img
               src={profilePic}
+              className="img-fluid"
               alt="profile picture"
               style={{
-                width: "180px",
-                height: "180px",
-                objectFit: "cover",
                 borderRadius: "50%",
-                border: "6px solid #2d2346",
-                background: "#2d2346",
-                display: "block",
-                marginLeft: "-1.5rem",
+                objectFit: "cover",
+                width: "200px",
+                height: "200px",
+                aspectRatio: "1/1",
+                backgroundColor: "#222",
               }}
             />
 
@@ -264,7 +251,7 @@ function Settings() {
 
           <label
             htmlFor="file-upload"
-            className="change-pic text-white fw-bold fs-2 rounded-4 p-2 text-center text-nowrap mb-20"
+            className="change-pic text-white rounded-4 p-2 text-center text-nowrap"
             style={{
               cursor:
                 isUploadingPic || isDeletingPic ? "not-allowed" : "pointer",
@@ -277,7 +264,7 @@ function Settings() {
           </label>
 
           <button
-            className={`deletee btn-secondary fw-bold fs-5 rounded-4 text-nowrap text-white ${
+            className={`deletee btn-secondary rounded-4 position-absolute text-nowrap text-white ${
               isUploadingPic || isDeletingPic ? "disabled" : ""
             }`}
             onClick={handleDeleteProfilePicture}
@@ -307,7 +294,7 @@ function Settings() {
         <div className="btns">
           <button
             type="button"
-            className="btn btn-secondary btn-lg fw-bold fs-3 rounded-5 position-absolute"
+            className="btn btn-secondary rounded-5"
             onClick={logout}
           >
             Log out

@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState, useContext } from "react";
 import Back from "../../../assets/BackButton.png";
 import leftArrow from "../../../assets/leftArrow.png";
@@ -59,7 +58,15 @@ const LesoneContent = () => {
         });
       }
     }
-  }, [step, currentIndex, currentStepTerms, lessonKey, navigate, showButton, fromLecture]);
+  }, [
+    step,
+    currentIndex,
+    currentStepTerms,
+    lessonKey,
+    navigate,
+    showButton,
+    fromLecture,
+  ]);
 
   useEffect(() => {
     // Only auto-complete the lecture when we arrived via the lecture flow.
@@ -71,14 +78,26 @@ const LesoneContent = () => {
     ) {
       if (step === 1) {
         updateProgress(level, lessonKey, "step1Lecture");
-        console.log(`Automatically updated progress for ${lessonKey} step1Lecture`);
+        console.log(
+          `Automatically updated progress for ${lessonKey} step1Lecture`
+        );
       } else if (step === 2) {
         updateProgress(level, lessonKey, "step2Lecture");
-        console.log(`Automatically updated progress for ${lessonKey} step2Lecture`);
+        console.log(
+          `Automatically updated progress for ${lessonKey} step2Lecture`
+        );
       }
       setHasUpdated(true);
     }
-  }, [fromLecture, hasUpdated, currentIndex, currentStepTerms, step, updateProgress, lessonKey, level]);
+  }, [
+    hasUpdated,
+    currentIndex,
+    currentStepTerms,
+    step,
+    updateProgress,
+    lessonKey,
+    level,
+  ]);
 
   useEffect(() => {
     setHasUpdated(false);
@@ -190,14 +209,14 @@ const LesoneContent = () => {
           </video>
         </div>
 
-        <div className="text-container d-flex flex-column align-items-center justify-content-center gap-5 mt-4">
+        <div className="text-container d-flex flex-column align-items-center justify-content-center gap-5">
           <div className="letter-container">
             <button onClick={() => handleNavigation("prev")}>
               <img src={leftArrow} alt="Left Arrow" className="arrow" width={48} height={48} style={{display: 'block'}}/>
             </button>
 
-            <div className="textOne">
-              <p className="m-0">{terms}</p>
+            <div className="textOne align-center text-center">
+              <p>{terms}</p>
             </div>
 
             {/* Remove the disabled attribute from the next button so it remains clickable even at the end */}

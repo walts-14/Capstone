@@ -29,26 +29,36 @@
   --midlight-red: #d7443e;
   --midblue: #04aae0;
 }
+
 .introduction-container {
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   height: 100vh;
-  margin-left: 25em; /* space for the sidebar */
+  margin-left: 25em;
   background: var(--background);
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-top: 2rem;
+  padding-bottom: 5rem; /* Add bottom padding to prevent overlap */
 }
+
 .intro-header {
-  flex: 0 0 auto;
-  padding: 2rem 0 1rem;
-  margin-left: 2rem;
+  display: flex;
+  justify-content: center;
+  width: 100%; /* Changed from 100vw to 100% */
+  margin-bottom: 2rem; /* Add some spacing below header */
 }
-.introductions {
+
+/* .introductions {
   margin-left: 25em;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   z-index: 0;
   position: relative;
-}
+} */
+
 .intro-text {
   display: inline-block;
   background-color: var(--mid-purple);
@@ -56,82 +66,468 @@
   font-size: 2.5rem;
   font-weight: bold;
   padding: 1rem 2rem;
-  border-radius: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 0.5rem;
 }
+
 /* interpreter-----------------------------------------------------------------------------------------------------------------------*/
+.interpreter-container {
+  padding: 0 2rem 3rem 2rem;  
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;  
+}
+
 .interpreter-intro {
   background-color: var(--mid-purple);
   font-size: 1.1rem;
-  width: 74vw;
+  width: 100%;
+  max-width: 1200px;
   height: 45vh;
   margin-bottom: 2rem;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.interpreter-details {
-  padding: 15px;
-}
-.interpreter-details p:nth-child(1) {
-  font-size: 2.7rem;
-  color: var(--dark-purple);
-}
-.interpreter-details p {
-  font-size: 2rem;
-  color: #d3bdf0;
-  margin: 0;
-}
-.interpreter-details p span {
-  font-size: 2rem;
-  color: #f2f2f2;
-  font-weight: bold;
-}
+
 .interpreter-video {
-  width: 100%; /* fill container width */
-  max-width: 600px; /* optional: cap the width */
-  height: 338px; /* fixed height for uniformity */
-  object-fit: contain; /* scale each video to fit without cropping */
-  background: black; /* black bars show where aspect ratios differ */
-  border-radius: 15px; /* optional: rounded corners */
+  width: 50%;
+  height: auto;
+  max-width: 400px;
+  margin-right: 2rem;
 }
 
-.twobuttons {
-  margin-top: 1rem;
+.interpreter-details {
+  flex: 1;
 }
-.twobuttons button {
-  background-color: var(--dark-purple);
-  color: white;
-  border: none;
-  font-size: 2rem;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  cursor: pointer;
-}
-.twobuttons button:hover {
-  background-color: var(--light-purple);
-}
-.twobuttons .active-btn {
-  background-color: #924dbf !important;
-  color: #fff;
-}
+
 .scroll-area {
-  flex: 1 1 auto;
-  overflow-y: auto;
-  padding: 0 2rem 2rem;
-}
-
-/* ensure your inner components fill the width */
-.component-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
 }
-/* instructions-----------------------------------------------------------------------------------------------------------------------*/
-.how {
-  width: 75vw;
-  height: 35vh;
-  left: 20rem;
-  top: 45rem;
-  margin-bottom: 15rem;
+
+@media (min-width: 1024px) {
+  .introduction-container {
+    margin-left: 15em; /* Ensure proper sidebar spacing */
+    padding-top: 2rem;
+    padding-bottom: 5rem;
+  }
+  
+  .intro-header {
+    margin: 0 2rem 3rem 2rem;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .intro-text {
+    font-size: 2.5rem;
+    padding: 1rem 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .twobuttons {
+    display: flex;
+    flex-direction: row; /* Change to row for better tablet layout */
+    justify-content: center;
+    gap: 2rem;
+  }
+  
+  .twobuttons button {
+    font-size: 1.6rem;
+    padding: 1rem 2rem;
+    min-width: 160px;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: var(--purple);
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .twobuttons button:hover {
+    background-color: var(--mid-purple);
+  }
+  
+  .twobuttons button.active-btn {
+    background-color: var(--light-purple);
+    color: var(--background);
+  }
+  
+  .interpreter-container {
+    padding: 0 3rem 3rem 3rem;
+  }
+  
+  .interpreter-intro {
+    width: 100%;
+    max-width: 900px;
+    height: auto;
+    min-height: 350px;
+    flex-direction: row;
+    align-items: center;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    border-radius: 1rem;
+  }
+  
+  .interpreter-video {
+    width: 40%;
+    height: 280px;
+    margin-right: 2rem;
+    margin-bottom: 0;
+    border-radius: 0.5rem;
+    object-fit: cover;
+  }
+  
+  .interpreter-details {
+    flex: 1;
+    padding: 1rem;
+    color: white;
+  }
+  
+  .interpreter-details p:nth-child(1) {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+  }
+  
+  .interpreter-details p {
+    font-size: 1.3rem;
+    margin-bottom: 0.8rem;
+    line-height: 1.4;
+  }
+  
+  .interpreter-details p span {
+    font-size: 1.3rem;
+    color: var(--light-purple);
+  }
+  
+  .howtoplay-container {
+    padding: 2rem 3rem;
+    gap: 2rem;
+  }
+  
+  .how {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 2rem auto;
+  }
+  
+  .how img {
+    width: 100%;
+    height: auto;
+    border-radius: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
 }
+
+@media (min-width: 1440px) {
+  .introduction-container {
+    margin-left: 20em;
+    padding-top: 2rem;
+    padding-bottom: 5rem;
+  }
+  
+  .intro-header {
+    margin: 0 3rem 4rem 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .intro-text {
+    font-size: 3rem;
+    padding: 1.5rem 3rem;
+    margin-bottom: 2.5rem;
+  }
+  
+  .twobuttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 3rem;
+  }
+  
+  .twobuttons button {
+    font-size: 1.8rem;
+    padding: 1.2rem 2.5rem;
+    min-width: 180px;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: var(--purple);
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .twobuttons button:hover {
+    background-color: var(--mid-purple);
+  }
+  
+  .twobuttons button.active-btn {
+    background-color: var(--light-purple);
+    color: var(--background);
+  }
+  
+  .interpreter-container {
+    padding: 0 4rem 4rem 4rem;
+  }
+  
+  .interpreter-intro {
+    max-width: 1200px;
+    height: auto;
+    min-height: 400px;
+    padding: 3rem;
+    margin-bottom: 4rem;
+    border-radius: 1rem;
+  }
+  
+  .interpreter-video {
+    width: 45%;
+    height: 350px;
+    margin-right: 3rem;
+    border-radius: 0.5rem;
+    object-fit: cover;
+  }
+  
+  .interpreter-details {
+    flex: 1;
+    padding: 2rem;
+  }
+  
+  .interpreter-details p:nth-child(1) {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .interpreter-details p {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+  
+  .interpreter-details p span {
+    font-size: 1.5rem;
+    color: var(--light-purple);
+  }
+  
+  .howtoplay-container {
+    padding: 3rem 4rem;
+    gap: 3rem;
+  }
+  
+  .how {
+    max-width: 1200px;
+    margin: 0 auto 3rem auto;
+  }
+  
+  .how img {
+    width: 100%;
+    height: auto;
+    border-radius: 1rem;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  }
+}
+/* @media (min-width: 749px) {} */
+
+/* Add these styles for larger video in modal context */
+.modal-content .interpreter-video {
+  width: 60% !important;
+  height: 400px !important;
+  max-width: 700px !important;
+}
+
+.modal-content .interpreter-intro {
+  height: auto !important;
+  min-height: 400px !important;
+  padding: 2rem !important;
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  .introduction-container {
+    margin-left: 6em; /* Remove sidebar space on mobile */
+    padding: 0;
+    padding-top: 1rem; /* Add top padding to account for mobile navbar */
+    padding-bottom: 5rem;
+  }
+
+  .interpreter-container{
+    margin: 0;
+    padding: 1rem;
+    width: 100%;
+  }
+
+  .intro-header {
+    margin: 1rem; /* Add bottom margin for spacing */
+    padding: 1rem;
+    width: auto; /* Change from 60vw to auto for better fit */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .intro-text {
+    font-size: 1.8rem;
+    padding: 1rem 1rem;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .twobuttons {
+    display: flex;
+    flex-direction: row; /* Stack buttons vertically on mobile */
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .twobuttons button {
+    font-size: 1.3rem;
+    padding: 0.8rem 1.5rem;
+    min-width: 200px;
+    width: 80%;
+    max-width: 250px;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: var(--purple);
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .twobuttons button:hover {
+    background-color: var(--mid-purple);
+  }
+  
+  .twobuttons button.active-btn {
+    background-color: var(--light-purple);
+    color: var(--background);
+  }
+  
+  .interpreter-intro {
+    width: calc(100% - 2rem); /* Account for container padding */
+    height: auto;
+    min-height: 300px;
+    flex-direction: column;
+    padding: 1rem;
+    margin: 0 1rem 1rem 1rem;
+    border-radius: 1rem;
+  }
+  
+  .interpreter-video {
+    width: 80%;
+    max-width: 300px;
+    height: 180px;
+    margin-bottom: 1rem;
+    margin-right: 0;
+    border-radius: 0.5rem;
+    object-fit: contain; /* Changed from cover to contain to prevent cropping */
+  }
+  
+  .interpreter-details {
+    padding: 10px;
+    width: 100%;
+    color: white;
+  }
+  
+  .interpreter-details p:nth-child(1) {
+    font-size: 1.8rem;
+    font-weight: bold;
+  }
+  
+  .interpreter-details p {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+  }
+  
+  .interpreter-details p span {
+    font-size: 1.2rem;
+    color: var(--light-purple);
+  }
+  
+  .scroll-area {
+    padding: 0;
+    width: 100%;
+  }
+
+  /* How to play mobile styles */
+  .howtoplay-container {
+    padding: 1rem;
+    gap: 1rem;
+  }
+  
+  .how {
+    width: calc(100% - 2rem); /* Account for margins */
+    max-width: none;
+    margin: 0 1rem 2rem 1rem;
+    padding: 0;
+  }
+
+  .how img {
+    width: 100%;
+    height: auto;
+    border-radius: 1rem;
+  }
+
+  .modal-content .interpreter-video {
+    width: 100% !important;
+    height: 400px !important;
+    max-width: 700px !important;
+    object-fit: contain !important; /* Changed from cover to contain */
+  }
+  
+  .modal-content .interpreter-intro {
+    min-height: 400px !important;
+    padding: 1rem !important;
+  }
+}
+
+@media (max-width: 426px) {
+  .interpreter-intro {
+    width: 100%;
+    height: auto;
+  }
+  
+  .interpreter-video {
+    width: 100%;
+    max-width: 350px;
+    height: 160px;
+  }
+  
+  .modal-content .interpreter-video {
+    width: 100% !important;
+    height: 180px !important;
+    max-width: 350px !important;
+  }
+}
+
+/* instructions-----------------------------------------------------------------------------------------------------------------------*/
+.howtoplay-container{
+  padding: 1rem;  
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;  
+  gap: 1rem;
+}
+
+.how {
+  width: 100%; /* Use full width instead of viewport width */
+  max-width: 1200px; /* Set a reasonable max width */
+  height: auto; /* Let height be automatic */
+  margin: 0;
+}
+
 .how img {
-  width: 75vw;
+  width: 100%; /* Use full container width */
+  height: auto; /* Maintain aspect ratio */
 }

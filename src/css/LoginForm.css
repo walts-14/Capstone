@@ -39,7 +39,12 @@ h1 {
   margin: 25px 0 0 0;
 }
 .login-container {
-  width: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+    background-color: var(--background);
+
 }
 .login-input {
   padding: 20px;
@@ -55,7 +60,7 @@ h1 {
   gap: 35px;
 }
 .login-width {
-  width: 100%;
+  width: 25%;
   height: 450px;
 }
 .login-input {
@@ -104,4 +109,378 @@ h1 {
 
 .sign-up a {
   color: var(--light-purple);
+}
+
+@media (max-width: 1440px) {
+  
+.login-card {
+  background-color: var(--semidark-purple);
+  padding: auto;
+  gap: 35px;
+}
+.login-width {
+  width:30%;
+  height: 330px;
+}
+.login-input {
+  width: 290px !important;
+  height: 45px !important;
+  border-radius: 12px;
+  color: white;
+}
+.login-input:focus {
+  background-color: var(--input-gray);
+  color: white;
+}
+.login-input::placeholder {
+  color: var(--placeholder);
+  font-size: 16px;
+  font-weight: 500;
+  font-family: "Baloo";
+}
+.input-height {
+  height: 55px;
+  width: 380px;
+}
+
+.check-box,
+.forgot-password {
+  font-size: 12px;
+}
+.forgot-password {
+  color: var(--light-purple);
+  text-decoration: none;
+}
+
+.button-login {
+  width: 100%;
+  font-family: "Baloo";
+  font-size: 25px;
+  background-color: var(--purple);
+  border: none;
+}
+.button-login:hover {
+  background-color: #613099;
+}
+.button-login:active {
+  background-color: var(--background);
+}
+
+.sign-up a {
+  color: var(--light-purple);
+}
+
+}
+
+@media (max-width: 1024px) {
+  
+.login-card {
+  background-color: var(--semidark-purple);
+  padding: auto;
+  gap: 35px;
+}
+.login-width {
+  width:50%;
+  height: 330px;
+}
+.login-input {
+  width: 290px !important;
+  height: 45px !important;
+  border-radius: 12px;
+  color: white;
+}
+.login-input:focus {
+  background-color: var(--input-gray);
+  color: white;
+}
+.login-input::placeholder {
+  color: var(--placeholder);
+  font-size: 16px;
+  font-weight: 500;
+  font-family: "Baloo";
+}
+.input-height {
+  height: 55px;
+  width: 380px;
+}
+
+.check-box,
+.forgot-password {
+  font-size: 12px;
+}
+.forgot-password {
+  color: var(--light-purple);
+  text-decoration: none;
+}
+
+.button-login {
+  width: 100%;
+  font-family: "Baloo";
+  font-size: 25px;
+  background-color: var(--purple);
+  border: none;
+}
+.button-login:hover {
+  background-color: #613099;
+}
+.button-login:active {
+  background-color: var(--background);
+}
+
+.sign-up a {
+  color: var(--light-purple);
+}
+
+}
+
+@media (max-width: 768px) {
+  
+.login-card {
+  background-color: var(--semidark-purple);
+  padding: auto;
+  gap: 35px;
+}
+.login-width {
+  width:50%;
+  height: 330px;
+}
+.login-input {
+  width: 290px !important;
+  height: 45px !important;
+  border-radius: 12px;
+  color: white;
+}
+.login-input:focus {
+  background-color: var(--input-gray);
+  color: white;
+}
+.login-input::placeholder {
+  color: var(--placeholder);
+  font-size: 16px;
+  font-weight: 500;
+  font-family: "Baloo";
+}
+.input-height {
+  height: 55px;
+  width: 380px;
+}
+
+.check-box,
+.forgot-password {
+  font-size: 12px;
+}
+.forgot-password {
+  color: var(--light-purple);
+  text-decoration: none;
+}
+
+.button-login {
+  width: 100%;
+  font-family: "Baloo";
+  font-size: 25px;
+  background-color: var(--purple);
+  border: none;
+}
+.button-login:hover {
+  background-color: #613099;
+}
+.button-login:active {
+  background-color: var(--background);
+}
+
+.sign-up a {
+  color: var(--light-purple);
+}
+
+}
+
+@media (max-width: 425px) {
+  
+.login-card {
+  background-color: var(--semidark-purple);
+  padding: auto;
+  gap: 35px;
+}
+.login-width {
+  width:95%;
+  height: 330px;
+}
+.login-input {
+  width: 290px !important;
+  height: 45px !important;
+  border-radius: 12px;
+  color: white;
+}
+.login-input:focus {
+  background-color: var(--input-gray);
+  color: white;
+}
+.login-input::placeholder {
+  color: var(--placeholder);
+  font-size: 16px;
+  font-weight: 500;
+  font-family: "Baloo";
+}
+.input-height {
+  height: 55px;
+  width: 380px;
+}
+
+.check-box,
+.forgot-password {
+  font-size: 12px;
+}
+.forgot-password {
+  color: var(--light-purple);
+  text-decoration: none;
+}
+
+.button-login {
+  width: 100%;
+  font-family: "Baloo";
+  font-size: 25px;
+  background-color: var(--purple);
+  border: none;
+}
+.button-login:hover {
+  background-color: #613099;
+}
+.button-login:active {
+  background-color: var(--background);
+}
+
+.sign-up a {
+  color: var(--light-purple);
+}
+
+}
+
+@media (max-width: 375px) {
+  
+.login-card {
+  background-color: var(--semidark-purple);
+  border-radius: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 35px;
+}
+.login-width {
+  width: 90%;
+  height: 330px;
+}
+.login-input {
+  width: 290px !important;
+  height: 45px !important;
+  border-radius: 12px;
+  color: white;
+}
+.login-input:focus {
+  background-color: var(--input-gray);
+  color: white;
+}
+.login-input::placeholder {
+  color: var(--placeholder);
+  font-size: 16px;
+  font-weight: 500;
+  font-family: "Baloo";
+}
+.input-height {
+  height: 55px;
+  width: 380px;
+}
+
+.check-box,
+.forgot-password {
+  font-size: 12px;
+}
+.forgot-password {
+  color: var(--light-purple);
+  text-decoration: none;
+}
+
+.button-login {
+  width: 100%;
+  font-family: "Baloo";
+  font-size: 25px;
+  background-color: var(--purple);
+  border: none;
+}
+.button-login:hover {
+  background-color: #613099;
+}
+.button-login:active {
+  background-color: var(--background);
+}
+
+.sign-up a {
+  color: var(--light-purple);
+}
+
+}
+
+@media (max-width: 320px) {
+  
+.login-card {
+  background-color: var(--semidark-purple);
+  border-radius: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 35px;
+}
+.login-width {
+  width: 95%;
+  height: 330px;
+}
+.login-input {
+  width: 280px !important;
+  height: 45px !important;
+  border-radius: 12px;
+  color: white;
+}
+.login-input:focus {
+  background-color: var(--input-gray);
+  color: white;
+}
+.login-input::placeholder {
+  color: var(--placeholder);
+  font-size: 16px;
+  font-weight: 500;
+  font-family: "Baloo";
+}
+.input-height {
+  height: 55px;
+  width: 380px;
+}
+
+.check-box,
+.forgot-password {
+  font-size: 12px;
+}
+.forgot-password {
+  color: var(--light-purple);
+  text-decoration: none;
+}
+
+.button-login {
+  width: 100%;
+  font-family: "Baloo";
+  font-size: 25px;
+  background-color: var(--purple);
+  border: none;
+}
+.button-login:hover {
+  background-color: #613099;
+}
+.button-login:active {
+  background-color: var(--background);
+}
+
+.sign-up a {
+  color: var(--light-purple);
+}
+
 }
