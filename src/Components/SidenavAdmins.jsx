@@ -9,11 +9,27 @@ const Sidebar = ({
   fetchStudents,
   setShowLeaderboard,
   showLeaderboard,
-  role = "admin", // new prop: "admin" or "superadmin"
+  role = "admin",
 }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [activeItem, setActiveItem] = useState("dashboard");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [selectedGradeLocal, setSelectedGradeLocal] = useState("");
+
+  // Handle window resize
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+      if (window.innerWidth > 768) {
+        setSidebarOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Set the initial active item based on showLeaderboard or pathname
   useEffect(() => {
@@ -26,33 +42,66 @@ const Sidebar = ({
 
   const handleDashboardClick = () => {
     setSelectedGrade("");
+    setSelectedGradeLocal("");
     fetchStudents();
     setShowLeaderboard(false);
     setActiveItem("dashboard");
     navigate("/admin");
+    if (isMobile) setSidebarOpen(false);
   };
 
   const handleLeaderboardClick = () => {
     setShowLeaderboard(true);
     setActiveItem("leaderboard");
+    if (isMobile) setSidebarOpen(false);
+  };
+
+  const handleGradeSelection = (grade) => {
+    setSelectedGradeLocal(grade);
+    setSelectedGrade(grade);
+    fetchStudents(grade);
   };
 
   return (
     <>
-      <div className="left-sidebar">
+      {/* Mobile Toggle Button */}
+      {isMobile && (
+        <button
+          className="sidebar-toggle"
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          aria-label="Toggle sidebar"
+        >
+          ☰
+        </button>
+      )}
+
+      {/* Overlay for mobile */}
+      <div
+        className={`sidebar-overlay ${sidebarOpen ? "open" : ""}`}
+        onClick={() => setSidebarOpen(false)}
+        style={{ display: isMobile && sidebarOpen ? "block" : "none" }}
+      />
+
+      {/* Sidebar - with holy-grail-sidebar parent class compatibility */}
+      <div
+        className={`left-sidebar ${sidebarOpen ? "open" : ""}`}
+        style={{ height: "100%", width: "100%" }}
+      >
         <h2
           style={{
             color: "#3A86D1",
             fontWeight: "bold",
-            fontSize: "70px",
+            fontSize: isMobile ? "28px" : "50px",
             textAlign: "center",
             width: "100%",
-            margin: "0 0 50px 0",
+            margin: "0 0 20px 0",
+            paddingBottom: "10px",
+            borderBottom: "2px solid #6c7294",
           }}
         >
           {String(role).toLowerCase() === "superadmin"
             ? "Super Admin"
-            : "Admin"}
+            : "WeSign"}
         </h2>
         <div className="sidebar-box">
           <div
@@ -79,6 +128,33 @@ const Sidebar = ({
             <span>Leaderboard</span>
           </div>
         </div>
+
+        {/* Grade Selection Section */}
+        {activeItem === "dashboard" && (
+          <div className="levels">
+            {[
+              "Grade 7",
+              "Grade 8",
+              "Grade 9",
+              "Grade 10",
+              "Grade 11",
+              "Grade 12",
+            ].map((grade) => {
+              const gradeClass = grade.replace(" ", "").toLowerCase();
+              return (
+                <div
+                  key={grade}
+                  className={`level-item ${gradeClass} ${
+                    selectedGradeLocal === grade ? "active" : ""
+                  }`}
+                  onClick={() => handleGradeSelection(grade)}
+                >
+                  {grade.toUpperCase()}
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </>
   );
