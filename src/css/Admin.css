@@ -4,6 +4,97 @@
   font-style: normal;
 }
 
+/* ===== HOLY GRAIL LAYOUT ===== */
+.holy-grail-layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  grid-template-rows: 1fr;
+  min-height: 100vh;
+  background-color: #100429;
+  overflow: hidden;
+  width: 100vw;
+}
+
+.holy-grail-sidebar {
+  grid-column: 1;
+  grid-row: 1;
+  background-color: #ffffff;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 100;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 300px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.holy-grail-sidebar::-webkit-scrollbar {
+  display: none;
+}
+
+.holy-grail-content-wrapper {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.holy-grail-header {
+  background: linear-gradient(135deg, #3a86d1 0%, #2a6db5 100%);
+  color: #ffffff;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 50;
+  position: sticky;
+  top: 0;
+}
+
+.holy-grail-header h1 {
+  font-family: "Baloo", sans-serif;
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: 0;
+  color: #ffffff;
+}
+
+.holy-grail-main {
+  flex: 1;
+  background-color: #100429;
+  padding: 2rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.holy-grail-main::-webkit-scrollbar {
+  display: none;
+}
+
+.dashboard-main-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.holy-grail-footer {
+  background: linear-gradient(135deg, #2a6db5 0%, #1a4d8a 100%);
+  color: #ffffff;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 50;
+}
+
 /* Ensure the body allows vertical scrolling */
 .body {
   overflow-y: hidden; /* Allow vertical scrolling */
@@ -52,19 +143,19 @@
 
 /* Create Button */
 .Create {
-  position: absolute;
-  top: 70px; /* Adjust position relative to the top */
-  right: 40px; /* Align to the right */
-  background-color: #f6f6f6;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  background-color: transparent;
   color: #ffffff;
   border-radius: 10px;
   font-weight: bold;
   font-size: 1.2rem;
-  padding: 10px 20px;
+  padding: 0;
+  margin-bottom: 1rem;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-shrink: 0;
 }
 
 
@@ -79,12 +170,15 @@
   gap: 10px;
   width: 100%;
   pointer-events: auto;
+  flex-wrap: wrap;
+  row-gap: 8px;
 }
 
 .action-admin button,
 .action-admin img {
   position: relative;
   z-index: 11;
+  flex-shrink: 0;
 }
 
 .popup-form {
@@ -185,6 +279,41 @@
   min-height: 100vh;
   color: #ffffff;
 }
+/* Sidebar Toggle Button */
+.sidebar-toggle {
+  display: none;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1200;
+  background-color: #3A86D1;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  width: 50px;
+  height: 50px;
+  font-size: 1.8rem;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s ease;
+}
+
+.sidebar-toggle:hover {
+  background-color: #2a6db5;
+}
+
+/* Sidebar Overlay for mobile */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
 /* Left Sidebar */
 .left-sidebar {
   position: relative;
@@ -192,49 +321,60 @@
   flex-direction: column;
   align-items: center;
   background-color: #ffffff;
-  padding-top: 50px;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-  margin-left: -20px;
-  width: 300px;
-  height: 450px;
+  padding-top: 30px;
+  box-shadow: none;
+  margin-left: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.left-sidebar::-webkit-scrollbar {
+  display: none;
 }
 .sidebar-box {
   display: flex;
   flex-direction: column;
   gap: 15px;
+  width: 100%;
+  padding: 0 10px;
 }
 /* This is the CSS modification for the sidebar items */
 
 .sidebar-item {
   display: flex;
   align-items: center;
+  justify-content: center;
   text-align: center;
   gap: 10px;
   z-index: 11;
   color: #6c7294;
   font-weight: bold;
-  font-size: 2rem;
+  font-size: 1.8rem;
   cursor: pointer;
-  padding: 10px;
+  padding: 12px 15px;
   background-color: #ffffff;
   transition: background-color 0.3s ease, border 0.3s ease;
-  width: 105%;
+  width: 100%;
   position: relative;
-  left: 4px;
+  border-radius: 8px;
+  border-left: 4px solid transparent;
 }
 
 .sidebar-item:hover {
-  background-color: #6c7294;
-  color: #ffffff;
+  background-color: #f0f0f0;
+  color: #3a86d1;
   border: none;
+  border-left: 4px solid #3a86d1;
 }
 
 .sidebar-item.active {
-  background-color: #6c7294; /* Dark purple background for active state */
-  /* remove stroke and rounded corner for active items */
-  border: none;
-  border-radius: 0;
-  color: #ffffff;
+  background-color: #e8f0ff;
+  border-left: 4px solid #3a86d1;
+  color: #3a86d1;
+  font-weight: 800;
 }
 .sidebar-icon {
   width: 50px;
@@ -244,15 +384,14 @@
 .levels {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 10px;
-  margin-top: 20px;
-  margin-left: -20px;
+  align-items: center;
+  gap: 8px;
+  margin-top: 30px;
+  margin-left: 0;
   position: relative;
-  z-index: 10; /* Keep higher z-index for clickability */
+  z-index: 10;
   pointer-events: auto;
-  /* Prevent levels from overlapping the scrollbar */
-  width: 300px; /* Match width of level items */
+  width: 280px;
 }
 .level-item {
   color: #ffffff;
@@ -261,7 +400,7 @@
   padding: 10px 20px;
   border-radius: 10px;
   text-align: center;
-  width: 300px;
+  width: 280px;
   color: var(--white);
   font-family: "Baloo", sans-serif;
   font-size: 2rem;
@@ -304,41 +443,104 @@
   opacity: 0.9; /* Slight hover effect */
 }
 /* Table Container - Updated for scrolling functionality */
+.table-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
 .contentdiv {
-  margin-top: -50rem;
-  margin-right: -150px;
   position: relative;
   z-index: 5;
   pointer-events: auto;
-  /* Create a positioning context for the table */
   transform: translateZ(0);
+  width: 100%;
+  max-width: 1400px;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
 }
+
+/* Tablet content adjustments */
+@media (max-width: 1024px) {
+  .contentdiv {
+    max-width: 100%;
+  }
+
+  .table-wrapper {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .contentdiv{
+   max-width: 80%;
+    overflow-x: auto;
+  }
+
+
+}
+
+/* Mobile content adjustments */
+@media (max-width: 768px) {
+  .contentdiv {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+}
+
 /* Create a table container wrapper for scrolling */
 .table-wrapper {
-  max-height: 700px;
+  max-height: calc(100vh - 300px);
   overflow-y: auto;
   overflow-x: auto;
   border-radius: 10px;
-  margin: 7rem 0 0 20rem;
-  width: 75%;
+  width: 100%;
+  max-width: 1400px;
   position: relative;
   z-index: 5;
-  /* This is critical - creates a new stacking context */
   transform: translateZ(0);
-  /* Ensure scrollbar is fully functional */
   -webkit-overflow-scrolling: touch;
+}
+
+/* Tablet table wrapper adjustments */
+
+/* Force horizontal scroll on mobile */
+@media (max-width: 768px) {
+  .table-wrapper {
+    max-width: 100vw;
+    overflow-x: scroll;
+  }
 }
 
 /* Style the table with fixed header */
 .dashboard-table {
   font-size: 1.4rem;
   width: 100%;
+  max-width: 1400px;
   color: #ffffff;
-  table-layout: fixed;
+  table-layout: auto;
   border-collapse: separate;
   border-spacing: 0;
   background-color: #2e2e4d;
   position: relative;
+  min-width: 1000px;
+}
+
+/* Mobile table adjustments */
+@media (max-width: 768px) {
+  .dashboard-table {
+    min-width: 800px;
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-table {
+    min-width: 700px;
+    font-size: 1rem;
+  }
 }
 /* Fixed header styles */
 .dashboard-table thead {
@@ -352,6 +554,7 @@
   color: #ffffff;
   padding: 15px;
   text-align: center;
+  white-space: nowrap;
 }
 
 /* Increase width of the actions column */
@@ -360,12 +563,10 @@
   right: 0;
   z-index: 7;
   background-color: #3a86d1;
+  width: 300px;
+  min-width: 300px;
 }
-.dashboard-table td:last-child {
-  position: sticky;
-  right: 0;
-  z-index: 6;
-}
+
 
 .dashboard-table td {
   padding: 15px;
@@ -376,6 +577,7 @@
   color: #363333;
   font-size: 1.3rem;
   position: relative;
+  min-width: 150px;
 }
 
 .dashboard-table tr:nth-child(even) {
@@ -436,8 +638,6 @@
   background-color: var(--semidark-purple);
 }
 .btn-logout {
-  margin-top: 850px;
-  width: 10%;
   background-color: var(--midlight-red);
   color: var(--white);
   font-family: "Baloo", sans-serif;
@@ -445,11 +645,8 @@
   border: none;
   border-radius: 50px;
   cursor: pointer;
-  margin-left: auto;
-  position: fixed;
-  right: 3rem;
-  bottom: 1rem;
-  z-index: 10;
+  padding: 0.75rem 2.5rem;
+  transition: transform 160ms ease, box-shadow 160ms ease, background-color 200ms ease;
 }
 .btn-logout:hover {
   background-color: var(--semidark-red);
@@ -660,12 +857,941 @@
 }
 .wrapper-lb {
   overflow-y: auto;
-  margin: -25rem 1rem 0 20rem;
-  width: 81.5vw;
-  padding-left: 5rem;
+  width: 100%;
+  height: 100%;
 }
 .progress-modal-container .lessonTracker {
   width: 100%; /* fill the wrapper's width */
   max-width: 55vh; /* constrain so it doesn't get too wide */
   height: 68%; /* fill the wrapper's height */
+}
+
+/* ===== RESPONSIVE MEDIA QUERIES ===== */
+/* Organized from largest to smallest breakpoints for better maintainability */
+
+/* ========================================
+   TABLET & LARGE MOBILE (max-width: 768px)
+   ======================================== */
+@media (max-width: 768px) {
+  /* --- Holy Grail Layout --- */
+  .holy-grail-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .holy-grail-sidebar {
+    position: fixed;
+    left: -300px;
+    width: 280px;
+    transition: left 0.3s ease;
+    z-index: 1100;
+  }
+
+  .holy-grail-sidebar.open {
+    left: 0;
+  }
+
+  .holy-grail-content-wrapper {
+    margin-left: 0;
+  }
+
+  .holy-grail-header h1 {
+    font-size: 2rem;
+  }
+
+  .holy-grail-main {
+    padding: 1.5rem 1rem;
+
+  }
+
+  .holy-grail-footer {
+    padding: 1rem;
+  }
+
+  /* --- Sidebar & Navigation --- */
+  .sidebar-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sidebar-overlay {
+    display: none;
+  }
+
+  .sidebar-overlay.open {
+    display: block;
+    z-index: 1050;
+  }
+
+  .left-sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 280px;
+    z-index: 1050;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    margin-left: 0;
+    padding-top: 20px;
+    border-radius: 0;
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .left-sidebar.open {
+    transform: translateX(0);
+    z-index: 1100;
+  }
+
+  .left-sidebar h2 {
+    font-size: 40px;
+    margin: 0 0 20px 0;
+  }
+
+  .sidebar-box {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .sidebar-item {
+    font-size: 1.6rem;
+    padding: 12px;
+    width: 100%;
+    left: 0;
+  }
+
+  /* --- Main Content Area --- */
+  .main-content {
+    margin-left: 0;
+    padding: 20px 10px;
+  }
+
+  .dashboard-main-content {
+    gap: 1rem;
+  }
+
+  .contentdiv {
+    margin: 0;
+  }
+
+  /* --- Dashboard Elements --- */
+  .DashboardAdmin h2 {
+    width: 100%;
+    margin-left: 0;
+    font-size: 40px;
+  }
+
+  .Create {
+    justify-content: center;
+    top: 80px;
+    right: 15px;
+    font-size: 1rem;
+    padding: 8px 15px;
+    margin-bottom: 1rem;
+  }
+
+  .btn-logout {
+    width: 25%;
+    font-size: 1.2rem;
+    margin-top: 20px;
+    position: relative;
+    right: auto;
+    bottom: auto;
+  }
+
+  /* --- Table Styles --- */
+  .table-container {
+    flex: 1;
+  }
+
+  .table-wrapper {
+    max-height: 600px;
+    margin: 0;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .dashboard-table {
+    font-size: 1.2rem;
+    min-width: 900px;
+  }
+
+  .dashboard-table th,
+  .dashboard-table td {
+    padding: 12px 8px;
+    font-size: 1rem;
+    min-width: 120px;
+  }
+
+  .dashboard-table th.actions-column,
+  .dashboard-table td:last-child {
+    width: 280px;
+    min-width: 280px;
+  }
+
+  /* --- Action Buttons --- */
+  .action-admin {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .action-admin button {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 0.95rem;
+  }
+
+  .action-admin img {
+    width: 32px;
+    height: 32px;
+  }
+
+  /* --- Grade Levels --- */
+  .level-item {
+    font-size: 1.3rem;
+    width: 260px;
+    padding: 8px 12px;
+  }
+
+  .levels {
+    width: 260px;
+    margin-top: 20px;
+  }
+
+  /* --- Leaderboard --- */
+  .wrapper-lb {
+    margin: 0;
+    width: 100%;
+    padding-left: 0;
+  }
+
+  .Create {
+   display: flex;
+   justify-content: end;
+   align-items: center;
+   width: 95%;
+  }
+
+  .holy-grail-header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+   .contentdiv {
+    max-width: 95%;
+    overflow-x: auto;
+  }
+
+  .holy-grail-footer{
+    padding: 1rem;
+    width: 97%;
+  }
+
+  /* --- Notification Modal --- */
+  .notification-modal {
+    width: 90vw !important;
+    min-width: auto !important;
+    max-width: 90vw !important;
+    top: 8% !important;
+    padding: 2rem 1.5rem !important;
+    max-height: 85vh !important;
+  }
+
+  .notification-close-btn {
+    top: 15px !important;
+    right: 15px !important;
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 1.4rem !important;
+  }
+
+  .notification-title {
+    font-size: 2rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  .notification-card {
+    flex-direction: column !important;
+    padding: 1rem !important;
+    gap: 0.75rem !important;
+  }
+
+  .notification-tags {
+    flex-wrap: wrap !important;
+  }
+
+  .notification-tag {
+    font-size: 0.95rem !important;
+  }
+
+  .notification-body {
+    font-size: 1rem !important;
+  }
+
+  .notification-time {
+    font-size: 0.85rem !important;
+  }
+
+  .notification-actions {
+    flex-direction: row !important;
+    justify-content: flex-end !important;
+    margin-left: 0 !important;
+  }
+
+  .notification-mark-read-btn {
+    font-size: 0.95rem !important;
+    padding: 0.45rem 0.75rem !important;
+  }
+
+}
+
+/* ========================================
+   MEDIUM MOBILE (max-width: 600px)
+   ======================================== */
+@media (max-width: 600px) {
+  /* --- Holy Grail Layout --- */
+  .holy-grail-sidebar {
+    width: 240px;
+    left: -240px;
+  }
+
+  .holy-grail-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .holy-grail-main {
+    padding: 0.75rem 0.5rem;
+  }
+
+  /* --- Body & Sidebar --- */
+  .admin-body {
+    overflow-y: auto;
+  }
+
+  .sidebar-toggle {
+    width: 45px;
+    height: 45px;
+    font-size: 1.5rem;
+    top: 15px;
+    left: 15px;
+  }
+
+  .left-sidebar {
+    width: 240px;
+  }
+
+  .left-sidebar h2 {
+    font-size: 28px;
+    margin: 0 0 15px 0;
+  }
+
+  .sidebar-box {
+    gap: 8px;
+  }
+
+  .sidebar-item {
+    font-size: 1.3rem;
+    padding: 8px;
+    gap: 6px;
+  }
+
+  .sidebar-icon {
+    width: 35px;
+    height: 35px;
+  }
+
+  /* --- Main Content --- */
+  .main-content {
+    padding: 15px 8px;
+  }
+
+  /* --- Dashboard Elements --- */
+  .DashboardAdmin h2 {
+    font-size: 28px;
+    width: 95%;
+    margin-left: 0;
+    padding: 6px 10px;
+  }
+
+  .Create {
+    top: 65px;
+    right: 8px;
+    font-size: 0.8rem;
+    padding: 5px 10px;
+  }
+
+  .btn-logout {
+    width: 35%;
+    font-size: 0.95rem;
+    margin-top: 15px;
+  }
+
+  /* --- Table Styles --- */
+  .table-wrapper {
+    max-height: 450px;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .dashboard-table {
+    font-size: 0.9rem;
+    min-width: 750px;
+  }
+
+  .dashboard-table th,
+  .dashboard-table td {
+    padding: 8px 4px;
+    font-size: 0.85rem;
+    min-width: 90px;
+  }
+
+  .dashboard-table th.actions-column,
+  .dashboard-table td:last-child {
+    width: 240px;
+    min-width: 240px;
+  }
+
+  /* --- Action Buttons --- */
+  .action-admin {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .action-admin button {
+    width: 100%;
+    padding: 5px 8px;
+    font-size: 0.75rem;
+  }
+
+  .action-admin img {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* --- Grade Levels --- */
+  .level-item {
+    font-size: 1.5rem;
+    width: 240px;
+    padding: 6px 12px;
+  }
+
+  .levels {
+    width: 240px;
+    margin-top: 20px;
+  }
+
+  /* --- Forms & Modals --- */
+  .popup-form {
+    width: 95%;
+    max-width: 320px;
+    padding: 20px;
+  }
+
+  .popup-form h3 {
+    font-size: 2rem;
+  }
+
+  .popup-form .form-control {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+
+  .Create {
+   display: flex;
+   justify-content: end;
+   align-items: center;
+   width: 95%;
+  }
+
+  .holy-grail-header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+   .contentdiv {
+    max-width: 95%;
+    overflow-x: auto;
+  }
+
+  .holy-grail-footer{
+    padding: 1rem;
+    width: 97%;
+  }
+}
+
+/* ========================================
+   SMALL MOBILE (max-width: 480px)
+   ======================================== */
+@media (max-width: 480px) {
+  /* --- Sidebar & Navigation --- */
+  .sidebar-toggle {
+    width: 42px;
+    height: 42px;
+    font-size: 1.4rem;
+    top: 12px;
+    left: 12px;
+  }
+
+  .left-sidebar {
+    width: 220px;
+  }
+
+  .left-sidebar h2 {
+    font-size: 24px;
+    margin: 0 0 10px 0;
+  }
+
+  .sidebar-item {
+    font-size: 1.2rem;
+    padding: 6px;
+    gap: 5px;
+  }
+
+  .sidebar-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  /* --- Main Content --- */
+  .main-content {
+    padding: 12px 6px;
+  }
+
+  /* --- Dashboard Elements --- */
+  .DashboardAdmin h2 {
+    font-size: 24px;
+    padding: 5px 8px;
+    width: 98%;
+  }
+
+  .Create {
+    top: 60px;
+    right: 5px;
+    font-size: 0.75rem;
+    padding: 4px 8px;
+  }
+
+  .btn-logout {
+    width: 40%;
+    font-size: 0.9rem;
+    margin-top: 12px;
+  }
+
+  /* --- Table Styles --- */
+  .table-wrapper {
+    max-height: 400px;
+    margin: 5rem 0 0 0;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .dashboard-table {
+    font-size: 0.8rem;
+    min-width: 700px;
+  }
+
+  .dashboard-table th,
+  .dashboard-table td {
+    padding: 6px 3px;
+    font-size: 0.75rem;
+    min-width: 80px;
+  }
+
+  .dashboard-table th.actions-column,
+  .dashboard-table td:last-child {
+    width: 220px;
+    min-width: 220px;
+  }
+
+  /* --- Action Buttons --- */
+  .action-admin {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .action-admin button {
+    width: 100%;
+    padding: 4px 6px;
+    font-size: 0.65rem;
+  }
+
+  .action-admin img {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* --- Grade Levels --- */
+  .level-item {
+    font-size: 1.4rem;
+    width: 220px;
+    padding: 5px 10px;
+  }
+
+  .levels {
+    width: 220px;
+    margin-top: 20px;
+  }
+
+  /* --- Forms & Modals --- */
+  .popup-form {
+    width: 98%;
+    max-width: 300px;
+    padding: 15px;
+  }
+
+  .popup-form h3 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+  }
+
+  .popup-form .form-control {
+    font-size: 0.85rem;
+    padding: 6px;
+    border-width: 2px;
+  }
+
+  .popup-form .btn-create,
+  .popup-form .btn-cancel {
+    font-size: 1.2rem;
+    padding: 8px;
+  }
+
+  .progress-modal-content {
+    width: 95%;
+    max-width: 280px;
+    padding: 15px;
+  }
+
+  .progress-item {
+    font-size: 1.4rem;
+  }
+
+  .progress-section h4 {
+    font-size: 1.4rem !important;
+  }
+
+  .Create {
+   display: flex;
+   justify-content: end;
+   align-items: center;
+   width: 95%;
+  }
+
+  .holy-grail-header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+   .contentdiv {
+    max-width: 95%;
+    overflow-x: auto;
+  }
+
+  .holy-grail-footer{
+    padding: 1rem;
+    width: 97%;
+  }
+
+}
+
+/* ========================================
+   MEDIUM SMALL MOBILE (max-width: 425px)
+   ======================================== */
+@media (max-width: 425px) {
+  /* --- Notification Modal --- */
+  .notification-modal {
+    width: 95vw !important;
+    min-width: auto !important;
+    max-width: 95vw !important;
+    top: 5% !important;
+    padding: 1.75rem 1.25rem !important;
+    max-height: 88vh !important;
+    border-radius: 14px !important;
+  }
+
+  .notification-close-btn {
+    top: 12px !important;
+    right: 12px !important;
+    width: 34px !important;
+    height: 34px !important;
+    font-size: 1.3rem !important;
+  }
+
+  .notification-title {
+    font-size: 1.75rem !important;
+    margin-bottom: 1.25rem !important;
+  }
+
+  .notification-card {
+    flex-direction: column !important;
+    padding: 0.85rem !important;
+    gap: 0.65rem !important;
+  }
+
+  .notification-tags {
+    flex-wrap: wrap !important;
+  }
+
+  .notification-tag {
+    font-size: 0.9rem !important;
+    padding: 0.25rem 0.65rem !important;
+  }
+
+  .notification-body {
+    font-size: 0.95rem !important;
+  }
+
+  .notification-time {
+    font-size: 0.8rem !important;
+  }
+
+  .notification-actions {
+    flex-direction: row !important;
+    justify-content: flex-end !important;
+    margin-left: 0 !important;
+  }
+
+  .notification-mark-read-btn {
+    font-size: 0.9rem !important;
+    padding: 0.45rem 0.7rem !important;
+  }
+}
+
+/* ========================================
+   EXTRA SMALL MOBILE (max-width: 375px)
+   ======================================== */
+@media (max-width: 375px) {
+  /* --- Sidebar & Navigation --- */
+
+  .contentdiv {
+    max-width: 96%;
+    overflow-x: auto;
+  }
+
+  .holy-grail-footer{
+    padding: 1rem;
+    width: 97%;
+  }
+  .sidebar-toggle {
+    width: 40px;
+    height: 40px;
+    font-size: 1.3rem;
+    top: 10px;
+    left: 10px;
+  }
+
+  .left-sidebar {
+    width: 200px;
+  }
+
+  .left-sidebar h2 {
+    font-size: 20px;
+    margin: 0 0 8px 0;
+  }
+
+  .sidebar-item {
+    font-size: 1.1rem;
+    padding: 5px;
+    gap: 4px;
+  }
+
+  .sidebar-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  /* --- Main Content --- */
+  .main-content {
+    padding: 10px 5px;
+  }
+
+  /* --- Dashboard Elements --- */
+  .DashboardAdmin h2 {
+    font-size: 20px;
+    padding: 4px 6px;
+    width: 99%;
+  }
+
+  .Create {
+   display: flex;
+   justify-content: end;
+   align-items: center;
+   width: 95%;
+  }
+
+  .holy-grail-header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .btn-logout {
+    width: 45%;
+    font-size: 0.85rem;
+    margin-top: 10px;
+  }
+
+  /* --- Table Styles --- */
+  .table-wrapper {
+    max-height: 350px;
+    margin: 5rem 0 0 0;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .dashboard-table {
+    font-size: 0.75rem;
+    min-width: 650px;
+  }
+
+  .dashboard-table th,
+  .dashboard-table td {
+    padding: 5px 2px;
+    font-size: 0.7rem;
+    min-width: 75px;
+  }
+
+  .dashboard-table th.actions-column,
+  .dashboard-table td:last-child {
+    width: 200px;
+    min-width: 200px;
+  }
+
+  /* --- Action Buttons --- */
+  .action-admin {
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .action-admin button {
+    width: 100%;
+    padding: 3px 5px;
+    font-size: 0.6rem;
+  }
+
+  .action-admin img {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* --- Grade Levels --- */
+  .level-item {
+    font-size: 1.1rem;
+    width: 90vw;
+    max-width: 160px;
+    padding: 6px 10px;
+    margin: 0 auto;
+  }
+
+  .levels {
+    width: 90vw;
+    max-width: 160px;
+    margin-left: 0;
+    margin-top: 15px;
+    align-items: center;
+  }
+
+  /* --- Forms & Modals --- */
+  .popup-form {
+    width: 99%;
+    max-width: 280px;
+    padding: 12px;
+  }
+
+  .popup-form h3 {
+    font-size: 1.6rem;
+    margin-bottom: 12px;
+  }
+
+  .popup-form .form-control {
+    font-size: 0.8rem;
+    padding: 5px;
+  }
+
+  .popup-form .btn-create,
+  .popup-form .btn-cancel {
+    font-size: 1.1rem;
+    padding: 6px;
+  }
+
+  .progress-modal-content {
+    width: 96%;
+    max-width: 260px;
+    padding: 12px;
+  }
+
+  .progress-item {
+    font-size: 1.2rem;
+  }
+
+  .progress-section h4 {
+    font-size: 1.2rem !important;
+  }
+
+  /* --- Notification Modal --- */
+  .notification-modal {
+    width: 95vw !important;
+    min-width: auto !important;
+    max-width: 95vw !important;
+    top: 5% !important;
+    padding: 1.5rem 1rem !important;
+    max-height: 90vh !important;
+    border-radius: 12px !important;
+  }
+
+  .notification-close-btn {
+    top: 10px !important;
+    right: 10px !important;
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 1.2rem !important;
+  }
+
+  .notification-title {
+    font-size: 1.5rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .notification-card {
+    flex-direction: column !important;
+    padding: 0.75rem !important;
+    gap: 0.5rem !important;
+  }
+
+  .notification-tags {
+    flex-wrap: wrap !important;
+  }
+
+  .notification-tag {
+    font-size: 0.85rem !important;
+    padding: 0.2rem 0.6rem !important;
+  }
+
+  .notification-body {
+    font-size: 0.9rem !important;
+  }
+
+  .notification-time {
+    font-size: 0.75rem !important;
+  }
+
+  .notification-actions {
+    flex-direction: row !important;
+    justify-content: flex-end !important;
+    margin-left: 0 !important;
+  }
+
+  .notification-mark-read-btn {
+    font-size: 0.85rem !important;
+    padding: 0.4rem 0.6rem !important;
+  }
 }
