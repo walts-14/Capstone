@@ -598,7 +598,7 @@ export default function ProgressTracker({ student }) {
     </div>
 
     <div className="mobile-tracker flex flex-row items-center justify-center gap-4 fixed right-7 top-20 z-[1]">
-       <div className="streakleaderboard flex flex-row items-center justify-center gap-3 fixed right-3 top-7"> 
+       <div className="streakleaderboard flex flex-row items-center justify-center gap-3 fixed right-5 top-7"> 
         {/* Leaderboard box - align with streak button */}
         <div
           className="flex items-center text-white  h-[8.3vh] w-[45vw]  gap-2 px-1"
@@ -629,7 +629,7 @@ export default function ProgressTracker({ student }) {
         <div >
           <button
             onClick={() => setMobileModalOpen(true)}
-            className="flex items-center py-[2px] px-[6px] h-[8.3vh] w-[15vw] text-align "
+            className="flex items-center py-[2px] px-[11px] h-[8.3vh] w-[15vw] text-align "
             style={{ backgroundColor: "#271D3E", fontFamily: '"Baloo", sans-serif',
                      fontFamily: '"Baloo", sans-serif',
                      boxShadow: "0 0 0 3px #C0C0C0", 
@@ -646,7 +646,7 @@ export default function ProgressTracker({ student }) {
     {mobileModalOpen && (
       <div className="fixed inset-0 z-[60] flex items-start justify-center bg-black bg-opacity-50" onClick={() => setMobileModalOpen(false)}>
         <div
-          className="mt-8 w-[94%] max-w-[640px] rounded-3xl p-4 relative"
+          className="mt-4 w-[94%] h-[83vh] max-w-[640px] rounded-3xl p-4 relative"
           style={{ backgroundColor: "#271D3E", color: "white", fontFamily: '"Baloo", sans-serif' }}
           onClick={(e) => e.stopPropagation()}
         >
@@ -813,7 +813,12 @@ export default function ProgressTracker({ student }) {
           } 
           
           .panelClass {
-            height: 70vh !important;
+            height: 72vh !important;
+            z-index: 1;
+            width: 80vw !important;
+            position: fixed !important;
+            top: 71px !important;
+            right: 10vw !important;
           }
           /* Progress panel adjustments for small phones */
           /* make level headers and lesson labels smaller and panels height:auto */
