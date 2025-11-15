@@ -76,12 +76,12 @@ export default function IntroductionModal() {
       {/* Modal Overlay */}
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
-          <button
+          {/* <button
             onClick={() => setShowModal(false)}
             className="modal-close-btn"
           >
             ✕
-          </button>
+          </button> */}
           <div
             className="modal-content rounded-xl"
             onClick={(e) => e.stopPropagation()}
