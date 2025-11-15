@@ -44,29 +44,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 //security headers
-// Configure a Content Security Policy that allows the frontend to
-// `connect` (XHR/fetch) to the backend API and local dev servers.
-const cspDirectives = {
-  defaultSrc: ["'self'"],
-  // allow XHR/fetch/websocket connections to our backend and localhost during dev
-  connectSrc: [
-    "'self'",
-    'https://wesign-backend-cef3encxhphtq0ds.eastasia-01.azurewebsites.net',
-    'http://localhost:5173',
-    'http://localhost:3000',
-  ],
-  // allow scripts/styles/images from self and inline where Vite needs it
-  scriptSrc: ["'self'", "'unsafe-inline'"],
-  styleSrc: ["'self'", "'unsafe-inline'"],
-  imgSrc: ["'self'", 'data:', 'blob:'],
-  frameAncestors: ["'none'"],
-};
-
-app.use(
-  helmet.contentSecurityPolicy({
-    directives: cspDirectives,
-  })
-);
+app.use(helmet());
 
 // Health check endpoint
 app.get("/health", (_req, res) => res.json({ ok: true }));
