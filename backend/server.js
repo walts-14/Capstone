@@ -70,10 +70,23 @@ app.use("/api/messages", messageRoutes);
 connectDB();
 
 // Serve static files (only needed if you're serving frontend from backend)
-app.use(express.static("./build"));
-app.get("*", (_req, res) => {
-  res.sendFile("index.html", { root: "./build" });
-});
+// Vite outputs the production build to `dist` by default. Serve `dist`.
+import fs from "fs";
+// If `dist` exists (Vite default), serve it. Some deployment flows deploy
+// the dist contents directly into `wwwroot` (no `dist` folder), so fall
+// back to serving the app root when `dist` is missing.
+if (fs.existsSync("./dist/index.html")) {
+  app.use(express.static("./dist"));
+  app.get("*", (_req, res) => {
+    res.sendFile("index.html", { root: "./dist" });
+  });
+} else {
+  // Serve from project root (wwwroot) where index.html may be placed directly
+  app.use(express.static("./"));
+  app.get("*", (_req, res) => {
+    res.sendFile("index.html", { root: "./" });
+  });
+}
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
