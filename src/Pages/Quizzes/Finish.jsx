@@ -100,35 +100,35 @@ function Finish() {
   return (
     <>
       <div className="finishtext d-flex flex-column align-items-center position-relative fw-bold fs-1">
-  <img src={Applause} className="img-fluid img-large p-1 mb-3" alt="applause img" />
-        <p> {mode === "practice" ? "You've Finished the Practice Quiz" : "You've Finished the Quiz"} </p>
+        <img src={Applause} className="applause img-fluid p-1 mb-3" alt="applause img" />
+        <p className="textFinished"> {mode === "practice" ? "You've Finished the Practice Quiz" : "You've Finished the Quiz"} </p>
 
         <div className="stats-quiz d-flex flex-row gap-1 text-center ">
           {mode === "practice" ? null : (
-              <div className="dia-reward d-flex ">
-                <img src={diamond} className="img-fluid img-icon--medal p-1 " alt="diamond img" />
-                <p className="dia-number ms-3  me-5">
-                  {/* Prefer backend-provided pointsEarned when available. Otherwise compute based on level and attemptNumber. */}
-                  {(() => {
-                    if (pointsEarned !== null && pointsEarned !== undefined) return pointsEarned;
-                    // points tiers per attempt bucket
-                    const pointsTable = {
-                      basic: { firstTwo: 10, third: 5, fourthPlus: 2 },
-                      intermediate: { firstTwo: 15, third: 8, fourthPlus: 3 },
-                      advanced: { firstTwo: 20, third: 10, fourthPlus: 5 },
-                    };
-                    const lvl = currentLevel || 'basic';
-                    const tiers = pointsTable[lvl] || pointsTable.basic;
-                    let perAnswer = tiers.firstTwo;
-                    if (attemptNumber === 3) perAnswer = tiers.third;
-                    else if (attemptNumber >= 4) perAnswer = tiers.fourthPlus;
-                    // if attemptNumber is null/undefined, assume firstTwo (initial run)
-                    return perAnswer * Number(correctAnswers || 0);
-                  })()}
-                </p>
-              </div>
-            )}
-          <img src={check} className="tama img-fluid img-icon p-1" alt="check img" />
+            <div className="dia-reward d-flex ">
+              <img src={diamond} className="img-fluid p-1 " alt="diamond img" />
+              <p className="dia-number ms-3  me-5">
+                {/* Prefer backend-provided pointsEarned when available. Otherwise compute based on level and attemptNumber. */}
+                {(() => {
+                  if (pointsEarned !== null && pointsEarned !== undefined) return pointsEarned;
+                  // points tiers per attempt bucket
+                  const pointsTable = {
+                    basic: { firstTwo: 10, third: 5, fourthPlus: 2 },
+                    intermediate: { firstTwo: 15, third: 8, fourthPlus: 3 },
+                    advanced: { firstTwo: 20, third: 10, fourthPlus: 5 },
+                  };
+                  const lvl = currentLevel || 'basic';
+                  const tiers = pointsTable[lvl] || pointsTable.basic;
+                  let perAnswer = tiers.firstTwo;
+                  if (attemptNumber === 3) perAnswer = tiers.third;
+                  else if (attemptNumber >= 4) perAnswer = tiers.fourthPlus;
+                  // if attemptNumber is null/undefined, assume firstTwo (initial run)
+                  return perAnswer * Number(correctAnswers || 0);
+                })()}
+              </p>
+            </div>
+          )}
+          <img src={check} className="tama img-fluid p-1" alt="check img" />
           <p className="check-number ms-2" style={{ color: "#20BF55" }}>{correctAnswers}</p>
           <img src={ekis} className="mali img-fluid img-icon p-1 ms-5" alt="ekis img" />
           <p className="ekis-number ms-2" style={{ color: "#F44336" }}>{wrongAnswers}</p>
@@ -174,7 +174,7 @@ function Finish() {
               className="img-fluid d-flex p-2 mb-1"
               alt="quiz"
             />
-            {currentStep === 1 ? "1 Quiz" : "2 Quiz"}
+            <p>{currentStep === 1 ? "1 Quiz" : "2 Quiz"}</p>
           </button>
         ) : (
           /* Regular mode: Show Continue button only for step 1 */
@@ -203,6 +203,255 @@ function Finish() {
           )
         )}
       </div>
+
+      {/* Responsive styles for smooth transition */}
+      <style>{`
+        /* Tablet sidenav and logo - show between 640px-1024px */
+        @media (min-width: 640px) and (max-width: 768px) {
+          .finishtext {
+            top: 80px !important;
+          }
+          .applause {
+            width: 100px !important;  
+            height: auto !important;          
+          }
+          .textFinished {
+            font-size: 1.5rem !important;  
+            text-align: center !important;
+          }
+          .stats-quiz img {
+            width: 2rem !important;  
+            height: 2rem !important;          
+          }
+          
+          .stats-quiz p {
+            font-size: 1.5rem !important;
+
+          }
+          .${currentLevel}tracker {
+            width: 60vw !important;
+            gap: 4px !important;
+          }
+          .${currentLevel}tracker span {
+            font-size: 1.5rem !important;
+            
+          }
+          .finishbuttons {
+            width: 56vw !important;
+            height: 12vh !important;
+            margin-left: 15px !important;
+            gap: 2px !important;
+            margin-top: 110px !important;
+          }
+            
+          .finishbuttons button {
+            font-size: 1.4rem !important;
+            width: 95vw !important;
+            height: 10vh !important;
+            margin-left: 6px !important;
+            margin-right: 6px !important;
+            gap: 0px !important;
+            
+          }
+          .dashboard-button {
+            margin-top: 4px !important;
+          }
+          .dashboard-button img {
+            margin-right: 5px !important;
+            display: flex;
+            width: 30px !important;
+          }
+          .continue {
+            padding: 20px !important;
+
+          }
+          .continue img {
+            width: 2.3rem !important;  
+            height: 2.3rem !important;
+            position: relative !important;
+            left: 0px !important;
+            margin-top: 8px;
+            margin-right: 16px;
+          }
+          .continue p {
+            margin-top: 0px;
+            margin-left: 20px;
+          }
+          .Quiz  {
+            gap: 25px !important;
+            padding-left: 18px !important;
+          }
+          
+          .Quiz p {
+            margin-top: 10px;
+            margin-left: 12px;
+          }
+
+        }
+        
+        /* Mobile sidenav - only show below 640px */
+        @media (max-width: 639px) {
+          .finishtext {
+            top: 80px !important;
+          }
+          .applause {
+            width: 100px !important;  
+            height: auto !important;          
+          }
+          .textFinished {
+            font-size: 1.5rem !important;  
+            text-align: center !important;
+          }
+          .stats-quiz img {
+            width: 2rem !important;  
+            height: 2rem !important;          
+          }
+          
+          .stats-quiz p {
+            font-size: 1.5rem !important;
+
+          }
+          .${currentLevel}tracker {
+            width: 90vw !important;
+            gap: 4px !important;
+          }
+          .${currentLevel}tracker span {
+            font-size: 1.5rem !important;
+            
+          }
+          .finishbuttons {
+            width: 95vw !important;
+            height: 12vh !important;
+            margin-left: 6px !important;
+            gap: 2px !important;
+            margin-top: 100px !important;
+          }
+            
+          .finishbuttons button {
+            font-size: 1.1rem !important;
+            width: 42vw !important;
+            height: 8vh !important;
+            margin-left: 6px !important;
+            margin-right: 6px !important;
+            gap: 0px !important;
+            
+          }
+
+          .continue{
+            padding: 20px !important;
+          }
+          .continue img, dashboard-button img {
+            display: flex;
+            width: 30px !important;
+            margin-top: 6px;
+            margin-right: 8px;
+          }
+          .Quiz  {
+            gap: 25px !important;
+            
+          }
+          .Quiz img {
+            width: 3rem !important;  
+            height: 3rem !important;
+            position: fixed !important;
+            right: 100px !important;
+          }
+          .Quiz p {
+            margin-top: 10px;
+            margin-left: 20px;
+          }
+          
+        }
+        
+        /* Desktop sidenav - show above 1024px */
+        @media (min-width: 1024px) {
+             .finishtext {
+            top: 80px !important;
+          }
+          .applause {
+            width: 100px !important;  
+            height: auto !important;          
+          }
+          .textFinished {
+            font-size: 1.5rem !important;  
+            text-align: center !important;
+          }
+          .stats-quiz img {
+            width: 2.8rem !important;  
+            height: 2.8rem !important;           
+          }
+          
+          .stats-quiz p {
+            font-size: 2rem !important;
+
+          }
+          .${currentLevel}tracker {
+            width: 60vw !important;
+            gap: 4px !important;
+          }
+          .${currentLevel}tracker span {
+            font-size: 1.5rem !important;
+            
+          }
+          .finishbuttons {
+            width: 56vw !important;
+            height: 12vh !important;
+            margin-left: 15px !important;
+            gap: 2px !important;
+            margin-top: 110px !important;
+          }
+            
+          .finishbuttons button {
+            font-size: 1.4rem !important;
+            width: 95vw !important;
+            height: 10vh !important;
+            margin-left: 6px !important;
+            margin-right: 6px !important;
+            gap: 0px !important;
+            
+          }
+          .dashboard-button {
+            margin-top: 4px !important;
+          }
+          .dashboard-button img {
+            margin-right: 5px !important;
+            display: flex;
+            width: 35px !important;
+          }
+          .continue {
+            padding: 20px !important;
+
+          }
+          .continue img {
+            width: 2.3rem !important;  
+            height: 2.3rem !important;
+            position: relative !important;
+            left: 0px !important;
+            margin-top: 8px;
+            margin-right: 16px;
+          }
+          .continue p {
+            margin-top: 0px;
+            margin-left: 20px;
+          }
+          .Quiz  {
+            gap: 25px !important;
+            padding-left: 18px !important;
+          }
+          
+          .Quiz p {
+            margin-top: 10px;
+            margin-left: 12px;
+          }
+          .Quiz img {
+            width: 3.3rem !important;  
+
+            height: 3.3rem !important;
+            
+          }
+        }
+
+      `}</style>
     </>
   );
 }

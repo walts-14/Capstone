@@ -412,7 +412,7 @@ function Quiz() {
   const displayTotalPoints = backendTotalPoints ?? "-";
     return (
       <div className="d-flex flex-column align-items-center justify-content-center gap-2" style={{ minHeight: "100vh", backgroundColor: "var(--background)" }}>
-        <img src={failed} alt="" className="mb-4" />
+        <img className="failedIcon mb-4" src={failed} alt=""  />
 
         <div className="stats-quiz d-flex flex-row gap-2 text-center fs-1 ">
           <img src={check} className="tama img-fluid img-icon p-1" alt="check img" />
@@ -421,13 +421,8 @@ function Quiz() {
           <p className="ekis-number " style={{ color: "#F44336" }}>{wrongAnswers}</p>
         </div>
 
-        {/* Summary row: show correct / wrong only (remove fraction like "6/10") */}
-        <div className="quiz-summary d-flex flex-row gap-4 align-items-center my-3">
-          <div className="attempts-box text-center">
-          </div>
-        </div>
 
-        <div className="d-flex flex-column align-items-center justify-content-center mb-4">
+        <div className="failedText d-flex flex-column align-items-center justify-content-center mb-4">
           <h1 className="text-white fw-bold text-uppercase mt-0" style={{ fontSize: "3rem", fontFamily: "Baloo, sans-serif" }}>{failHeading}</h1>
           <h2 style={{ fontSize: "2rem", fontFamily: "Baloo, sans-serif", color: "#878194" }}>
             You need at least 7 correct answers to pass the quiz
@@ -452,10 +447,282 @@ function Quiz() {
             className="retry-button d-flex flex-direction-row justify-content-center align-items-center"
             onClick={handleRetry}
           >
-            <img src={retry} className="img-fluid img-icon" alt="retry img" />
+            <img src={retry} className="img-fluid d-flex" alt="retry img" />
             <p style={{ color: "white" }}>Try again</p>
           </button>
         </div>
+          
+        {/* Responsive styles for smooth transition */}
+      <style>{`
+        /* Tablet sidenav and logo - show between 640px-1024px */
+        @media (min-width: 640px) and (max-width: 768px) {
+          .failedIcon {
+            width: 100px !important;  
+            height: auto !important;                 
+          }
+          .failedText {
+            width: 100%;         /* use container width instead of huge vw */
+            max-width: 800px;    /* optional cap so text line length stays readable */
+            margin: 0 0 0 0;      /* centers the block horizontally */
+            text-align: center;  /* centers inline text inside the block */
+            box-sizing: border-box;
+            font-size: 1.5rem !important;
+          }
+          .failedText h1 {
+            font-size: 1.6rem !important;
+          }
+          .failedText h2{
+            font-size: 1.3rem !important;
+          }
+          .stats-quiz img {
+            width: 2rem !important;  
+            height: 2rem !important;      
+          }
+          
+          .stats-quiz p {
+            font-size: 1.5rem !important;
+
+          }
+         
+          .finishbuttons {
+            width: 56vw !important;
+            height: 12vh !important;
+            margin-left: 2px !important;
+            gap: 2px !important;
+          }
+            
+          .finishbuttons button {
+            font-size: 1.1rem !important;
+            width: 95vw !important;
+            height: 10vh !important;
+            margin-left: 6px !important;
+            margin-right: 6px !important;
+            gap: 0px !important;
+            border-radius: 12px !important;
+            padding: 2px !important;
+          }
+          .dashboard-button img {
+            width: 2.3rem !important;  
+            height: 2.3rem !important;
+            margin-bottom: 6px !important;
+          }
+          .retry-button {
+            width: 44vw !important;
+            height: 8vh !important;
+          }
+          .retry-button p {
+            font-size: 1.1rem !important;
+            width: 100px !important;
+          }
+          .retry-button img {
+            width: 2.3rem !important;  
+            height: 2.3rem !important;
+            margin-top: 4px !important;
+          }
+        }
+        
+        /* Mobile sidenav - only show below 640px */
+        @media (max-width: 639px) {
+          .failedIcon {
+            width: 100px !important;  
+            height: auto !important;                 
+          }
+          .failedText {
+            width: 100%;         /* use container width instead of huge vw */
+            max-width: 800px;    /* optional cap so text line length stays readable */
+            margin: 0 0 0 0;      /* centers the block horizontally */
+            text-align: center;  /* centers inline text inside the block */
+            box-sizing: border-box;
+            font-size: 1.5rem !important;
+          }
+          .failedText h1 {
+            font-size: 1.5rem !important;
+          }
+          .failedText h2{
+            font-size: 1.2rem !important;
+          }
+          .stats-quiz img {
+            width: 2rem !important;  
+            height: 2rem !important;      
+          }
+          
+          .stats-quiz p {
+            font-size: 1.5rem !important;
+
+          }
+         
+          .finishbuttons {
+            width: 95vw !important;
+            height: 12vh !important;
+            margin-left: 2px !important;
+            gap: 2px !important;
+          }
+            
+          .finishbuttons button {
+           font-size: 1.1rem !important;
+            width: 44vw !important;
+            height: 8vh !important;
+            margin-left: 6px !important;
+            margin-right: 6px !important;
+            gap: 0px !important;
+            border-radius: 12px !important;
+            padding: 2px !important;
+          }
+          .dashboard-button img {
+            width: 2.3rem !important;  
+            height: 2.3rem !important;
+            margin-bottom: 6px !important;
+          }
+          .retry-button {
+            width: 44vw !important;
+            height: 8vh !important;
+          }
+          .retry-button p {
+            font-size: 1.1rem !important;
+          
+          }
+          .retry-button img {
+            width: 2.3rem !important;  
+            height: 2.3rem !important;
+            margin-top: 4px !important;
+          }
+        }
+        
+        /* Desktop sidenav - show above 1024px */
+        @media (min-width: 1024px) {
+               .failedIcon {
+            width: 100px !important;  
+            height: auto !important;                 
+          }
+          .failedText {
+            width: 100%;         /* use container width instead of huge vw */
+            max-width: 800px;    /* optional cap so text line length stays readable */
+            margin: 0 0 0 0;      /* centers the block horizontally */
+            text-align: center;  /* centers inline text inside the block */
+            box-sizing: border-box;
+            font-size: 1.5rem !important;
+          }
+          .failedText h1 {
+            font-size: 1.6rem !important;
+          }
+          .failedText h2{
+            font-size: 1.3rem !important;
+          }
+          .stats-quiz img {
+            width: 2.8rem !important;  
+            height: 2.8rem !important;           
+          }
+          
+          .stats-quiz p {
+            font-size: 2rem !important;
+
+          }
+         
+          .finishbuttons {
+            width: 56vw !important;
+            height: 12vh !important;
+            margin-left: 2px !important;
+            gap: 2px !important;
+          }
+            
+          .finishbuttons button {
+            font-size: 1.1rem !important;
+            width: 95vw !important;
+            height: 10vh !important;
+            margin-left: 6px !important;
+            margin-right: 6px !important;
+            gap: 0px !important;
+            border-radius: 12px !important;
+            padding: 2px !important;
+          }
+          .dashboard-button img {
+            width: 2.4rem !important;  
+            height: 2.4rem !important;
+            margin-bottom: 6px !important;
+          }
+          .retry-button {
+            width: 44vw !important;
+            height: 8vh !important;
+          }
+          .retry-button p {
+            font-size: 1.1rem !important;
+            width: 100px !important;
+          }
+          .retry-button img {
+            width: 2.3rem !important;  
+            height: 2.3rem !important;
+            margin-top: 4px !important;
+          }
+        }
+
+         /* Desktop sidenav - show above 1024px */
+        @media (min-width: 1440px) {
+               .failedIcon {
+            width: 100px !important;  
+            height: auto !important;                 
+          }
+          .failedText {
+            width: 100%;         /* use container width instead of huge vw */
+            max-width: 800px;    /* optional cap so text line length stays readable */
+            margin: 0 0 0 0;      /* centers the block horizontally */
+            text-align: center;  /* centers inline text inside the block */
+            box-sizing: border-box;
+            font-size: 1.5rem !important;
+          }
+          .failedText h1 {
+            font-size: 1.6rem !important;
+          }
+          .failedText h2{
+            font-size: 1.3rem !important;
+          }
+          .stats-quiz img {
+            width: 2.8rem !important;  
+            height: 2.8rem !important;           
+          }
+          
+          .stats-quiz p {
+            font-size: 2rem !important;
+
+          }
+         
+          .finishbuttons {
+            width: 56vw !important;
+            height: 12vh !important;
+            margin-left: 2px !important;
+            gap: 2px !important;
+          }
+            
+          .finishbuttons button {
+            font-size: 1.1rem !important;
+            width: 95vw !important;
+            height: 10vh !important;
+            margin-left: 6px !important;
+            margin-right: 6px !important;
+            gap: 0px !important;
+            border-radius: 12px !important;
+            padding: 2px !important;
+          }
+          .dashboard-button img {
+            width: 2.4rem !important;  
+            height: 2.4rem !important;
+            margin-bottom: 6px !important;
+          }
+          .retry-button {
+            width: 44vw !important;
+            height: 8vh !important;
+          }
+          .retry-button p {
+            font-size: 1.1rem !important;
+            width: 100px !important;
+          }
+          .retry-button img {
+            width: 2.3rem !important;  
+            height: 2.3rem !important;
+            margin-top: 4px !important;
+          }
+        }
+
+      `}</style>
       </div>
     );
   }
@@ -549,7 +816,7 @@ function Quiz() {
             onClick={handleNext}
             disabled={lives <= 0}
           >
-            Next
+            <p>Next</p>
             <img
               src={arrow}
               className="img-fluid d-flex ms-auto img-icon p-1 mt-1"
@@ -558,6 +825,458 @@ function Quiz() {
           </button>
         </>
       )}
+        {/* Responsive styles for smooth transition */}
+      <style>{`
+       
+        
+        /* Mobile sidenav - only show below 640px */
+        @media (max-width: 639px) {
+       .progress {
+          margin-left: 14px !important;
+          margin-top: 10vh !important;
+          align-items: center !important;
+          width: 92vw !important;
+          height: 18px !important;
+          border-radius: 50px !important;
+        }
+
+        .grid {
+          height: 200vh !important;
+          width: 100vw !important;
+          border-radius: 0px !important;
+          gap: 60px 78px !important;
+          margin-top: 15px !important;
+        }
+
+        .choices {
+          height: 22vh !important;
+          width: 46vw !important;
+          position: relative !important;
+          top: 8vh !important;
+          right: 33px !important;
+          margin: 0 auto !important;
+        }
+
+        .choice-a, .choice-b, .choice-c, .choice-d {
+          height: 5vh !important;
+          width: 50vw !important;
+          position: relative !important;
+          bottom: 7vh !important;
+          right: 0 !important;
+          margin: 8px auto !important;
+          border-radius: 12px !important;
+        }
+        
+        .choice-a strong, .choice-b strong, .choice-c strong, .choice-d strong {
+          margin-top: 2px !important;
+          font-size: 1rem !important;
+        }
+
+        .choice-a video, .choice-b video, .choice-c video, .choice-d video {
+          width: 41vw !important;
+          height: auto !important;
+          max-width: 300px !important;
+          max-height: 45vh !important;
+          object-fit: contain !important;
+          display: block !important;
+     
+          border-radius: 12px !important;
+          margin: 0 auto !important;
+          position: absolute !important;
+          top: 5vh !important;
+          left: 50% !important;
+          transform: translateX(-50%) !important;
+          z-index: 1 !important;
+        }
+
+        .continue {
+          display: flex !important;
+          justify-content: center !important;
+          align-items: center !important;
+          position: absolute !important;
+          top: 91vh !important;
+          left: 12px !important;
+          height: 6vh !important;
+          width: 92vw !important;
+          font-size: 1.6rem !important;
+          padding-top: 10px !important;
+          border-radius: 12px !important;
+        }
+
+        .continue img {
+          margin: 0px !important;
+          margin-top: 10px !important;
+          margin-left: 8px !important;
+          width: 2.2rem !important;
+          height: 2rem !important;
+        }
+        .continue p {
+          margin-bottom: 0px !important;
+          margin-top: 4px !important;
+        }      
+        .quiz-question {
+          display: block !important;
+          font-size: 1.3rem !important;
+          position: fixed !important;
+          left: 50% !important;
+          top: 8rem !important;
+          transform: translateX(-50%) !important;
+          width: 92vw !important;
+          text-align: center !important;
+        }
+
+         .back {
+            display: flex !important;
+            justify-content: center !important;
+            position: fixed !important;
+            left: 4rem !important;
+            top: -0.5rem !important;
+            font-size: 1.5rem !important;
+          }
+          .back img {
+            width: 2rem !important;
+            height: 1.5rem !important;
+          }
+      }
+        .lives-quizz {
+          display: flex !important;
+          position: absolute !important;
+          top:  0.5rem !important;
+          left: 18rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
+          transform: scale(1) !important;
+        }
+           /* Mobile sidenav - only show below 640px */
+        @media (min-width: 425px) {
+          .lives-quizz {
+          display: flex !important;
+          position: absolute !important;
+          top:  0.5rem !important;
+          left: 21rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
+          transform: scale(1) !important;
+        }
+          .choice-a video, .choice-b video, .choice-c video, .choice-d video {
+          width: 39vw !important;
+          height: auto !important;
+          max-width: 300px !important;
+          max-height: 45vh !important;
+          object-fit: contain !important;
+          display: block !important;
+          
+          border-radius: 12px !important;
+          margin: 0 auto !important;
+          position: absolute !important;
+          top: 5vh !important;
+          left: 50% !important;
+          transform: translateX(-50%) !important;
+          z-index: 1 !important;
+        }
+          .choices {
+          height: 23vh !important;
+          width: 44vw !important;
+          position: relative !important;
+          top: 4vh !important;
+          right: 33px !important;
+          margin: 0 auto !important;
+        }
+      }
+        
+         /* Tablet sidenav and logo - show between 640px-1024px */
+        @media (min-width: 640px) and (max-width: 768px) {
+           .back {
+            display: flex !important;
+            justify-content: center !important;
+            position: fixed !important;
+            left: 2rem !important;
+            top: 0rem !important;
+            font-size: 1.5rem !important;
+            }
+           
+          .lives-quizz {
+          display: flex !important;
+          position: absolute !important;
+          top:  7rem !important;
+          left: 40rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
+          
+         }
+          .back img {
+            width: 2rem !important;
+            height: 1.5rem !important;
+          }
+          .grid {
+            height: 60vh !important;
+            width: 90vw !important;
+            border-radius: 18px !important;
+            gap: 56px 102px !important;
+            margin-top: 15px !important;
+          }
+
+          .quiz-question {
+            display: block !important;
+            font-size: 1.7rem !important;
+            position: fixed !important;
+            left: 50% !important;
+            top: 10rem !important;
+            transform: translateX(-50%) !important;
+            width: 80vw !important;
+            text-align: center !important;
+          }
+          .choices {
+            height: 20vh !important;
+            width: 38vw !important;
+            position: relative !important;
+            top: 8vh !important;
+            right: 38px !important;
+            margin: 0 auto !important;
+           }
+          .choice-a, .choice-b, .choice-c, .choice-d {
+            height: 7vh !important;
+            width: 7vw !important;
+            position: absolute !important;
+            bottom: 6vh !important;
+            left: 7px !important;
+            margin: 0px auto !important;
+            border-radius: 12px !important;
+          }
+          .choice-a strong, .choice-b strong, .choice-c strong, .choice-d strong {
+            margin-top: 2px !important;
+            font-size: 1.5rem !important;
+          }
+          .choice-a video, .choice-b video, .choice-c video, .choice-d video {
+            width: 41vw !important;
+            height: auto !important;
+            max-width: 180px !important;
+            max-height: 30vh !important;
+            object-fit: contain !important;
+            display: block !important;
+        
+            border-radius: 12px !important;
+            margin: 0 auto !important;
+            position: absolute !important;
+            top: -2rem !important;
+            
+            left: 10.7rem !important;
+            transform: translateX(-50%) !important;
+            z-index: 1 !important;
+          }
+          
+          .continue {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            font-size: 1.6rem !important;
+            padding-top: 10px !important;
+            margin-bottom: 45px !important;
+          } 
+          .continue img {
+            margin: 0px !important;
+            margin-top: 10px !important;
+            margin-left: 8px !important;
+            width: 2.5rem !important;
+            height: 2.3rem !important;
+          }
+          .continue p {
+            margin-bottom: 0px !important;
+            margin-top: 4px !important;
+          }      
+        }
+
+        /* Desktop sidenav - show above 1024px */
+        @media (min-width: 1024px) {
+           .back {
+            display: flex !important;
+            justify-content: center !important;
+            position: fixed !important;
+            left: 1.3rem !important;
+            top: -0.5rem !important;
+            font-size: 1.5rem !important;
+            }
+          .lives-quizz {
+          display: flex !important;
+          position: absolute !important;
+          top:  7rem !important;
+          left: 55rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
+          
+         }
+          .back img {
+            width: 2rem !important;
+            height: 1.5rem !important;
+          }
+          .grid {
+            height: 60vh !important;
+            width: 90vw !important;
+            border-radius: 18px !important;
+            gap: 56px 102px !important;
+            margin-top: 15px !important;
+          }
+
+          .quiz-question {
+            display: block !important;
+            font-size: 1.7rem !important;
+            position: fixed !important;
+            left: 50% !important;
+            top: 11rem !important;
+            transform: translateX(-50%) !important;
+            width: 80vw !important;
+            text-align: center !important;
+          }
+          .choices {
+            height: 20vh !important;
+            width: 34vw !important;
+            position: relative !important;
+            top: 8vh !important;
+            right: 38px !important;
+            margin: 0 auto !important;
+           }
+          .choice-a, .choice-b, .choice-c, .choice-d {
+            height: 7vh !important;
+            width: 5vw !important;
+            position: absolute !important;
+            bottom: 6vh !important;
+            left: 22px !important;
+            margin: 0px auto !important;
+            border-radius: 12px !important;
+          }
+          .choice-a strong, .choice-b strong, .choice-c strong, .choice-d strong {
+            margin-top: 2px !important;
+            font-size: 1.5rem !important;
+          }
+          .choice-a video, .choice-b video, .choice-c video, .choice-d video {
+            width: 41vw !important;
+            height: auto !important;
+            max-width: 198px !important;
+            max-height: 35vh !important;
+            object-fit: contain !important;
+            display: block !important;
+            border-radius: 12px !important;
+            margin: 0 auto !important;
+            position: absolute !important;
+            top: -2.3rem !important;
+            
+            left: 13.2rem !important;
+            transform: translateX(-50%) !important;
+            z-index: 1 !important;
+          }
+          
+          .continue {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            font-size: 1.6rem !important;
+            padding-top: 10px !important;
+            margin-bottom: 45px !important;
+          } 
+          .continue img {
+            margin: 0px !important;
+            margin-top: 10px !important;
+            margin-left: 8px !important;
+            width: 2.5rem !important;
+            height: 2.3rem !important;
+          }
+          .continue p {
+            margin-bottom: 0px !important;
+            margin-top: 4px !important;
+          }      
+        }
+
+            /* Desktop sidenav - show above 1024px */
+        @media (min-width: 1440px) {
+          .back {
+              display: flex !important;
+              justify-content: center !important;
+              position: fixed !important;
+              left: 1rem !important;
+              top: -0.8rem !important;
+              font-size: 1.9rem !important;
+            }
+          .back img {
+            width: 2.5rem !important;
+            height: 2rem !important;
+          } 
+          .lives-quizz {
+            display: flex !important;
+            position: absolute !important;
+            top:  7rem !important;
+            left: 84rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
+
+           }
+          
+          .grid {
+            height: 60vh !important;
+            width: 90vw !important;
+            border-radius: 18px !important;
+            gap: 90px 107px !important;
+            margin-top: 15px !important;
+          }
+
+          .quiz-question {
+            display: block !important;
+            font-size: 2.2rem !important;
+            position: fixed !important;
+            left: 50% !important;
+            top: 11rem !important;
+            transform: translateX(-50%) !important;
+            width: 80vw !important;
+            text-align: center !important;
+          }
+          .choices {
+            height: 22vh !important;
+            width: 33vw !important;
+            position: relative !important;
+            top: 8vh !important;
+            right: 38px !important;
+            margin: 0 auto !important;
+           }
+          .choice-a, .choice-b, .choice-c, .choice-d {
+            height: 8vh !important;
+            width: 4vw !important;
+            position: absolute !important;
+            bottom: 6vh !important;
+            left: 38px !important;
+            margin: 0px auto !important;
+            border-radius: 12px !important;
+          }
+          .choice-a strong, .choice-b strong, .choice-c strong, .choice-d strong {
+            margin-top:0px !important;
+            font-size: 2.3rem !important;
+          }
+          .choice-a video, .choice-b video, .choice-c video, .choice-d video {
+            width: 48vw !important;
+            height: auto !important;
+            max-width: 260px !important;
+            max-height: 35vh !important;
+            object-fit: contain !important;
+            display: block !important;
+            border-radius: 12px !important;
+            margin: 0 auto !important;
+            position: absolute !important;
+            top: -3.1rem !important;
+     
+            left: 16.2rem !important;
+            transform: translateX(-50%) !important;
+            z-index: 1 !important;
+          }
+          
+          .continue {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            font-size: 1.6rem !important;
+            padding-top: 10px !important;
+            margin-bottom: 45px !important;
+          } 
+          .continue img {
+            margin: 0px !important;
+            margin-top: 10px !important;
+            margin-left: 8px !important;
+            width: 2.5rem !important;
+            height: 2.3rem !important;
+          }
+          .continue p {
+            margin-bottom: 0px !important;
+            margin-top: 4px !important;
+          }      
+        }
+      `}</style>
     </>
   );
 }

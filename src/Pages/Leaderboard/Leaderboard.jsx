@@ -7,10 +7,12 @@ import "../../css/Leaderboard.css";
 function Leaderboard() {
   return (
     <>
-      <div className="leaderboard-container flex flex-col items-center justify-center my-4">
+      <div className="leaderboard-container">
         <Sidenav />
-        <div className="leaderboard-scroll-wrapper overflow-y-auto w-full max-h-screen p-4 mr-9">
-          <LbComponent />
+        <div className="leaderboard-content">
+          <div className="leaderboard-wrapper">
+            <LbComponent />
+          </div>
         </div>
       </div>
     </>

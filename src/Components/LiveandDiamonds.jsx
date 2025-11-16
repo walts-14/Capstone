@@ -73,56 +73,58 @@ function LivesandDiamonds({ showDiamonds = true, showLives = true }) {
   return (
     <>
       {showLives && (
-        <div className="flex items-center gap-1">
+        <div className="lives-container flex items-center gap-2">
           <img
             src={heart}
-            className="w-12 h-12 object-contain"
+            className="heart-icon w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 object-contain"
             alt="lives logo"
           />
-          <p className="m-0 text-red-500 font-bold text-3xl ml-1">{lives}</p>
+          <p className="lives-number m-0 text-red-500 font-bold text-xl sm:text-2xl md:text-3xl ml-1">{lives}</p>
         </div>
       )}
       {showDiamonds && (
-        <div className="flex items-center gap-1 text-white">
+        <div className="diamonds-container flex items-center gap-2 text-white">
           <img
             src={diamond}
-            className="w-12 h-12 object-contain"
+            className="diamond-icon w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 object-contain"
             alt="Points"
           />
-          <p className="m-0 font-bold text-3xl ml-1">{points}</p>
+          <p className="points-number m-0 font-bold text-xl sm:text-2xl md:text-3xl ml-1">{points}</p>
         </div>
       )}
 
-      <style>{`
-        /* Tablet responsive styles - ONLY activate at breakpoint */
-        @media (max-width: 1024px) {
-          .lives-container {
-            gap: 0.25rem !important;
-          }
-          
-          .heart-icon {
-            width: 2.5rem !important;
-            height: 2.5rem !important;
-          }
-          
-          .lives-number {
-            font-size: 1.875rem !important;
-            margin-left: 0.25rem !important;
-          }
-          
-          .diamonds-container {
-            gap: 0.25rem !important;
-          }
-          
-          .diamond-icon {
-            width: 2.5rem !important;
-            height: 2.5rem !important;
-          }
-          
-          .points-number {
-            font-size: 1.875rem !important;
-            margin-left: 0.25rem !important;
-          }
+      <style jsx>{`
+        /* Mobile sidenav - only show below 640px */
+        @media (max-width: 639px) {
+        .lives-container, .diamonds-container { gap: 0px }
+        .heart-icon, .diamond-icon { width: 1.5rem; height: auto; }
+        .lives-number, .points-number { font-size: 1.3rem; margin-left: 0.25rem; }
+        }
+
+        @media (max-width: 768px) {
+        .lives-container, .diamonds-container { gap: 0px }
+        .heart-icon, .diamond-icon { width: 1.6rem; height: auto; }
+        .lives-number, .points-number { font-size: 1.6rem; margin-left: 0.25rem; }
+        } 
+        /* Laptop breakpoint: 1024x668 and up */
+        @media (min-width: 1024px) {
+          .lives-container, .diamonds-container { gap: 0.5rem; }
+          .heart-icon, .diamond-icon { width: 2rem; height: 2rem; }
+          .lives-number, .points-number { font-size: 1.75rem; margin-left: 0.5rem; }
+        }
+
+        /* Laptop L: 1440x891 and up - slightly larger */
+        @media (min-width: 1440px) {
+          .lives-container, .diamonds-container { gap: 0.75rem; }
+          .heart-icon, .diamond-icon { width: 3rem; height: 3rem; }
+          .lives-number, .points-number { font-size: 2.25rem; margin-left: 0.5rem; }
+        }
+
+        /* 4K: 2560x1672 and up - scale up for large displays */
+        @media (min-width: 2560px) {
+          .lives-container, .diamonds-container { gap: 1rem; }
+          .heart-icon, .diamond-icon { width: 4.5rem; height: 4.5rem; }
+          .lives-number, .points-number { font-size: 3.5rem; margin-left: 0.75rem; }
         }
       `}</style>
     </>

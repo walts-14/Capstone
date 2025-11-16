@@ -437,7 +437,9 @@ const SuperAdmin = () => {
           console.log("No qrDataUrl or magicUrl in response:", returned);
       }
 
-      toast.success(`${formMode === "edit" ? "Updated" : "Created"} ${activeTab}`);
+      toast.success(
+        `${formMode === "edit" ? "Updated" : "Created"} ${activeTab}`
+      );
       await fetchUsers(formData.yearLevel);
       setSelectedGrade(formData.yearLevel);
       setShowForm(false);
@@ -700,8 +702,9 @@ const SuperAdmin = () => {
   const dataToDisplay = activeTab === "Users" ? users : teachers;
 
   return (
-    <div className="admin-body">
-      <div className="sidebarr">
+    <div className="holy-grail-layout">
+      {/* Sidebar */}
+      <aside className="holy-grail-sidebar">
         <SidenavAdmins
           setSelectedGrade={setSelectedGrade}
           fetchStudents={activeTab === "Users" ? fetchUsers : fetchTeachers}
@@ -709,246 +712,176 @@ const SuperAdmin = () => {
           showLeaderboard={showLeaderboard}
           role="superadmin"
         />
-      </div>
+      </aside>
 
-      {showLeaderboard ? (
-        <div
-          className="wrapper-lb"
-          style={{ maxHeight: "100vh", overflowY: "auto" }}
-        >
-          <LbComponent />
-        </div>
-      ) : (
-        <>
-          <div className="levels">
-            {[
-              "Grade 7",
-              "Grade 8",
-              "Grade 9",
-              "Grade 10",
-              "Grade 11",
-              "Grade 12",
-            ].map((grade) => {
-              const gradeClass = grade.replace(" ", "").toLowerCase();
-              return (
-                <div
-                  key={grade}
-                  className={`level-item ${gradeClass} ${
-                    selectedGrade === grade ? "active" : ""
-                  }`}
-                  onClick={() => handleGradeSelection(grade)}
-                  style={{
-                    minWidth: "120px",
-                    textAlign: "center",
-                    fontWeight: "bold",
-                    fontSize: "1.1rem",
-                    borderRadius: "8px",
-                    padding: "1.1rem 0",
-                    cursor: "pointer",
-                    transition: "background 0.2s, color 0.2s",
-                  }}
-                >
-                  {grade.toUpperCase()}
-                </div>
-              );
-            })}
-          </div>
-
+      {/* Main Content Wrapper */}
+      <div className="holy-grail-content-wrapper">
+        {/* Header */}
+        <header className="holy-grail-header">
           <div
-            className="divtabs d-flex justify-content-center"
-            style={{ zIndex: showProgressTracker ? 1 : 10 }}
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
+              gap: "1rem",
+            }}
           >
-            <div className="tabs position-absolute">
-              <button
-                className={`tabss ${activeTab === "Users" ? "active" : ""}`}
-                onClick={() => {
-                  setActiveTab("Users");
-                  fetchUsers(selectedGrade);
-                }}
-              >
-                Users
-              </button>
-              <button
-                className={`tabss ${activeTab === "Teachers" ? "active" : ""}`}
-                onClick={() => {
-                  setActiveTab("Teachers");
-                  fetchTeachers(selectedGrade);
-                }}
-              >
-                Teacher
-              </button>
-            </div>
-          </div>
-
-          <div className="table-container">
-            <div
-              className="Create"
-              style={{ display: "flex", alignItems: "center" }}
-            >
-              <div style={{ marginRight: "1.5rem" }}>
+            <h1 className="supertitle" style={{ margin: 0, fontSize: "2rem" }}>
+              Super Admin Dashboard
+            </h1>
+            {!showLeaderboard && (
+              <div style={{ display: "flex", gap: "0.5rem" }}>
                 <button
-                  className="btn text-light px-1 py-1"
-                  style={{
-                    backgroundColor: "#6C7294",
-                    color: "#FFF",
-                    borderRadius: 10,
-                    fontWeight: "bold",
-                    fontSize: "1.5rem",
-                    padding: "30px",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.5rem",
+                  className={`tabss ${activeTab === "Users" ? "active" : ""}`}
+                  onClick={() => {
+                    setActiveTab("Users");
+                    fetchUsers(selectedGrade);
                   }}
-                  onClick={handleMessageButtonClick}
+                  style={{
+                    padding: "0.5rem 1.5rem",
+                    fontSize: "1.2rem",
+                    border:
+                      activeTab === "Users"
+                        ? "3px solid #fff"
+                        : "3px solid transparent",
+                    backgroundColor:
+                      activeTab === "Users" ? "#fff" : "rgba(255,255,255,0.2)",
+                    color: activeTab === "Users" ? "#3a86d1" : "#fff",
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                    fontWeight: "bold",
+                    transition: "all 0.3s ease",
+                  }}
                 >
-                  {/* Envelope icon SVG */}
-                  <svg
-                    width="32"
-                    height="32"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <rect width="24" height="24" rx="6" fill="#6C7294" />
-                    <path
-                      d="M4 8V16C4 17.1046 4.89543 18 6 18H18C19.1046 18 20 17.1046 20 16V8C20 6.89543 19.1046 6 18 6H6C4.89543 6 4 6.89543 4 8Z"
-                      stroke="#fff"
-                      strokeWidth="2"
-                    />
-                    <path d="M4 8L12 13L20 8" stroke="#fff" strokeWidth="2" />
-                  </svg>
+                  Users
+                </button>
+                <button
+                  className={`tabss ${
+                    activeTab === "Teachers" ? "active" : ""
+                  }`}
+                  onClick={() => {
+                    setActiveTab("Teachers");
+                    fetchTeachers(selectedGrade);
+                  }}
+                  style={{
+                    padding: "0.5rem 1.5rem",
+                    fontSize: "1.2rem",
+                    border:
+                      activeTab === "Teachers"
+                        ? "3px solid #fff"
+                        : "3px solid transparent",
+                    backgroundColor:
+                      activeTab === "Teachers"
+                        ? "#fff"
+                        : "rgba(255,255,255,0.2)",
+                    color: activeTab === "Teachers" ? "#3a86d1" : "#fff",
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                    fontWeight: "bold",
+                    transition: "all 0.3s ease",
+                  }}
+                >
+                  Teacher
                 </button>
               </div>
-              {/* Messages Popup Modal */}
-              {showMessagesPopup && (
+            )}
+          </div>
+        </header>
+
+        {/* Main Content */}
+        <main className="holy-grail-main">
+          {showLeaderboard ? (
+            <div className="wrapper-lb">
+              <LbComponent />
+            </div>
+          ) : (
+            <div className="dashboard-main-content">
+              {/* Levels moved to `SidenavAdmins.jsx` - removed duplicate grade buttons here */}
+
+              <div className="">
                 <div
-                  style={{
-                    position: "fixed",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                    background: "#fff",
-                    borderRadius: "30px",
-                    border: "2px solid #e0e0e0",
-                    zIndex: 2000,
-                    width: "600px",
-                    height: "550px",
-                    boxShadow: "0 4px 24px rgba(0,0,0,0.18)",
-                    padding: "2rem 2.5rem 2rem 2.5rem",
-                    display: "flex",
-                    flexDirection: "column",
-                    overflowY: "auto",
-                  }}
+                  className="Create"
+                  style={{ display: "flex", alignItems: "center" }}
                 >
-                  {/* Close button - square, centered X */}
-                  <button
-                    type="button"
-                    onClick={handleCloseMessagesPopup}
-                    aria-label="Close"
-                    style={{
-                      position: "absolute",
-                      top: "32px",
-                      right: "14px",
-                      backgroundColor: "#e74c3c",
-                      color: "#fff",
-                      border: "none",
-                      borderRadius: "10px",
-                      width: "48px",
-                      height: "48px",
-                      fontWeight: "bold",
-                      fontSize: "2.2rem",
-                      cursor: "pointer",
-                      zIndex: 2,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      padding: 0,
-                    }}
-                  >
-                    <span
+                  <div style={{ marginRight: "1.5rem" }}>
+                    <button
+                      className="btn text-light px-1 py-1"
                       style={{
+                        backgroundColor: "#6C7294",
+                        color: "#FFF",
+                        borderRadius: 10,
+                        fontWeight: "bold",
+                        fontSize: "1.5rem",
+                        padding: "30px",
                         display: "flex",
                         alignItems: "center",
-                        justifyContent: "center",
-                        width: "100%",
-                        height: "100%",
+                        gap: "0.5rem",
                       }}
+                      onClick={handleMessageButtonClick}
                     >
-                      ×
-                    </span>
-                  </button>
-                  {/* Plus icon */}
-                  <button
-                    type="button"
-                    aria-label="Add Message"
-                    style={{
-                      position: "absolute",
-                      top: "32px",
-                      right: "75px",
-                      backgroundColor: "#7338a0",
-                      color: "#fff",
-                      border: "none",
-                      borderRadius: "12px",
-                      width: "48px",
-                      height: "48px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: "2.2rem",
-                      cursor: "pointer",
-                    }}
-                    onClick={handlePlusClick}
-                  >
-                    <span style={{ fontSize: "2.7rem", fontWeight: "bold" }}>
-                      +
-                    </span>
-                  </button>
-                  <h2
-                    style={{
-                      color: "#222",
-                      fontWeight: "bold",
-                      fontSize: "2.2rem",
-                      marginBottom: "1.5rem",
-                    }}
-                  >
-                    Message
-                  </h2>
-                  {/* Message Form Popup */}
-                  {showMessageForm && (
+                      {/* Envelope icon SVG */}
+                      <svg
+                        width="32"
+                        height="32"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <rect width="24" height="24" rx="6" fill="#6C7294" />
+                        <path
+                          d="M4 8V16C4 17.1046 4.89543 18 6 18H18C19.1046 18 20 17.1046 20 16V8C20 6.89543 19.1046 6 18 6H6C4.89543 6 4 6.89543 4 8Z"
+                          stroke="#fff"
+                          strokeWidth="2"
+                        />
+                        <path
+                          d="M4 8L12 13L20 8"
+                          stroke="#fff"
+                          strokeWidth="2"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  {/* Messages Popup Modal */}
+                  {showMessagesPopup && (
                     <div
+                      className="message-popup-modal"
                       style={{
                         position: "fixed",
                         top: "50%",
                         left: "50%",
                         transform: "translate(-50%, -50%)",
                         background: "#fff",
-                        borderRadius: "20px",
+                        borderRadius: "30px",
                         border: "2px solid #e0e0e0",
-                        zIndex: 3000,
-                        width: "400px",
+                        zIndex: 2000,
+                        width: "600px",
+                        height: "550px",
                         boxShadow: "0 4px 24px rgba(0,0,0,0.18)",
-                        padding: "2rem 2rem 1.5rem 2rem",
+                        padding: "2rem 2.5rem 2rem 2.5rem",
                         display: "flex",
                         flexDirection: "column",
-                        justifyContent: "flex-start",
+                        overflowY: "auto",
                       }}
                     >
+                      {/* Close button - square, centered X */}
                       <button
                         type="button"
-                        onClick={handleMessageFormClose}
+                        onClick={handleCloseMessagesPopup}
                         aria-label="Close"
+                        className="message-close-btn"
                         style={{
                           position: "absolute",
-                          top: "18px",
-                          right: "18px",
+                          top: "32px",
+                          right: "14px",
                           backgroundColor: "#e74c3c",
                           color: "#fff",
                           border: "none",
-                          borderRadius: "8px",
-                          width: "32px",
-                          height: "32px",
+                          borderRadius: "10px",
+                          width: "48px",
+                          height: "48px",
                           fontWeight: "bold",
-                          fontSize: "1.5rem",
+                          fontSize: "2.2rem",
                           cursor: "pointer",
                           zIndex: 2,
                           display: "flex",
@@ -969,833 +902,963 @@ const SuperAdmin = () => {
                           ×
                         </span>
                       </button>
+                      {/* Plus icon */}
+                      <button
+                        type="button"
+                        aria-label="Add Message"
+                        className="message-add-btn"
+                        style={{
+                          position: "absolute",
+                          top: "32px",
+                          right: "75px",
+                          backgroundColor: "#7338a0",
+                          color: "#fff",
+                          border: "none",
+                          borderRadius: "12px",
+                          width: "48px",
+                          height: "48px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontSize: "2.2rem",
+                          cursor: "pointer",
+                        }}
+                        onClick={handlePlusClick}
+                      >
+                        <span
+                          style={{ fontSize: "2.7rem", fontWeight: "bold" }}
+                        >
+                          +
+                        </span>
+                      </button>
                       <h2
+                        className="message-title"
                         style={{
                           color: "#222",
                           fontWeight: "bold",
-                          fontSize: "2rem",
+                          fontSize: "2.2rem",
                           marginBottom: "1.5rem",
-                          textAlign: "center",
                         }}
                       >
                         Message
                       </h2>
-                      <form onSubmit={handleSendMessage}>
-                        <div style={{ marginBottom: "1rem" }}>
-                          <div style={{ marginBottom: "0.7rem" }}>
-<label
-  style={{
-    color: "#000",
-    fontWeight: "bold",
-    fontSize: "1.1rem",
-  }}
->
-  <input
-    type="checkbox"
-    checked={sendToAllAdmins}
-    onChange={(e) => setSendToAllAdmins(e.target.checked)}
-    style={{ marginRight: "0.5rem" }}
-  />
-  Send to All Admins
-</label>
-                          </div>
-                          <select
-                            name="teacher"
-                            value={newMessage.teacher}
-                            onChange={handleMessageInputChange}
-                            style={{
-                              width: "100%",
-                              padding: "0.8rem",
-                              borderRadius: "10px",
-                              background: "#e9e9ee",
-                              color: "#222",
-                              border: "1px solid #bdbdbd",
-                              fontSize: "1.1rem",
-                              marginBottom: "0.7rem",
-                            }}
-                            disabled={sendToAllAdmins}
-                          >
-                            <option value="">Select Teacher</option>
-                            {teachers.map((t) => (
-                              <option key={t._id} value={t._id}>
-                                {t.name || t.username || t.email}
-                              </option>
-                            ))}
-                          </select>
-                          <select
-                            name="grade"
-                            value={newMessage.grade}
-                            onChange={handleMessageInputChange}
-                            style={{
-                              width: "100%",
-                              padding: "0.8rem",
-                              borderRadius: "10px",
-                              background: "#e9e9ee",
-                              color: "#222",
-                              border: "1px solid #bdbdbd",
-                              fontSize: "1.1rem",
-                              marginBottom: "0.7rem",
-                            }}
-                          >
-                            <option value="">Grade</option>
-                            <option value="GRADE 7">GRADE 7</option>
-                            <option value="GRADE 8">GRADE 8</option>
-                            <option value="GRADE 9">GRADE 9</option>
-                            <option value="GRADE 10">GRADE 10</option>
-                            <option value="GRADE 11">GRADE 11</option>
-                            <option value="GRADE 12">GRADE 12</option>
-                          </select>
-                          <select
-                            name="student"
-                            value={newMessage.student}
-                            onChange={handleMessageInputChange}
-                            style={{
-                              width: "100%",
-                              padding: "0.8rem",
-                              borderRadius: "10px",
-                              background: "#e9e9ee",
-                              color: "#222",
-                              border: "1px solid #bdbdbd",
-                              fontSize: "1.1rem",
-                              marginBottom: "0.7rem",
-                            }}
-                          >
-                            <option value="">Select Student</option>
-                            {messageStudents.map((u) => (
-                              <option
-                                key={u._id || u.email}
-                                value={u._id || u.email}
-                              >
-                                {u.name || u.username || u.email}
-                              </option>
-                            ))}
-                          </select>
-                          <textarea
-                            name="content"
-                            value={newMessage.content}
-                            onChange={handleMessageInputChange}
-                            placeholder="Message"
-                            style={{
-                              width: "100%",
-                              minHeight: "120px",
-                              borderRadius: "10px",
-                              background: "#e9e9ee",
-                              color: "#222",
-                              border: "1px solid #bdbdbd",
-                              fontSize: "1.1rem",
-                              padding: "0.8rem",
-                            }}
-                          />
-                        </div>
-                        <button
-                          type="submit"
+                      {/* Message Form Popup */}
+                      {showMessageForm && (
+                        <div
+                          className="message-form-modal"
                           style={{
-                            width: "100%",
-                            background: "#1976d2",
-                            color: "#fff",
-                            border: "none",
-                            borderRadius: "10px",
-                            fontWeight: "bold",
-                            fontSize: "1.5rem",
-                            padding: "0.7rem 0",
-                            marginTop: "0.5rem",
-                            cursor: "pointer",
-                          }}
-                        >
-                          Send
-                        </button>
-                      </form>
-                    </div>
-                  )}
-                  <div
-                    style={{
-                      width: "100%",
-                      marginTop: "1rem",
-                      flex: 1,
-                      overflowY: "auto",
-                    }}
-                  >
-                    {editingMsgId === null ? (
-                      messages.length === 0 ? (
-                        <div style={{ color: "#222", textAlign: "center" }}>
-                          No messages found.
-                        </div>
-                      ) : (
-                        messages.map((msg) => (
-                          <div
-                            key={msg.id}
-                            style={{
-                              background: "#2d2342",
-                              borderRadius: "15px",
-                              padding: "1rem",
-                              marginBottom: "1rem",
-                              color: "#fff",
-                              cursor: "pointer",
-                            }}
-                            onClick={() => handleEditMsg(msg)}
-                          >
-                            <div style={{ marginBottom: "0.5rem" }}>
-                              <span
-                                style={{
-                                  background: "#f7c948",
-                                  color: "#222",
-                                  borderRadius: "7px",
-                                  padding: "0.2rem 0.7rem",
-                                  fontWeight: "bold",
-                                  marginRight: "0.5rem",
-                                }}
-                              >
-                                {msg.sender}
-                              </span>
-                              <span
-                                style={{
-                                  background: "#7c6ae3",
-                                  color: "#fff",
-                                  borderRadius: "7px",
-                                  padding: "0.2rem 0.7rem",
-                                  fontWeight: "bold",
-                                  marginRight: "0.5rem",
-                                }}
-                              >
-                                {msg.grade}
-                              </span>
-                              <span
-                                style={{
-                                  background: "#bdbdbd",
-                                  color: "#222",
-                                  borderRadius: "7px",
-                                  padding: "0.2rem 0.7rem",
-                                  fontWeight: "bold",
-                                }}
-                              >
-                                {msg.recipient}
-                              </span>
-                            </div>
-                            <div style={{ color: "#fff", fontSize: "1rem" }}>
-                              {msg.content}
-                            </div>
-                          </div>
-                        ))
-                      )
-                    ) : (
-                      // Edit Message Form
-                      <div
-                        style={{
-                          position: "fixed",
-                          top: "50%",
-                          left: "50%",
-                          transform: "translate(-50%, -50%)",
-                          background: "#2d2342",
-                          borderRadius: "20px",
-                          border: "2px solid #7338a0",
-                          zIndex: 3000,
-                          width: "400px",
-                          boxShadow: "0 0 20px #000",
-                          padding: "2rem 2rem 1.5rem 2rem",
-                          display: "flex",
-                          flexDirection: "column",
-                        }}
-                      >
-                        <button
-                          type="button"
-                          onClick={() => setEditingMsgId(null)}
-                          aria-label="Close"
-                          style={{
-                            position: "absolute",
-                            top: "18px",
-                            right: "18px",
-                            backgroundColor: "#e74c3c",
-                            color: "#fff",
-                            border: "none",
-                            borderRadius: "8px",
-                            width: "32px",
-                            height: "32px",
-                            fontWeight: "bold",
-                            fontSize: "1.5rem",
-                            cursor: "pointer",
-                            zIndex: 2,
+                            position: "fixed",
+                            top: "50%",
+                            left: "50%",
+                            transform: "translate(-50%, -50%)",
+                            background: "#fff",
+                            borderRadius: "20px",
+                            border: "2px solid #e0e0e0",
+                            zIndex: 3000,
+                            width: "400px",
+                            boxShadow: "0 4px 24px rgba(0,0,0,0.18)",
+                            padding: "2rem 2rem 1.5rem 2rem",
                             display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            padding: 0,
+                            flexDirection: "column",
+                            justifyContent: "flex-start",
                           }}
                         >
-                          <span
+                          <button
+                            type="button"
+                            onClick={handleMessageFormClose}
+                            aria-label="Close"
+                            className="message-form-close-btn"
                             style={{
+                              position: "absolute",
+                              top: "18px",
+                              right: "18px",
+                              backgroundColor: "#e74c3c",
+                              color: "#fff",
+                              border: "none",
+                              borderRadius: "8px",
+                              width: "32px",
+                              height: "32px",
+                              fontWeight: "bold",
+                              fontSize: "1.5rem",
+                              cursor: "pointer",
+                              zIndex: 2,
                               display: "flex",
                               alignItems: "center",
                               justifyContent: "center",
-                              width: "100%",
-                              height: "100%",
+                              padding: 0,
                             }}
                           >
-                            ×
-                          </span>
-                        </button>
-                        <h2
-                          style={{
-                            color: "#fff",
-                            fontWeight: "bold",
-                            fontSize: "2rem",
-                            marginBottom: "1.5rem",
-                            textAlign: "center",
-                          }}
-                        >
-                          Message
-                        </h2>
-                        <form onSubmit={handleApplyMsgEdit}>
-                          <div style={{ marginBottom: "1rem" }}>
-                            <select
-                              name="teacher"
-                              value={editMsgForm.teacher}
-                              onChange={handleEditMsgFormChange}
+                            <span
                               style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
                                 width: "100%",
-                                padding: "0.8rem",
-                                borderRadius: "10px",
-                                background: "#3c2e5e",
-                                color: "#fff",
-                                border: "none",
-                                fontSize: "1.1rem",
-                                marginBottom: "0.7rem",
+                                height: "100%",
                               }}
-                              required
                             >
-                              <option value="">Select Teacher</option>
-                              {teachers.map((t) => (
-                                <option key={t._id} value={t._id}>
-                                  {t.name || t.username || t.email}
-                                </option>
-                              ))}
-                            </select>
-                            <select
-                              name="grade"
-                              value={editMsgForm.grade}
-                              onChange={handleEditMsgFormChange}
-                              style={{
-                                width: "100%",
-                                padding: "0.8rem",
-                                borderRadius: "10px",
-                                background: "#3c2e5e",
-                                color: "#fff",
-                                border: "none",
-                                fontSize: "1.1rem",
-                                marginBottom: "0.7rem",
-                              }}
-                              required
-                            >
-                              <option value="">Grade</option>
-                              <option value="GRADE 7">GRADE 7</option>
-                              <option value="GRADE 8">GRADE 8</option>
-                              <option value="GRADE 9">GRADE 9</option>
-                              <option value="GRADE 10">GRADE 10</option>
-                              <option value="GRADE 11">GRADE 11</option>
-                              <option value="GRADE 12">GRADE 12</option>
-                            </select>
-                            <select
-                              name="student"
-                              value={editMsgForm.student}
-                              onChange={handleEditMsgFormChange}
-                              style={{
-                                width: "100%",
-                                padding: "0.8rem",
-                                borderRadius: "10px",
-                                background: "#3c2e5e",
-                                color: "#fff",
-                                border: "none",
-                                fontSize: "1.1rem",
-                                marginBottom: "0.7rem",
-                              }}
-                              required
-                            >
-                              <option value="">Select Student</option>
-                              {messageStudents.map((u) => (
-                                <option
-                                  key={u._id || u.email}
-                                  value={u._id || u.email}
-                                >
-                                  {u.name || u.username || u.email}
-                                </option>
-                              ))}
-                            </select>
-                            <textarea
-                              name="content"
-                              value={editMsgForm.content}
-                              onChange={handleEditMsgFormChange}
-                              placeholder="Message"
-                              style={{
-                                width: "100%",
-                                minHeight: "120px",
-                                borderRadius: "10px",
-                                background: "#3c2e5e",
-                                color: "#fff",
-                                border: "2px solid #bdbdbd",
-                                fontSize: "1.1rem",
-                                padding: "0.8rem",
-                              }}
-                              required
-                            />
-                          </div>
-                          <div
+                              ×
+                            </span>
+                          </button>
+                          <h2
+                            className="message-form-title"
                             style={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                              marginTop: "1rem",
+                              color: "#222",
+                              fontWeight: "bold",
+                              fontSize: "2rem",
+                              marginBottom: "1.5rem",
+                              textAlign: "center",
                             }}
                           >
+                            Message
+                          </h2>
+                          <form onSubmit={handleSendMessage}>
+                            <div style={{ marginBottom: "1rem" }}>
+                              <div style={{ marginBottom: "0.7rem" }}>
+                                <label
+                                  style={{
+                                    color: "#fff",
+                                    fontWeight: "bold",
+                                    fontSize: "1.1rem",
+                                  }}
+                                >
+                                  <input
+                                    type="checkbox"
+                                    checked={sendToAllAdmins}
+                                    onChange={(e) =>
+                                      setSendToAllAdmins(e.target.checked)
+                                    }
+                                    style={{ marginRight: "0.5rem" }}
+                                  />
+                                  Send to All Admins
+                                </label>
+                              </div>
+                              <select
+                                name="teacher"
+                                value={newMessage.teacher}
+                                onChange={handleMessageInputChange}
+                                style={{
+                                  width: "100%",
+                                  padding: "0.8rem",
+                                  borderRadius: "10px",
+                                  background: "#e9e9ee",
+                                  color: "#222",
+                                  border: "1px solid #bdbdbd",
+                                  fontSize: "1.1rem",
+                                  marginBottom: "0.7rem",
+                                }}
+                                disabled={sendToAllAdmins}
+                              >
+                                <option value="">Select Teacher</option>
+                                {teachers.map((t) => (
+                                  <option key={t._id} value={t._id}>
+                                    {t.name || t.username || t.email}
+                                  </option>
+                                ))}
+                              </select>
+                              <select
+                                name="grade"
+                                value={newMessage.grade}
+                                onChange={handleMessageInputChange}
+                                style={{
+                                  width: "100%",
+                                  padding: "0.8rem",
+                                  borderRadius: "10px",
+                                  background: "#e9e9ee",
+                                  color: "#222",
+                                  border: "1px solid #bdbdbd",
+                                  fontSize: "1.1rem",
+                                  marginBottom: "0.7rem",
+                                }}
+                              >
+                                <option value="">Grade</option>
+                                <option value="GRADE 7">GRADE 7</option>
+                                <option value="GRADE 8">GRADE 8</option>
+                                <option value="GRADE 9">GRADE 9</option>
+                                <option value="GRADE 10">GRADE 10</option>
+                                <option value="GRADE 11">GRADE 11</option>
+                                <option value="GRADE 12">GRADE 12</option>
+                              </select>
+                              <select
+                                name="student"
+                                value={newMessage.student}
+                                onChange={handleMessageInputChange}
+                                style={{
+                                  width: "100%",
+                                  padding: "0.8rem",
+                                  borderRadius: "10px",
+                                  background: "#e9e9ee",
+                                  color: "#222",
+                                  border: "1px solid #bdbdbd",
+                                  fontSize: "1.1rem",
+                                  marginBottom: "0.7rem",
+                                }}
+                              >
+                                <option value="">Select Student</option>
+                                {messageStudents.map((u) => (
+                                  <option
+                                    key={u._id || u.email}
+                                    value={u._id || u.email}
+                                  >
+                                    {u.name || u.username || u.email}
+                                  </option>
+                                ))}
+                              </select>
+                              <textarea
+                                name="content"
+                                value={newMessage.content}
+                                onChange={handleMessageInputChange}
+                                placeholder="Message"
+                                style={{
+                                  width: "100%",
+                                  minHeight: "120px",
+                                  borderRadius: "10px",
+                                  background: "#e9e9ee",
+                                  color: "#222",
+                                  border: "1px solid #bdbdbd",
+                                  fontSize: "1.1rem",
+                                  padding: "0.8rem",
+                                }}
+                              />
+                            </div>
                             <button
                               type="submit"
                               style={{
-                                background: "#7338a0",
+                                width: "100%",
+                                background: "#1976d2",
                                 color: "#fff",
                                 border: "none",
                                 borderRadius: "10px",
                                 fontWeight: "bold",
                                 fontSize: "1.5rem",
-                                padding: "0.7rem 2rem",
+                                padding: "0.7rem 0",
+                                marginTop: "0.5rem",
                                 cursor: "pointer",
                               }}
                             >
-                              Apply
+                              Send
                             </button>
+                          </form>
+                        </div>
+                      )}
+                      <div
+                        style={{
+                          width: "100%",
+                          marginTop: "1rem",
+                          flex: 1,
+                          overflowY: "auto",
+                        }}
+                      >
+                        {editingMsgId === null ? (
+                          messages.length === 0 ? (
+                            <div style={{ color: "#222", textAlign: "center" }}>
+                              No messages found.
+                            </div>
+                          ) : (
+                            messages.map((msg) => (
+                              <div
+                                key={msg.id}
+                                className="message-card"
+                                style={{
+                                  background: "#2d2342",
+                                  borderRadius: "15px",
+                                  padding: "1rem",
+                                  marginBottom: "1rem",
+                                  color: "#fff",
+                                  cursor: "pointer",
+                                }}
+                                onClick={() => handleEditMsg(msg)}
+                              >
+                                <div
+                                  className="message-tags"
+                                  style={{ marginBottom: "0.5rem" }}
+                                >
+                                  <span
+                                    className="message-tag"
+                                    style={{
+                                      background: "#f7c948",
+                                      color: "#222",
+                                      borderRadius: "7px",
+                                      padding: "0.2rem 0.7rem",
+                                      fontWeight: "bold",
+                                      marginRight: "0.5rem",
+                                    }}
+                                  >
+                                    {msg.sender}
+                                  </span>
+                                  <span
+                                    className="message-tag"
+                                    style={{
+                                      background: "#7c6ae3",
+                                      color: "#fff",
+                                      borderRadius: "7px",
+                                      padding: "0.2rem 0.7rem",
+                                      fontWeight: "bold",
+                                      marginRight: "0.5rem",
+                                    }}
+                                  >
+                                    {msg.grade}
+                                  </span>
+                                  <span
+                                    className="message-tag"
+                                    style={{
+                                      background: "#bdbdbd",
+                                      color: "#222",
+                                      borderRadius: "7px",
+                                      padding: "0.2rem 0.7rem",
+                                      fontWeight: "bold",
+                                    }}
+                                  >
+                                    {msg.recipient}
+                                  </span>
+                                </div>
+                                <div
+                                  className="message-content"
+                                  style={{ color: "#fff", fontSize: "1rem" }}
+                                >
+                                  {msg.content}
+                                </div>
+                              </div>
+                            ))
+                          )
+                        ) : (
+                          // Edit Message Form
+                          <div
+                            style={{
+                              position: "fixed",
+                              top: "50%",
+                              left: "50%",
+                              transform: "translate(-50%, -50%)",
+                              background: "#2d2342",
+                              borderRadius: "20px",
+                              border: "2px solid #7338a0",
+                              zIndex: 3000,
+                              width: "400px",
+                              boxShadow: "0 0 20px #000",
+                              padding: "2rem 2rem 1.5rem 2rem",
+                              display: "flex",
+                              flexDirection: "column",
+                            }}
+                          >
                             <button
                               type="button"
+                              onClick={() => setEditingMsgId(null)}
+                              aria-label="Close"
                               style={{
-                                background: "#e74c3c",
+                                position: "absolute",
+                                top: "18px",
+                                right: "18px",
+                                backgroundColor: "#e74c3c",
                                 color: "#fff",
                                 border: "none",
-                                borderRadius: "10px",
+                                borderRadius: "8px",
+                                width: "32px",
+                                height: "32px",
                                 fontWeight: "bold",
                                 fontSize: "1.5rem",
-                                padding: "0.7rem 2rem",
                                 cursor: "pointer",
+                                zIndex: 2,
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                padding: 0,
                               }}
-                              onClick={handleDeleteMsg}
                             >
-                              Delete
+                              <span
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  width: "100%",
+                                  height: "100%",
+                                }}
+                              >
+                                ×
+                              </span>
                             </button>
+                            <h2
+                              style={{
+                                color: "#fff",
+                                fontWeight: "bold",
+                                fontSize: "2rem",
+                                marginBottom: "1.5rem",
+                                textAlign: "center",
+                              }}
+                            >
+                              Message
+                            </h2>
+                            <form onSubmit={handleApplyMsgEdit}>
+                              <div style={{ marginBottom: "1rem" }}>
+                                <select
+                                  name="teacher"
+                                  value={editMsgForm.teacher}
+                                  onChange={handleEditMsgFormChange}
+                                  style={{
+                                    width: "100%",
+                                    padding: "0.8rem",
+                                    borderRadius: "10px",
+                                    background: "#3c2e5e",
+                                    color: "#fff",
+                                    border: "none",
+                                    fontSize: "1.1rem",
+                                    marginBottom: "0.7rem",
+                                  }}
+                                  required
+                                >
+                                  <option value="">Select Teacher</option>
+                                  {teachers.map((t) => (
+                                    <option key={t._id} value={t._id}>
+                                      {t.name || t.username || t.email}
+                                    </option>
+                                  ))}
+                                </select>
+                                <select
+                                  name="grade"
+                                  value={editMsgForm.grade}
+                                  onChange={handleEditMsgFormChange}
+                                  style={{
+                                    width: "100%",
+                                    padding: "0.8rem",
+                                    borderRadius: "10px",
+                                    background: "#3c2e5e",
+                                    color: "#fff",
+                                    border: "none",
+                                    fontSize: "1.1rem",
+                                    marginBottom: "0.7rem",
+                                  }}
+                                  required
+                                >
+                                  <option value="">Grade</option>
+                                  <option value="GRADE 7">GRADE 7</option>
+                                  <option value="GRADE 8">GRADE 8</option>
+                                  <option value="GRADE 9">GRADE 9</option>
+                                  <option value="GRADE 10">GRADE 10</option>
+                                  <option value="GRADE 11">GRADE 11</option>
+                                  <option value="GRADE 12">GRADE 12</option>
+                                </select>
+                                <select
+                                  name="student"
+                                  value={editMsgForm.student}
+                                  onChange={handleEditMsgFormChange}
+                                  style={{
+                                    width: "100%",
+                                    padding: "0.8rem",
+                                    borderRadius: "10px",
+                                    background: "#3c2e5e",
+                                    color: "#fff",
+                                    border: "none",
+                                    fontSize: "1.1rem",
+                                    marginBottom: "0.7rem",
+                                  }}
+                                  required
+                                >
+                                  <option value="">Select Student</option>
+                                  {messageStudents.map((u) => (
+                                    <option
+                                      key={u._id || u.email}
+                                      value={u._id || u.email}
+                                    >
+                                      {u.name || u.username || u.email}
+                                    </option>
+                                  ))}
+                                </select>
+                                <textarea
+                                  name="content"
+                                  value={editMsgForm.content}
+                                  onChange={handleEditMsgFormChange}
+                                  placeholder="Message"
+                                  style={{
+                                    width: "100%",
+                                    minHeight: "120px",
+                                    borderRadius: "10px",
+                                    background: "#3c2e5e",
+                                    color: "#fff",
+                                    border: "2px solid #bdbdbd",
+                                    fontSize: "1.1rem",
+                                    padding: "0.8rem",
+                                  }}
+                                  required
+                                />
+                              </div>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  marginTop: "1rem",
+                                }}
+                              >
+                                <button
+                                  type="submit"
+                                  style={{
+                                    background: "#7338a0",
+                                    color: "#fff",
+                                    border: "none",
+                                    borderRadius: "10px",
+                                    fontWeight: "bold",
+                                    fontSize: "1.5rem",
+                                    padding: "0.7rem 2rem",
+                                    cursor: "pointer",
+                                  }}
+                                >
+                                  Apply
+                                </button>
+                                <button
+                                  type="button"
+                                  style={{
+                                    background: "#e74c3c",
+                                    color: "#fff",
+                                    border: "none",
+                                    borderRadius: "10px",
+                                    fontWeight: "bold",
+                                    fontSize: "1.5rem",
+                                    padding: "0.7rem 2rem",
+                                    cursor: "pointer",
+                                  }}
+                                  onClick={handleDeleteMsg}
+                                >
+                                  Delete
+                                </button>
+                              </div>
+                            </form>
                           </div>
-                        </form>
+                        )}
                       </div>
-                    )}
+                    </div>
+                  )}
+
+                  <div>
+                    <button
+                      className="btn text-light px-1 py-1"
+                      style={{
+                        backgroundColor: "#6C7294",
+                        color: "#FFF",
+                        borderRadius: 10,
+                        fontWeight: "bold",
+                        fontSize: "1.5rem",
+                        padding: "30px",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                      }}
+                      onClick={() => openForm("create")}
+                    >
+                      <FaUserPlus /> Create
+                    </button>
+                  </div>
+                </div>
+
+                <div className="contentsuper">
+                  <div className="table-wrapper" style={{ marginTop: "4rem" }}>
+                    <table className="dashboard-table text-light">
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Username</th>
+                          <th>Email</th>
+                          {activeTab === "Users" && <th>Year Level</th>}
+                          <th className="actions-column"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {dataToDisplay.map((u, idx) => (
+                          <tr
+                            key={
+                              unwrapDefault(u.email) ||
+                              unwrapDefault(u.username) ||
+                              idx
+                            }
+                          >
+                            <td>{unwrapDefault(u.name) || "N/A"}</td>
+                            <td>{unwrapDefault(u.username) || "N/A"}</td>
+                            <td>{unwrapDefault(u.email) || "N/A"}</td>
+                            {activeTab === "Users" && (
+                              <td>{unwrapDefault(u.yearLevel) || "N/A"}</td>
+                            )}
+                            <td>
+                              <div className="d-flex gap-1 justify-contents-center align-items-center">
+                                {activeTab === "Users" && (
+                                  <button
+                                    onClick={() => handleClick(u)}
+                                    className="btn text-white fs-5 px-3 py-2 rounded-4"
+                                    style={{
+                                      backgroundColor: "#2E86C1",
+                                      border: "none",
+                                    }}
+                                  >
+                                    Progress
+                                  </button>
+                                )}
+                                <img
+                                  src={
+                                    typeof EditIconImport === "object" &&
+                                    EditIconImport !== null &&
+                                    EditIconImport.default
+                                      ? EditIconImport.default
+                                      : EditIconImport
+                                  }
+                                  alt="Edit"
+                                  className="img-action img-edit"
+                                  style={{ cursor: "pointer" }}
+                                  onClick={() => openForm("edit", u)}
+                                />
+                                <img
+                                  src={
+                                    typeof RemoveIconImport === "object" &&
+                                    RemoveIconImport !== null &&
+                                    RemoveIconImport.default
+                                      ? RemoveIconImport.default
+                                      : RemoveIconImport
+                                  }
+                                  alt="Remove"
+                                  className="img-action"
+                                  style={{
+                                    marginRight: "50px",
+                                    cursor: "pointer",
+                                  }}
+                                  onClick={() =>
+                                    handleDelete(unwrapDefault(u.email))
+                                  }
+                                />
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              {/* QR Modal */}
+              {(() => {
+                console.log("SuperAdmin QR modal state:", {
+                  qrModalVisible,
+                  qrDataUrl,
+                  magicUrl,
+                  qrStudentEmail,
+                });
+                return qrModalVisible ? (
+                  <QRModal
+                    visible={qrModalVisible}
+                    onClose={() => setQrModalVisible(false)}
+                    dataUrl={qrDataUrl}
+                    magicUrl={magicUrl}
+                    studentEmail={qrStudentEmail}
+                  />
+                ) : null;
+              })()}
+
+              {showForm && (
+                <div
+                  className="popup-form"
+                  style={{
+                    position: "fixed",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    background: "#fff",
+                    borderRadius: "20px",
+                    border: "2px solid #e0e0e0",
+                    zIndex: 3000,
+                    width: "400px",
+                    boxShadow: "0 4px 24px rgba(0,0,0,0.18)",
+                    padding: "2rem 2rem 1.5rem 2rem",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "flex-start",
+                  }}
+                >
+                  <div className="popup-content">
+                    <h3
+                      style={{
+                        color: "#2d254c",
+                        fontWeight: "bold",
+                        fontSize: "2rem",
+                        marginBottom: "1.5rem",
+                        textAlign: "center",
+                      }}
+                    >
+                      {formMode === "edit" ? "Edit" : "Add"}{" "}
+                      {activeTab.slice(0, -1)}
+                    </h3>
+                    <form onSubmit={handleFormSubmit}>
+                      <div className="form-group">
+                        <input
+                          name="name"
+                          value={formData.name}
+                          onChange={handleInputChange}
+                          className="form-control"
+                          placeholder="Name"
+                          required
+                          style={{
+                            width: "100%",
+                            marginBottom: "16px",
+                            padding: "12px 16px",
+                            borderRadius: "8px",
+                            border: "1px solid #d1d5db",
+                            background: "#6C7294",
+                            color: "#fff",
+                            fontSize: "1rem",
+                            "::placeholder": { color: "#bfc3d1", opacity: 1 },
+                          }}
+                          placeholderTextColor="#bfc3d1"
+                        />
+                      </div>
+                      <div className="form-group">
+                        <input
+                          name="username"
+                          value={formData.username}
+                          onChange={handleInputChange}
+                          className="form-control text-yellow-400"
+                          placeholder="Username"
+                          required
+                          style={{
+                            width: "100%",
+                            marginBottom: "16px",
+                            padding: "12px 16px",
+                            borderRadius: "8px",
+                            border: "1px solid #d1d5db",
+                            background: "#6C7294",
+                            color: "#fff",
+                            fontSize: "1rem",
+                            "::placeholder": { color: "#bfc3d1", opacity: 1 },
+                          }}
+                          placeholderTextColor="#bfc3d1"
+                        />
+                      </div>
+                      <div className="form-group">
+                        <select
+                          name="yearLevel"
+                          value={formData.yearLevel}
+                          onChange={handleInputChange}
+                          className="form-control"
+                          required
+                          style={{
+                            width: "100%",
+                            marginBottom: "16px",
+                            padding: "12px 16px",
+                            borderRadius: "8px",
+                            border: "1px solid #d1d5db",
+                            background: "#6C7294",
+                            color: "#fff",
+                            fontSize: "1rem",
+                          }}
+                        >
+                          <option value="" style={{ color: "#bfc3d1" }}>
+                            -- Select Year Level --
+                          </option>
+                          <option value="Grade 7">Grade 7</option>
+                          <option value="Grade 8">Grade 8</option>
+                          <option value="Grade 9">Grade 9</option>
+                          <option value="Grade 10">Grade 10</option>
+                          <option value="Grade 11">Grade 11</option>
+                          <option value="Grade 12">Grade 12</option>
+                        </select>
+                      </div>
+                      <div className="form-group">
+                        <input
+                          type="email"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleInputChange}
+                          className="form-control"
+                          placeholder="Email"
+                          required
+                          style={{
+                            width: "100%",
+                            marginBottom: "16px",
+                            padding: "12px 16px",
+                            borderRadius: "8px",
+                            border: "1px solid #d1d5db",
+                            background: "#6C7294",
+                            color: "#fff",
+                            fontSize: "1rem",
+                            "::placeholder": { color: "#bfc3d1", opacity: 1 },
+                          }}
+                          placeholderTextColor="#bfc3d1"
+                        />
+                      </div>
+                      <div className="form-group">
+                        <input
+                          type="password"
+                          name="password"
+                          value={formData.password}
+                          onChange={handleInputChange}
+                          className="form-control"
+                          placeholder="Your password"
+                          required={formMode !== "edit"}
+                          style={{
+                            width: "100%",
+                            marginBottom: "16px",
+                            padding: "12px 16px",
+                            borderRadius: "8px",
+                            border: "1px solid #d1d5db",
+                            background: "#6C7294",
+                            color: "#fff",
+                            fontSize: "1rem",
+                            "::placeholder": { color: "#bfc3d1", opacity: 1 },
+                          }}
+                          placeholderTextColor="#bfc3d1"
+                        />
+                      </div>
+                      <div className="form-group">
+                        <input
+                          type="password"
+                          name="confirmPassword"
+                          value={formData.confirmPassword}
+                          onChange={handleInputChange}
+                          className="form-control"
+                          placeholder="Repeat password"
+                          required={formMode !== "edit"}
+                          style={{
+                            width: "100%",
+                            marginBottom: "16px",
+                            padding: "12px 16px",
+                            borderRadius: "8px",
+                            border: "1px solid #d1d5db",
+                            background: "#6C7294",
+                            color: "#fff",
+                            fontSize: "1rem",
+                            "::placeholder": { color: "#bfc3d1", opacity: 1 },
+                          }}
+                          placeholderTextColor="#bfc3d1"
+                        />
+                      </div>
+                      <div
+                        className="form-actions"
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "10px",
+                          marginTop: "10px",
+                        }}
+                      >
+                        <button
+                          type="submit"
+                          className="btn-create"
+                          disabled={isSubmitting}
+                          style={{
+                            width: "100%",
+                            padding: "12px 0",
+                            borderRadius: "8px",
+                            border: "none",
+                            fontSize: "1rem",
+                            fontWeight: "bold",
+                            cursor: "pointer",
+                            background: "#2563eb",
+                            color: "#fff",
+                          }}
+                        >
+                          {isSubmitting
+                            ? formMode === "edit"
+                              ? "Saving..."
+                              : "Creating..."
+                            : formMode === "edit"
+                            ? "Save Changes"
+                            : "Create"}
+                        </button>
+                        <button
+                          type="button"
+                          className="btn-cancel"
+                          onClick={() => setShowForm(false)}
+                          style={{
+                            width: "100%",
+                            padding: "12px 0",
+                            borderRadius: "8px",
+                            border: "none",
+                            fontSize: "1rem",
+                            fontWeight: "bold",
+                            cursor: "pointer",
+                            background: "#ef4444",
+                            color: "#fff",
+                          }}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </form>
                   </div>
                 </div>
               )}
 
-              <div>
-                <button
-                  className="btn text-light px-1 py-1"
+              {/* Progress modal (SuperAdmin uses this) */}
+              {showProgressTracker && (
+                <div
+                  className="progress-modal-container"
                   style={{
-                    backgroundColor: "#6C7294",
-                    color: "#FFF",
-                    borderRadius: 10,
-                    fontWeight: "bold",
-                    fontSize: "1.5rem",
-                    padding: "30px",
+                    top: "50%",
+                    transform: "translate(-40%, -50%)",
+                    width: "65vh",
+                    height: "90vh",
+                    borderRadius: "30px",
+                    zIndex: 1000,
+                    backgroundColor: "#1a1230",
+                    border: "3px solid #7338a0",
+                    position: "fixed",
                     display: "flex",
-                    alignItems: "center",
-                    gap: "0.5rem",
-                  }}
-                  onClick={() => openForm("create")}
-                >
-                  <FaUserPlus /> Create
-                </button>
-              </div>
-            </div>
-
-            <div className="contentdiv">
-              <div className="table-wrapper" style={{ marginTop: "4rem" }}>
-                <table className="dashboard-table text-light">
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Username</th>
-                      <th>Email</th>
-                      {activeTab === "Users" && <th>Year Level</th>}
-                      <th className="actions-column"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {dataToDisplay.map((u, idx) => (
-                      <tr
-                        key={
-                          unwrapDefault(u.email) ||
-                          unwrapDefault(u.username) ||
-                          idx
-                        }
-                      >
-                        <td>{unwrapDefault(u.name) || "N/A"}</td>
-                        <td>{unwrapDefault(u.username) || "N/A"}</td>
-                        <td>{unwrapDefault(u.email) || "N/A"}</td>
-                        {activeTab === "Users" && (
-                          <td>{unwrapDefault(u.yearLevel) || "N/A"}</td>
-                        )}
-                        <td>
-                          <div className="action-admin">
-                            {activeTab === "Users" && (
-                              <button
-                                onClick={() => handleClick(u)}
-                                className="btn text-white fs-5 px-3 py-2 rounded-4"
-                                style={{
-                                  backgroundColor: "#2E86C1",
-                                  border: "none",
-                                  marginLeft: "2rem",
-                                }}
-                              >
-                                Progress
-                              </button>
-                            )}
-                            <img
-                              src={
-                                typeof EditIconImport === "object" &&
-                                EditIconImport !== null &&
-                                EditIconImport.default
-                                  ? EditIconImport.default
-                                  : EditIconImport
-                              }
-                              alt="Edit"
-                              className="img-action img-edit"
-                              style={{ cursor: "pointer" }}
-                              onClick={() => openForm("edit", u)}
-                            />
-                            <img
-                              src={
-                                typeof RemoveIconImport === "object" &&
-                                RemoveIconImport !== null &&
-                                RemoveIconImport.default
-                                  ? RemoveIconImport.default
-                                  : RemoveIconImport
-                              }
-                              alt="Remove"
-                              className="img-action"
-                              style={{ marginRight: "50px", cursor: "pointer" }}
-                              onClick={() =>
-                                handleDelete(unwrapDefault(u.email))
-                              }
-                            />
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-
-          {/* QR Modal */}
-          {(() => {
-            console.log("SuperAdmin QR modal state:", {
-              qrModalVisible,
-              qrDataUrl,
-              magicUrl,
-              qrStudentEmail,
-            });
-            return qrModalVisible ? (
-              <QRModal
-                visible={qrModalVisible}
-                onClose={() => setQrModalVisible(false)}
-                dataUrl={qrDataUrl}
-                magicUrl={magicUrl}
-                studentEmail={qrStudentEmail}
-              />
-            ) : null;
-          })()}
-
-          <div className="logout-container">
-            <button className="btn-logout" onClick={logout}>
-              Logout
-            </button>
-          </div>
-
-          {showForm && (
-            <div
-              className="popup-form"
-              style={{
-                position: "fixed",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                background: "#fff",
-                borderRadius: "20px",
-                border: "2px solid #e0e0e0",
-                zIndex: 3000,
-                width: "400px",
-                boxShadow: "0 4px 24px rgba(0,0,0,0.18)",
-                padding: "2rem 2rem 1.5rem 2rem",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "flex-start",
-              }}
-            >
-              <div className="popup-content">
-                <h3
-                  style={{
-                    color: "#2d254c",
-                    fontWeight: "bold",
-                    fontSize: "2rem",
-                    marginBottom: "1.5rem",
-                    textAlign: "center",
+                    flexDirection: "column",
+                    alignContent: "center",
+                    justifyContent: "center",
+                    right: "20%",
                   }}
                 >
-                  {formMode === "edit" ? "Edit" : "Add"}{" "}
-                  {activeTab.slice(0, -1)}
-                </h3>
-                <form onSubmit={handleFormSubmit}>
-                  <div className="form-group">
-                    <input
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      className="form-control"
-                      placeholder="Name"
-                      required
-                      style={{
-                        width: "100%",
-                        marginBottom: "16px",
-                        padding: "12px 16px",
-                        borderRadius: "8px",
-                        border: "1px solid #d1d5db",
-                        background: "#6C7294",
-                        color: "#fff",
-                        fontSize: "1rem",
-                        "::placeholder": { color: "#bfc3d1", opacity: 1 },
-                      }}
-                      placeholderTextColor="#bfc3d1"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <input
-                      name="username"
-                      value={formData.username}
-                      onChange={handleInputChange}
-                      className="form-control text-yellow-400"
-                      placeholder="Username"
-                      required
-                      style={{
-                        width: "100%",
-                        marginBottom: "16px",
-                        padding: "12px 16px",
-                        borderRadius: "8px",
-                        border: "1px solid #d1d5db",
-                        background: "#6C7294",
-                        color: "#fff",
-                        fontSize: "1rem",
-                        "::placeholder": { color: "#bfc3d1", opacity: 1 },
-                      }}
-                      placeholderTextColor="#bfc3d1"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <select
-                      name="yearLevel"
-                      value={formData.yearLevel}
-                      onChange={handleInputChange}
-                      className="form-control"
-                      required
-                      style={{
-                        width: "100%",
-                        marginBottom: "16px",
-                        padding: "12px 16px",
-                        borderRadius: "8px",
-                        border: "1px solid #d1d5db",
-                        background: "#6C7294",
-                        color: "#fff",
-                        fontSize: "1rem",
-                      }}
-                    >
-                      <option value="" style={{ color: "#bfc3d1" }}>
-                        -- Select Year Level --
-                      </option>
-                      <option value="Grade 7">Grade 7</option>
-                      <option value="Grade 8">Grade 8</option>
-                      <option value="Grade 9">Grade 9</option>
-                      <option value="Grade 10">Grade 10</option>
-                      <option value="Grade 11">Grade 11</option>
-                      <option value="Grade 12">Grade 12</option>
-                    </select>
-                  </div>
-                  <div className="form-group">
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className="form-control"
-                      placeholder="Email"
-                      required
-                      style={{
-                        width: "100%",
-                        marginBottom: "16px",
-                        padding: "12px 16px",
-                        borderRadius: "8px",
-                        border: "1px solid #d1d5db",
-                        background: "#6C7294",
-                        color: "#fff",
-                        fontSize: "1rem",
-                        "::placeholder": { color: "#bfc3d1", opacity: 1 },
-                      }}
-                      placeholderTextColor="#bfc3d1"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <input
-                      type="password"
-                      name="password"
-                      value={formData.password}
-                      onChange={handleInputChange}
-                      className="form-control"
-                      placeholder="Your password"
-                      required={formMode !== "edit"}
-                      style={{
-                        width: "100%",
-                        marginBottom: "16px",
-                        padding: "12px 16px",
-                        borderRadius: "8px",
-                        border: "1px solid #d1d5db",
-                        background: "#6C7294",
-                        color: "#fff",
-                        fontSize: "1rem",
-                        "::placeholder": { color: "#bfc3d1", opacity: 1 },
-                      }}
-                      placeholderTextColor="#bfc3d1"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <input
-                      type="password"
-                      name="confirmPassword"
-                      value={formData.confirmPassword}
-                      onChange={handleInputChange}
-                      className="form-control"
-                      placeholder="Repeat password"
-                      required={formMode !== "edit"}
-                      style={{
-                        width: "100%",
-                        marginBottom: "16px",
-                        padding: "12px 16px",
-                        borderRadius: "8px",
-                        border: "1px solid #d1d5db",
-                        background: "#6C7294",
-                        color: "#fff",
-                        fontSize: "1rem",
-                        "::placeholder": { color: "#bfc3d1", opacity: 1 },
-                      }}
-                      placeholderTextColor="#bfc3d1"
-                    />
-                  </div>
                   <div
-                    className="form-actions"
                     style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "10px",
-                      marginTop: "10px",
+                      position: "fixed",
+                      top: "15px",
+                      right: "92%",
+                      zIndex: 2,
                     }}
                   >
                     <button
-                      type="submit"
-                      className="btn-create"
-                      disabled={isSubmitting}
-                      style={{
-                        width: "100%",
-                        padding: "12px 0",
-                        borderRadius: "8px",
-                        border: "none",
-                        fontSize: "1rem",
-                        fontWeight: "bold",
-                        cursor: "pointer",
-                        background: "#2563eb",
-                        color: "#fff",
-                      }}
-                    >
-                      {isSubmitting
-                        ? formMode === "edit"
-                          ? "Saving..."
-                          : "Creating..."
-                        : formMode === "edit"
-                        ? "Save Changes"
-                        : "Create"}
-                    </button>
-                    <button
                       type="button"
-                      className="btn-cancel"
-                      onClick={() => setShowForm(false)}
+                      className="btn-close"
+                      onClick={handleClose}
+                      aria-label="Close"
                       style={{
-                        width: "100%",
-                        padding: "12px 0",
-                        borderRadius: "8px",
-                        border: "none",
-                        fontSize: "1rem",
-                        fontWeight: "bold",
-                        cursor: "pointer",
-                        background: "#ef4444",
-                        color: "#fff",
+                        backgroundColor: "red",
+                        borderRadius: "20%",
+                        padding: "4px",
                       }}
-                    >
-                      Cancel
-                    </button>
+                    ></button>
                   </div>
-                </form>
-              </div>
+
+                  {/* key ensures remount when different student is opened */}
+                  <ProgressTracker
+                    key={
+                      unwrapDefault(showProgressTracker.email) ||
+                      unwrapDefault(showProgressTracker.username) ||
+                      Date.now()
+                    }
+                    student={showProgressTracker}
+                  />
+                </div>
+              )}
             </div>
           )}
+        </main>
 
-          {/* Progress modal (SuperAdmin uses this) */}
-          {showProgressTracker && (
-            <div
-              className="progress-modal-container"
-              style={{
-                top: "50%",
-                transform: "translate(-40%, -50%)",
-                width: "65vh",
-                height: "90vh",
-                borderRadius: "30px",
-                zIndex: 1000,
-                backgroundColor: "#1a1230",
-                border: "3px solid #7338a0",
-                position: "fixed",
-                display: "flex",
-                flexDirection: "column",
-                alignContent: "center",
-                justifyContent: "center",
-                right: "20%",
-              }}
-            >
-              <div
-                style={{
-                  position: "fixed",
-                  top: "15px",
-                  right: "92%",
-                  zIndex: 2,
-                }}
-              >
-                <button
-                  type="button"
-                  className="btn-close"
-                  onClick={handleClose}
-                  aria-label="Close"
-                  style={{
-                    backgroundColor: "red",
-                    borderRadius: "20%",
-                    padding: "4px",
-                  }}
-                ></button>
-              </div>
-
-              {/* key ensures remount when different student is opened */}
-              <ProgressTracker
-                key={
-                  unwrapDefault(showProgressTracker.email) ||
-                  unwrapDefault(showProgressTracker.username) ||
-                  Date.now()
-                }
-                student={showProgressTracker}
-              />
-            </div>
-          )}
-        </>
-      )}
+        {/* Footer */}
+        <footer className="holy-grail-footer">
+          <button
+            className="btn-logout"
+            onClick={logout}
+            style={{
+              backgroundColor: "#e74c3c",
+              color: "#fff",
+              fontFamily: "Baloo, sans-serif",
+              fontSize: "1.5rem",
+              border: "none",
+              borderRadius: "50px",
+              cursor: "pointer",
+              padding: "0.75rem 2.5rem",
+              transition: "all 0.3s ease",
+            }}
+          >
+            Logout
+          </button>
+        </footer>
+      </div>
     </div>
   );
 };
