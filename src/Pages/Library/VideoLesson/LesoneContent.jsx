@@ -7,6 +7,7 @@ import rightArrow from "../../../assets/rightArrow.png";
 import "../../../css/lesoneContent.css";
 import { ProgressContext } from "../../../Pages/Dashboard/ProgressContext";
 import TrimmedVideo from "./TrimmedVideo";
+import backkpoint from "../../../assets/backkpoint.png";
 import Sidenav from "../../../Components/Sidenav";
 
 const levelMapping = {
@@ -260,7 +261,8 @@ const LesoneContent = () => {
     <>
    
       <div className="back fs-1 fw-bold d-flex" onClick={handleBack}>
-        <img src={Back} className="img-fluid p-1 mt-1" alt="Back" />
+        <img src={backkpoint} className="img-fluid p-1 mt-1" alt="Back" />
+        <p>Back</p>
       </div>
 
       <div className="container-lecture d-flex flex-column align-items-center justify-content-center">
