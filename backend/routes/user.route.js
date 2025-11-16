@@ -1,5 +1,4 @@
 import express from "express";
-import cors from "cors";
 import {
   loginUser,
   uploadProfilePicture,
@@ -11,12 +10,6 @@ import uploadImage from "../config/multer.js";
 
 export const router = express.Router();
 
-router.use(
-  cors({
-    withCredentials: true,
-    origin: "http://localhost:5173",
-  })
-);
 
 //router.post("/signup", createUser);
 router.post("/login", loginUser);
