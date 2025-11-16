@@ -141,6 +141,26 @@ export default function ResultBanner({ isCorrect }) {
           }
         }
 
+         @media (min-width: 1440px) {
+             .result-ans {
+            height: 80px !important;
+            width: 28vw !important;
+            top: 12.2vh !important;
+        
+            text-align: center !important;
+          }
+          .result-ans span{
+            font-size: 1.8rem !important;
+            margin: 0rem !important;
+            
+          }
+          .result-ans img{
+            width: 35px !important;
+            height: 35px !important;
+            margin-left: 0rem !important;
+          }
+        }
+
       `}</style>
     </div>
   );
