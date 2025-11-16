@@ -324,6 +324,11 @@ function LessonButtons() {
               gap: 4rem;
             }
           }
+          @media (min-width: 1440px) {
+            .lessons-grid {
+              gap: 6rem;
+            }
+          }
           @media (min-width: 1800px) {
             .lessons-grid {
               gap: 8rem;
@@ -417,17 +422,17 @@ function LessonButtons() {
               gap: 14px;
             }
             .lesson-button {
-              height: 6rem !important;
-              width: 7rem !important;
-              font-size: 3.5rem !important;
-              border-radius: 1.5rem !important;
+              height: 9rem !important;
+              width: 11rem !important;
+              font-size: 4.5rem !important;
+              border-radius: 2.5rem !important;
             }
             .lessons-grid .lesson-tile:nth-child(2n + 1) {
               transform: translateY(-3rem);
               margin-top: 3rem;
             }
             .lessons-grid .lesson-tile:nth-child(2n) {
-              transform: translateY(6rem);
+              transform: translateY(10rem);
             }
             .max-h-screen {
               max-height: 79vh !important;
