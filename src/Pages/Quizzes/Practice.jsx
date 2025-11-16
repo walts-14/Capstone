@@ -207,10 +207,10 @@ function Practice() {
         </>
       )}
         {/* Responsive styles for smooth transition */}
-      <style>{`
+     <style>{`
        
         
-         /* Mobile sidenav - only show below 640px */
+        /* Mobile sidenav - only show below 640px */
         @media (max-width: 639px) {
        .progress {
           margin-left: 14px !important;
@@ -225,7 +225,7 @@ function Practice() {
           height: 200vh !important;
           width: 100vw !important;
           border-radius: 0px !important;
-          gap: 60px 68px !important;
+          gap: 60px 78px !important;
           margin-top: 15px !important;
         }
 
@@ -234,7 +234,7 @@ function Practice() {
           width: 46vw !important;
           position: relative !important;
           top: 8vh !important;
-          right: 29px !important;
+          right: 33px !important;
           margin: 0 auto !important;
         }
 
@@ -242,7 +242,7 @@ function Practice() {
           height: 5vh !important;
           width: 50vw !important;
           position: relative !important;
-          bottom: 6vh !important;
+          bottom: 7vh !important;
           right: 0 !important;
           margin: 8px auto !important;
           border-radius: 12px !important;
@@ -260,11 +260,11 @@ function Practice() {
           max-height: 45vh !important;
           object-fit: contain !important;
           display: block !important;
-          border: 2px solid #7338A0 !important;
+     
           border-radius: 12px !important;
           margin: 0 auto !important;
           position: absolute !important;
-          top: 6.5vh !important;
+          top: 5vh !important;
           left: 50% !important;
           transform: translateX(-50%) !important;
           z-index: 1 !important;
@@ -310,24 +310,56 @@ function Practice() {
             display: flex !important;
             justify-content: center !important;
             position: fixed !important;
-            left: 0.5rem !important;
-            top: 0.5rem !important;
+            left: 4rem !important;
+            top: -0.5rem !important;
             font-size: 1.5rem !important;
           }
           .back img {
             width: 2rem !important;
             height: 1.5rem !important;
           }
-
+      }
         .lives-quizz {
           display: flex !important;
           position: absolute !important;
           top:  0.5rem !important;
-          left: 16.5rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
+          left: 18rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
           transform: scale(1) !important;
         }
-           
+           /* Mobile sidenav - only show below 640px */
+        @media (min-width: 425px) {
+          .lives-quizz {
+          display: flex !important;
+          position: absolute !important;
+          top:  0.5rem !important;
+          left: 21rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
+          transform: scale(1) !important;
         }
+          .choice-a video, .choice-b video, .choice-c video, .choice-d video {
+          width: 39vw !important;
+          height: auto !important;
+          max-width: 300px !important;
+          max-height: 45vh !important;
+          object-fit: contain !important;
+          display: block !important;
+          
+          border-radius: 12px !important;
+          margin: 0 auto !important;
+          position: absolute !important;
+          top: 5vh !important;
+          left: 50% !important;
+          transform: translateX(-50%) !important;
+          z-index: 1 !important;
+        }
+          .choices {
+          height: 23vh !important;
+          width: 44vw !important;
+          position: relative !important;
+          top: 4vh !important;
+          right: 33px !important;
+          margin: 0 auto !important;
+        }
+      }
         
          /* Tablet sidenav and logo - show between 640px-1024px */
         @media (min-width: 640px) and (max-width: 768px) {
@@ -335,15 +367,16 @@ function Practice() {
             display: flex !important;
             justify-content: center !important;
             position: fixed !important;
-            left: 0.5rem !important;
-            top: 0.5rem !important;
+            left: 2rem !important;
+            top: 0rem !important;
             font-size: 1.5rem !important;
-          }
+            }
+           
           .lives-quizz {
           display: flex !important;
           position: absolute !important;
           top:  7rem !important;
-          right: 4rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
+          left: 40rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
           
          }
           .back img {
@@ -396,11 +429,11 @@ function Practice() {
             max-height: 30vh !important;
             object-fit: contain !important;
             display: block !important;
-            border: 2px solid #7338A0 !important;
+        
             border-radius: 12px !important;
             margin: 0 auto !important;
             position: absolute !important;
-            bottom: -2rem !important;
+            top: -2rem !important;
             
             left: 10.7rem !important;
             transform: translateX(-50%) !important;
@@ -413,7 +446,7 @@ function Practice() {
             align-items: center !important;
             font-size: 1.6rem !important;
             padding-top: 10px !important;
-            
+            margin-bottom: 45px !important;
           } 
           .continue img {
             margin: 0px !important;
@@ -428,22 +461,21 @@ function Practice() {
           }      
         }
 
-        
         /* Desktop sidenav - show above 1024px */
         @media (min-width: 1024px) {
-            .back {
+           .back {
             display: flex !important;
             justify-content: center !important;
             position: fixed !important;
-            left: 0.5rem !important;
-            top: 0.5rem !important;
+            left: 1.3rem !important;
+            top: -0.5rem !important;
             font-size: 1.5rem !important;
-          }
+            }
           .lives-quizz {
           display: flex !important;
           position: absolute !important;
-          top:  6.6rem !important;
-          right: 4rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
+          top:  7rem !important;
+          left: 55rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
           
          }
           .back img {
@@ -499,7 +531,7 @@ function Practice() {
             border-radius: 12px !important;
             margin: 0 auto !important;
             position: absolute !important;
-            bottom: -2.4rem !important;
+            top: -2.3rem !important;
             
             left: 13.2rem !important;
             transform: translateX(-50%) !important;
@@ -512,7 +544,7 @@ function Practice() {
             align-items: center !important;
             font-size: 1.6rem !important;
             padding-top: 10px !important;
-            
+            margin-bottom: 45px !important;
           } 
           .continue img {
             margin: 0px !important;
@@ -524,7 +556,106 @@ function Practice() {
           .continue p {
             margin-bottom: 0px !important;
             margin-top: 4px !important;
-          }   
+          }      
+        }
+
+            /* Desktop sidenav - show above 1024px */
+        @media (min-width: 1440px) {
+            .back {
+            display: flex !important;
+            justify-content: center !important;
+            position: fixed !important;
+            left: 1rem !important;
+            top: -0.8rem !important;
+            font-size: 2.3rem !important;
+            }
+          .lives-quizz {
+          display: flex !important;
+          position: absolute !important;
+          top:  7rem !important;
+          left: 78rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
+          
+         }
+           .back img {
+              width: 3rem !important;
+              height: 2.5rem !important;
+            } 
+          .grid {
+            height: 60vh !important;
+            width: 90vw !important;
+            border-radius: 18px !important;
+            gap: 140px 132px !important;
+            margin-top: 15px !important;
+          }
+
+          .quiz-question {
+            display: block !important;
+            font-size: 2.2rem !important;
+            position: fixed !important;
+            left: 50% !important;
+            top: 11rem !important;
+            transform: translateX(-50%) !important;
+            width: 80vw !important;
+            text-align: center !important;
+          }
+          .choices {
+            height: 22vh !important;
+            width: 33vw !important;
+            position: relative !important;
+            top: 8vh !important;
+            right: 38px !important;
+            margin: 0 auto !important;
+           }
+          .choice-a, .choice-b, .choice-c, .choice-d {
+            height: 7vh !important;
+            width: 5vw !important;
+            position: absolute !important;
+            bottom: 6vh !important;
+            left: 22px !important;
+            margin: 0px auto !important;
+            border-radius: 12px !important;
+          }
+          .choice-a strong, .choice-b strong, .choice-c strong, .choice-d strong {
+            margin-top: 2px !important;
+            font-size: 2.3rem !important;
+          }
+          .choice-a video, .choice-b video, .choice-c video, .choice-d video {
+            width: 48vw !important;
+            height: auto !important;
+            max-width: 300px !important;
+            max-height: 35vh !important;
+            object-fit: contain !important;
+            display: block !important;
+            border-radius: 12px !important;
+            margin: 0 auto !important;
+            position: absolute !important;
+            top: -4.2rem !important;
+     
+            left: 16.2rem !important;
+            transform: translateX(-50%) !important;
+            z-index: 1 !important;
+          }
+          
+          .continue {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            font-size: 1.6rem !important;
+            padding-top: 10px !important;
+            margin-bottom: 45px !important;
+          } 
+          .continue img {
+            margin: 0px !important;
+            margin-top: 10px !important;
+            margin-left: 8px !important;
+            width: 2.5rem !important;
+            height: 2.3rem !important;
+          }
+          .continue p {
+            margin-bottom: 0px !important;
+            margin-top: 4px !important;
+          }      
+        }
       `}</style>
     </div>
   );
