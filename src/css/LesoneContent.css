@@ -162,6 +162,18 @@ body {
 }
 
 @media (min-width: 375px) {
+ .back {
+      display: flex !important;
+      justify-content: center !important;
+      position: fixed !important;
+      left: 4rem !important;
+      top: 0rem !important;
+      font-size: 1.5rem !important;
+    }
+    .back img {
+      width: 2rem !important;
+      height: 1.5rem !important;
+    }
   .container-lecture video {
     width: 95vw;
     border: 5px solid var(--grey-purple);

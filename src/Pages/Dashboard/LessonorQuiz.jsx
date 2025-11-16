@@ -578,7 +578,7 @@ function LectureorQuiz() {
             
 
             .progress-bar-container {
-            margin-top: 6.3rem !important;
+            margin-top: 10rem !important;
             width:34% !important;
           }
           .container {

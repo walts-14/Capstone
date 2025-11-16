@@ -21,7 +21,7 @@ function Page() {
       {/* Scoped responsive styles for this page's Lessonlist only */}
       <style>{`
         /* default (mobile-first): full width in the flow */
-        @media (max-width: 639px) {
+        @media (min-width: 375px) {
             .lecture-lessonlist-container {
             position: absolute;
             right: 4vw;
@@ -31,13 +31,21 @@ function Page() {
           }
         }
         
-
+         @media (min-width: 425px) {
+            .lecture-lessonlist-container {
+            position: absolute;
+            right: 4vw;
+            top: 85px;
+            width: 90vw;
+      
+          }
+        }
         /* tablet */
         @media (min-width: 640px) and (max-width: 768px) {
           .lecture-lessonlist-container {
             position: absolute;
-            right: 44vw;
-            top: -12px;
+            right: 42vw;
+            top: -0px;
             width: 60vw;
             height: 260vh;
             display: inline-block;
