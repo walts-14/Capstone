@@ -297,4 +297,12 @@
       max-width: 768px;
     }
   }
+  .lessonTitle h1 {
+    font-size: 2.5rem;
+    width: 35vw;
+  }
+  .lessonTitle h2 {
+    font-size: 2rem;
+    width: 150vw;
+  }
 }

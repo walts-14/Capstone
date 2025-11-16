@@ -52,6 +52,15 @@ function Page() {
             width: 110vw;
           }
         }
+
+          @media (min-width: 1440px) {
+          .lecture-lessonlist-container {
+            position: absolute;
+            right: 3vw;
+            top: 80px;
+            width: 100vw;
+          }
+        }
       `}</style>
     </div>
   );

@@ -114,9 +114,9 @@ function LivesandDiamonds({ showDiamonds = true, showLives = true }) {
         }
 
         /* Laptop L: 1440x891 and up - slightly larger */
-        @media (min-width: 1400px) {
+        @media (min-width: 1440px) {
           .lives-container, .diamonds-container { gap: 0.75rem; }
-          .heart-icon, .diamond-icon { width: 3.5rem; height: 3.5rem; }
+          .heart-icon, .diamond-icon { width: 3rem; height: 3rem; }
           .lives-number, .points-number { font-size: 2.25rem; margin-left: 0.5rem; }
         }
 

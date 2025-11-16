@@ -412,7 +412,7 @@ function LessonButtons() {
             }
             .Difficulty {
               display: flex !important;
-              height: 66px;
+              height: 68px;
               font-size: 2rem;
               padding-inline: 12px !important;
               border-radius: 1rem !important;
