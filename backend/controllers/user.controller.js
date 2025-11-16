@@ -78,37 +78,101 @@ export const loginUser = async (req, res) => {
 };
 
 /// Profile Picture Upload Function
+// Replace your current uploadProfilePicture with this
+
 export const uploadProfilePicture = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id);
-    if (!user) return res.status(404).json({ message: "User not found" });
-
-    // Delete previous pic from cloudinary
-    if (user.profilePic?.public_id) {
-      await cloudinary.uploader.destroy(user.profilePic.public_id);
-    }
-
-    // Upload new image
-    const result = await cloudinary.uploader.upload(req.file.path, {
-      folder: "profile_pictures",
+    console.info('uploadProfilePicture: incoming request', {
+      hasAuthHeader: !!req.headers.authorization,
+      reqUserPresent: !!req.user,
     });
 
-    // Save new profile pic
+    // AUTH CHECK
+    if (!req.user || !req.user.id) {
+      console.warn('uploadProfilePicture: missing req.user');
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    // FILE CHECK
+    if (!req.file) {
+      console.warn('uploadProfilePicture: no file attached (req.file is undefined). Check multer and field name.');
+      return res.status(400).json({ message: 'No file uploaded. Make sure form field is "image" and multer is configured with .single("image")' });
+    }
+
+    console.info('uploadProfilePicture: req.file', {
+      originalname: req.file.originalname,
+      mimetype: req.file.mimetype,
+      size: req.file.size,
+      path: req.file.path,
+    });
+
+    // get user
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      // remove uploaded temp file to avoid leaks
+      try { if (req.file.path) fs.unlinkSync(req.file.path); } catch (e) {}
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Delete previous pic from cloudinary (if exists)
+    if (user.profilePic?.public_id) {
+      try {
+        await cloudinary.uploader.destroy(user.profilePic.public_id);
+      } catch (destroyErr) {
+        console.warn('uploadProfilePicture: cloudinary destroy warning', destroyErr.message);
+        // don't abort; proceed with uploading new one
+      }
+    }
+
+    // Upload new image to Cloudinary
+    let result;
+    try {
+      result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "profile_pictures",
+        use_filename: true,
+        unique_filename: true,
+        overwrite: false,
+      });
+    } catch (cloudErr) {
+      console.error('uploadProfilePicture: cloudinary upload failed', cloudErr);
+      // cleanup local file
+      try { if (req.file.path) fs.unlinkSync(req.file.path); } catch (e) {}
+      return res.status(500).json({ error: 'Cloudinary upload failed', details: cloudErr.message });
+    }
+
+    // Save in DB
     user.profilePic = {
       url: result.secure_url,
       public_id: result.public_id,
     };
 
     await user.save();
-    fs.unlinkSync(req.file.path); // Remove local file
-    res.json({
+
+    // remove local temp file after successful upload
+    try {
+      if (req.file && req.file.path) fs.unlinkSync(req.file.path);
+    } catch (e) {
+      console.warn('uploadProfilePicture: failed to unlink temp file', e.message);
+    }
+
+    console.info('uploadProfilePicture: success', {
+      userId: user._id.toString(),
+      public_id: user.profilePic.public_id,
+      url: user.profilePic.url,
+    });
+
+    return res.status(200).json({
       message: "Profile picture uploaded",
       profilePic: user.profilePic,
     });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error('uploadProfilePicture: handler error', { message: err.message, stack: err.stack });
+    // Attempt to remove the temp file if it exists
+    try { if (req.file?.path) fs.unlinkSync(req.file.path); } catch (e) {}
+    return res.status(500).json({ error: 'Server error during upload', details: err.message });
   }
 };
+
 
 /// Delete Profile Picture Function
 export const deleteProfilePicture = async (req, res) => {
