@@ -177,13 +177,6 @@
   font-weight: bold;
 }
 
-.leaderboard-container {
-  background-color: var(--background);
-  min-height: 100vh;
-  display: flex;
-  width: 100%;
-}
-
 .leaderboard-content {
   flex: 1;
   display: flex;
@@ -235,10 +228,16 @@
 
 /* Mobile responsiveness */
 @media (max-width: 768px) {
+  .leaderboard-container{
+    /* padding: 5rem;
+    margin: 2rem */
+    margin-left: 2rem;
+  }
+
   .top-three-container {
     flex-direction: row;
     align-items: center;
-    gap: 1.5rem;
+    gap: 5rem;
   }
   
   .podium-first, .podium-second, .podium-third {
