@@ -677,22 +677,22 @@ function LectureorQuiz() {
             }    
             
             .progress-bar-container {
-            margin-top: 10rem !important;
-            width:34% !important;
+            margin-top: 8.5rem !important;
+            width:26% !important;
           }
           .container {
             display: flex !important;
-            gap: 0.5rem !important;
+            gap: 0rem !important;
        
           }
           .progress-step{
-            width: 4.5rem !important;    
-            height: 4.5rem!important;
-            font-size: 2.5rem !important;
+            width: 4rem !important;    
+            height: 4rem!important;
+            font-size: 2rem !important;
           }
           .progress-line {
-            height: 1.3rem !important;
-            width: 80% !important;
+            height: 1.1rem !important;
+            width: 65% !important;
           }  
           .lecture-quiz-container {
             display: flex !important;
@@ -707,20 +707,20 @@ function LectureorQuiz() {
           
           .lecture-outer {
             width: 24rem !important;
-            height: 30rem !important;
+            height: 26rem !important;
             border-radius: 2rem !important;
 
           }
             
           .lecture-inner {
             width: 23rem !important;
-            height: 25rem !important;
+            height: 21rem !important;
             border-radius: 2rem !important;
           }
          
           .quiz-outer, .practice-outer {
             width: 24rem !important;
-            height: 14rem !important;
+            height: 12rem !important;
             padding: 0px !important;
             border-radius: 2rem !important;
         
@@ -730,7 +730,7 @@ function LectureorQuiz() {
           }
           .quiz-inner, .practice-inner {
             width: 23rem !important;
-            height: 18.5vh !important;
+            height: 16.5vh !important;
             margin-top: 1.8rem !important;
             border-radius: 2rem !important;
          }

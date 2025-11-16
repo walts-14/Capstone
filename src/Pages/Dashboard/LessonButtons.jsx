@@ -38,7 +38,7 @@ function LessonButtons() {
 
   // Border highlight colors to match LibraryButtons select
   const highlightBorderColors = {
-    BASIC: "#2E86C1",
+    BASIC: "#A6DCFF",
     INTERMEDIATE: "#FFFEA6",
     ADVANCED: "#FF7D6F",
   };
