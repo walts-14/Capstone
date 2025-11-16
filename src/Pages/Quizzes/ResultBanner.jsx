@@ -145,7 +145,7 @@ export default function ResultBanner({ isCorrect }) {
              .result-ans {
             height: 80px !important;
             width: 28vw !important;
-            top: 12.2vh !important;
+            top: 13.5vh !important;
         
             text-align: center !important;
           }
