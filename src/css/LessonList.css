@@ -153,7 +153,7 @@
   }
   .lessonTitle h2 {
     font-size: 1.5rem;
-    width: 80vw;
+    width: 150vw;
   }
   .lesson-list {
     position: relative;
@@ -234,23 +234,17 @@
 /* Large Desktop (1440px) */
 @media (min-width: 1440px) {
   .terms-list {
-    max-width: 1300px;
+    max-width: 1360px;
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(600px, 2fr));
+    padding: 24px;
+    height: 500px; /* Set a fixed height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    scrollbar-width: none;
+    margin-top: 10rem;
+    margin-left: 14rem !important;
     gap: 0rem;
-    margin: 0 auto;
-    padding: 0;
-    padding-left: 15rem; /* kept from second block */
-    box-sizing: border-box;
-    justify-items: stretch;
-    align-items: start;
-    max-height: calc(100vh - 5rem); /* kept the newer value */
-    overflow-y: auto;
-    overflow-x: hidden;
-    font-weight: 200;
-    scrollbar-width: thin; /* Firefox thin scrollbar */
-    scrollbar-color: var(--semidark-blue) var(--background);
   }
 
   .lessonTitle {
@@ -258,14 +252,14 @@
     width: 75%; /* from the second block */
     height: 10vh; /* more reliable than 9vw */
     min-height: 0;
-    margin: -3rem auto 1.2rem 17rem;
+    margin: 0rem auto 1.2rem 17rem;
     padding: 10px 16px; /* merged padding */
     border-radius: 16px;
     background-color: var(--semidark-blue);
     box-sizing: border-box;
     position: absolute; /* keep this from the second block */
-    top: 0;
-    left: 0;
+    top: -2rem;
+    left: 1rem;
     bottom: 5rem;
     display: flex;
     flex-direction: row;
@@ -296,13 +290,5 @@
     .terms-list {
       max-width: 768px;
     }
-  }
-  .lessonTitle h1 {
-    font-size: 2.5rem;
-    width: 35vw;
-  }
-  .lessonTitle h2 {
-    font-size: 2rem;
-    width: 150vw;
   }
 }
