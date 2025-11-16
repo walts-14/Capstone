@@ -67,25 +67,44 @@ a {
     flex-direction: column;
     gap: 1rem;
     width: 90%;
-    height: calc(90vh - -5rem);
+    height: calc(90vh - 7rem);
     box-sizing: border-box;
     padding-left: auto;
     margin-right: 1em;
-    margin-top: -1.5rem;
+    margin-top: 1rem;
     overflow-x: hidden;
+    font-weight: 100;
   }
 
   .level-container::-webkit-scrollbar {
     display: none;
   }
+ .level-container .level-content {
+     display: flex;
+    flex-direction: column;
+    min-height: 7.5rem;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(
+      to bottom,
+      var(--level-bg-start) 34px,
+      var(--level-bg-end) 34px
+    );
+    background-repeat: no-repeat;
+    border-radius: 16px;
+    color: var(--white);
+  }
   .level-content span {
-    font-size: 1.3rem;
-    font-weight: 550;
-    padding-bottom: 0.5rem;
+    font-size: 1.5rem;
+    
+  }
+  .level-content span:nth-child(2) {
+    font-size: 0.8rem;
   }
   .level-content p {
     font-size: 1.3rem;
-    font-weight: 550;
+    margin-bottom: 10px;
+    
   }
   .lessonTitle {
     display: flex;

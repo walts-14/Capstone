@@ -52,17 +52,17 @@
     grid-template-columns: repeat(1, 1fr);
     gap: 0.75rem;
     padding: 0.75rem 1rem 8rem; /* bottom space for mobile nav */
-    margin-top: 8rem;
+    margin-top: 6rem;
     width: 100%;
-    max-height: calc(100vh - 15rem);
+    max-height: calc(150vh - 33rem);
     overflow-y: auto; /* make grid scrollable */
-    font-weight: 400;
+    
     scrollbar-width: none; /* Firefox */
   }
   .lesson-list {
     position: relative;
     top: 12rem;
-    left: 15px;
+    left: 18px;
     width: 90%;
     height: 50%;
     min-height: 0;
@@ -234,7 +234,7 @@
 /* Large Desktop (1440px) */
 @media (min-width: 1440px) {
   .terms-list {
-    max-width: 1360px;
+    max-width: 1200px;
     width: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(600px, 2fr));

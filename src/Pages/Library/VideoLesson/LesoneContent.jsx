@@ -258,7 +258,7 @@ const LesoneContent = () => {
 
   return (
     <>
-      <Sidenav />
+   
       <div className="back fs-1 fw-bold d-flex" onClick={handleBack}>
         <img src={Back} className="img-fluid p-1 mt-1" alt="Back" />
       </div>
