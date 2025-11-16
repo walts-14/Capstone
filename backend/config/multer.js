@@ -1,4 +1,6 @@
 import multer from 'multer';
+import path from 'path';
+import fs from 'fs';
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -7,14 +9,22 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
     const title = req.body.title || file.originalname;
     const cleanTitle = title.replace(/\.[^/.]+$/, ''); // remove extension if present
-    cb(null, cleanTitle); // Save as filename with no extension
+    // keep original extension for default storage
+    const ext = path.extname(file.originalname) || '';
+    cb(null, `${cleanTitle}${ext}`);
   },
 });
 
 const upload = multer({ storage });
-export default upload;
 
 // ---------- Image Upload Middleware for Profile Pictures ----------
+// ensure uploads/images directory exists
+try {
+  fs.mkdirSync('uploads/images', { recursive: true });
+} catch (e) {
+  // ignore
+}
+
 export const uploadImage = multer({
   storage: multer.diskStorage({
     destination: (req, file, cb) => {
@@ -33,3 +43,6 @@ export const uploadImage = multer({
     else cb(new Error('Invalid file type. Only JPEG and PNG are allowed.'), false);
   },
 });
+
+// default export: profile picture middleware (used by routes expecting uploadImage as default)
+export default uploadImage;
