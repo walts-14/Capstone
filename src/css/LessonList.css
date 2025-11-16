@@ -44,7 +44,6 @@
   min-height: calc(100vh - 11 rem);
 }
 
-/* Mobile */
 @media (min-width: 375px) {
   /* Mobile-first, fluid layout for terms grid */
   .terms-list {
@@ -74,6 +73,9 @@
     gap: 0px;
     display: flex;
     align-items: flex-start;
+    position: relative;
+    right: 0rem;
+    width: 100%;
   }
   .lessonTitle h2 {
     font-size: 0.9rem;
@@ -86,9 +88,9 @@
     grid-template-columns: repeat(1, 1fr);
     gap: 0.75rem;
     padding: 0.75rem 1rem 8rem; /* bottom space for mobile nav */
-    margin-top: 8rem;
+    margin-top: 4rem;
     width: 100%;
-    max-height: calc(100vh - 15rem);
+    max-height: calc(110vh - 18rem);
     overflow-y: auto; /* make grid scrollable */
     font-weight: 400;
     scrollbar-width: none; /* Firefox */
@@ -108,6 +110,10 @@
     gap: 0px;
     display: flex;
     align-items: flex-start;
+    position: relative;
+    left: 0.3rem;
+    top: -6rem;
+    width: 100%;
   }
   .lessonTitle h2 {
     font-size: 0.9rem;
