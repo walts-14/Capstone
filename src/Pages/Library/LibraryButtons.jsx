@@ -26,7 +26,7 @@ function LibraryButtons({ forcedDifficulty }) {
   const selectBorderColor = useMemo(() => {
     if (currentDifficulty === "Advanced") return "#FF7D6F";
     if (currentDifficulty === "Intermediate") return "#FFFEA6";
-    return "#579ECD";
+    return "#A6DCFF";
   }, [currentDifficulty]);
 
   function handleDifficultyChange(e) {

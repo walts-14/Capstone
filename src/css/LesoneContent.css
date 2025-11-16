@@ -324,12 +324,8 @@ body {
     left: 13rem;
   }
 }
-@media (min-width: 900px) {
-  .textOne p {
-    font-size: 2rem;
-  }
-}
-@media (min-width: 1200px) {
+
+@media (min-width: 1440px) {
   .textOne p {
     font-size: 2.5rem;
   }
