@@ -40,6 +40,7 @@ function Page() {
             top: -12px;
             width: 60vw;
             height: 260vh;
+            display: inline-block;
           }
         }
 
