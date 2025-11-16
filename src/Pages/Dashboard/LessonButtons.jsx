@@ -24,11 +24,10 @@ function LessonButtons() {
   const navigate = useNavigate();
   const [difficulty, setDifficulty] = useState("BASIC");
   const [lives, setLives] = useState(0);
-  const { points: ctxPoints } = useContext(ProgressContext);
+  const { points: ctxPoints, progressData } = useContext(ProgressContext);
   const points = typeof ctxPoints === "number" ? ctxPoints : 0;
   const [unlockedLessons, setUnlockedLessons] = useState([1]);
   const buttonContainerRef = useRef(null);
-  const progressData = ctx.progressData || null;
 
   const difficultyColors = {
     BASIC: "#579ecd",
