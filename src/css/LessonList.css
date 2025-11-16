@@ -126,7 +126,7 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     padding-left: 5rem;
-    padding-top: 8rem;
+    padding-top: 4rem;
     margin-left: auto;
     width: 100%;
     height: calc(
@@ -143,9 +143,9 @@
     overflow-y: hidden;
   }
   .lessonTitle {
-    position: absolute;
-    top: 1rem;
-    left: 7rem;
+    position: relative;
+    top: 0rem;
+    left: 5rem;
     width: 80vw;
     height: 13vh;
     min-height: 0;
@@ -159,7 +159,7 @@
   }
   .lessonTitle h2 {
     font-size: 1.5rem;
-    width: 150vw;
+    width: 80vw;
   }
   .lesson-list {
     position: relative;
@@ -176,19 +176,21 @@
     max-width: 1100px;
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
-    margin: 0 auto;
-    padding: 0;
+    margin-top: 12rem;
+    padding: 8px;
     padding-left: 15rem; /* kept from second block */
+    position: relative;
+    left: 2.5rem;
     box-sizing: border-box;
     justify-items: stretch;
     align-items: start;
-    max-height: calc(100vh - 5rem); /* kept the newer value */
+    max-height: calc(120vh - 14rem); /* kept the newer value */
     overflow-y: auto;
     overflow-x: hidden;
     font-weight: 400;
-    scrollbar-width: thin; /* Firefox thin scrollbar */
+    scrollbar-width: none; /* Firefox thin scrollbar */
     scrollbar-color: var(--semidark-blue) var(--background);
   }
 
@@ -203,7 +205,7 @@
     background-color: var(--semidark-blue);
     box-sizing: border-box;
     position: absolute; /* keep this from the second block */
-    top: 0;
+    top: 2rem;
     left: 0;
     bottom: 5rem;
     display: flex;
@@ -254,8 +256,8 @@
   }
 
   .lessonTitle {
-    max-width: 1100px;
-    width: 75%; /* from the second block */
+    max-width: 1200px;
+    width: 90%; /* from the second block */
     height: 10vh; /* more reliable than 9vw */
     min-height: 0;
     margin: 0rem auto 1.2rem 17rem;
@@ -265,7 +267,7 @@
     box-sizing: border-box;
     position: absolute; /* keep this from the second block */
     top: -2rem;
-    left: 1rem;
+    left: -1.5rem;
     bottom: 5rem;
     display: flex;
     flex-direction: row;
@@ -278,6 +280,9 @@
     white-space: nowrap;
     display: inline;
   }
+   .lessonTitle h1 {
+    width: 20rem;
+   }
   .terms-list::-webkit-scrollbar {
     width: 8px;
   }
