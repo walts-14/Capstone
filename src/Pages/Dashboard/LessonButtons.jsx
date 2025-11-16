@@ -429,7 +429,7 @@ function LessonButtons() {
             }
             .lessons-grid .lesson-tile:nth-child(2n + 1) {
               transform: translateY(-3rem);
-              margin-top: 3rem;
+              margin-top: 4.8rem;
             }
             .lessons-grid .lesson-tile:nth-child(2n) {
               transform: translateY(10rem);

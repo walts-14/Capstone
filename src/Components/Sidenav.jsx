@@ -87,7 +87,7 @@ function Sidenav() {
   className="fixed top-28 left-0 bottom-28 rounded-r-4xl p-4 bg-[var(--purple)] h-[80vh] hidden lg:flex"
   style={{ fontFamily: '"Baloo", sans-serif' }}
 >
-  <nav className="text-white flex flex-col w-full z-10 gap-4">
+  <nav className="text-white flex flex-col w-full z-10 gap-10">
     {menuItems.map((item, idx) => {
       const normalizedItemPath = normalizePath(item.path);
       const isActive = currentPath === normalizedItemPath;
@@ -110,9 +110,9 @@ function Sidenav() {
               <img
                 src={item.icon}
                 alt={`${item.label.toLowerCase()} logo`}
-                className="flex-shrink-0 object-contain w-9 h-9"
+                className="flex-shrink-0 object-contain w-11 h-11"
               />
-              <span className={`truncate text-2xl ${isActive ? "text-white" : "text-white"} text-left flex-1`}>
+              <span className={`truncate text-3xl ${isActive ? "text-white" : "text-white"} text-left flex-1`}>
                 {item.label}
               </span>
             </div>

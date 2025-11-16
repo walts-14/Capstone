@@ -1056,7 +1056,7 @@ export default function ProgressTracker({ student }) {
             font-size: 24px !important;
           }
           .btnstreak {
-            width: 10vw !important;
+            width: 8vw !important;
             height: 10vh !important;
           }
           .btnstreak img, .btnleaderboard img {
@@ -1078,6 +1078,7 @@ export default function ProgressTracker({ student }) {
             border-radius: 18px !important;
             gap: 0rem !important;
             padding: 10px !important;
+            width: 17.5vw !important;
           }
           .btnleaderboard p {
             font-size: 2.5rem !important;
@@ -1087,7 +1088,7 @@ export default function ProgressTracker({ student }) {
           }
           .panelClass {
             height: 72vh !important;
-            width: 29.8vw !important;
+            width: 27vw !important;
             position: fixed !important;
             top: 170px !important;
             right: 2.5vw !important;
@@ -1096,33 +1097,33 @@ export default function ProgressTracker({ student }) {
           /* Progress panel adjustments for small phones */
           /* make level headers and lesson labels smaller and panels height:auto */
           .Difprogress {
-            height: 38vh !important;
+            height: 40vh !important;
             max-height: none !important;
             border-radius: 20px !important;
           }
           /* header inside each level box: pill sizing + font-size */
            .DifHeader {
-            font-size: 2.8rem !important; /* requested header font-size */
+            font-size: 2.3rem !important; /* requested header font-size */
             padding: 0.15rem !important;
             line-height: 1 !important;
-            width: 330px !important;
-            height: 46px !important;
+            width: 295px !important;
+            height: 44px !important;
             display: inline-block !important;
             text-align: center !important;
             vertical-align: middle !important;
             overflow: visible !important;
-            margin-button: 0px;
+            margin-button: -5px;
           }
 
           .Lesprogress {
             margin: 0.5rem !important;
-            height: 55px !important;
+            height: 46px !important;
            
           }
           /* lesson label and percent text size */
           .rounded-2xl .Leslabel,
           .Lesprogress .Perclabel {
-            font-size: 2rem !important; /* requested lesson/percent size */
+            font-size: 1.5rem !important; /* requested lesson/percent size */
             width: auto !important;
             padding: 4px !important;
           }
