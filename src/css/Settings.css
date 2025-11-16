@@ -623,6 +623,16 @@ body {
     padding: 0.4rem 0.9rem;
     box-sizing: border-box;
   }
+  .profile-picture-wrapper {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 1.2rem auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    /* Ensure stays at top */
+  }
   .profile-picture-wrapper img {
     width: 100%;
     height: 100%;
@@ -633,19 +643,25 @@ body {
     object-fit: cover;
     border-radius: 50%;
     margin: -43rem auto 0.5rem auto;
+    top: 0;
+    display: block;
   }
-  /* Hidden overlay by default */
   .camera-overlay {
     position: absolute;
-    top: -39.3rem;
+    top: 0;
     left: 0;
-    width: 15vw;
-    height: 15vw;
+    margin-top: -38.3rem;
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
     background-color: rgba(0, 0, 0, 0.4);
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
     pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
   }
   /* Show overlay only when hovering on "Change Profile" */
   .change-pic:hover ~ .camera-overlay {
@@ -780,6 +796,16 @@ body {
     padding: 0.4rem 0.9rem;
     box-sizing: border-box;
   }
+  .profile-picture-wrapper {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 1.2rem auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    /* Ensure stays at top */
+  }
   .profile-picture-wrapper img {
     width: 100%;
     height: 100%;
@@ -790,19 +816,25 @@ body {
     object-fit: cover;
     border-radius: 50%;
     margin: -43rem auto 0.5rem auto;
+    top: 0;
+    display: block;
   }
-  /* Hidden overlay by default */
   .camera-overlay {
     position: absolute;
-    top: -39.3rem;
+    top: 0;
     left: 0;
-    width: 10.5vw;
-    height: 10.5vw;
+    margin-top: -38.3rem;
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
     background-color: rgba(0, 0, 0, 0.4);
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
     pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
   }
   /* Show overlay only when hovering on "Change Profile" */
   .change-pic:hover ~ .camera-overlay {
