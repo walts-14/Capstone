@@ -234,11 +234,11 @@
 /* Large Desktop (1440px) */
 @media (min-width: 1440px) {
   .terms-list {
-    max-width: 1100px;
+    max-width: 1300px;
     width: 100%;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 1.5rem;
+    gap: 0rem;
     margin: 0 auto;
     padding: 0;
     padding-left: 15rem; /* kept from second block */
@@ -248,7 +248,7 @@
     max-height: calc(100vh - 5rem); /* kept the newer value */
     overflow-y: auto;
     overflow-x: hidden;
-    font-weight: 400;
+    font-weight: 200;
     scrollbar-width: thin; /* Firefox thin scrollbar */
     scrollbar-color: var(--semidark-blue) var(--background);
   }
