@@ -38,7 +38,8 @@ function LessonButtons() {
     ADVANCED: "#C0392B",
   };
 
-  const strokeColors = {
+  // Border highlight colors to match LibraryButtons select
+  const highlightBorderColors = {
     BASIC: "#A6DCFF",
     INTERMEDIATE: "#FFFEA6",
     ADVANCED: "#FF7D6F",
@@ -46,29 +47,49 @@ function LessonButtons() {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (!buttonContainerRef.current) return;
       const container = buttonContainerRef.current;
-      const scrollTop = container.scrollTop;
-      const sections = container.querySelectorAll(
-        ".lessons-container, .lessons-container2, .lessons-container3"
-      );
+      if (!container) return;
 
-      let currentDifficulty = "BASIC";
-      sections.forEach((section, index) => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.offsetHeight;
-        if (scrollTop >= sectionTop - sectionHeight / 2) {
-          if (index === 1) currentDifficulty = "INTERMEDIATE";
-          if (index === 2) currentDifficulty = "ADVANCED";
+      // Use viewport coordinates so this works regardless of container offsetParent
+      const containerRect = container.getBoundingClientRect();
+      const lookY = containerRect.top + container.clientHeight / 3; // a point 1/3 down the container
+
+      const tiles = Array.from(container.querySelectorAll(".lesson-tile"));
+      if (!tiles.length) return;
+
+      let activeIndex = 0;
+      for (let i = 0; i < tiles.length; i++) {
+        const tRect = tiles[i].getBoundingClientRect();
+        if (tRect.top <= lookY && tRect.bottom >= lookY) {
+          activeIndex = i;
+          break;
         }
-      });
+      }
+
+      // Fallback: pick first tile that appears below the top edge
+      if (activeIndex === 0) {
+        for (let i = 0; i < tiles.length; i++) {
+          const tRect = tiles[i].getBoundingClientRect();
+          if (tRect.top >= containerRect.top - 1) {
+            activeIndex = i;
+            break;
+          }
+        }
+      }
+
+      const lessonId = activeIndex + 1; // tiles correspond to lessons 1..12
+      let currentDifficulty = "BASIC";
+      if (lessonId >= 5 && lessonId <= 8) currentDifficulty = "INTERMEDIATE";
+      else if (lessonId >= 9) currentDifficulty = "ADVANCED";
 
       setDifficulty(currentDifficulty);
     };
 
     const container = buttonContainerRef.current;
     if (container) {
-      container.addEventListener("scroll", handleScroll);
+      container.addEventListener("scroll", handleScroll, { passive: true });
+      // run once to initialize
+      handleScroll();
     }
     return () => {
       if (container) {
@@ -221,297 +242,334 @@ function LessonButtons() {
   }
 
   return (
-    <div
-      className="max-h-screen overflow-auto p-8 mr-[7.5rem] ml-auto scrollbar-hide"
-      ref={buttonContainerRef}
-      style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-    >
-      <style>{`
-        div::-webkit-scrollbar {
-          display: none;
-        }
-        
-          /* Glow on hover for unlocked basic lesson buttons */
-            .lesson-button.basic:not(.cursor-not-allowed):hover {
-              box-shadow: 0 12px 0 #246b9a, 0 0 24px 6px rgba(166,220,255,0.28); /* drop + cyan glow on hover */
-            }
-
-            .lesson-button.intermediate:not(.cursor-not-allowed):hover {
-              box-shadow: 0 12px 0 #a9890a, 0 0 24px 6px rgba(255,254,166,0.28); /* yellow glow */
-            }
-
-            .lesson-button.advanced:not(.cursor-not-allowed):hover {
-              box-shadow: 0 12px 0 #992d22, 0 0 24px 6px rgba(255,125,111,0.28); /* red glow */
-            }
-        
-        /* Large tablet responsive styles - ONLY activate at breakpoint */
-        @media (max-width: 1200px) {
-          .lesson-button {
-            height: 9rem !important;
-            width: 11rem !important;
-            font-size: 4.5rem !important;
-          }
-          
-          .lesson-button-shadow {
-            box-shadow: 0px 10px 0px !important;
-          }
-          
-          .lesson-button-shadow.basic {
-            box-shadow: 0px 10px 0px #246b9a !important;
-          }
-          
-          .lesson-button-shadow.intermediate {
-            box-shadow: 0px 10px 0px #a9890a !important;
-          }
-          
-          .lesson-button-shadow.advanced {
-            box-shadow: 0px 10px 0px #992d22 !important;
-          }
-          
-          .difficulty-button {
-            width: 22vw !important;
-            font-size: 2.25rem !important;
-            padding: 0.75rem 1.25rem !important;
-          }
-          
-          .header-container {
-            gap: 1.5rem !important;
-            margin-bottom: 2.5rem !important;
-            justify-content: center !important;
-          }
-        }
-        
-        /* Tablet responsive styles - ONLY activate at breakpoint */
-        @media (max-width: 1024px) {
-          .lesson-button {
-            height: 8rem !important;
-            width: 10rem !important;
-            font-size: 4rem !important;
-          }
-          
-          .lesson-button-shadow {
-            box-shadow: 0px 8px 0px !important;
-          }
-          
-          .lesson-button-shadow.basic {
-            box-shadow: 0px 8px 0px #246b9a !important;
-          }
-          
-          .lesson-button-shadow.intermediate {
-            box-shadow: 0px 8px 0px #a9890a !important;
-          }
-          
-          .lesson-button-shadow.advanced {
-            box-shadow: 0px 8px 0px #992d22 !important;
-          }
-          
-          .difficulty-button {
-            width: 20vw !important;
-            font-size: 2rem !important;
-            padding: 0.5rem 1rem !important;
-          }
-          
-          .header-container {
-            gap: 1rem !important;
-            margin-bottom: 2rem !important;
-            justify-content: center !important;
-          }
-        }
-        
-        /* Small tablet responsive styles - ONLY activate at breakpoint */
-        @media (max-width: 900px) {
-          .lesson-button {
-            height: 7rem !important;
-            width: 9rem !important;
-            font-size: 3.75rem !important;
-          }
-          
-          .lesson-button-shadow {
-            box-shadow: 0px 7px 0px !important;
-          }
-          
-          .lesson-button-shadow.basic {
-            box-shadow: 0px 7px 0px #246b9a !important;
-          }
-          
-          .lesson-button-shadow.intermediate {
-            box-shadow: 0px 7px 0px #a9890a !important;
-          }
-          
-          .lesson-button-shadow.advanced {
-            box-shadow: 0px 7px 0px #992d22 !important;
-          }
-          
-          .difficulty-button {
-            width: 18vw !important;
-            font-size: 1.875rem !important;
-            padding: 0.5rem 1rem !important;
-          }
-          
-          .header-container {
-            gap: 0.75rem !important;
-            margin-bottom: 1.75rem !important;
-            justify-content: center !important;
-          }
-        }
-        
-        /* Mobile responsive styles - ONLY activate at breakpoint */
-        @media (max-width: 640px) {
-          .lesson-button {
-            height: 6rem !important;
-            width: 8rem !important;
-            font-size: 3.25rem !important;
-          }
-          
-          .lesson-button-shadow {
-            box-shadow: 0px 6px 0px !important;
-          }
-          
-          .lesson-button-shadow.basic {
-            box-shadow: 0px 6px 0px #246b9a !important;
-          }
-          
-          .lesson-button-shadow.intermediate {
-            box-shadow: 0px 6px 0px #a9890a !important;
-          }
-          
-          .lesson-button-shadow.advanced {
-            box-shadow: 0px 6px 0px #992d22 !important;
-          }
-          
-          .difficulty-button {
-            width: 60vw !important;
-            font-size: 1.5rem !important;
-            padding: 0.75rem 1rem !important;
-          }
-          
-          .header-container {
-            gap: 0.5rem !important;
-            margin-bottom: 1.5rem !important;
-            justify-content: center !important;
-          }
-        }
-      `}</style>
-
+    <>
       {/* Header with difficulty and lives/diamonds */}
-      <div className="flex items-center justify-center gap-5 sticky top-3 z-10 mb-15 text-white header-container">
+      <div
+        className="headerlessbtn flex items-center justify-center gap-5 sticky top-3 z-10  text-white header-container"
+        style={{
+          marginTop: "-40rem",
+        }}
+      >
         <div
-          className="text-center px-5 py-2 rounded-2xl font-bold text-white text-[2.5rem] w-[24vw] difficulty-button"
+          className="Difficulty text-center px-5 py-2 rounded-2xl font-bold text-white text-[2.5rem] difficulty-button"
           style={{
             backgroundColor: difficultyColors[difficulty],
-            boxShadow: `0 0 0 5px ${strokeColors[difficulty] || '#A6DCFF'}`,
+            border: `4px solid ${highlightBorderColors[difficulty]}`,
+            width: "auto"
           }}
         >
           {difficulty}
         </div>
-        <LivesandDiamonds />
+        <div className="livesDia flex items-center justify-center">
+          <LivesandDiamonds />
+        </div>
       </div>
 
-      {/* Lesson Groups with Zigzag Layout */}
-      {lessonGroups.map((group, groupIndex) => (
-        <div key={groupIndex} className="mb-10">
-          {/* Section Label */}
-          {groupIndex === 0 && (
-            <div className="lessons-container flex flex-col space-y-10">
-              {group.map((lesson, lessonIndex) => (
+      <div
+        className="max-h-screen overflow-auto p-8 mt-[2rem] ml-auto scrollbar-hide lesson-scroll-container"
+        ref={buttonContainerRef}
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+      >
+        <style jsx>{`
+          /* hide default scrollbars for this container */
+          div::-webkit-scrollbar {
+            display: none;
+          }
+
+          /* Glow on hover for unlocked lesson buttons (keep original colors) */
+          .lesson-button.basic:not(.cursor-not-allowed):hover {
+            box-shadow: 0 12px 0 #246b9a, 0 0 24px 6px rgba(166, 220, 255, 0.28);
+          }
+          .lesson-button.intermediate:not(.cursor-not-allowed):hover {
+            box-shadow: 0 12px 0 #a9890a, 0 0 24px 6px rgba(255, 254, 166, 0.28);
+          }
+          .lesson-button.advanced:not(.cursor-not-allowed):hover {
+            box-shadow: 0 12px 0 #992d22, 0 0 24px 6px rgba(255, 125, 111, 0.28);
+          }
+
+          /* Wrapper centers content and reserves space for right panel */
+          .lesson-wrap {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+          }
+
+          /* Add extra bottom padding for desktop/laptop so lesson 12 is reachable */
+          @media (min-width: 1024px) {
+            .lesson-scroll-container {
+              padding-bottom: 8rem !important;
+            }
+          }
+
+          /* Keep the layout strictly two columns on desktop
+        - Desktop & tablet: 2 columns
+        - Mobile (<=640px): 1 column
+        This preserves the look while avoiding extra columns */
+          .lessons-grid {
+            display: grid;
+            gap: 7rem;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            align-items: start;
+          }
+          @media (max-width: 639px) {
+            .lessons-grid {
+              gap: 2rem;
+            }
+          }
+          @media (max-width: 768px)  {
+            .lessons-grid {
+              gap: 2rem;
+          }
+          }
+         @media (min-width: 1024px) {
+            .lessons-grid {
+              gap: 4rem;
+            }
+          }
+          @media (min-width: 1440px) {
+            .lessons-grid {
+              gap: 6rem;
+            }
+          }
+          @media (min-width: 1800px) {
+            .lessons-grid {
+              gap: 8rem;
+            }
+          }
+          @media (min-width: 2560px) {
+            .lessons-grid {
+              gap: 9.5rem;
+            }
+          }
+
+          /* Tile container used to stagger vertical position without horizontal margins (2-column pattern) */
+          .lesson-tile {
+            transition: transform 200ms ease;
+            display: flex;
+            justify-content: center;
+          }
+          /* Odd items lift up to create the zigzag in a 2-column layout */
+          .lessons-grid .lesson-tile:nth-child(2n + 1) {
+            transform: translateY(-3.4rem);
+          }
+          .lessons-grid .lesson-tile:nth-child(2n) {
+            transform: translateY(0);
+          }
+
+        
+
+          /* Default button sizing (responsive overrides below) */
+          .lesson-button {
+            height: 6.5rem;
+            width: 9rem;
+            font-size: 3.25rem;
+          }
+          @media (min-width: 1024px) {
+            .headerlessbtn {
+              display: flex !important;
+              gap: 1rem !important;
+              margin-top: 8vh !important;
+              margin-right: 5rem !important;
+              z-index: -999;
+            }
+            .Difficulty {
+              display: flex !important;
+              height: 54px;
+              font-size: 1.4rem;
+              padding-inline: 12px !important;
+              border-radius: 1rem !important;
+            }
+            .livesDia {
+              display: flex !important;
+              gap: 14px;
+            }
+            .lesson-button {
+              height: 6rem !important;
+              width: 7rem !important;
+              font-size: 3.5rem !important;
+              border-radius: 1.5rem !important;
+            }
+            .lessons-grid .lesson-tile:nth-child(2n + 1) {
+              transform: translateY(-3rem);
+              margin-top: 3rem;
+            }
+            .lessons-grid .lesson-tile:nth-child(2n) {
+              transform: translateY(6rem);
+            }
+            .max-h-screen {
+              max-height: 79vh !important;
+              margin-top: 4vh !important;
+              margin-right: 5rem !important;
+              padding: 0.5rem !important;
+            }
+          }
+          
+            @media (min-width: 1440px) {
+            .headerlessbtn {
+              display: flex !important;
+              gap: 1rem !important;
+              margin-top: 8vh !important;
+              margin-right: 5rem !important;
+              z-index: -999;
+            }
+            .Difficulty {
+              display: flex !important;
+              height: 68px;
+              font-size: 2rem;
+              padding-inline: 12px !important;
+              border-radius: 1rem !important;
+            }
+            .livesDia {
+              display: flex !important;
+              gap: 14px;
+            }
+            .lesson-button {
+              height: 9rem !important;
+              width: 11rem !important;
+              font-size: 4.5rem !important;
+              border-radius: 2.5rem !important;
+            }
+            .lessons-grid .lesson-tile:nth-child(2n + 1) {
+              transform: translateY(-3rem);
+              margin-top: 4.8rem;
+            }
+            .lessons-grid .lesson-tile:nth-child(2n) {
+              transform: translateY(10rem);
+            }
+            .max-h-screen {
+              max-height: 79vh !important;
+              margin-top: 4vh !important;
+              margin-right: 5rem !important;
+              padding: 0.5rem !important;
+            }
+          }
+          /* Mobile sidenav - only show below 640px */
+          @media (min-width: 640px) and (max-width: 768px)  {
+            .headerlessbtn {
+              display: flex !important;
+              gap: 1rem !important;
+              margin-top: 8vh !important;
+              margin-right: 8rem !important;
+              z-index: -999;
+            }
+            .Difficulty {
+              display: flex !important;
+              height: 54px;
+              font-size: 1.4rem;
+              padding-inline: 12px !important;
+              border-radius: 1rem !important;
+            }
+            .livesDia {
+              display: flex !important;
+              gap: 14px;
+            }
+            .lesson-button {
+              height: 6rem !important;
+              width: 8rem !important;
+              font-size: 4rem !important;
+              border-radius: 1.5rem !important;
+            }
+            .lessons-grid .lesson-tile:nth-child(2n + 1) {
+              transform: translateY(-5rem);
+              margin-top: 4rem;
+            }
+            .lessons-grid .lesson-tile:nth-child(2n) {
+              transform: translateY(5rem);
+            }
+            .max-h-screen {
+              max-height: 72vh !important;
+              margin-top: 4vh !important;
+              margin-right: 8rem !important;
+              padding: 1rem !important;
+            }
+          }
+
+          /* Mobile sidenav - only show below 640px */
+          @media (max-width: 639px) {
+            .headerlessbtn {
+              display: flex !important;
+              gap: 1rem !important;
+              margin-top: 20vh !important;
+              z-index: -999;
+            }
+            .Difficulty {
+              display: flex !important;
+              height: 47px;
+              font-size: 1.2rem;
+              padding-inline: 10px !important;
+              border-radius: 1rem !important;
+            }
+            .livesDia {
+              display: flex !important;
+              gap: 14px;
+            }
+            .lesson-button {
+              height: 5.5rem !important;
+              width: 30rem !important;
+              font-size: 4rem !important;
+              border-radius: 1.5rem !important;
+            }
+            .lessons-grid .lesson-tile:nth-child(2n + 1) {
+              transform: translateY(-5rem);
+              margin-top: 4rem;
+            }
+            .lessons-grid .lesson-tile:nth-child(2n) {
+              transform: translateY(5rem);
+            }
+            .max-h-screen {
+              max-height: 56vh !important;
+              margin-top: 4vh !important;
+
+              padding: 1rem !important;
+            }
+          }
+
+          /* hide-scrollbar helper kept for container compatibility */
+          .hide-scrollbar {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+          }
+          .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+          }
+        `}</style>
+
+        {/* Responsive lessons grid: keeps the column design while making it fluid */}
+        <div className="lesson-wrap">
+          <div className="lessons-grid">
+            {lessonRoutes.map((lesson, index) => (
+              <div key={lesson.id} className="lesson-tile">
                 <div
-                  key={lesson.id}
-                  className={`flex ${getPositionClass(lessonIndex)}`}
+                  className={`${getLessonButtonClass(
+                    lesson
+                  )} lesson-button lesson-button-shadow ${
+                    lesson.id >= 1 && lesson.id <= 4
+                      ? "basic"
+                      : lesson.id >= 5 && lesson.id <= 8
+                      ? "intermediate"
+                      : "advanced"
+                  }`}
+                  onClick={() => {
+                    if (lesson.unlocked) {
+                      let difficulty = "BASIC";
+                      if (lesson.id >= 5 && lesson.id <= 8)
+                        difficulty = "INTERMEDIATE";
+                      if (lesson.id >= 9 && lesson.id <= 12)
+                        difficulty = "ADVANCED";
+                      navigate(`/page/${lesson.termId}`, {
+                        state: { difficulty },
+                      });
+                    }
+                  }}
                 >
-                  <div
-                    className={`${getLessonButtonClass(lesson)} lesson-button lesson-button-shadow ${
-                      lesson.id >= 1 && lesson.id <= 4 ? 'basic' : 
-                      lesson.id >= 5 && lesson.id <= 8 ? 'intermediate' : 'advanced'
-                    }`}
-                    onClick={() => {
-                      if (lesson.unlocked) {
-                        let difficulty = "BASIC";
-                        if (lesson.id >= 5 && lesson.id <= 8)
-                          difficulty = "INTERMEDIATE";
-                        if (lesson.id >= 9 && lesson.id <= 12)
-                          difficulty = "ADVANCED";
-
-                        navigate(`/page/${lesson.termId}`, {
-                          state: { difficulty },
-                        });
-                      }
-                    }}
-                  >
-                    {lesson.id}
-                  </div>
+                  {lesson.id}
                 </div>
-              ))}
-            </div>
-          )}
-
-          {groupIndex === 1 && (
-            <div className="lessons-container2 flex flex-col space-y-10">
-              {group.map((lesson, lessonIndex) => (
-                <div
-                  key={lesson.id}
-                  className={`flex ${getPositionClass(lessonIndex)}`}
-                >
-                  <div
-                    className={`${getLessonButtonClass(lesson)} lesson-button lesson-button-shadow ${
-                      lesson.id >= 1 && lesson.id <= 4 ? 'basic' : 
-                      lesson.id >= 5 && lesson.id <= 8 ? 'intermediate' : 'advanced'
-                    }`}
-                    onClick={() => {
-                      if (lesson.unlocked) {
-                        let difficulty = "BASIC";
-                        if (lesson.id >= 5 && lesson.id <= 8)
-                          difficulty = "INTERMEDIATE";
-                        if (lesson.id >= 9 && lesson.id <= 12)
-                          difficulty = "ADVANCED";
-
-                        navigate(`/page/${lesson.termId}`, {
-                          state: { difficulty },
-                        });
-                      }
-                    }}
-                  >
-                    {lesson.id}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {groupIndex === 2 && (
-            <div className="lessons-container3 flex flex-col space-y-10">
-              {group.map((lesson, lessonIndex) => (
-                <div
-                  key={lesson.id}
-                  className={`flex ${getPositionClass(lessonIndex)}`}
-                >
-                  <div
-                    className={`${getLessonButtonClass(lesson)} lesson-button lesson-button-shadow ${
-                      lesson.id >= 1 && lesson.id <= 4 ? 'basic' : 
-                      lesson.id >= 5 && lesson.id <= 8 ? 'intermediate' : 'advanced'
-                    }`}
-                    onClick={() => {
-                      if (lesson.unlocked) {
-                        let difficulty = "BASIC";
-                        if (lesson.id >= 5 && lesson.id <= 8)
-                          difficulty = "INTERMEDIATE";
-                        if (lesson.id >= 9 && lesson.id <= 12)
-                          difficulty = "ADVANCED";
-
-                        navigate(`/page/${lesson.termId}`, {
-                          state: { difficulty },
-                        });
-                      }
-                    }}
-                  >
-                    {lesson.id}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+              </div>
+            ))}
+          </div>
         </div>
-      ))}
-    </div>
+      </div>
+    </>
   );
 }
 

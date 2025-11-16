@@ -9,16 +9,12 @@ import how6 from "../../assets/how6.png";
 export default function HowtoPlay() {
   const howImages = [how1, how5, how2, how3, how4, how6];
   return (
-    <>
+    <div className="howtoplay-container">
       {howImages.map((src, idx) => (
-        <div key={idx} className="how rounded-4">
-          <img
-            src={src}
-            className="img-fluid"
-            alt={`tutorial step ${idx + 1}`}
-          />
+        <div key={idx} className="how">
+          <img src={src} alt={`tutorial step ${idx + 1}`} />
         </div>
       ))}
-    </>
+    </div>
   );
 }

@@ -37,13 +37,19 @@ const interpreters = [
 
 export default function Interpreter() {
   return (
-    <>
+    <div className="interpreter-container">
       {interpreters.map((intp) => (
         <div
           key={intp.id}
           className="interpreter-intro text-white rounded-3xl p-3 relative"
         >
-          <video src={intp.video} autoPlay loop muted className="interpreter-video" />
+          <video
+            src={intp.video}
+            autoPlay
+            loop
+            muted
+            className="interpreter-video"
+          />
           <div className="interpreter-details flex flex-col ms-auto">
             <p>Interpreter #{intp.id}</p>
             <p>
@@ -61,6 +67,6 @@ export default function Interpreter() {
           </div>
         </div>
       ))}
-    </>
+    </div>
   );
 }

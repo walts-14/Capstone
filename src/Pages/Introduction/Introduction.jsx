@@ -20,7 +20,7 @@ export default function Introduction() {
           <div className="intro-text">INTRODUCTION</div>
           <div className="twobuttons">
             <button
-              className={`rounded-2 me-3 ${
+              className={`rounded-2 p-2 ${
                 activeComponent === "interpreter" ? "active-btn" : ""
               }`}
               onClick={() => setActiveComponent("interpreter")}
@@ -28,7 +28,7 @@ export default function Introduction() {
               Interpreter
             </button>
             <button
-              className={`rounded-2 ${
+              className={`rounded-2 p-2 ${
                 activeComponent === "howtoplay" ? "active-btn" : ""
               }`}
               onClick={() => setActiveComponent("howtoplay")}
