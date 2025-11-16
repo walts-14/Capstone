@@ -755,6 +755,9 @@
 }
 /* Progress Section Container */
 .progress-section-container {
+  background-color: #271d3e; /* Dark purple background for each section */
+  padding: 15px;
+}
 /* Hide visible scrollbars in the progress modal but keep scrolling functional */
 .progress-modal-container,
 .progress-modal-container > * {
@@ -770,9 +773,6 @@
   display: none; /* Safari/Chrome */
   width: 0;
   height: 0;
-}
-  background-color: #271d3e; /* Dark purple background for each section */
-  padding: 15px;
 }
 /* Progress Item */
 .progress-item {
@@ -861,6 +861,9 @@
   overflow-y: auto;
   width: 100%;
   height: 100%;
+  max-height: calc(110vh - 320px);
+  display: flex;
+  flex-direction: column;
 }
 .progress-modal-container .lessonTracker {
   width: 100%; /* fill the wrapper's width */
