@@ -32,15 +32,23 @@ app.use(compression());
 app.use(cookieParser());
 
 // CORS configuration - single unified config
-const corsOptions = {
-  origin: [
-    "https://www.wesign.games",
-    "http://localhost:5173",
-  ],
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://www.wesign.games",
+  "https://wesign.games",
+];
+
+app.use(cors({
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.log("❌ Blocked by CORS:", origin);
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
-  optionsSuccessStatus: 200,
-};
-app.use(cors(corsOptions));
+}));
 
 //security headers
 app.use(helmet());
