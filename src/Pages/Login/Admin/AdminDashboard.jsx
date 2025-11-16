@@ -397,7 +397,7 @@ const fetchAdminMessages = async (grade = "") => {
               <div className="table-container" style={{ marginTop: "-3rem" }}>
                 {/* Updated table with wrapper for scrolling */}
                 <div className="contentdiv  ">
-                  <div className="table-wrapper" style={{ marginTop: "4rem" }}>
+                  <div className="table-wrapper" style={{ marginTop: "1rem" }}>
                     <table className="dashboard-table text-light">
                       <thead>
                         <tr>
@@ -661,8 +661,8 @@ const fetchAdminMessages = async (grade = "") => {
                   style={{
                     top: "50%",
                     transform: "translate(-40%, -50%)",
-                    width: "65vh",
-                    height: "95vh",
+                     width: "73vh",
+                    height: "100vh",
                     borderRadius: "30px",
                     zIndex: 1000,
                     backgroundColor: "#1a1230",

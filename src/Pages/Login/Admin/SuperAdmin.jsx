@@ -1448,7 +1448,7 @@ const SuperAdmin = () => {
                 </div>
 
                 <div className="contentsuper">
-                  <div className="table-wrapper" style={{ marginTop: "4rem" }}>
+                  <div className="table-wrapper" style={{ marginTop: "1rem" }}>
                     <table className="dashboard-table text-light">
                       <thead>
                         <tr>
@@ -1788,8 +1788,8 @@ const SuperAdmin = () => {
                   style={{
                     top: "50%",
                     transform: "translate(-40%, -50%)",
-                    width: "65vh",
-                    height: "90vh",
+                    width: "73vh",
+                    height: "100vh",
                     borderRadius: "30px",
                     zIndex: 1000,
                     backgroundColor: "#1a1230",
