@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import backkpoint from "../../assets/backkpoint.png";
 import arrow from "../../assets/arrow.png";
+import arrow2 from "../../assets/arrow2.png";
+import arrow3 from "../../assets/arrow3.png";
 import check from "../../assets/check.png";
 import ekis from "../../assets/ekis.png";
 import diamond from "../../assets/diamond.png";
@@ -198,7 +200,9 @@ function Quiz() {
         }
         // Track per-question attempts locally for UI (won't affect server-side persisted quizAttempts)
         const questionId = currentQuestion._id || currentQuestion.question; // fallback to question text if no id
-        const newAttemptCount = attempts[questionId] ? attempts[questionId] + 1 : 1;
+        const newAttemptCount = attempts[questionId]
+          ? attempts[questionId] + 1
+          : 1;
         setAttempts((prev) => ({ ...prev, [questionId]: newAttemptCount }));
       } catch (error) {
         toast.error("Failed to update lives/points. Please try again.");
@@ -296,14 +300,20 @@ function Quiz() {
             };
             const lessonNumber = lessonNumberMapping[lessonKey] || 1;
 
-            const respFail = await axios.post(`${backendURL}/api/quizzes/update-points`, {
-              email: userEmail,
-              level,
-              lessonNumber,
-              quizPart: currentStep,
-              correctCount: correctAnswers,
-            });
-            const { attemptNumber: failAttemptNumber, totalPoints: failTotalPoints } = respFail.data || {};
+            const respFail = await axios.post(
+              `${backendURL}/api/quizzes/update-points`,
+              {
+                email: userEmail,
+                level,
+                lessonNumber,
+                quizPart: currentStep,
+                correctCount: correctAnswers,
+              }
+            );
+            const {
+              attemptNumber: failAttemptNumber,
+              totalPoints: failTotalPoints,
+            } = respFail.data || {};
             setBackendAttemptNumber(failAttemptNumber || null);
             setBackendTotalPoints(failTotalPoints || null);
 
@@ -347,22 +357,36 @@ function Quiz() {
           };
           const lessonNumber = lessonNumberMapping[lessonKey] || 1;
 
-          const resp = await axios.post(`${backendURL}/api/quizzes/update-points`, {
-            email: userEmail,
-            level,
-            lessonNumber,
-            quizPart: currentStep,
-            correctCount: correctAnswers,
-          });
+          const resp = await axios.post(
+            `${backendURL}/api/quizzes/update-points`,
+            {
+              email: userEmail,
+              level,
+              lessonNumber,
+              quizPart: currentStep,
+              correctCount: correctAnswers,
+            }
+          );
 
           // backend returns pointsEarned, totalPoints, passed, attemptNumber
-          const { pointsEarned, totalPoints, passed, attemptNumber } = resp.data || {};
+          const { pointsEarned, totalPoints, passed, attemptNumber } =
+            resp.data || {};
           // you can store totalPoints locally if needed (e.g., in context)
           // update progress only if backend recorded it
           updateProgress(level, lessonKey, progressKey);
           setHasUpdatedQuiz(true);
           navigate("/finish", {
-            state: { correctAnswers, wrongAnswers, lessonKey, level, currentStep, pointsEarned, totalPoints, passed, attemptNumber },
+            state: {
+              correctAnswers,
+              wrongAnswers,
+              lessonKey,
+              level,
+              currentStep,
+              pointsEarned,
+              totalPoints,
+              passed,
+              attemptNumber,
+            },
           });
         } catch (err) {
           console.error("Failed to update backend points:", err);
@@ -370,7 +394,13 @@ function Quiz() {
           updateProgress(level, lessonKey, progressKey);
           setHasUpdatedQuiz(true);
           navigate("/finish", {
-            state: { correctAnswers, wrongAnswers, lessonKey, level, currentStep },
+            state: {
+              correctAnswers,
+              wrongAnswers,
+              lessonKey,
+              level,
+              currentStep,
+            },
           });
         }
       })();
@@ -397,25 +427,43 @@ function Quiz() {
   }
 
   if (failedPointsRequirement) {
-  const userPoints = correctAnswers * pointsPerCorrectAnswer;
-  const totalAttempts = Object.values(attempts || {}).reduce((a, b) => a + b, 0) + 1;
-  const displayAttempt = backendAttemptNumber ?? totalAttempts;
-  const displayTotalPoints = backendTotalPoints ?? "-";
+    const userPoints = correctAnswers * pointsPerCorrectAnswer;
+    const totalAttempts =
+      Object.values(attempts || {}).reduce((a, b) => a + b, 0) + 1;
+    const displayAttempt = backendAttemptNumber ?? totalAttempts;
+    const displayTotalPoints = backendTotalPoints ?? "-";
     return (
-      <div className="d-flex flex-column align-items-center justify-content-center gap-2" style={{ minHeight: "100vh", backgroundColor: "var(--background)" }}>
-        <img className="failedIcon mb-4" src={failed} alt=""  />
+      <div
+        className="d-flex flex-column align-items-center justify-content-center gap-2"
+        style={{ minHeight: "100vh", backgroundColor: "var(--background)" }}
+      >
+        <img className="failedIcon mb-4" src={failed} alt="" />
 
         <div className="stats-quiz d-flex flex-row gap-2 text-center fs-1 ">
           <img src={check} className="tama img-fluid p-1" alt="check img" />
-          <p className="check-number " style={{ color: "#20BF55" }}>{correctAnswers}</p>
+          <p className="check-number " style={{ color: "#20BF55" }}>
+            {correctAnswers}
+          </p>
           <img src={ekis} className="mali img-fluid p-1 ms-5" alt="ekis img" />
-          <p className="ekis-number " style={{ color: "#F44336" }}>{wrongAnswers}</p>
+          <p className="ekis-number " style={{ color: "#F44336" }}>
+            {wrongAnswers}
+          </p>
         </div>
 
-
         <div className="failedText d-flex flex-column align-items-center justify-content-center mb-4">
-          <h1 className="text-white fw-bold text-uppercase mt-0" style={{ fontSize: "3rem", fontFamily: "Baloo, sans-serif" }}>{failHeading}</h1>
-          <h2 style={{ fontSize: "2rem", fontFamily: "Baloo, sans-serif", color: "#878194" }}>
+          <h1
+            className="text-white fw-bold text-uppercase mt-0"
+            style={{ fontSize: "3rem", fontFamily: "Baloo, sans-serif" }}
+          >
+            {failHeading}
+          </h1>
+          <h2
+            style={{
+              fontSize: "2rem",
+              fontFamily: "Baloo, sans-serif",
+              color: "#878194",
+            }}
+          >
             You need at least 7 correct answers to pass the quiz
           </h2>
         </div>
@@ -442,9 +490,9 @@ function Quiz() {
             <p style={{ color: "white" }}>Try again</p>
           </button>
         </div>
-          
+
         {/* Responsive styles for smooth transition */}
-      <style>{`
+        <style>{`
         /* Tablet sidenav and logo - show between 640px-1024px */
         @media (min-width: 640px) and (max-width: 768px) {
           .failedIcon {
@@ -778,8 +826,9 @@ function Quiz() {
                   <div
                     className={`choice-${["A", "B", "C", "D"][
                       index
-                    ].toLowerCase()} rounded-4 m-4${isSelected ? " selected" : ""
-                      }`}
+                    ].toLowerCase()} rounded-4 m-4${
+                      isSelected ? " selected" : ""
+                    }`}
                   >
                     <strong>{["A", "B", "C", "D"][index]}</strong>
                     <LazyVideo
@@ -805,18 +854,41 @@ function Quiz() {
             type="button"
             className="continue d-flex rounded-4 p-3 pt-2 ms-auto"
             onClick={handleNext}
-            disabled={lives <= 0}
+            disabled={
+              lives <= 0 || (!showResult && selectedAnswerIndex === null)
+            }
+            style={{
+              backgroundColor: showResult ? "#7338A0" : "#4A2574",
+              border: showResult ? "none" : "3px solid #fff",
+              boxShadow: showResult
+                ? "0 2px 8px rgba(115,56,160,0.12)"
+                : "0 2px 8px rgba(74,37,116,0.12)",
+              cursor:
+                lives <= 0 || (!showResult && selectedAnswerIndex === null)
+                  ? "not-allowed"
+                  : "pointer",
+              transition: "background 0.2s, border 0.2s",
+            }}
           >
-            <p>Next</p>
+            <p
+              style={{
+                color: showResult ? "#FFFFFF" : "#CF96FF", // White for both states
+                fontWeight: "bold",
+                letterSpacing: "1px",
+                textShadow: "0 1px 2px rgba(0,0,0,0.15)",
+              }}
+            >
+              {showResult ? "NEXT" : "SUBMIT"}
+            </p>
             <img
-              src={arrow}
+              src={showResult ? arrow3 : arrow2}
               className="img-fluid d-flex ms-auto p-1 mt-1"
-              alt="Next"
+              alt={showResult ? "Next" : "Submit"}
             />
           </button>
         </>
       )}
-        {/* Responsive styles for smooth transition */}
+      {/* Responsive styles for smooth transition */}
       <style>{`
        
         
