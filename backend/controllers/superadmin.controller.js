@@ -69,8 +69,13 @@ export const createAccount = async (req, res) => {
     let magicUrl = null;
     // Always generate QR and magic link for both admin and user
     const magicToken = await createMagicToken(user._id);
-    const backend = process.env.BACKEND_URL || `http://localhost:5000`;
-    magicUrl = `${backend}/api/magic-login?token=${encodeURIComponent(magicToken)}`;
+    // Prefer explicit BACKEND_URL env var (set this to your deployed backend domain)
+    // Fallback to request origin or host so links generated from deployed frontend/backend use the correct domain
+    const reqOrigin = req.get && (req.get('origin') || (req.protocol && req.get('host') ? `${req.protocol}://${req.get('host')}` : null));
+    // Default to the deployed frontend domain. If you need a different backend host,
+    // set BACKEND_URL in your environment (e.g. https://api.wesign.games).
+    const backend = process.env.BACKEND_URL || reqOrigin || `https://www.wesign.games`;
+    magicUrl = `${backend.replace(/\/$/, '')}/api/magic-login?token=${encodeURIComponent(magicToken)}`;
     const pngBuffer = await toPngBuffer(magicUrl);
 
     let html;
