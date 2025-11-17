@@ -477,15 +477,17 @@ body {
   .container-lecture {
     max-width: 20vw;
     padding-bottom: 6rem;
-    margin-top: 2rem;
+    position: absolute;
+    top: -10rem;
+    left: 36rem;
   }
   .tryone-container {
-    height: 20vw;
+    height: 40vw;
     width: 12vw;
     align-items: center;
     margin-bottom: -3rem;
     left: auto;
-    top: 0px;
+    top: -10px;
     padding-left: 0rem;
   }
   .tryone-container video {
@@ -495,9 +497,11 @@ body {
     border-width: 10px;
     border-radius: 30px;
     margin-bottom: 20rem;
+    position: absolute;
+    top: 12rem;
   }
   .text-container {
-    width: 80vw;
+    width: 40vw;
     left: auto;
     top: auto;
     bottom: auto;
