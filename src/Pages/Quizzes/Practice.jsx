@@ -209,8 +209,7 @@ function Practice() {
         {/* Responsive styles for smooth transition */}
      <style>{`
        
-        
-        /* Mobile sidenav - only show below 640px */
+          /* Mobile sidenav - only show below 640px */
         @media (max-width: 639px) {
        .progress {
           margin-left: 14px !important;
@@ -561,30 +560,31 @@ function Practice() {
 
             /* Desktop sidenav - show above 1024px */
         @media (min-width: 1440px) {
-            .back {
-            display: flex !important;
-            justify-content: center !important;
-            position: fixed !important;
-            left: 1rem !important;
-            top: -0.8rem !important;
-            font-size: 2.3rem !important;
+          .back {
+              display: flex !important;
+              justify-content: center !important;
+              position: fixed !important;
+              left: 1rem !important;
+              top: -0.8rem !important;
+              font-size: 1.9rem !important;
             }
+          .back img {
+            width: 2.5rem !important;
+            height: 2rem !important;
+          } 
           .lives-quizz {
-          display: flex !important;
-          position: absolute !important;
-          top:  7rem !important;
-          left: 78rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
+            display: flex !important;
+            position: absolute !important;
+            top:  7rem !important;
+            left:   rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
+
+           }
           
-         }
-           .back img {
-              width: 3rem !important;
-              height: 2.5rem !important;
-            } 
           .grid {
             height: 60vh !important;
             width: 90vw !important;
             border-radius: 18px !important;
-            gap: 140px 132px !important;
+            gap: 90px 107px !important;
             margin-top: 15px !important;
           }
 
@@ -607,29 +607,29 @@ function Practice() {
             margin: 0 auto !important;
            }
           .choice-a, .choice-b, .choice-c, .choice-d {
-            height: 7vh !important;
-            width: 5vw !important;
+            height: 8vh !important;
+            width: 4vw !important;
             position: absolute !important;
             bottom: 6vh !important;
-            left: 22px !important;
+            left: 38px !important;
             margin: 0px auto !important;
             border-radius: 12px !important;
           }
           .choice-a strong, .choice-b strong, .choice-c strong, .choice-d strong {
-            margin-top: 2px !important;
+            margin-top:0px !important;
             font-size: 2.3rem !important;
           }
           .choice-a video, .choice-b video, .choice-c video, .choice-d video {
             width: 48vw !important;
             height: auto !important;
-            max-width: 300px !important;
+            max-width: 260px !important;
             max-height: 35vh !important;
             object-fit: contain !important;
             display: block !important;
             border-radius: 12px !important;
             margin: 0 auto !important;
             position: absolute !important;
-            top: -4.2rem !important;
+            top: -3.1rem !important;
      
             left: 16.2rem !important;
             transform: translateX(-50%) !important;
