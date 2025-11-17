@@ -45,6 +45,55 @@
   min-height: calc(100vh - 11 rem);
 }
 
+@media (min-width: 320px) {
+  /* Mobile-first, fluid layout for terms grid */
+  .terms-list {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 0.75rem;
+    padding: 0.75rem 1rem 8rem; /* bottom space for mobile nav */
+    margin-top: 6rem;
+    width: 100%;
+    max-height: calc(150vh - 33rem);
+    overflow-y: auto; /* make grid scrollable */
+    
+    scrollbar-width: none; /* Firefox */
+  }
+  .lesson-list {
+    position: relative;
+    top: 12rem;
+    left: 18px;
+    width: 90%;
+    height: 50%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .lessonTitle {
+    padding: 8px;
+    gap: 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: relative;
+    bottom: 28px;
+    right: 0rem;
+    width: 100%;
+    border-radius: 20px;
+    
+  }
+   .lessonTitle h1 {
+    font-size: 1.5rem;
+   }
+  .lessonTitle h2 {
+    font-size: 0.9rem;
+    color: var(--white);
+  }
+  .container {
+    margin-top: 3rem;
+  }
+  
+}
 @media (min-width: 375px) {
   /* Mobile-first, fluid layout for terms grid */
   .terms-list {
@@ -77,9 +126,13 @@
     position: relative;
     right: 0rem;
     width: 100%;
+    top: 0rem;
   }
   .lessonTitle h2 {
     font-size: 0.9rem;
+  }
+  .container {
+    margin-top: 6rem;
   }
 }
 @media (min-width: 425px) {

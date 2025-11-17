@@ -34,6 +34,7 @@
   min-height: 100vh;
   padding: 1rem;
   width: 100%;
+  max-width: 500px;
 }
 
 /* Top 3 podium styles */
@@ -225,6 +226,7 @@
   scrollbar-width: thin;
   scrollbar-color: var(--purple) var(--background);
 }
+
 
 /* Mobile responsiveness */
 @media (max-width: 768px) {
@@ -441,4 +443,19 @@
   .podium-points {
     font-size: 1rem;
   }
+}
+@media (min-width: 425px) {
+  .leaderboard-container{
+    /* padding: 5rem;
+    margin: 2rem */
+    margin-left: 00rem;
+  }
+}
+@media (min-width: 375px) {
+  .leaderboard-container{
+    /* padding: 5rem;
+    margin: 2rem */
+    margin-left: 00rem;
+  }
+
 }
