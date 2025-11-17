@@ -1,10 +1,12 @@
 {
   "navigationFallback": {
     "rewrite": "/index.html",
-    "exclude": ["/api/*", "/assets/*", "/favicon.ico"]
-  }
-},
-{
+    "exclude": [
+      "/api/*",
+      "/assets/*",
+      "/favicon.ico"
+    ]
+  },
   "routes": [
     {
       "route": "/api/*",
