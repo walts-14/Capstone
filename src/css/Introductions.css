@@ -531,3 +531,34 @@
   width: 100%; /* Use full container width */
   height: auto; /* Maintain aspect ratio */
 }
+
+@media (min-width: 375px) {  
+  .introduction-container {
+    margin-left: 0rem;
+    padding: 0rem;
+    height: 90vh;
+    margin-bottom: 10rem;
+  } 
+  .interpreter-intro {
+    width: 20rem;
+  }
+  .interpreter-container {
+      margin-left: 0.8rem;
+  }
+  .scroll-area {
+    width: 20rem;
+  }
+  .intro-header {
+    width: 20rem;
+  }
+  .twobuttons button{
+    max-width: 2rem;
+    height: 2;
+  }
+  .howtoplay-container {
+    width: 23rem;
+    margin-left: 1.8rem;
+    
+  }
+
+}
