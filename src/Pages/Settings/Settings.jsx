@@ -1,10 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import "bootstrap/dist/css/bootstrap.min.css";
 import Sidenav from "../../Components/Sidenav";
 import "../../css/Settings.css";
 import { useNavigate } from "react-router-dom";
-import changepic from "../../assets/changepic.png";
 import axios from "axios";
 import MaintenanceModal from "../../Components/Maintenance/MaintenanceModal.jsx";
 import { ProgressContext } from "../Dashboard/ProgressContext.jsx";
@@ -143,148 +141,103 @@ function Settings() {
   const [showModal, setShowModal] = useState(false);
 
   return (
-    <>
-      <button
-        onClick={() => setShowModal(true)}
-        style={{ position: "absolute", top: "10px", right: "10px" }}
-      >
-        Maintenance
-      </button>
-
-      {/* modal only renders when showModal===true */}
-      <MaintenanceModal show={showModal} onClose={() => setShowModal(false)} />
-
+    <div className="settings-main-wrapper">
       <Sidenav />
-      <div className="settings-container rounded-4">
-        {/* ——— STUDENT INFO (no design changes) ——— */}
-        <div className="students-information">
-          <span className="name-stud text-white">Name</span>
-          <div className="student-details rounded-4">
-            <p className="text-white text-left">{userName}</p>
-          </div>
-
-          <span className="username-stud text-white">Username</span>
-          <div className="username-stud-view rounded-4">
-            <p className="text-white text-left">{userUsername}</p>
-          </div>
-
-          <span className="email-stud text-white">Email</span>
-          <div className="email-stud-view rounded-4">
-            <p className="text-white text-left">{userEmail}</p>
-          </div>
-        </div>
-
-        {/* ——— PROFILE PICTURE (with loading states) ——— */}
-        <div className="profile-picture-wrapper position-relative m-5">
-          <div className="position-relative">
-            <img
-              src={profilePic}
-              className="img-fluid"
-              alt="profile picture"
-              style={{
-                borderRadius: "50%",
-                objectFit: "cover",
-                width: "200px",
-                height: "200px",
-                aspectRatio: "1/1",
-                backgroundColor: "#222",
-              }}
-            />
-
-            {/* Loading overlay for upload */}
-            {isUploadingPic && (
-              <div
-                className="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+      <div className="settings-container">
+        <button className="maintenance-btn" onClick={() => setShowModal(true)}>
+          Maintenance
+        </button>
+        <MaintenanceModal
+          show={showModal}
+          onClose={() => setShowModal(false)}
+        />
+        <div className="settings-grid">
+          {/* --- PROFILE COLUMN --- */}
+          <div className="settings-profile">
+            <div className="profile-picture-wrapper">
+              <img src={profilePic} alt="profile" className="profile-img" />
+              {isUploadingPic && (
+                <div className="camera-overlay">
+                  <div className="loading-text">
+                    <span className="loader"></span>
+                    <span>Uploading...</span>
+                  </div>
+                </div>
+              )}
+              {isDeletingPic && (
+                <div className="camera-overlay">
+                  <div className="loading-text">
+                    <span className="loader"></span>
+                    <span>Deleting...</span>
+                  </div>
+                </div>
+              )}
+              <div className="camera-overlay camera-icon-overlay">
+                <i className="fas fa-camera"></i>
+              </div>
+              <input
+                type="file"
+                id="file-upload"
+                accept="image/*"
+                onChange={handleImageChange}
+                disabled={isUploadingPic || isDeletingPic}
+                className="file-input"
+                key={isUploadingPic ? "uploading" : "ready"}
+              />
+            </div>
+            <div className="profile-actions">
+              <label
+                htmlFor="file-upload"
+                className="change-pic"
                 style={{
-                  backgroundColor: "rgba(0, 0, 0, 0.7)",
-                  borderRadius: "50%",
-                  aspectRatio: "1/1",
-                  marginLeft: "1.5rem",
+                  cursor:
+                    isUploadingPic || isDeletingPic ? "not-allowed" : "pointer",
+                  opacity: isUploadingPic || isDeletingPic ? 0.6 : 1,
+                  pointerEvents:
+                    isUploadingPic || isDeletingPic ? "none" : "auto",
                 }}
               >
-                <div className="text-center text-white">
-                  <div className="spinner-border text-light mb-2" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                  </div>
-                  <div className="fw-bold">Uploading...</div>
-                </div>
-              </div>
-            )}
-
-            {/* Loading overlay for delete */}
-            {isDeletingPic && (
-              <div
-                className="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+                Change Profile
+              </label>
+              <button
+                className={`deletee ${
+                  isUploadingPic || isDeletingPic ? "disabled" : ""
+                }`}
+                onClick={handleDeleteProfilePicture}
+                disabled={isUploadingPic || isDeletingPic}
                 style={{
-                  backgroundColor: "rgba(0, 0, 0, 0.7)",
-                  borderRadius: "50%",
-                  aspectRatio: "1/1",
-                  marginLeft: "1.5rem",
+                  opacity: isUploadingPic || isDeletingPic ? 0.6 : 1,
                 }}
               >
-                <div className="text-center text-white">
-                  <div className="spinner-border text-light mb-2" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                  </div>
-                  <div className="fw-bold">Deleting...</div>
-                </div>
+                {isDeletingPic ? "Deleting..." : "Delete Profile"}
+              </button>
+            </div>
+          </div>
+          {/* --- INFO COLUMN --- */}
+          <div className="settings-info">
+            <div className="students-information">
+              <span className="name-stud">Name</span>
+              <div className="student-details">
+                <p className="text-left">{userName}</p>
               </div>
-            )}
+              <span className="username-stud">Username</span>
+              <div className="username-stud-view">
+                <p className="text-left">{userUsername}</p>
+              </div>
+              <span className="email-stud">Email</span>
+              <div className="email-stud-view">
+                <p className="text-left">{userEmail}</p>
+              </div>
+            </div>
+            <div className="btns">
+              <button type="button" className="btn-logout" onClick={logout}>
+                Log out
+              </button>
+            </div>
           </div>
-
-          <label
-            htmlFor="file-upload"
-            className="change-pic text-white rounded-4 p-2 text-center text-nowrap"
-            style={{
-              cursor:
-                isUploadingPic || isDeletingPic ? "not-allowed" : "pointer",
-              opacity: isUploadingPic || isDeletingPic ? 0.6 : 1,
-              pointerEvents: isUploadingPic || isDeletingPic ? "none" : "auto",
-            }}
-          >
-            Change Profile
-          </label>
-
-          <button
-            className={`deletee btn-secondary rounded-4 position-absolute text-nowrap text-white ${
-              isUploadingPic || isDeletingPic ? "disabled" : ""
-            }`}
-            onClick={handleDeleteProfilePicture}
-            disabled={isUploadingPic || isDeletingPic}
-            style={{
-              opacity: isUploadingPic || isDeletingPic ? 0.6 : 1,
-            }}
-          >
-            {isDeletingPic ? "Deleting..." : "Delete Picture"}
-          </button>
-
-          <div className="camera-overlay d-flex justify-content-center align-items-center">
-            <i className="fas fa-camera fa-2x text-white"></i>
-          </div>
-
-          <input
-            type="file"
-            id="file-upload"
-            accept="image/*"
-            onChange={handleImageChange}
-            disabled={isUploadingPic || isDeletingPic}
-            style={{ display: "none" }}
-            key={isUploadingPic ? "uploading" : "ready"}
-          />
-        </div>
-
-        {/* ——— LOGOUT BUTTON ——— */}
-        <div className="btns">
-          <button
-            type="button"
-            className="btn btn-secondary rounded-5"
-            onClick={logout}
-          >
-            Log out
-          </button>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
