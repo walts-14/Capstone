@@ -45,10 +45,16 @@
   padding: 1rem;
   border-radius: 1rem;
 }
+ .profile-picture-wrapper {
+    margin: 1.5rem;
+  }
 .profile-pic-container {
   display: flex;
   justify-content: center;
+  align-items: center;
   width: 20rem;
+  /* allow an explicit height to control the image size */
+  height: auto;
 }
 .profile-btn {
   display: flex;
@@ -74,8 +80,13 @@
   padding: 10px;
 }
 .profile-picture-wrapper {
-  width: 50vw; /* adjust based on your original image size */
-  height: 50vh;
+  /* Make the wrapper size driven by the parent `.profile-pic-container`
+     so changing that container's width/height will affect the image. */
+  width: 100%;
+  height: 100%;
+  /* keep sensible maximums so large screens don't make the image huge */
+  max-width: 50vw;
+  max-height: 50vh;
 }
 .settings-container img {
   position: relative;
@@ -153,10 +164,14 @@
 }
 
 .profile-picture-wrapper img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 50%;
+  /* ensure image doesn't overflow its container */
+  max-width: 100%;
+  max-height: 100%;
 }
 
 /* Hidden overlay by default */
@@ -180,33 +195,450 @@
 
 
 @media (min-width: 1440px) {
-  
+  .settings-container {
+  background-color: #271d3e;
+  width: 70vw;
+  height: 80vh;
+  position: fixed;
+  display: flex;
+  flex-direction: row;
+  top: 7rem;
+  left: 45rem;
+  transform: translateX(-50%) translateX(14rem); /* center + offset */
+  padding: 1rem;
+  border-radius: 1rem;
+}
+ .profile-picture-wrapper {
+    margin: 1.5rem;
+  }
+.profile-pic-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20rem;
+  /* allow an explicit height to control the image size */
+  height: auto;
+}
+.profile-btn {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 2rem;
+  width: 100%;
+}
+.change-pic {
+  background-color: var(--input-gray);
+  height: auto;
+  width: clamp(200px, 17vw, 300px);
+  font-size: 1.5rem;
+  font-family: "Baloo", sans-serif;
+  padding: 10px;
+}
+.delete-btn {
+  background-color: #d7443e;  
+  height: auto;
+  width: clamp(200px, 17vw, 300px);
+  font-size: 1.5rem;
+  font-family: "Baloo", sans-serif;
+  padding: 10px;
+}
+.profile-picture-wrapper {
+  /* Make the wrapper size driven by the parent `.profile-pic-container`
+     so changing that container's width/height will affect the image. */
+  width: 100%;
+  height: 100%;
+  /* keep sensible maximums so large screens don't make the image huge */
+  max-width: 50vw;
+  max-height: 50vh;
+}
+.settings-container img {
+  position: relative;
+  left: 1.5em;
+  top: 0;
+}
+
+
+.students-information {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 24px;
+  margin-right: 28px;
+}
+.name-stud {
+  font-family: "Baloo", sans-serif;
+  left: 16em;
+  top: 1em;
+  font-size: 1.5rem;
+}
+.username-stud {
+  font-family: "Baloo", sans-serif;
+  left: 16em;
+  top: 5.5em;
+  font-size: 1.5rem;
+}
+.email-stud {
+  font-family: "Baloo", sans-serif;
+  left: 16em;
+  top: 10em;
+  font-size: 1.5rem;
+}
+.student-details {
+  height: auto;
+  width: 37vw;
+  padding-left: 2rem;
+  background-color: var(--background);
+  font-size: 2.5rem;
+  font-family: "Baloo", sans-serif;
+  left: 12.5em;
+  top: 1.8em;
+  color: var(--grey-purple);
+}
+.username-stud-view {
+  height: auto;
+  width: 37vw;
+  padding-left: 2rem;
+  background-color: var(--background);
+  font-size: 2.5rem;
+  font-family: "Baloo", sans-serif;
+  left: 12.5em;
+  top: 3.3em;
+  color: var(--grey-purple);
+}
+
+.email-stud-view {
+  height: auto;
+  width: 37vw;
+  padding-left: 2rem;
+  background-color: var(--background);
+  font-size: 2.5rem;
+  font-family: "Baloo", sans-serif;
+  left: 12.5em;
+  top: 5em;
+  color: var(--grey-purple);
+}
+.btn-logout-wrapper button {
+  position: absolute;
+  bottom: 2rem;
+  right: 4%;
+  background-color: #d7443e; 
+  font-size: 2rem;
+  padding: 5px 40px;
+}
+
+.profile-picture-wrapper img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  /* ensure image doesn't overflow its container */
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* Hidden overlay by default */
+.camera-overlay {
+  position: absolute;
+  top: 0;
+  left: 1.5rem;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  pointer-events: none;
+}
+
+/* Show overlay only when hovering on "Change Profile" */
+.change-pic:hover ~ .camera-overlay {
+  opacity: 1;
+}
+
 
 }
 
 @media (max-width: 1024px) {
-  
+  .settings-container {
+  background-color: #271d3e;
+  width: 70vw;
+  height: 60vh;
+  position: fixed;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  top: 10rem;
+  left: 26rem;
+  transform: translateX(-50%) translateX(14rem); /* center + offset */
+  padding: 1rem;
+  border-radius: 1rem;
+}
+ .profile-picture-wrapper {
+    margin: 1rem;
+  }
+.profile-pic-container {
+   display: flex;
+    justify-content: center;
+    width: 10rem;
+    height: 10rem;
+    margin-left: 24px;
+}
+.profile-btn {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+}
+.change-pic {
+  background-color: var(--input-gray);
+  height: auto;
+  width: clamp(200px, 17vw, 300px);
+  font-size: 1rem;
+  font-family: "Baloo", sans-serif;
+  padding: 10px;
+}
+.delete-btn {
+  background-color: #d7443e;  
+  height: auto;
+  width: clamp(200px, 17vw, 300px);
+  font-size: 1rem;
+  font-family: "Baloo", sans-serif;
+  padding: 10px;
+}
+.profile-picture-wrapper {
+  /* Make the wrapper size driven by the parent `.profile-pic-container`
+     so changing that container's width/height will affect the image. */
+  width: 100%;
+  height: 100%;
+  /* keep sensible maximums so large screens don't make the image huge */
+  max-width: 50vw;
+  max-height: 50vh;
+}
+.settings-container img {
+  position: relative;
+  left: 1.5em;
+  top: 0;
+}
 
+
+.students-information {
+  display: flex;
+  flex-direction: column;
+  gap: 0rem;
+  margin-top: 0px;
+  margin-right: 20px;
+}
+.name-stud {
+  font-family: "Baloo", sans-serif;
+  left: 16em;
+  top: 1em;
+  font-size: 1.3rem;
+}
+.username-stud {
+  font-family: "Baloo", sans-serif;
+  left: 16em;
+  top: 5.5em;
+  font-size: 1.3rem;
+}
+.email-stud {
+  font-family: "Baloo", sans-serif;
+  left: 16em;
+  top: 10em;
+  font-size: 1.3rem;
+}
+.student-details {
+  height: auto;
+  width: 37vw;
+  padding-left: 1rem;
+  background-color: var(--background);
+  font-size: 1.5rem;
+  font-family: "Baloo", sans-serif;
+  left: 12.5em;
+  top: 1.8em;
+  color: var(--grey-purple);
+}
+.username-stud-view {
+  height: auto;
+  width: 37vw;
+  padding-left: 1rem;
+  background-color: var(--background);
+  font-size: 1.5rem;
+  font-family: "Baloo", sans-serif;
+  left: 12.5em;
+  top: 3.3em;
+  color: var(--grey-purple);
+}
+
+.email-stud-view {
+  height: auto;
+  width: 37vw;
+  padding-left: 1rem;
+  background-color: var(--background);
+  font-size: 1.5rem;
+  font-family: "Baloo", sans-serif;
+  left: 12.5em;
+  top: 5em;
+  color: var(--grey-purple);
+}
+.btn-logout-wrapper button {
+  position: absolute;
+  bottom: 2rem;
+  right: 4%;
+  background-color: #d7443e; 
+  font-size: 1rem;
+  padding: 5px 40px;
+}
+
+
+/* Hidden overlay by default */
 
 }
 
 @media (max-width: 768px) {
-  
-
-}
-
-@media (max-width: 425px) {
-  
-
-
-}
-
-@media (max-width: 375px) {
-  
-}
-
-@media (max-width: 320px) {
   .settings-container {
+  background-color: #271d3e;
+  width: 80vw;
+  height: 60vh;
+  position: fixed;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  top: 8rem;
+  left: 13.3rem;
+  transform: translateX(-50%) translateX(14rem); /* center + offset */
+  padding: 1rem;
+  border-radius: 1rem;
+}
+ .profile-picture-wrapper {
+    margin: 1rem;
+  }
+.profile-pic-container {
+   display: flex;
+    justify-content: center;
+    width: 10rem;
+    height: 10rem;
+    margin-left: 24px;
+}
+.profile-btn {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+}
+.change-pic {
+  background-color: var(--input-gray);
+  height: auto;
+  width: clamp(200px, 17vw, 300px);
+  font-size: 1rem;
+  font-family: "Baloo", sans-serif;
+  padding: 10px;
+}
+.delete-btn {
+  background-color: #d7443e;  
+  height: auto;
+  width: clamp(200px, 17vw, 300px);
+  font-size: 1rem;
+  font-family: "Baloo", sans-serif;
+  padding: 10px;
+}
+.profile-picture-wrapper {
+  /* Make the wrapper size driven by the parent `.profile-pic-container`
+     so changing that container's width/height will affect the image. */
+  width: 100%;
+  height: 100%;
+  /* keep sensible maximums so large screens don't make the image huge */
+  max-width: 50vw;
+  max-height: 50vh;
+}
+.settings-container img {
+  position: relative;
+  left: 1.5em;
+  top: 0;
+}
+
+
+.students-information {
+  display: flex;
+  flex-direction: column;
+  gap: 0rem;
+  margin-top: 0px;
+  margin-right: 20px;
+}
+.name-stud {
+  font-family: "Baloo", sans-serif;
+  left: 16em;
+  top: 1em;
+  font-size: 1.3rem;
+}
+.username-stud {
+  font-family: "Baloo", sans-serif;
+  left: 16em;
+  top: 5.5em;
+  font-size: 1.3rem;
+}
+.email-stud {
+  font-family: "Baloo", sans-serif;
+  left: 16em;
+  top: 10em;
+  font-size: 1.3rem;
+}
+.student-details {
+  height: auto;
+  width: 37vw;
+  padding-left: 1rem;
+  background-color: var(--background);
+  font-size: 1.5rem;
+  font-family: "Baloo", sans-serif;
+  left: 12.5em;
+  top: 1.8em;
+  color: var(--grey-purple);
+}
+.username-stud-view {
+  height: auto;
+  width: 37vw;
+  padding-left: 1rem;
+  background-color: var(--background);
+  font-size: 1.5rem;
+  font-family: "Baloo", sans-serif;
+  left: 12.5em;
+  top: 3.3em;
+  color: var(--grey-purple);
+}
+
+.email-stud-view {
+  height: auto;
+  width: 37vw;
+  padding-left: 1rem;
+  background-color: var(--background);
+  font-size: 1.5rem;
+  font-family: "Baloo", sans-serif;
+  left: 12.5em;
+  top: 5em;
+  color: var(--grey-purple);
+}
+.btn-logout-wrapper button {
+  position: absolute;
+  bottom: 2rem;
+  right: 4%;
+  background-color: #d7443e; 
+  font-size: 1rem;
+  padding: 5px 40px;
+}
+
+
+/* Hidden overlay by default */
+
+
+}
+
+@media (max-width: 426px) {
+  
+.settings-container {
     background-color: #271d3e;
     width: 90vw;
     height: 80vh;
@@ -214,29 +646,35 @@
     display: flex;
     flex-direction: column;
     top: 2rem;
-    left: -4rem;
+    left: -0.8rem;
     transform: translateX(-50%) translateX(14rem); /* center + offset */
     padding: 1rem;
     border-radius: 1rem;
   }
+  .profile-picture-wrapper {
+    margin: 0px;
+     margin-left: 0rem;
+  }
   .profile-pic-container {
     display: flex;
     justify-content: center;
-    width: 10rem;
-    height: 10rem;
+    width: 7rem;
+    height: 7rem;
+    margin-left: 1.5rem;
+  
   }
   .profile-btn {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    gap: 2rem;
+    gap: 1rem;
     width: 100%;
   }
   .change-pic {
     background-color: var(--input-gray);
     height: auto;
     width: clamp(200px, 17vw, 300px);
-    font-size: 1.5rem;
+    font-size: 1rem;
     font-family: "Baloo", sans-serif;
     padding: 10px;
   }
@@ -244,7 +682,7 @@
     background-color: #d7443e;  
     height: auto;
     width: clamp(200px, 17vw, 300px);
-    font-size: 1.5rem;
+    font-size: 1rem;
     font-family: "Baloo", sans-serif;
     padding: 10px;
   }
@@ -262,7 +700,10 @@
   .students-information {
     display: flex;
     flex-direction: column;
-    margin-top: 12px;
+    margin-bottom: 6rem;
+    margin-right: 0px;
+    gap: 0.5rem;
+
   }
   .name-stud {
     font-family: "Baloo", sans-serif;
@@ -284,10 +725,10 @@
   }
   .student-details {
     height: auto;
-    width: 37vw;
-    padding-left: 2rem;
+    width: 80vw;
+    padding-left: 0.5rem;
     background-color: var(--background);
-    font-size: 2rem;
+    font-size: 1rem;
     font-family: "Baloo", sans-serif;
     left: 12.5em;
     top: 1.8em;
@@ -295,33 +736,306 @@
   }
   .username-stud-view {
     height: auto;
-    width: 37vw;
-    padding-left: 2rem;
+    width: 80vw;
+    padding-left: 0.5rem;
     background-color: var(--background);
-    font-size: 2rem;
+    font-size: 1rem;
     font-family: "Baloo", sans-serif;
     left: 12.5em;
     top: 3.3em;
     color: var(--grey-purple);
   }
-
   .email-stud-view {
     height: auto;
-    width: 37vw;
-    padding-left: 2rem;
+    width: 80vw;
+    padding-left: 0.5rem;
     background-color: var(--background);
-    font-size: 2rem;
+    font-size: 1rem;
     font-family: "Baloo", sans-serif;
     left: 12.5em;
     top: 5em;
     color: var(--grey-purple);
   }
+   .student-details p, .username-stud-view p, .email-stud-view p {
+    margin-bottom: 0px;
+  }
+
   .btn-logout-wrapper button {
     position: absolute;
-    bottom: 2rem;
-    left: 2%;
+    bottom: 4rem;
+    left: 25%;
     background-color: #d7443e; 
-    font-size: 2rem;
-    padding: 5px 40px;
+    font-size: 1rem;
+    padding: 5px 20px;
+    width: 12rem;
+  }
+
+}
+
+@media (max-width: 376px) {
+  .settings-container {
+    background-color: #271d3e;
+    width: 90vw;
+    height: 80vh;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    top: 2rem;
+    left: -2.3rem;
+    transform: translateX(-50%) translateX(14rem); /* center + offset */
+    padding: 1rem;
+    border-radius: 1rem;
+  }
+  .profile-picture-wrapper {
+    margin: 0px;
+     margin-left: 0rem;
+  }
+  .profile-pic-container {
+    display: flex;
+    justify-content: center;
+    width: 7rem;
+    height: 7rem;
+    margin-left: 0.5rem;
+  
+  }
+  .profile-btn {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+  }
+  .change-pic {
+    background-color: var(--input-gray);
+    height: auto;
+    width: clamp(200px, 17vw, 300px);
+    font-size: 1rem;
+    font-family: "Baloo", sans-serif;
+    padding: 10px;
+  }
+  .delete-btn {
+    background-color: #d7443e;  
+    height: auto;
+    width: clamp(200px, 17vw, 300px);
+    font-size: 1rem;
+    font-family: "Baloo", sans-serif;
+    padding: 10px;
+  }
+  .profile-picture-wrapper {
+    width: 50vw; /* adjust based on your original image size */
+    height: 50vh;
+  }
+  .settings-container img {
+    position: relative;
+    left: 1.5em;
+    top: 0;
+  }
+
+
+  .students-information {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 6rem;
+    margin-right: 0px;
+    gap: 0.5rem;
+
+  }
+  .name-stud {
+    font-family: "Baloo", sans-serif;
+    left: 16em;
+    top: 1em;
+    font-size: 1rem;
+  }
+  .username-stud {
+    font-family: "Baloo", sans-serif;
+    left: 16em;
+    top: 5.5em;
+    font-size: 1rem;
+  }
+  .email-stud {
+    font-family: "Baloo", sans-serif;
+    left: 16em;
+    top: 10em;
+    font-size: 1rem;
+  }
+  .student-details {
+    height: auto;
+    width: 80vw;
+    padding-left: 0.5rem;
+    background-color: var(--background);
+    font-size: 1rem;
+    font-family: "Baloo", sans-serif;
+    left: 12.5em;
+    top: 1.8em;
+    color: var(--grey-purple);
+  }
+  .username-stud-view {
+    height: auto;
+    width: 80vw;
+    padding-left: 0.5rem;
+    background-color: var(--background);
+    font-size: 1rem;
+    font-family: "Baloo", sans-serif;
+    left: 12.5em;
+    top: 3.3em;
+    color: var(--grey-purple);
+  }
+  .email-stud-view {
+    height: auto;
+    width: 80vw;
+    padding-left: 0.5rem;
+    background-color: var(--background);
+    font-size: 1rem;
+    font-family: "Baloo", sans-serif;
+    left: 12.5em;
+    top: 5em;
+    color: var(--grey-purple);
+  }
+   .student-details p, .username-stud-view p, .email-stud-view p {
+    margin-bottom: 0px;
+  }
+
+  .btn-logout-wrapper button {
+    position: absolute;
+    bottom: 4rem;
+    left: 22%;
+    background-color: #d7443e; 
+    font-size: 1rem;
+    padding: 5px 20px;
+    width: 12rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .settings-container {
+    background-color: #271d3e;
+    width: 90vw;
+    height: 80vh;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    top: 2rem;
+    left: -4rem;
+    transform: translateX(-50%) translateX(14rem); /* center + offset */
+    padding: 1rem;
+    border-radius: 1rem;
+  }
+  .profile-picture-wrapper {
+    margin: 0px;
+     margin-left: 0rem;
+  }
+  .profile-pic-container {
+    display: flex;
+    justify-content: center;
+    width: 7rem;
+    height: 7rem;
+    margin-left: 0px;
+  
+  }
+  .profile-btn {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+  }
+  .change-pic {
+    background-color: var(--input-gray);
+    height: auto;
+    width: clamp(200px, 17vw, 300px);
+    font-size: 1rem;
+    font-family: "Baloo", sans-serif;
+    padding: 10px;
+  }
+  .delete-btn {
+    background-color: #d7443e;  
+    height: auto;
+    width: clamp(200px, 17vw, 300px);
+    font-size: 1rem;
+    font-family: "Baloo", sans-serif;
+    padding: 10px;
+  }
+  .profile-picture-wrapper {
+    width: 50vw; /* adjust based on your original image size */
+    height: 50vh;
+  }
+  .settings-container img {
+    position: relative;
+    left: 1.5em;
+    top: 0;
+  }
+
+
+  .students-information {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 6rem;
+    margin-right: 0px;
+    gap: 0.5rem;
+
+  }
+  .name-stud {
+    font-family: "Baloo", sans-serif;
+    left: 16em;
+    top: 1em;
+    font-size: 1rem;
+  }
+  .username-stud {
+    font-family: "Baloo", sans-serif;
+    left: 16em;
+    top: 5.5em;
+    font-size: 1rem;
+  }
+  .email-stud {
+    font-family: "Baloo", sans-serif;
+    left: 16em;
+    top: 10em;
+    font-size: 1rem;
+  }
+  .student-details {
+    height: auto;
+    width: 80vw;
+    padding-left: 0.5rem;
+    background-color: var(--background);
+    font-size: 1rem;
+    font-family: "Baloo", sans-serif;
+    left: 12.5em;
+    top: 1.8em;
+    color: var(--grey-purple);
+  }
+  .username-stud-view {
+    height: auto;
+    width: 80vw;
+    padding-left: 0.5rem;
+    background-color: var(--background);
+    font-size: 1rem;
+    font-family: "Baloo", sans-serif;
+    left: 12.5em;
+    top: 3.3em;
+    color: var(--grey-purple);
+  }
+  .email-stud-view {
+    height: auto;
+    width: 80vw;
+    padding-left: 0.5rem;
+    background-color: var(--background);
+    font-size: 1rem;
+    font-family: "Baloo", sans-serif;
+    left: 12.5em;
+    top: 5em;
+    color: var(--grey-purple);
+  }
+   .student-details p, .username-stud-view p, .email-stud-view p {
+    margin-bottom: 0px;
+  }
+
+  .btn-logout-wrapper button {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 17%;
+    background-color: #d7443e; 
+    font-size: 1rem;
+    padding: 5px 20px;
+    width: 12rem;
   }
 }
