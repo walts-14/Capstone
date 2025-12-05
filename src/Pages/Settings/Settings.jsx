@@ -144,39 +144,23 @@ function Settings() {
 
   return (
     <>
-      <button
+      {/* <button
         onClick={() => setShowModal(true)}
         style={{ position: "absolute", top: "10px", right: "10px" }}
       >
         Maintenance
-      </button>
+      </button> */}
 
       {/* modal only renders when showModal===true */}
       <MaintenanceModal show={showModal} onClose={() => setShowModal(false)} />
 
       <Sidenav />
+      
       <div className="settings-container rounded-4">
         {/* ——— STUDENT INFO (no design changes) ——— */}
-        <div className="students-information">
-          <span className="name-stud text-white">Name</span>
-          <div className="student-details rounded-4">
-            <p className="text-white text-left">{userName}</p>
-          </div>
-
-          <span className="username-stud text-white">Username</span>
-          <div className="username-stud-view rounded-4">
-            <p className="text-white text-left">{userUsername}</p>
-          </div>
-
-          <span className="email-stud text-white">Email</span>
-          <div className="email-stud-view rounded-4">
-            <p className="text-white text-left">{userEmail}</p>
-          </div>
-        </div>
-
-        {/* ——— PROFILE PICTURE (with loading states) ——— */}
-        <div className="profile-picture-wrapper position-relative m-5">
-          <div className="position-relative">
+             {/* ——— PROFILE PICTURE (with loading states) ——— */}
+        <div className="profile-picture-wrapper position-relative m-4">
+          <div className="profile-pic-container">
             <img
               src={profilePic}
               className="img-fluid"
@@ -184,8 +168,8 @@ function Settings() {
               style={{
                 borderRadius: "50%",
                 objectFit: "cover",
-                width: "200px",
-                height: "200px",
+                width: "250px",
+                height: "250px",
                 aspectRatio: "1/1",
                 backgroundColor: "#222",
               }}
@@ -249,36 +233,38 @@ function Settings() {
             </div>
           </div>
 
-          <label
-            htmlFor="file-upload"
-            className="change-pic text-white rounded-4 p-2 text-center text-nowrap"
-            style={{
-              cursor:
-                isUploadingPic || isDeletingPic ? "not-allowed" : "pointer",
-              opacity: isUploadingPic || isDeletingPic ? 0.6 : 1,
-              pointerEvents: isUploadingPic || isDeletingPic ? "none" : "auto",
-              width: "auto",
-            }}
-          >
-            Change Profile
-          </label>
+          <div className="profile-btn mt-4">
+              <label
+                htmlFor="file-upload"
+                className="change-pic text-white rounded-4 text-center text-nowrap"
+                style={{
+                  cursor:
+                    isUploadingPic || isDeletingPic ? "not-allowed" : "pointer",
+                  opacity: isUploadingPic || isDeletingPic ? 0.6 : 1,
+                  pointerEvents: isUploadingPic || isDeletingPic ? "none" : "auto",
+                  width: "auto",
+                }}
+              >
+                Change Profile
+              </label>
 
-          <button
-            className={`deletee btn-secondary rounded-4 position-absolute text-nowrap text-white ${
-              isUploadingPic || isDeletingPic ? "disabled" : ""
-            }`}
-            onClick={handleDeleteProfilePicture}
-            disabled={isUploadingPic || isDeletingPic}
-            style={{
-              opacity: isUploadingPic || isDeletingPic ? 0.6 : 1,
-              width: "auto",
-              marginTop: "1.5rem",
-              marginLeft: "1rem",
-            }}
-          >
-            {isDeletingPic ? "Deleting..." : "Delete Picture"}
-          </button>
+              <button
+                className={`delete-btn btn-secondary rounded-4  text-nowrap text-white ${
+                  isUploadingPic || isDeletingPic ? "disabled" : ""
+                }`}
+                onClick={handleDeleteProfilePicture}
+                disabled={isUploadingPic || isDeletingPic}
+                style={{
+                  opacity: isUploadingPic || isDeletingPic ? 0.6 : 1,
+                  width: "auto",
+                
+                }}
+              >
+                {isDeletingPic ? "Deleting..." : "Delete Picture"}
+              </button>
 
+          </div>
+          
           <input
             type="file"
             id="file-upload"
@@ -290,16 +276,45 @@ function Settings() {
           />
         </div>
 
-        {/* ——— LOGOUT BUTTON ——— */}
-        <div className="btns">
-          <button
-            type="button"
-            className="btn btn-secondary rounded-5"
-            onClick={logout}
-          >
-            Log out
-          </button>
+        <div className="students-information">
+          <div>
+            <span className="name-stud text-white">Name</span>
+            <div className="student-details rounded-4">
+              <p className=" text-left">{userName}</p>
+            </div>
+          </div>
+
+           <div>
+            <span className="username-stud text-white">Username</span>
+            <div className="username-stud-view rounded-4">
+              <p className=" text-left">{userUsername}</p>
+            </div>    
+          </div>
+
+           <div>
+            <span className="email-stud text-white">Email</span>
+            <div className="email-stud-view rounded-4">
+              <p className=" text-left">{userEmail}</p>
+            </div>
+          </div>
+          
+
+
+             {/* ——— LOGOUT BUTTON ——— */}
+          <div className="btn-logout-wrapper text-center mt-4">
+            <button
+              type="button"
+              className="btn btn-secondary rounded-5"
+              onClick={logout}
+            >
+              Log out
+            </button>
+          </div>
         </div>
+
+   
+
+     
       </div>
     </>
   );
