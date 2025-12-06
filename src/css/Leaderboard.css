@@ -251,117 +251,7 @@
 }
 
 
-/* Mobile responsiveness */
-@media (max-width: 768px) {
-  .leaderboard-container{
-    /* padding: 5rem;
-    margin: 2rem */
-    margin-left: 2rem;
-  }
 
-  .top-three-container {
-    flex-direction: row;
-    align-items: center;
-    gap: 5rem;
-  }
-  
-  .podium-first, .podium-second, .podium-third {
-    order: initial;
-    margin-bottom: 0;
-  }
-  
-  .leaderboard-header {
-    padding: 0.75rem 1rem;
-  }
-  
-  .header-text {
-    font-size: 1rem;
-  }
-  
-  .user-rank {
-    padding: 0.5rem 0.75rem;
-  }
-  
-  .user-avatar {
-    width: 35px;
-    height: 35px;
-  }
-  
-  .medal-image {
-    width: 50px;
-    height: 50px;
-  }
-  
-  .podium-avatar {
-    width: 45px;
-    height: 45px;
-  }
-}
-
-
-/* Desktop and laptop screens */
-@media (min-width: 1024px) {
-  .leaderboard-container{
-    /* padding: 5rem;
-    margin: 2rem */
-    margin-left: 7rem;
-  }
-
-  .leaderboard-wrapper {
-    max-width: 750px; /* Even wider for laptops/desktops */
-  }
-  
-  .top-three-container {
-    gap: 8rem;
-  }
-
-  .medal-image {
-    width: 100px;
-    height: 100px;
-  }
-  
-  .podium-avatar {
-    width: 100px;
-    height: 100px;
-  }
-  
-  .user-avatar {
-    width: 50px;
-    height: 50px;
-  }
-  
-  .leaderboard-header {
-    padding: 1.5rem 2.5rem;
-  }
-  
-  .header-text {
-    font-size: 1.5rem;
-  }
-  
-  .user-rank {
-    padding: 1.2rem 2rem;
-  }
-  
-  .rank-number {
-    font-size: 1.3rem;
-  }
-  
-  .user-name {
-    font-size: 1.2rem;
-  }
-  
-  .points-text {
-    font-size: 1.2rem;
-  }
-  
-  .podium-name {
-    font-size: 1.1rem;
-  }
-  
-  .podium-points {
-    font-size: 1rem;
-  }
-}
 
 /* Large desktop screens */
 @media (min-width: 1440px) {
@@ -423,9 +313,94 @@
     font-size: 1rem;
   }
 }
+/* Desktop and laptop screens */
 
+@media (min-width: 1024px) {
+  .leaderboard-container{
+    /* padding: 5rem;
+    margin: 2rem */
+    margin-right: 12rem;
+  }
+
+  .leaderboard-wrapper {
+    max-width: 750px; /* Even wider for laptops/desktops */
+    margin-left: 0.5rem;
+  }
+  
+  .top-three-container {
+    gap: 8rem;
+  }
+
+  .medal-image {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .podium-avatar {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .user-avatar {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .leaderboard-header {
+    padding: 1.5rem 2.5rem;
+  }
+  
+  .header-text {
+    font-size: 1.5rem;
+  }
+  
+  .user-rank {
+    padding: 1.2rem 2rem;
+  }
+  
+  .rank-number {
+    font-size: 1.3rem;
+  }
+  
+  .user-name {
+    font-size: 1.2rem;
+  }
+  
+  .points-text {
+    font-size: 1.2rem;
+  }
+  
+  .podium-name {
+    font-size: 1.1rem;
+  }
+  
+  .podium-points {
+    font-size: 1rem;
+  }
+}
 /* Tablet and larger screens */
 @media (max-width: 769px) {
+  .top-three-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: 0rem;
+  gap: 0rem;
+  justify-items: center;
+  align-items: center;
+  margin-bottom: 0rem;
+  margin-top: 19rem;
+  width: 100%;
+}
+
+.podium-first {
+  /* first spans both columns (top center) */
+  grid-column: 1 / -1;
+  justify-self: center;
+  margin-bottom: 18rem;
+}
+.podium-third {
+  margin-left: 3rem;
+}
   .leaderboard-wrapper {
     max-width: 1200px; /* Wider for tablets */
   }
@@ -433,6 +408,11 @@
     /* padding: 5rem;
     margin: 2rem */
     margin-left: 0rem;
+  } 
+  .leaderboard-content1{
+    /* padding: 5rem;
+    margin: 2rem */
+    margin-left: 2rem;
   } 
   .medal-image {
     width: 70px;
