@@ -9,7 +9,7 @@ function Leaderboard() {
     <>
       <div className="leaderboard-container">
         <Sidenav />
-        <div className="leaderboard-content">
+        <div className="leaderboard-content1">
           <div className="leaderboard-wrapper">
             <LbComponent />
           </div>
