@@ -22,7 +22,9 @@ function BasicLibrary() {
           </Link>
           <Link to="/terms/termstwo">
             <div className="level-content rounded-xl">
-              <span className="text-3xl">Lesson 2</span>
+              <span className="text-3xl">Lesson 
+                
+              </span>
               <span className="text-2xl pt-2">30 items</span>
               <p className="text-5xl">
                 Common Expressions and Polite Greetings
