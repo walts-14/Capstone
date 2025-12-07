@@ -74,7 +74,7 @@ function LbComponent() {
         {sortedLeaderboard[0] && (
           <div className="podium-position podium-first">
             <img src={medal1} className="medal-image" alt="1st place" />
-             <div>
+             <div className="Pcontain">
                <img
               src={picFor(0, profile1)}
               className="podium-avatar"
@@ -94,7 +94,7 @@ function LbComponent() {
         {sortedLeaderboard[1] && (
           <div className="podium-position podium-second">
             <img src={medal2} className="medal-image" alt="2nd place" />
-            <div>
+            <div className="Pcontain">
                <img
               src={picFor(1, profile2)}
               className="podium-avatar"
@@ -114,7 +114,7 @@ function LbComponent() {
         {sortedLeaderboard[2] && (
           <div className="podium-position podium-third">
             <img src={medal3} className="medal-image" alt="3rd place" />
-             <div>
+             <div className="Pcontain">
                <img
               src={picFor(2, profile3)}
               className="podium-avatar"
@@ -137,10 +137,6 @@ function LbComponent() {
       <div className="leaderboard-content">
  
             <div className="w-full">
-              {/* Top 3 Podium */}
-            
-
-              {/* Table Header */}
              
 
               {/* User List */}
