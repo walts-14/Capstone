@@ -442,7 +442,19 @@ function LectureorQuiz() {
             margin-top: .2rem !important;
          }
        }
-        
+         @media (min-width: 390px) {
+          .quiz-inner, .practice-inner {
+              width: 7.6rem !important;
+              height: 11vh !important;
+              margin-top: 1.8rem !important;
+              border-radius: 1.5rem !important;
+          }
+           .MobileIntroduction {
+              position: absolute !important;
+              bottom: 48rem !important;
+              left: 19.5rem !important;
+          }
+        } 
         /* Mobile sidenav - only show below 640px */
         @media (min-width: 425px) {
            .back {
