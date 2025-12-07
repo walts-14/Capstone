@@ -207,161 +207,305 @@ function Practice() {
         </>
       )}
         {/* Responsive styles for smooth transition */}
-     <style>{`
+    <style>{`
        
-          /* Mobile sidenav - only show below 640px */
-        @media (max-width: 639px) {
-       .progress {
-          margin-left: 14px !important;
-          margin-top: 10vh !important;
-          align-items: center !important;
-          width: 92vw !important;
-          height: 18px !important;
-          border-radius: 50px !important;
-        }
+        .back {
+              display: flex !important;
+              justify-content: center !important;
+              position: fixed !important;
+              right: 20rem !important;
+              top: -0.8rem !important;
+              font-size: 1.9rem !important;
+            }
+          .back img {
+            width: 2.5rem !important;
+            height: 2rem !important;
+          } 
+          .lives-quizz {
+            display: flex !important;
+            position: absolute !important;
+            top:  7rem !important;
+            left: 82rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
 
-        .grid {
-          height: 200vh !important;
-          width: 100vw !important;
-          border-radius: 0px !important;
-          gap: 60px 78px !important;
-          margin-top: 15px !important;
-        }
+           }
+          
+          .grid {
+            height: 60vh !important;
+            width: 90vw !important;
+            border-radius: 18px !important;
+            gap: 84px 107px !important;
+            margin-top: 15px !important;
+          }
 
-        .choices {
-          height: 22vh !important;
-          width: 46vw !important;
-          position: relative !important;
-          top: 8vh !important;
-          right: 33px !important;
-          margin: 0 auto !important;
-        }
-
-        .choice-a, .choice-b, .choice-c, .choice-d {
-          height: 5vh !important;
-          width: 50vw !important;
-          position: relative !important;
-          bottom: 7vh !important;
-          right: 0 !important;
-          margin: 8px auto !important;
-          border-radius: 12px !important;
-        }
-        
-        .choice-a strong, .choice-b strong, .choice-c strong, .choice-d strong {
-          margin-top: 2px !important;
-          font-size: 1rem !important;
-        }
-
-        .choice-a video, .choice-b video, .choice-c video, .choice-d video {
-          width: 41vw !important;
-          height: auto !important;
-          max-width: 300px !important;
-          max-height: 45vh !important;
-          object-fit: contain !important;
-          display: block !important;
+          .quiz-question {
+            display: block !important;
+            font-size: 2.2rem !important;
+            position: fixed !important;
+            left: 50% !important;
+            top: 11rem !important;
+            transform: translateX(-50%) !important;
+            width: 80vw !important;
+            text-align: center !important;
+          }
+          .choices {
+            height: 22vh !important;
+            width: 33vw !important;
+            position: relative !important;
+            top: 8vh !important;
+            right: 38px !important;
+            margin: 0 auto !important;
+           }
+          .choice-a, .choice-b, .choice-c, .choice-d {
+            height: 8vh !important;
+            width: 4vw !important;
+            position: absolute !important;
+            bottom: 6vh !important;
+            left: 38px !important;
+            margin: 0px auto !important;
+            border-radius: 12px !important;
+          }
+          .choice-a strong, .choice-b strong, .choice-c strong, .choice-d strong {
+            margin-top:0px !important;
+            font-size: 2.3rem !important;
+          }
+          .choice-a video, .choice-b video, .choice-c video, .choice-d video {
+            width: 48vw !important;
+            height: auto !important;
+            max-width: 260px !important;
+            max-height: 35vh !important;
+            object-fit: contain !important;
+            display: block !important;
+            border-radius: 12px !important;
+            margin: 0 auto !important;
+            position: absolute !important;
+            top: -3.1rem !important;
      
-          border-radius: 12px !important;
-          margin: 0 auto !important;
-          position: absolute !important;
-          top: 5vh !important;
-          left: 50% !important;
-          transform: translateX(-50%) !important;
-          z-index: 1 !important;
-        }
+            left: 16.2rem !important;
+            transform: translateX(-50%) !important;
+            z-index: 1 !important;
+          }
+          
+          .continue {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            font-size: 1.6rem !important;
+            padding-top: 10px !important;
+            margin-bottom: 45px !important;
+          } 
+          .continue img {
+            margin: 0px !important;
+            margin-top: 10px !important;
+            margin-left: 8px !important;
+            width: 2.5rem !important;
+            height: 2.3rem !important;
+          }
+          .continue p {
+            margin-bottom: 0px !important;
+            margin-top: 4px !important;
+          }  
 
-        .continue {
-          display: flex !important;
-          justify-content: center !important;
-          align-items: center !important;
-          position: absolute !important;
-          top: 91vh !important;
-          left: 12px !important;
-          height: 6vh !important;
-          width: 92vw !important;
-          font-size: 1.6rem !important;
-          padding-top: 10px !important;
-          border-radius: 12px !important;
-        }
+              /* Desktop sidenav - show above 1024px */
+        @media (max-width: 1441px) {
+          .back {
+              display: flex !important;
+              justify-content: center !important;
+              position: fixed !important;
+              right: 0rem !important;
+              top: -0.8rem !important;
+              font-size: 1.9rem !important;
+            }
+          .back img {
+            width: 2.5rem !important;
+            height: 2rem !important;
+          } 
+          .lives-quizz {
+            display: flex !important;
+            position: absolute !important;
+            top:  7rem !important;
+            left: 78rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
 
-        .continue img {
-          margin: 0px !important;
-          margin-top: 10px !important;
-          margin-left: 8px !important;
-          width: 2.2rem !important;
-          height: 2rem !important;
-        }
-        .continue p {
-          margin-bottom: 0px !important;
-          margin-top: 4px !important;
-        }      
-        .quiz-question {
-          display: block !important;
-          font-size: 1.3rem !important;
-          position: fixed !important;
-          left: 50% !important;
-          top: 8rem !important;
-          transform: translateX(-50%) !important;
-          width: 92vw !important;
-          text-align: center !important;
-        }
+           }
+          
+          .grid {
+            height: 60vh !important;
+            width: 90vw !important;
+            border-radius: 18px !important;
+            gap: 110px 107px !important;
+            margin-top: 15px !important;
+          }
 
-         .back {
+          .quiz-question {
+            display: block !important;
+            font-size: 2.2rem !important;
+            position: fixed !important;
+            left: 50% !important;
+            top: 11rem !important;
+            transform: translateX(-50%) !important;
+            width: 80vw !important;
+            text-align: center !important;
+          }
+          .choices {
+            height: 22vh !important;
+            width: 33vw !important;
+            position: relative !important;
+            top: 8vh !important;
+            right: 38px !important;
+            margin: 0 auto !important;
+           }
+          .choice-a, .choice-b, .choice-c, .choice-d {
+            height: 8vh !important;
+            width: 4vw !important;
+            position: absolute !important;
+            bottom: 6vh !important;
+            left: 38px !important;
+            margin: 0px auto !important;
+            border-radius: 12px !important;
+          }
+          .choice-a strong, .choice-b strong, .choice-c strong, .choice-d strong {
+            margin-top:0px !important;
+            font-size: 2.3rem !important;
+          }
+          .choice-a video, .choice-b video, .choice-c video, .choice-d video {
+            width: 48vw !important;
+            height: auto !important;
+            max-width: 260px !important;
+            max-height: 35vh !important;
+            object-fit: contain !important;
+            display: block !important;
+            border-radius: 12px !important;
+            margin: 0 auto !important;
+            position: absolute !important;
+            top: -3.1rem !important;
+     
+            left: 16.2rem !important;
+            transform: translateX(-50%) !important;
+            z-index: 1 !important;
+          }
+          
+          .continue {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            font-size: 1.6rem !important;
+            padding-top: 10px !important;
+            margin-bottom: 45px !important;
+          } 
+          .continue img {
+            margin: 0px !important;
+            margin-top: 10px !important;
+            margin-left: 8px !important;
+            width: 2.5rem !important;
+            height: 2.3rem !important;
+          }
+          .continue p {
+            margin-bottom: 0px !important;
+            margin-top: 4px !important;
+          }  
+       }
+       
+
+        /* Desktop sidenav - show above 1024px */
+        @media (max-width: 1025px) {
+           .back {
             display: flex !important;
             justify-content: center !important;
             position: fixed !important;
-            left: 4rem !important;
+            left: 1.3rem !important;
             top: -0.5rem !important;
             font-size: 1.5rem !important;
-          }
+            }
+          .lives-quizz {
+          display: flex !important;
+          position: absolute !important;
+          top:  7rem !important;
+          left: 55rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
+          
+         }
           .back img {
             width: 2rem !important;
             height: 1.5rem !important;
           }
-      }
-        .lives-quizz {
-          display: flex !important;
-          position: absolute !important;
-          top:  0.5rem !important;
-          left: 18rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
-          transform: scale(1) !important;
-        }
-           /* Mobile sidenav - only show below 640px */
-        @media (min-width: 425px) {
-          .lives-quizz {
-          display: flex !important;
-          position: absolute !important;
-          top:  0.5rem !important;
-          left: 21rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
-          transform: scale(1) !important;
-        }
-          .choice-a video, .choice-b video, .choice-c video, .choice-d video {
-          width: 39vw !important;
-          height: auto !important;
-          max-width: 300px !important;
-          max-height: 45vh !important;
-          object-fit: contain !important;
-          display: block !important;
-          
-          border-radius: 12px !important;
-          margin: 0 auto !important;
-          position: absolute !important;
-          top: 5vh !important;
-          left: 50% !important;
-          transform: translateX(-50%) !important;
-          z-index: 1 !important;
-        }
+          .grid {
+            height: 60vh !important;
+            width: 90vw !important;
+            border-radius: 18px !important;
+            gap: 56px 102px !important;
+            margin-top: 15px !important;
+          }
+
+          .quiz-question {
+            display: block !important;
+            font-size: 1.7rem !important;
+            position: fixed !important;
+            left: 50% !important;
+            top: 11rem !important;
+            transform: translateX(-50%) !important;
+            width: 80vw !important;
+            text-align: center !important;
+          }
           .choices {
-          height: 23vh !important;
-          width: 44vw !important;
-          position: relative !important;
-          top: 4vh !important;
-          right: 33px !important;
-          margin: 0 auto !important;
+            height: 20vh !important;
+            width: 34vw !important;
+            position: relative !important;
+            top: 8vh !important;
+            right: 38px !important;
+            margin: 0 auto !important;
+           }
+          .choice-a, .choice-b, .choice-c, .choice-d {
+            height: 7vh !important;
+            width: 5vw !important;
+            position: absolute !important;
+            bottom: 6vh !important;
+            left: 22px !important;
+            margin: 0px auto !important;
+            border-radius: 12px !important;
+          }
+          .choice-a strong, .choice-b strong, .choice-c strong, .choice-d strong {
+            margin-top: 2px !important;
+            font-size: 1.5rem !important;
+          }
+          .choice-a video, .choice-b video, .choice-c video, .choice-d video {
+            width: 41vw !important;
+            height: auto !important;
+            max-width: 198px !important;
+            max-height: 35vh !important;
+            object-fit: contain !important;
+            display: block !important;
+            border-radius: 12px !important;
+            margin: 0 auto !important;
+            position: absolute !important;
+            top: -2.3rem !important;
+            
+            left: 13.2rem !important;
+            transform: translateX(-50%) !important;
+            z-index: 1 !important;
+          }
+          
+          .continue {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            font-size: 1.6rem !important;
+            padding-top: 10px !important;
+            margin-bottom: 45px !important;
+          } 
+          .continue img {
+            margin: 0px !important;
+            margin-top: 10px !important;
+            margin-left: 8px !important;
+            width: 2.5rem !important;
+            height: 2.3rem !important;
+          }
+          .continue p {
+            margin-bottom: 0px !important;
+            margin-top: 4px !important;
+          }      
         }
-      }
-        
-         /* Tablet sidenav and logo - show between 640px-1024px */
-        @media (min-width: 640px) and (max-width: 768px) {
+
+          
+            /* Tablet sidenav and logo - show between 640px-1024px */
+        @media (max-width: 769px) {
            .back {
             display: flex !important;
             justify-content: center !important;
@@ -460,201 +604,317 @@ function Practice() {
           }      
         }
 
-        /* Desktop sidenav - show above 1024px */
-        @media (min-width: 1024px) {
-           .back {
-            display: flex !important;
-            justify-content: center !important;
-            position: fixed !important;
-            left: 1.3rem !important;
-            top: -0.5rem !important;
-            font-size: 1.5rem !important;
+           @media (max-width: 426px) {
+              .lives-quizz {
+              display: flex !important;
+              position: absolute !important;
+              top:  0.5rem !important;
+              left: 21rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
+              transform: scale(1) !important;
             }
-          .lives-quizz {
-          display: flex !important;
-          position: absolute !important;
-          top:  7rem !important;
-          left: 55rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
-          
-         }
-          .back img {
-            width: 2rem !important;
-            height: 1.5rem !important;
-          }
-          .grid {
-            height: 60vh !important;
-            width: 90vw !important;
-            border-radius: 18px !important;
-            gap: 56px 102px !important;
-            margin-top: 15px !important;
-          }
+            .progress {
+              margin-left: 14px !important;
+              margin-top: 7.5vh !important;
+              margin-bottom: 0.5rem !important; 
+              align-items: center !important;
+              width: 92vw !important;
+              height: 18px !important;
+              border-radius: 50px !important;
+            }
 
-          .quiz-question {
-            display: block !important;
-            font-size: 1.7rem !important;
-            position: fixed !important;
-            left: 50% !important;
-            top: 11rem !important;
-            transform: translateX(-50%) !important;
-            width: 80vw !important;
-            text-align: center !important;
-          }
-          .choices {
-            height: 20vh !important;
-            width: 34vw !important;
-            position: relative !important;
-            top: 8vh !important;
-            right: 38px !important;
-            margin: 0 auto !important;
-           }
-          .choice-a, .choice-b, .choice-c, .choice-d {
-            height: 7vh !important;
-            width: 5vw !important;
-            position: absolute !important;
-            bottom: 6vh !important;
-            left: 22px !important;
-            margin: 0px auto !important;
-            border-radius: 12px !important;
-          }
-          .choice-a strong, .choice-b strong, .choice-c strong, .choice-d strong {
-            margin-top: 2px !important;
-            font-size: 1.5rem !important;
-          }
-          .choice-a video, .choice-b video, .choice-c video, .choice-d video {
-            width: 41vw !important;
-            height: auto !important;
-            max-width: 198px !important;
-            max-height: 35vh !important;
-            object-fit: contain !important;
-            display: block !important;
-            border-radius: 12px !important;
-            margin: 0 auto !important;
-            position: absolute !important;
-            top: -2.3rem !important;
+            .grid {
+              height: 200vh !important;
+              width: 100vw !important;
+              border-radius: 0px !important;
+              gap: 66px 86px !important;
+              margin-top: 0px !important;
+            }
+
+            .choices {
+              height: 24vh !important;
+              width: 46vw !important;
+              position: relative !important;
+              top: 8vh !important;
+              right: 38px !important;
+              margin: 0 auto !important;
+            }
+
+            .choice-a, .choice-b, .choice-c, .choice-d {
+              height: 5vh !important;
+              width: 50vw !important;
+              position: relative !important;
+              bottom: 7vh !important;
+              right: 0 !important;
+              margin: 8px auto !important;
+              border-radius: 12px !important;
+            }
             
-            left: 13.2rem !important;
-            transform: translateX(-50%) !important;
-            z-index: 1 !important;
-          }
-          
-          .continue {
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            font-size: 1.6rem !important;
-            padding-top: 10px !important;
-            margin-bottom: 45px !important;
-          } 
-          .continue img {
-            margin: 0px !important;
-            margin-top: 10px !important;
-            margin-left: 8px !important;
-            width: 2.5rem !important;
-            height: 2.3rem !important;
-          }
-          .continue p {
-            margin-bottom: 0px !important;
-            margin-top: 4px !important;
-          }      
-        }
+            .choice-a strong, .choice-b strong, .choice-c strong, .choice-d strong {
+              margin-top: 2px !important;
+              font-size: 1rem !important;
+            }
 
-            /* Desktop sidenav - show above 1024px */
-        @media (min-width: 1440px) {
-          .back {
+            .choice-a video, .choice-b video, .choice-c video, .choice-d video {
+              width: 41vw !important;
+              height: auto !important;
+              max-width: 300px !important;
+              max-height: 45vh !important;
+              object-fit: contain !important;
+              display: block !important;
+        
+              border-radius: 12px !important;
+              margin: 0 auto !important;
+              position: absolute !important;
+              top: 5vh !important;
+              left: 50% !important;
+              transform: translateX(-50%) !important;
+              z-index: 1 !important;
+            }
+
+            .continue {
               display: flex !important;
               justify-content: center !important;
-              position: fixed !important;
-              left: 1rem !important;
-              top: -0.8rem !important;
-              font-size: 1.9rem !important;
+              align-items: center !important;
+              position: absolute !important;
+              top: 92vh !important;
+              left: 16px !important;
+              height: 6vh !important;
+              width: 92vw !important;
+              font-size: 1.6rem !important;
+              padding-top: 10px !important;
+              border-radius: 12px !important;
             }
-          .back img {
-            width: 2.5rem !important;
-            height: 2rem !important;
-          } 
+
+            .continue img {
+              margin: 0px !important;
+              margin-top: 10px !important;
+              margin-left: 8px !important;
+              width: 2.2rem !important;
+              height: 2rem !important;
+            }
+            .continue p {
+              margin-bottom: 0px !important;
+              margin-top: 4px !important;
+            }      
+            .quiz-question {
+              display: block !important;
+              font-size: 1.3rem !important;
+              position: fixed !important;
+              left: 50% !important;
+              top: 8rem !important;
+              transform: translateX(-50%) !important;
+              width: 92vw !important;
+              text-align: center !important;
+            }
+
+            .back {
+                display: flex !important;
+                justify-content: center !important;
+                position: fixed !important;
+                right: 18rem !important;
+                top: -0.5rem !important;
+                font-size: 1.5rem !important;
+              }
+              .back img {
+                width: 2rem !important;
+                height: 1.5rem !important;
+              }
+          }
+
+          @media (max-width: 391px) {
           .lives-quizz {
             display: flex !important;
             position: absolute !important;
-            top:  7rem !important;
-            left:   rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
-
-           }
-          
-          .grid {
-            height: 60vh !important;
-            width: 90vw !important;
-            border-radius: 18px !important;
-            gap: 90px 107px !important;
-            margin-top: 15px !important;
+            top:  0.5rem !important;
+            left: 20rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
+            transform: scale(1) !important;
+          }
+          .back {
+            margin-left: 8px !important;
+          }
+          .choice-a , .choice-b , .choice-c , .choice-d {
+            margin-top: 2rem !important;
+            margin-right: .5rem !important;
+            font-size: 1rem !important;
           }
 
-          .quiz-question {
-            display: block !important;
-            font-size: 2.2rem !important;
-            position: fixed !important;
-            left: 50% !important;
-            top: 11rem !important;
-            transform: translateX(-50%) !important;
-            width: 80vw !important;
-            text-align: center !important;
-          }
-          .choices {
-            height: 22vh !important;
-            width: 33vw !important;
-            position: relative !important;
-            top: 8vh !important;
-            right: 38px !important;
-            margin: 0 auto !important;
-           }
-          .choice-a, .choice-b, .choice-c, .choice-d {
-            height: 8vh !important;
-            width: 4vw !important;
-            position: absolute !important;
-            bottom: 6vh !important;
-            left: 38px !important;
-            margin: 0px auto !important;
-            border-radius: 12px !important;
-          }
-          .choice-a strong, .choice-b strong, .choice-c strong, .choice-d strong {
-            margin-top:0px !important;
-            font-size: 2.3rem !important;
-          }
           .choice-a video, .choice-b video, .choice-c video, .choice-d video {
-            width: 48vw !important;
+            width: 38vw !important;
             height: auto !important;
-            max-width: 260px !important;
-            max-height: 35vh !important;
+            max-width: 300px !important;
+            max-height: 45vh !important;
             object-fit: contain !important;
             display: block !important;
+      
             border-radius: 12px !important;
             margin: 0 auto !important;
             position: absolute !important;
-            top: -3.1rem !important;
-     
-            left: 16.2rem !important;
+            top: 5vh !important;
+            left: 50% !important;
             transform: translateX(-50%) !important;
             z-index: 1 !important;
           }
-          
+          .progress {
+            margin-bottom: 1rem !important;
+            margin-top: 4rem !important;
+          }
+          .choices {
+            height: 18vh !important;
+            width: 44vw !important;
+            position: relative !important;
+            top: 4vh !important;
+            right: 33px !important;
+            margin: 0 auto !important;
+          }
+          .grid {
+            height: 200vh !important;
+            width: 100vw !important;
+            border-radius: 0px !important;
+            gap: 68px 78px !important;
+            margin-top: 0px !important;
+          }
+            
+
           .continue {
             display: flex !important;
             justify-content: center !important;
             align-items: center !important;
+            position: absolute !important;
+            top: 71vh !important;
+            left: 12px !important;
+            height: 6vh !important;
+            width: 92vw !important;
             font-size: 1.6rem !important;
             padding-top: 10px !important;
-            margin-bottom: 45px !important;
-          } 
-          .continue img {
-            margin: 0px !important;
-            margin-top: 10px !important;
-            margin-left: 8px !important;
-            width: 2.5rem !important;
-            height: 2.3rem !important;
+            border-radius: 12px !important;
           }
-          .continue p {
-            margin-bottom: 0px !important;
-            margin-top: 4px !important;
-          }      
+             .continue img {
+              margin: 0px !important;
+              margin-top: 10px !important;
+              margin-left: 8px !important;
+              width: 2.8rem !important;
+              height: 2rem !important;
+            }
+        }   
+
+
+          @media (max-width: 376px) {
+              .lives-quizz {
+              display: flex !important;
+              position: absolute !important;
+              top:  0.5rem !important;
+              left: 19rem !important; /* 14rem ≈ 224px — keeps it toward the right on small screens */
+              transform: scale(1) !important;
+            }
+            .progress {
+              margin-left: 14px !important;
+              margin-top: 7.5vh !important;
+              margin-bottom: 0.5rem !important; 
+              align-items: center !important;
+              width: 92vw !important;
+              height: 18px !important;
+              border-radius: 50px !important;
+            }
+
+            .grid {
+              height: 200vh !important;
+              width: 100vw !important;
+              border-radius: 0px !important;
+              gap: 66px 86px !important;
+              margin-top: 0px !important;
+            }
+
+            .choices {
+              height: 24vh !important;
+              width: 46vw !important;
+              position: relative !important;
+              top: 8vh !important;
+              right: 34px !important;
+              margin: 0 auto !important;
+            }
+
+            .choice-a, .choice-b, .choice-c, .choice-d {
+              height: 5vh !important;
+              width: 50vw !important;
+              position: relative !important;
+              bottom: 7vh !important;
+              right: 0 !important;
+              margin: 8px auto !important;
+              border-radius: 12px !important;
+            }
+            
+            .choice-a strong, .choice-b strong, .choice-c strong, .choice-d strong {
+              margin-top: 2px !important;
+              font-size: 1rem !important;
+            }
+
+            .choice-a video, .choice-b video, .choice-c video, .choice-d video {
+              width: 39vw !important;
+              height: auto !important;
+              max-width: 300px !important;
+              max-height: 45vh !important;
+              object-fit: contain !important;
+              display: block !important;
+        
+              border-radius: 12px !important;
+              margin: 0 auto !important;
+              position: absolute !important;
+              top: 5vh !important;
+              left: 50% !important;
+              transform: translateX(-50%) !important;
+              z-index: 1 !important;
+            }
+
+            .continue {
+              display: flex !important;
+              justify-content: center !important;
+              align-items: center !important;
+              position: absolute !important;
+              top: 92vh !important;
+              left: 16px !important;
+              height: 6vh !important;
+              width: 92vw !important;
+              font-size: 1.6rem !important;
+              padding-top: 10px !important;
+              border-radius: 12px !important;
+            }
+
+            .continue img {
+              margin: 0px !important;
+              margin-top: 10px !important;
+              margin-left: 8px !important;
+              width: 2.2rem !important;
+              height: 2rem !important;
+            }
+            .continue p {
+              margin-bottom: 0px !important;
+              margin-top: 4px !important;
+            }      
+            .quiz-question {
+              display: block !important;
+              font-size: 1.3rem !important;
+              position: fixed !important;
+              left: 50% !important;
+              top: 8rem !important;
+              transform: translateX(-50%) !important;
+              width: 92vw !important;
+              text-align: center !important;
+            }
+
+            .back {
+                display: flex !important;
+                justify-content: center !important;
+                position: fixed !important;
+                left: 4rem !important;
+                top: -0.5rem !important;
+                font-size: 1.5rem !important;
+              }
+              .back img {
+                width: 2rem !important;
+                height: 1.5rem !important;
+              }
+          }
+        
         }
       `}</style>
     </div>
