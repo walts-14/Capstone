@@ -87,7 +87,7 @@ function Sidenav() {
   className="fixed top-28 left-0 bottom-28 rounded-r-4xl p-4 bg-[var(--purple)] h-[80vh] hidden lg:flex"
   style={{ fontFamily: '"Baloo", sans-serif' }}
 >
-  <nav className="text-white flex flex-col w-full z-10 gap-10">
+  <nav className="text-white flex flex-col w-full z-10 gap-4">
     {menuItems.map((item, idx) => {
       const normalizedItemPath = normalizePath(item.path);
       const isActive = currentPath === normalizedItemPath;
