@@ -107,7 +107,7 @@
   position: relative;
   width: 100%;
   min-height: 100vh;
-  background-color: #DCDCDC;
+  background-color: #dcdcdc;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -159,9 +159,6 @@
   cursor: pointer;
   flex-shrink: 0;
 }
-
-
-
 
 .action-admin {
   position: relative;
@@ -255,24 +252,39 @@
 /* Close Button */
 .btn-close {
   position: absolute;
-  /* Position above the modal */
-  left: 59%; /* Center horizontally */
-  transform: translateX(-50%); /* Adjust for centering */
-  background-color: #e9170f; /* Red background for the close button */
+  top: 24px;
+  right: 32px;
+  background-color: #e9170f;
   border-radius: 20%;
   width: 40px;
   height: 40px;
-  font-size: 1.2rem;
+  font-size: 2rem;
   font-weight: bold;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1100; /* Ensure it stays above the modal */
+  color: #fff !important;
+  /* Remove any text-shadow or border for X */
+  text-shadow: none !important;
+  border: none;
+  z-index: 2000; /* ensure it's above modal content */
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
 }
 .btn-close:hover {
-  background-color: #e05a4f; /* Slightly lighter red on hover */
+  background-color: #e05a4f;
 }
+
+/* Center ProgressTracker inside modal */
+.progress-modal-container {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: fixed;
+  /* top/left/transform set inline in JSX */
+}
+
 /* Main Content */
 .main-content {
   margin-left: 270px; /* Adjust based on sidebar width */
@@ -288,7 +300,7 @@
   top: 20px;
   left: 20px;
   z-index: 1200;
-  background-color: #3A86D1;
+  background-color: #3a86d1;
   color: #ffffff;
   border: none;
   border-radius: 8px;
@@ -410,19 +422,31 @@
   position: relative;
   z-index: 11;
 }
-.level-item.grade7 { background-color: #A9A7A7; }
-.level-item.grade8 { background-color: #868686; }
-.level-item.grade9 { background-color: #6B6B6B; }
-.level-item.grade10 { background-color: #555555; }
-.level-item.grade11 { background-color: #3B3B3B; }
-.level-item.grade12 { background-color: #303030; }
+.level-item.grade7 {
+  background-color: #a9a7a7;
+}
+.level-item.grade8 {
+  background-color: #868686;
+}
+.level-item.grade9 {
+  background-color: #6b6b6b;
+}
+.level-item.grade10 {
+  background-color: #555555;
+}
+.level-item.grade11 {
+  background-color: #3b3b3b;
+}
+.level-item.grade12 {
+  background-color: #303030;
+}
 
 /* Ensure grade buttons have consistent white bold text and subtle shadow */
 .level-item {
   color: #ffffff !important;
   font-weight: 800;
   text-align: center;
-  box-shadow: 0 4px 0 rgba(0,0,0,0.08);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.08);
 }
 
 .level-item:hover {
@@ -432,7 +456,7 @@
 
 /* Active grade becomes slightly darker and stands out */
 .level-item.active {
-  box-shadow: 0 6px 0 rgba(0,0,0,0.12) inset;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.12) inset;
   transform: none;
 }
 
@@ -476,12 +500,10 @@
     overflow-x: auto;
   }
 
-  .contentdiv{
-   max-width: 80%;
+  .contentdiv {
+    max-width: 80%;
     overflow-x: auto;
   }
-
-
 }
 
 /* Mobile content adjustments */
@@ -569,7 +591,6 @@
   min-width: 300px;
 }
 
-
 .dashboard-table td {
   padding: 15px;
   text-align: center;
@@ -598,7 +619,7 @@
 
 .dashboard-table tbody tr:nth-child(odd) td,
 .dashboard-table tbody tr:nth-child(odd) th {
-  color: #6C7294; /* dark/purple text on light rows */
+  color: #6c7294; /* dark/purple text on light rows */
 }
 
 /* Make raster icons white on dark rows without swapping image assets */
@@ -648,7 +669,8 @@
   border-radius: 50px;
   cursor: pointer;
   padding: 0.75rem 2.5rem;
-  transition: transform 160ms ease, box-shadow 160ms ease, background-color 200ms ease;
+  transition: transform 160ms ease, box-shadow 160ms ease,
+    background-color 200ms ease;
 }
 .btn-logout:hover {
   background-color: var(--semidark-red);
@@ -661,7 +683,8 @@
 .level-item,
 .action-admin img,
 .action-admin button {
-  transition: transform 160ms ease, box-shadow 160ms ease, background-color 200ms ease, opacity 120ms ease, filter 160ms ease;
+  transition: transform 160ms ease, box-shadow 160ms ease,
+    background-color 200ms ease, opacity 120ms ease, filter 160ms ease;
   will-change: transform, opacity, box-shadow, filter;
 }
 
@@ -672,24 +695,24 @@
 }
 .level-item:hover {
   transform: translateY(-4px) scale(1.01);
-  box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
   opacity: 1;
 }
 .level-item:active {
   transform: translateY(0) scale(0.98);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.08) inset;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08) inset;
 }
 
 /* Create / popup buttons */
 .Create .btn:hover,
 .btn-create:hover {
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.16);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
 }
 .Create .btn:active,
 .btn-create:active {
   transform: translateY(0) scale(0.98);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.06) inset;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06) inset;
 }
 
 /* Action icons and buttons in table rows */
@@ -703,7 +726,7 @@
 }
 .action-admin button:hover {
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
 }
 .action-admin button:active {
   transform: translateY(0) scale(0.98);
@@ -712,11 +735,11 @@
 /* Logout button - stronger shadow on hover for prominence */
 .btn-logout:hover {
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 .btn-logout:active {
   transform: translateY(0) scale(0.98);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.06) inset;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06) inset;
 }
 
 /* Keyboard focus outlines for accessibility */
@@ -726,7 +749,7 @@
 .btn-logout:focus,
 .level-item:focus,
 .action-admin img:focus {
-  outline: 3px solid rgba(58,134,209,0.18);
+  outline: 3px solid rgba(58, 134, 209, 0.18);
   outline-offset: 4px;
 }
 .progress-modal {
@@ -905,7 +928,6 @@
 
   .holy-grail-main {
     padding: 1.5rem 1rem;
-
   }
 
   .holy-grail-footer {
@@ -1074,24 +1096,24 @@
   }
 
   .Create {
-   display: flex;
-   justify-content: end;
-   align-items: center;
-   width: 95%;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    width: 95%;
   }
 
-  .holy-grail-header{
+  .holy-grail-header {
     display: flex;
     justify-content: center;
     align-items: center;
   }
 
-   .contentdiv {
+  .contentdiv {
     max-width: 95%;
     overflow-x: auto;
   }
 
-  .holy-grail-footer{
+  .holy-grail-footer {
     padding: 1rem;
     width: 97%;
   }
@@ -1151,7 +1173,6 @@
     font-size: 0.95rem !important;
     padding: 0.45rem 0.75rem !important;
   }
-
 }
 
 /* ========================================
@@ -1307,24 +1328,24 @@
   }
 
   .Create {
-   display: flex;
-   justify-content: end;
-   align-items: center;
-   width: 95%;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    width: 95%;
   }
 
-  .holy-grail-header{
+  .holy-grail-header {
     display: flex;
     justify-content: center;
     align-items: center;
   }
 
-   .contentdiv {
+  .contentdiv {
     max-width: 95%;
     overflow-x: auto;
   }
 
-  .holy-grail-footer{
+  .holy-grail-footer {
     padding: 1rem;
     width: 97%;
   }
@@ -1336,43 +1357,43 @@
 @media (max-width: 480px) {
   /* --- Sidebar & Navigation --- */
   .sidebar-toggle {
-    width: 42px;
-    height: 42px;
-    font-size: 1.4rem;
-    top: 12px;
-    left: 12px;
+    width: 40px;
+    height: 40px;
+    font-size: 1.3rem;
+    top: 10px;
+    left: 10px;
   }
 
   .left-sidebar {
-    width: 220px;
+    width: 200px;
   }
 
   .left-sidebar h2 {
-    font-size: 24px;
-    margin: 0 0 10px 0;
+    font-size: 20px;
+    margin: 0 0 8px 0;
   }
 
   .sidebar-item {
-    font-size: 1.2rem;
-    padding: 6px;
-    gap: 5px;
+    font-size: 1.1rem;
+    padding: 5px;
+    gap: 4px;
   }
 
   .sidebar-icon {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
   }
 
   /* --- Main Content --- */
   .main-content {
-    padding: 12px 6px;
+    padding: 10px 5px;
   }
 
   /* --- Dashboard Elements --- */
   .DashboardAdmin h2 {
-    font-size: 24px;
-    padding: 5px 8px;
-    width: 98%;
+    font-size: 20px;
+    padding: 4px 6px;
+    width: 99%;
   }
 
   .Create {
@@ -1462,111 +1483,27 @@
     border-width: 2px;
   }
 
-  .popup-form .btn-create,
-  .popup-form .btn-cancel {
-    font-size: 1.2rem;
-    padding: 8px;
-  }
-
-  .progress-modal-content {
-    width: 95%;
-    max-width: 280px;
-    padding: 15px;
-  }
-
-  .progress-item {
-    font-size: 1.4rem;
-  }
-
-  .progress-section h4 {
-    font-size: 1.4rem !important;
-  }
-
   .Create {
-   display: flex;
-   justify-content: end;
-   align-items: center;
-   width: 95%;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    width: 95%;
   }
 
-  .holy-grail-header{
+  .holy-grail-header {
     display: flex;
     justify-content: center;
     align-items: center;
   }
 
-   .contentdiv {
+  .contentdiv {
     max-width: 95%;
     overflow-x: auto;
   }
 
-  .holy-grail-footer{
+  .holy-grail-footer {
     padding: 1rem;
     width: 97%;
-  }
-
-}
-
-/* ========================================
-   MEDIUM SMALL MOBILE (max-width: 425px)
-   ======================================== */
-@media (max-width: 425px) {
-  /* --- Notification Modal --- */
-  .notification-modal {
-    width: 95vw !important;
-    min-width: auto !important;
-    max-width: 95vw !important;
-    top: 5% !important;
-    padding: 1.75rem 1.25rem !important;
-    max-height: 88vh !important;
-    border-radius: 14px !important;
-  }
-
-  .notification-close-btn {
-    top: 12px !important;
-    right: 12px !important;
-    width: 34px !important;
-    height: 34px !important;
-    font-size: 1.3rem !important;
-  }
-
-  .notification-title {
-    font-size: 1.75rem !important;
-    margin-bottom: 1.25rem !important;
-  }
-
-  .notification-card {
-    flex-direction: column !important;
-    padding: 0.85rem !important;
-    gap: 0.65rem !important;
-  }
-
-  .notification-tags {
-    flex-wrap: wrap !important;
-  }
-
-  .notification-tag {
-    font-size: 0.9rem !important;
-    padding: 0.25rem 0.65rem !important;
-  }
-
-  .notification-body {
-    font-size: 0.95rem !important;
-  }
-
-  .notification-time {
-    font-size: 0.8rem !important;
-  }
-
-  .notification-actions {
-    flex-direction: row !important;
-    justify-content: flex-end !important;
-    margin-left: 0 !important;
-  }
-
-  .notification-mark-read-btn {
-    font-size: 0.9rem !important;
-    padding: 0.45rem 0.7rem !important;
   }
 }
 
@@ -1581,7 +1518,7 @@
     overflow-x: auto;
   }
 
-  .holy-grail-footer{
+  .holy-grail-footer {
     padding: 1rem;
     width: 97%;
   }
@@ -1626,13 +1563,13 @@
   }
 
   .Create {
-   display: flex;
-   justify-content: end;
-   align-items: center;
-   width: 95%;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    width: 95%;
   }
 
-  .holy-grail-header{
+  .holy-grail-header {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1720,83 +1657,58 @@
   .popup-form .form-control {
     font-size: 0.8rem;
     padding: 5px;
+    border-width: 2px;
   }
 
   .popup-form .btn-create,
   .popup-form .btn-cancel {
-    font-size: 1.1rem;
-    padding: 6px;
-  }
-
-  .progress-modal-content {
-    width: 96%;
-    max-width: 260px;
-    padding: 12px;
-  }
-
-  .progress-item {
     font-size: 1.2rem;
+    padding: 8px;
   }
 
-  .progress-section h4 {
-    font-size: 1.2rem !important;
+  .Create {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    width: 95%;
   }
 
-  /* --- Notification Modal --- */
-  .notification-modal {
-    width: 95vw !important;
-    min-width: auto !important;
-    max-width: 95vw !important;
-    top: 5% !important;
-    padding: 1.5rem 1rem !important;
-    max-height: 90vh !important;
-    border-radius: 12px !important;
+  .holy-grail-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
-  .notification-close-btn {
-    top: 10px !important;
-    right: 10px !important;
-    width: 32px !important;
-    height: 32px !important;
-    font-size: 1.2rem !important;
+  .contentdiv {
+    max-width: 95%;
+    overflow-x: auto;
   }
 
-  .notification-title {
-    font-size: 1.5rem !important;
-    margin-bottom: 1rem !important;
+  .holy-grail-footer {
+    padding: 1rem;
+    width: 97%;
   }
+}
 
-  .notification-card {
-    flex-direction: column !important;
-    padding: 0.75rem !important;
-    gap: 0.5rem !important;
-  }
+/* Progress Tracker Modal Overlay */
+.progress-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(20, 10, 40, 0.75);
+  z-index: 999;
+  pointer-events: auto;
+}
 
-  .notification-tags {
-    flex-wrap: wrap !important;
-  }
-
-  .notification-tag {
-    font-size: 0.85rem !important;
-    padding: 0.2rem 0.6rem !important;
-  }
-
-  .notification-body {
-    font-size: 0.9rem !important;
-  }
-
-  .notification-time {
-    font-size: 0.75rem !important;
-  }
-
-  .notification-actions {
-    flex-direction: row !important;
-    justify-content: flex-end !important;
-    margin-left: 0 !important;
-  }
-
-  .notification-mark-read-btn {
-    font-size: 0.85rem !important;
-    padding: 0.4rem 0.6rem !important;
-  }
+.edit-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(20, 10, 40, 0.75);
+  z-index: 999;
+  pointer-events: auto;
 }

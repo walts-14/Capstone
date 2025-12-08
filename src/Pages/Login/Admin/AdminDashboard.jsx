@@ -54,47 +54,53 @@ const DashboardAdmin = () => {
 
   // (Socket client removed) real-time updates disabled; messages are fetched when notification modal opens.
 
-const fetchAdminMessages = async (grade = "") => {
-  try {
-    setLoadingMessages(true);
+  const fetchAdminMessages = async (grade = "") => {
+    try {
+      setLoadingMessages(true);
 
-    // Be explicit about baseURL + token so we don't rely on other axios defaults
-    const tokenLocal = localStorage.getItem("token");
-    const headers = tokenLocal ? { Authorization: `Bearer ${tokenLocal}` } : {};
+      // Be explicit about baseURL + token so we don't rely on other axios defaults
+      const tokenLocal = localStorage.getItem("token");
+      const headers = tokenLocal
+        ? { Authorization: `Bearer ${tokenLocal}` }
+        : {};
 
-    const res = await axios.get("/api/messages/for-admin", {
-      baseURL: "", // use your backend host (adjust if different)
-      headers,
-      params: grade ? { grade } : {},
-    });
+      const res = await axios.get("/api/messages/for-admin", {
+        baseURL: "", // use your backend host (adjust if different)
+        headers,
+        params: grade ? { grade } : {},
+      });
 
-    // Debugging logs — check browser console / network
-    console.log("fetchAdminMessages - raw response:", res);
+      // Debugging logs — check browser console / network
+      console.log("fetchAdminMessages - raw response:", res);
 
-    // Support multiple response shapes
-    let payload = [];
-    if (Array.isArray(res.data)) payload = res.data;
-    else if (Array.isArray(res.data?.data)) payload = res.data.data;
-    else if (Array.isArray(res.data?.data?.data)) payload = res.data.data.data;
-    else if (res.data?.message && Array.isArray(res.data?.messages)) payload = res.data.messages; // another possible shape
-    else payload = []; // fallback
+      // Support multiple response shapes
+      let payload = [];
+      if (Array.isArray(res.data)) payload = res.data;
+      else if (Array.isArray(res.data?.data)) payload = res.data.data;
+      else if (Array.isArray(res.data?.data?.data))
+        payload = res.data.data.data;
+      else if (res.data?.message && Array.isArray(res.data?.messages))
+        payload = res.data.messages; // another possible shape
+      else payload = []; // fallback
 
-    console.log("fetchAdminMessages - normalized payload length:", payload.length);
-    setMessages(payload);
-  } catch (err) {
-    // Show full error info in console for debugging
-    console.error("Error fetching admin messages (detailed):", {
-      status: err?.response?.status,
-      data: err?.response?.data,
-      message: err?.message,
-    });
-    toast.error("Failed to load notifications.");
-    setMessages([]); // ensure UI shows No notifications rather than stale data
-  } finally {
-    setLoadingMessages(false);
-  }
-};
-
+      console.log(
+        "fetchAdminMessages - normalized payload length:",
+        payload.length
+      );
+      setMessages(payload);
+    } catch (err) {
+      // Show full error info in console for debugging
+      console.error("Error fetching admin messages (detailed):", {
+        status: err?.response?.status,
+        data: err?.response?.data,
+        message: err?.message,
+      });
+      toast.error("Failed to load notifications.");
+      setMessages([]); // ensure UI shows No notifications rather than stale data
+    } finally {
+      setLoadingMessages(false);
+    }
+  };
 
   useEffect(() => {
     fetchNotifications();
@@ -121,7 +127,8 @@ const fetchAdminMessages = async (grade = "") => {
       toast.success("Message deleted");
     } catch (err) {
       console.error("Failed to delete message", err?.response?.data || err);
-      const serverMsg = err?.response?.data?.message || "Failed to delete message.";
+      const serverMsg =
+        err?.response?.data?.message || "Failed to delete message.";
       toast.error(serverMsg);
     }
   };
@@ -182,12 +189,9 @@ const fetchAdminMessages = async (grade = "") => {
     // Fetch leaderboard data
     const fetchLeaderboard = async () => {
       try {
-        const response = await axios.get(
-          "/api/leaderboard",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const response = await axios.get("/api/leaderboard", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setLeaderboard(response.data);
       } catch (error) {
         console.error("Error fetching leaderboard:", error);
@@ -656,49 +660,79 @@ const fetchAdminMessages = async (grade = "") => {
               )}
 
               {showProgressTracker && (
-                <div
-                  className="progress-modal-container "
-                  style={{
-                    top: "50%",
-                    transform: "translate(-40%, -50%)",
-                     width: "73vh",
-                    height: "100vh",
-                    borderRadius: "30px",
-                    zIndex: 1000,
-                    backgroundColor: "#1a1230",
-                    border: "3px solid #7338a0",
-                    position: "fixed",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignContent: "center",
-                    justifyContent: "center",
-                    right: "20%",
-                  }}
-                >
-                  {/* Close button */}
+                <>
                   <div
+                    className="progress-modal-overlay"
                     style={{
                       position: "fixed",
-                      top: "15px",
-                      right: "92%",
-                      zIndex: 2,
+                      top: 0,
+                      left: 0,
+                      width: "100vw",
+                      height: "100vh",
+                      background: "rgba(20, 10, 40, 0.75)",
+                      zIndex: 999,
+                      pointerEvents: "auto",
+                    }}
+                  />
+                  <div
+                    className="progress-modal-container"
+                    style={{
+                      position: "fixed",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%, -50%)",
+                      width: "73vh",
+                      height: "100vh",
+                      borderRadius: "30px",
+                      zIndex: 1001,
+                      backgroundColor: "#1a1230",
+                      border: "3px solid #7338a0",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
                     }}
                   >
+                    {/* Close button in upper right, always on top */}
                     <button
                       type="button"
                       className="btn-close"
                       onClick={handleClose}
                       aria-label="Close"
                       style={{
+                        position: "absolute",
+                        top: "24px",
+                        right: "32px",
                         backgroundColor: "red",
                         borderRadius: "20%",
                         padding: "4px",
+                        width: "40px",
+                        height: "40px",
+                        fontSize: "2rem",
+                        color: "#fff",
+                        border: "none",
+                        zIndex: 2000,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        boxShadow: "0 2px 12px rgba(0,0,0,0.25)",
                       }}
-                    ></button>
+                    >
+                      ×
+                    </button>
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <ProgressTracker student={showProgressTracker} />
+                    </div>
                   </div>
-
-                  <ProgressTracker student={showProgressTracker} />
-                </div>
+                </>
               )}
 
               {/* Notification Modal */}

@@ -131,7 +131,11 @@ const SuperAdmin = () => {
     if (!grade) return; // Do not call API if grade is not selected
     try {
       const url = `/api/messages/users/year/${encodeURIComponent(grade)}`;
-      const res = await axios.get(url, { baseURL: import.meta.env.VITE_API_BASE || "https://wesign-backend-cef3encxhphtg0ds.eastasia-01.azurewebsites.net" });
+      const res = await axios.get(url, {
+        baseURL:
+          import.meta.env.VITE_API_BASE ||
+          "https://wesign-backend-cef3encxhphtg0ds.eastasia-01.azurewebsites.net",
+      });
       const raw = res.data.data || [];
       setMessageStudents(raw.map((u) => sanitizeObjectRecursive(u)));
     } catch (err) {
@@ -333,7 +337,11 @@ const SuperAdmin = () => {
       const url = grade
         ? `/api/superadmin/users/year/${encodeURIComponent(grade)}`
         : `/api/superadmin/users`;
-      const res = await axios.get(url, { baseURL: import.meta.env.VITE_API_BASE || "https://wesign-backend-cef3encxhphtg0ds.eastasia-01.azurewebsites.net" });
+      const res = await axios.get(url, {
+        baseURL:
+          import.meta.env.VITE_API_BASE ||
+          "https://wesign-backend-cef3encxhphtg0ds.eastasia-01.azurewebsites.net",
+      });
       const raw = res.data.data || [];
       // Keep raw list but sanitize each user shallowly so UI renders safely
       setUsers(raw.map((u) => sanitizeObjectRecursive(u)));
@@ -348,7 +356,11 @@ const SuperAdmin = () => {
       const url = grade
         ? `/api/superadmin/admins/year/${encodeURIComponent(grade)}`
         : `/api/superadmin/admins`;
-      const res = await axios.get(url, { baseURL: import.meta.env.VITE_API_BASE || "https://wesign-backend-cef3encxhphtg0ds.eastasia-01.azurewebsites.net" });
+      const res = await axios.get(url, {
+        baseURL:
+          import.meta.env.VITE_API_BASE ||
+          "https://wesign-backend-cef3encxhphtg0ds.eastasia-01.azurewebsites.net",
+      });
       const raw = res.data.data || [];
       setTeachers(raw.map((t) => sanitizeObjectRecursive(t)));
     } catch (err) {
@@ -540,9 +552,7 @@ const SuperAdmin = () => {
         return;
       }
 
-      const url = `/api/messages/edit/${encodeURIComponent(
-        editingMsgId
-      )}`;
+      const url = `/api/messages/edit/${encodeURIComponent(editingMsgId)}`;
 
       // Resolve teacher/student objects where possible
       const teacherObj = teachers.find(
@@ -582,7 +592,9 @@ const SuperAdmin = () => {
       );
 
       const res = await axios.put(url, payload, {
-        baseURL: import.meta.env.VITE_API_BASE || "https://wesign-backend-cef3encxhphtg0ds.eastasia-01.azurewebsites.net",
+        baseURL:
+          import.meta.env.VITE_API_BASE ||
+          "https://wesign-backend-cef3encxhphtg0ds.eastasia-01.azurewebsites.net",
         headers,
       });
 
@@ -663,9 +675,7 @@ const SuperAdmin = () => {
         return;
       }
 
-      const url = `/api/messages/${encodeURIComponent(
-        editingMsgId
-      )}`;
+      const url = `/api/messages/${encodeURIComponent(editingMsgId)}`;
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -674,7 +684,9 @@ const SuperAdmin = () => {
       console.log("handleDeleteMsg: DELETE", url, "headers:", headers);
 
       const res = await axios.delete(url, {
-        baseURL: import.meta.env.VITE_API_BASE || "https://wesign-backend-cef3encxhphtg0ds.eastasia-01.azurewebsites.net",
+        baseURL:
+          import.meta.env.VITE_API_BASE ||
+          "https://wesign-backend-cef3encxhphtg0ds.eastasia-01.azurewebsites.net",
         headers,
       });
 
@@ -844,406 +856,131 @@ const SuperAdmin = () => {
                   </div>
                   {/* Messages Popup Modal */}
                   {showMessagesPopup && (
-                    <div
-                      className="message-popup-modal"
-                      style={{
-                        position: "fixed",
-                        top: "50%",
-                        left: "50%",
-                        transform: "translate(-50%, -50%)",
-                        background: "#fff",
-                        borderRadius: "30px",
-                        border: "2px solid #e0e0e0",
-                        zIndex: 2000,
-                        width: "600px",
-                        height: "550px",
-                        boxShadow: "0 4px 24px rgba(0,0,0,0.18)",
-                        padding: "2rem 2.5rem 2rem 2.5rem",
-                        display: "flex",
-                        flexDirection: "column",
-                        overflowY: "auto",
-                      }}
-                    >
-                      {/* Close button - square, centered X */}
-                      <button
-                        type="button"
-                        onClick={handleCloseMessagesPopup}
-                        aria-label="Close"
-                        className="message-close-btn"
-                        style={{
-                          position: "absolute",
-                          top: "32px",
-                          right: "14px",
-                          backgroundColor: "#e74c3c",
-                          color: "#fff",
-                          border: "none",
-                          borderRadius: "10px",
-                          width: "48px",
-                          height: "48px",
-                          fontWeight: "bold",
-                          fontSize: "2.2rem",
-                          cursor: "pointer",
-                          zIndex: 2,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          padding: 0,
-                        }}
-                      >
-                        <span
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            width: "100%",
-                            height: "100%",
-                          }}
-                        >
-                          ×
-                        </span>
-                      </button>
-                      {/* Plus icon */}
-                      <button
-                        type="button"
-                        aria-label="Add Message"
-                        className="message-add-btn"
-                        style={{
-                          position: "absolute",
-                          top: "32px",
-                          right: "75px",
-                          backgroundColor: "#7338a0",
-                          color: "#fff",
-                          border: "none",
-                          borderRadius: "12px",
-                          width: "48px",
-                          height: "48px",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          fontSize: "2.2rem",
-                          cursor: "pointer",
-                        }}
-                        onClick={handlePlusClick}
-                      >
-                        <span
-                          style={{ fontSize: "2.7rem", fontWeight: "bold" }}
-                        >
-                          +
-                        </span>
-                      </button>
-                      <h2
-                        className="message-title"
-                        style={{
-                          color: "#222",
-                          fontWeight: "bold",
-                          fontSize: "2.2rem",
-                          marginBottom: "1.5rem",
-                        }}
-                      >
-                        Message
-                      </h2>
-                      {/* Message Form Popup */}
-                      {showMessageForm && (
-                        <div
-                          className="message-form-modal"
-                          style={{
-                            position: "fixed",
-                            top: "50%",
-                            left: "50%",
-                            transform: "translate(-50%, -50%)",
-                            background: "#fff",
-                            borderRadius: "20px",
-                            border: "2px solid #e0e0e0",
-                            zIndex: 3000,
-                            width: "400px",
-                            boxShadow: "0 4px 24px rgba(0,0,0,0.18)",
-                            padding: "2rem 2rem 1.5rem 2rem",
-                            display: "flex",
-                            flexDirection: "column",
-                            justifyContent: "flex-start",
-                          }}
-                        >
-                          <button
-                            type="button"
-                            onClick={handleMessageFormClose}
-                            aria-label="Close"
-                            className="message-form-close-btn"
-                            style={{
-                              position: "absolute",
-                              top: "18px",
-                              right: "18px",
-                              backgroundColor: "#e74c3c",
-                              color: "#fff",
-                              border: "none",
-                              borderRadius: "8px",
-                              width: "32px",
-                              height: "32px",
-                              fontWeight: "bold",
-                              fontSize: "1.5rem",
-                              cursor: "pointer",
-                              zIndex: 2,
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              padding: 0,
-                            }}
-                          >
-                            <span
-                              style={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                width: "100%",
-                                height: "100%",
-                              }}
-                            >
-                              ×
-                            </span>
-                          </button>
-                          <h2
-                            className="message-form-title"
-                            style={{
-                              color: "#222",
-                              fontWeight: "bold",
-                              fontSize: "2rem",
-                              marginBottom: "1.5rem",
-                              textAlign: "center",
-                            }}
-                          >
-                            Message
-                          </h2>
-                          <form onSubmit={handleSendMessage}>
-                            <div style={{ marginBottom: "1rem" }}>
-                              <div style={{ marginBottom: "0.7rem" }}>
-                                <label
-                                  style={{
-                                    color: "#fff",
-                                    fontWeight: "bold",
-                                    fontSize: "1.1rem",
-                                  }}
-                                >
-                                  <input
-                                    type="checkbox"
-                                    checked={sendToAllAdmins}
-                                    onChange={(e) =>
-                                      setSendToAllAdmins(e.target.checked)
-                                    }
-                                    style={{ marginRight: "0.5rem" }}
-                                  />
-                                  Send to All Admins
-                                </label>
-                              </div>
-                              <select
-                                name="teacher"
-                                value={newMessage.teacher}
-                                onChange={handleMessageInputChange}
-                                style={{
-                                  width: "100%",
-                                  padding: "0.8rem",
-                                  borderRadius: "10px",
-                                  background: "#e9e9ee",
-                                  color: "#222",
-                                  border: "1px solid #bdbdbd",
-                                  fontSize: "1.1rem",
-                                  marginBottom: "0.7rem",
-                                }}
-                                disabled={sendToAllAdmins}
-                              >
-                                <option value="">Select Teacher</option>
-                                {teachers.map((t) => (
-                                  <option key={t._id} value={t._id}>
-                                    {t.name || t.username || t.email}
-                                  </option>
-                                ))}
-                              </select>
-                              <select
-                                name="grade"
-                                value={newMessage.grade}
-                                onChange={handleMessageInputChange}
-                                style={{
-                                  width: "100%",
-                                  padding: "0.8rem",
-                                  borderRadius: "10px",
-                                  background: "#e9e9ee",
-                                  color: "#222",
-                                  border: "1px solid #bdbdbd",
-                                  fontSize: "1.1rem",
-                                  marginBottom: "0.7rem",
-                                }}
-                              >
-                                <option value="">Grade</option>
-                                <option value="GRADE 7">GRADE 7</option>
-                                <option value="GRADE 8">GRADE 8</option>
-                                <option value="GRADE 9">GRADE 9</option>
-                                <option value="GRADE 10">GRADE 10</option>
-                                <option value="GRADE 11">GRADE 11</option>
-                                <option value="GRADE 12">GRADE 12</option>
-                              </select>
-                              <select
-                                name="student"
-                                value={newMessage.student}
-                                onChange={handleMessageInputChange}
-                                style={{
-                                  width: "100%",
-                                  padding: "0.8rem",
-                                  borderRadius: "10px",
-                                  background: "#e9e9ee",
-                                  color: "#222",
-                                  border: "1px solid #bdbdbd",
-                                  fontSize: "1.1rem",
-                                  marginBottom: "0.7rem",
-                                }}
-                              >
-                                <option value="">Select Student</option>
-                                {messageStudents.map((u) => (
-                                  <option
-                                    key={u._id || u.email}
-                                    value={u._id || u.email}
-                                  >
-                                    {u.name || u.username || u.email}
-                                  </option>
-                                ))}
-                              </select>
-                              <textarea
-                                name="content"
-                                value={newMessage.content}
-                                onChange={handleMessageInputChange}
-                                placeholder="Message"
-                                style={{
-                                  width: "100%",
-                                  minHeight: "120px",
-                                  borderRadius: "10px",
-                                  background: "#e9e9ee",
-                                  color: "#222",
-                                  border: "1px solid #bdbdbd",
-                                  fontSize: "1.1rem",
-                                  padding: "0.8rem",
-                                }}
-                              />
-                            </div>
-                            <button
-                              type="submit"
-                              style={{
-                                width: "100%",
-                                background: "#1976d2",
-                                color: "#fff",
-                                border: "none",
-                                borderRadius: "10px",
-                                fontWeight: "bold",
-                                fontSize: "1.5rem",
-                                padding: "0.7rem 0",
-                                marginTop: "0.5rem",
-                                cursor: "pointer",
-                              }}
-                            >
-                              Send
-                            </button>
-                          </form>
-                        </div>
-                      )}
+                    <div>
                       <div
+                        className="message-popup-modal"
                         style={{
-                          width: "100%",
-                          marginTop: "1rem",
-                          flex: 1,
+                          position: "fixed",
+                          top: "50%",
+                          left: "50%",
+                          transform: "translate(-50%, -50%)",
+                          background: "#fff",
+                          borderRadius: "30px",
+                          border: "2px solid #e0e0e0",
+                          zIndex: 2000,
+                          width: "600px",
+                          height: "550px",
+                          boxShadow: "0 4px 24px rgba(0,0,0,0.18)",
+                          padding: "2rem 2.5rem 2rem 2.5rem",
+                          display: "flex",
+                          flexDirection: "column",
                           overflowY: "auto",
                         }}
                       >
-                        {editingMsgId === null ? (
-                          messages.length === 0 ? (
-                            <div style={{ color: "#222", textAlign: "center" }}>
-                              No messages found.
-                            </div>
-                          ) : (
-                            messages.map((msg) => (
-                              <div
-                                key={msg.id}
-                                className="message-card"
-                                style={{
-                                  background: "#2d2342",
-                                  borderRadius: "15px",
-                                  padding: "1rem",
-                                  marginBottom: "1rem",
-                                  color: "#fff",
-                                  cursor: "pointer",
-                                }}
-                                onClick={() => handleEditMsg(msg)}
-                              >
-                                <div
-                                  className="message-tags"
-                                  style={{ marginBottom: "0.5rem" }}
-                                >
-                                  <span
-                                    className="message-tag"
-                                    style={{
-                                      background: "#f7c948",
-                                      color: "#222",
-                                      borderRadius: "7px",
-                                      padding: "0.2rem 0.7rem",
-                                      fontWeight: "bold",
-                                      marginRight: "0.5rem",
-                                    }}
-                                  >
-                                    {msg.sender}
-                                  </span>
-                                  <span
-                                    className="message-tag"
-                                    style={{
-                                      background: "#7c6ae3",
-                                      color: "#fff",
-                                      borderRadius: "7px",
-                                      padding: "0.2rem 0.7rem",
-                                      fontWeight: "bold",
-                                      marginRight: "0.5rem",
-                                    }}
-                                  >
-                                    {msg.grade}
-                                  </span>
-                                  <span
-                                    className="message-tag"
-                                    style={{
-                                      background: "#bdbdbd",
-                                      color: "#222",
-                                      borderRadius: "7px",
-                                      padding: "0.2rem 0.7rem",
-                                      fontWeight: "bold",
-                                    }}
-                                  >
-                                    {msg.recipient}
-                                  </span>
-                                </div>
-                                <div
-                                  className="message-content"
-                                  style={{ color: "#fff", fontSize: "1rem" }}
-                                >
-                                  {msg.content}
-                                </div>
-                              </div>
-                            ))
-                          )
-                        ) : (
-                          // Edit Message Form
+                        {/* Close button - square, centered X */}
+                        <button
+                          type="button"
+                          onClick={handleCloseMessagesPopup}
+                          aria-label="Close"
+                          className="message-close-btn"
+                          style={{
+                            position: "absolute",
+                            top: "32px",
+                            right: "14px",
+                            backgroundColor: "#e74c3c",
+                            color: "#fff",
+                            border: "none",
+                            borderRadius: "10px",
+                            width: "48px",
+                            height: "48px",
+                            fontWeight: "bold",
+                            fontSize: "2.2rem",
+                            cursor: "pointer",
+                            zIndex: 2,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            padding: 0,
+                          }}
+                        >
+                          <span
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              width: "100%",
+                              height: "100%",
+                            }}
+                          >
+                            ×
+                          </span>
+                        </button>
+                        {/* Plus icon */}
+                        <button
+                          type="button"
+                          aria-label="Add Message"
+                          className="message-add-btn"
+                          style={{
+                            position: "absolute",
+                            top: "32px",
+                            right: "75px",
+                            backgroundColor: "#7338a0",
+                            color: "#fff",
+                            border: "none",
+                            borderRadius: "12px",
+                            width: "48px",
+                            height: "48px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontSize: "2.2rem",
+                            cursor: "pointer",
+                          }}
+                          onClick={handlePlusClick}
+                        >
+                          <span
+                            style={{ fontSize: "2.7rem", fontWeight: "bold" }}
+                          >
+                            +
+                          </span>
+                        </button>
+                        <h2
+                          className="message-title"
+                          style={{
+                            color: "#222",
+                            fontWeight: "bold",
+                            fontSize: "2.2rem",
+                            marginBottom: "1.5rem",
+                          }}
+                        >
+                          Message
+                        </h2>
+                        {/* Message Form Popup */}
+                        {showMessageForm && (
                           <div
+                            className="message-form-modal"
                             style={{
                               position: "fixed",
                               top: "50%",
                               left: "50%",
                               transform: "translate(-50%, -50%)",
-                              background: "#2d2342",
+                              background: "#fff",
                               borderRadius: "20px",
-                              border: "2px solid #7338a0",
+                              border: "2px solid #e0e0e0",
                               zIndex: 3000,
                               width: "400px",
-                              boxShadow: "0 0 20px #000",
+                              boxShadow: "0 4px 24px rgba(0,0,0,0.18)",
                               padding: "2rem 2rem 1.5rem 2rem",
                               display: "flex",
                               flexDirection: "column",
+                              justifyContent: "flex-start",
                             }}
                           >
                             <button
                               type="button"
-                              onClick={() => setEditingMsgId(null)}
+                              onClick={handleMessageFormClose}
                               aria-label="Close"
+                              className="message-form-close-btn"
                               style={{
                                 position: "absolute",
                                 top: "18px",
@@ -1277,8 +1014,9 @@ const SuperAdmin = () => {
                               </span>
                             </button>
                             <h2
+                              className="message-form-title"
                               style={{
-                                color: "#fff",
+                                color: "#222",
                                 fontWeight: "bold",
                                 fontSize: "2rem",
                                 marginBottom: "1.5rem",
@@ -1287,23 +1025,42 @@ const SuperAdmin = () => {
                             >
                               Message
                             </h2>
-                            <form onSubmit={handleApplyMsgEdit}>
+                            <form onSubmit={handleSendMessage}>
                               <div style={{ marginBottom: "1rem" }}>
+                                <div style={{ marginBottom: "0.7rem" }}>
+                                  <label
+                                    style={{
+                                      color: "#fff",
+                                      fontWeight: "bold",
+                                      fontSize: "1.1rem",
+                                    }}
+                                  >
+                                    <input
+                                      type="checkbox"
+                                      checked={sendToAllAdmins}
+                                      onChange={(e) =>
+                                        setSendToAllAdmins(e.target.checked)
+                                      }
+                                      style={{ marginRight: "0.5rem" }}
+                                    />
+                                    Send to All Admins
+                                  </label>
+                                </div>
                                 <select
                                   name="teacher"
-                                  value={editMsgForm.teacher}
-                                  onChange={handleEditMsgFormChange}
+                                  value={newMessage.teacher}
+                                  onChange={handleMessageInputChange}
                                   style={{
                                     width: "100%",
                                     padding: "0.8rem",
                                     borderRadius: "10px",
-                                    background: "#3c2e5e",
-                                    color: "#fff",
-                                    border: "none",
+                                    background: "#e9e9ee",
+                                    color: "#222",
+                                    border: "1px solid #bdbdbd",
                                     fontSize: "1.1rem",
                                     marginBottom: "0.7rem",
                                   }}
-                                  required
+                                  disabled={sendToAllAdmins}
                                 >
                                   <option value="">Select Teacher</option>
                                   {teachers.map((t) => (
@@ -1314,19 +1071,18 @@ const SuperAdmin = () => {
                                 </select>
                                 <select
                                   name="grade"
-                                  value={editMsgForm.grade}
-                                  onChange={handleEditMsgFormChange}
+                                  value={newMessage.grade}
+                                  onChange={handleMessageInputChange}
                                   style={{
                                     width: "100%",
                                     padding: "0.8rem",
                                     borderRadius: "10px",
-                                    background: "#3c2e5e",
-                                    color: "#fff",
-                                    border: "none",
+                                    background: "#e9e9ee",
+                                    color: "#222",
+                                    border: "1px solid #bdbdbd",
                                     fontSize: "1.1rem",
                                     marginBottom: "0.7rem",
                                   }}
-                                  required
                                 >
                                   <option value="">Grade</option>
                                   <option value="GRADE 7">GRADE 7</option>
@@ -1338,19 +1094,18 @@ const SuperAdmin = () => {
                                 </select>
                                 <select
                                   name="student"
-                                  value={editMsgForm.student}
-                                  onChange={handleEditMsgFormChange}
+                                  value={newMessage.student}
+                                  onChange={handleMessageInputChange}
                                   style={{
                                     width: "100%",
                                     padding: "0.8rem",
                                     borderRadius: "10px",
-                                    background: "#3c2e5e",
-                                    color: "#fff",
-                                    border: "none",
+                                    background: "#e9e9ee",
+                                    color: "#222",
+                                    border: "1px solid #bdbdbd",
                                     fontSize: "1.1rem",
                                     marginBottom: "0.7rem",
                                   }}
-                                  required
                                 >
                                   <option value="">Select Student</option>
                                   {messageStudents.map((u) => (
@@ -1364,64 +1119,325 @@ const SuperAdmin = () => {
                                 </select>
                                 <textarea
                                   name="content"
-                                  value={editMsgForm.content}
-                                  onChange={handleEditMsgFormChange}
+                                  value={newMessage.content}
+                                  onChange={handleMessageInputChange}
                                   placeholder="Message"
                                   style={{
                                     width: "100%",
                                     minHeight: "120px",
                                     borderRadius: "10px",
-                                    background: "#3c2e5e",
-                                    color: "#fff",
-                                    border: "2px solid #bdbdbd",
+                                    background: "#e9e9ee",
+                                    color: "#222",
+                                    border: "1px solid #bdbdbd",
                                     fontSize: "1.1rem",
                                     padding: "0.8rem",
                                   }}
-                                  required
                                 />
                               </div>
-                              <div
+                              <button
+                                type="submit"
                                 style={{
-                                  display: "flex",
-                                  justifyContent: "space-between",
-                                  marginTop: "1rem",
+                                  width: "100%",
+                                  background: "#1976d2",
+                                  color: "#fff",
+                                  border: "none",
+                                  borderRadius: "10px",
+                                  fontWeight: "bold",
+                                  fontSize: "1.5rem",
+                                  padding: "0.7rem 0",
+                                  marginTop: "0.5rem",
+                                  cursor: "pointer",
                                 }}
                               >
-                                <button
-                                  type="submit"
-                                  style={{
-                                    background: "#7338a0",
-                                    color: "#fff",
-                                    border: "none",
-                                    borderRadius: "10px",
-                                    fontWeight: "bold",
-                                    fontSize: "1.5rem",
-                                    padding: "0.7rem 2rem",
-                                    cursor: "pointer",
-                                  }}
-                                >
-                                  Apply
-                                </button>
-                                <button
-                                  type="button"
-                                  style={{
-                                    background: "#e74c3c",
-                                    color: "#fff",
-                                    border: "none",
-                                    borderRadius: "10px",
-                                    fontWeight: "bold",
-                                    fontSize: "1.5rem",
-                                    padding: "0.7rem 2rem",
-                                    cursor: "pointer",
-                                  }}
-                                  onClick={handleDeleteMsg}
-                                >
-                                  Delete
-                                </button>
-                              </div>
+                                Send
+                              </button>
                             </form>
                           </div>
                         )}
+                        <div
+                          style={{
+                            width: "100%",
+                            marginTop: "1rem",
+                            flex: 1,
+                            overflowY: "auto",
+                          }}
+                        >
+                          {editingMsgId === null ? (
+                            messages.length === 0 ? (
+                              <div
+                                style={{ color: "#222", textAlign: "center" }}
+                              >
+                                No messages found.
+                              </div>
+                            ) : (
+                              messages.map((msg) => (
+                                <div
+                                  key={msg.id}
+                                  className="message-card"
+                                  style={{
+                                    background: "#2d2342",
+                                    borderRadius: "15px",
+                                    padding: "1rem",
+                                    marginBottom: "1rem",
+                                    color: "#fff",
+                                    cursor: "pointer",
+                                  }}
+                                  onClick={() => handleEditMsg(msg)}
+                                >
+                                  <div
+                                    className="message-tags"
+                                    style={{ marginBottom: "0.5rem" }}
+                                  >
+                                    <span
+                                      className="message-tag"
+                                      style={{
+                                        background: "#f7c948",
+                                        color: "#222",
+                                        borderRadius: "7px",
+                                        padding: "0.2rem 0.7rem",
+                                        fontWeight: "bold",
+                                        marginRight: "0.5rem",
+                                      }}
+                                    >
+                                      {msg.sender}
+                                    </span>
+                                    <span
+                                      className="message-tag"
+                                      style={{
+                                        background: "#7c6ae3",
+                                        color: "#fff",
+                                        borderRadius: "7px",
+                                        padding: "0.2rem 0.7rem",
+                                        fontWeight: "bold",
+                                        marginRight: "0.5rem",
+                                      }}
+                                    >
+                                      {msg.grade}
+                                    </span>
+                                    <span
+                                      className="message-tag"
+                                      style={{
+                                        background: "#bdbdbd",
+                                        color: "#222",
+                                        borderRadius: "7px",
+                                        padding: "0.2rem 0.7rem",
+                                        fontWeight: "bold",
+                                      }}
+                                    >
+                                      {msg.recipient}
+                                    </span>
+                                  </div>
+                                  <div
+                                    className="message-content"
+                                    style={{ color: "#fff", fontSize: "1rem" }}
+                                  >
+                                    {msg.content}
+                                  </div>
+                                </div>
+                              ))
+                            )
+                          ) : (
+                            // Edit Message Form
+                            <div
+                              style={{
+                                position: "fixed",
+                                top: "50%",
+                                left: "50%",
+                                transform: "translate(-50%, -50%)",
+                                background: "#2d2342",
+                                borderRadius: "20px",
+                                border: "2px solid #7338a0",
+                                zIndex: 3000,
+                                width: "400px",
+                                boxShadow: "0 0 20px #000",
+                                padding: "2rem 2rem 1.5rem 2rem",
+                                display: "flex",
+                                flexDirection: "column",
+                              }}
+                            >
+                              <button
+                                type="button"
+                                onClick={() => setEditingMsgId(null)}
+                                aria-label="Close"
+                                style={{
+                                  position: "absolute",
+                                  top: "18px",
+                                  right: "18px",
+                                  backgroundColor: "#e74c3c",
+                                  color: "#fff",
+                                  border: "none",
+                                  borderRadius: "8px",
+                                  width: "32px",
+                                  height: "32px",
+                                  fontWeight: "bold",
+                                  fontSize: "1.5rem",
+                                  cursor: "pointer",
+                                  zIndex: 2,
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  padding: 0,
+                                }}
+                              >
+                                <span
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    width: "100%",
+                                    height: "100%",
+                                  }}
+                                >
+                                  ×
+                                </span>
+                              </button>
+                              <h2
+                                style={{
+                                  color: "#fff",
+                                  fontWeight: "bold",
+                                  fontSize: "2rem",
+                                  marginBottom: "1.5rem",
+                                  textAlign: "center",
+                                }}
+                              >
+                                Message
+                              </h2>
+                              <form onSubmit={handleApplyMsgEdit}>
+                                <div style={{ marginBottom: "1rem" }}>
+                                  <select
+                                    name="teacher"
+                                    value={editMsgForm.teacher}
+                                    onChange={handleEditMsgFormChange}
+                                    style={{
+                                      width: "100%",
+                                      padding: "0.8rem",
+                                      borderRadius: "10px",
+                                      background: "#3c2e5e",
+                                      color: "#fff",
+                                      border: "none",
+                                      fontSize: "1.1rem",
+                                      marginBottom: "0.7rem",
+                                    }}
+                                    required
+                                  >
+                                    <option value="">Select Teacher</option>
+                                    {teachers.map((t) => (
+                                      <option key={t._id} value={t._id}>
+                                        {t.name || t.username || t.email}
+                                      </option>
+                                    ))}
+                                  </select>
+                                  <select
+                                    name="grade"
+                                    value={editMsgForm.grade}
+                                    onChange={handleEditMsgFormChange}
+                                    style={{
+                                      width: "100%",
+                                      padding: "0.8rem",
+                                      borderRadius: "10px",
+                                      background: "#3c2e5e",
+                                      color: "#fff",
+                                      border: "none",
+                                      fontSize: "1.1rem",
+                                      marginBottom: "0.7rem",
+                                    }}
+                                    required
+                                  >
+                                    <option value="">Grade</option>
+                                    <option value="GRADE 7">GRADE 7</option>
+                                    <option value="GRADE 8">GRADE 8</option>
+                                    <option value="GRADE 9">GRADE 9</option>
+                                    <option value="GRADE 10">GRADE 10</option>
+                                    <option value="GRADE 11">GRADE 11</option>
+                                    <option value="GRADE 12">GRADE 12</option>
+                                  </select>
+                                  <select
+                                    name="student"
+                                    value={editMsgForm.student}
+                                    onChange={handleEditMsgFormChange}
+                                    style={{
+                                      width: "100%",
+                                      padding: "0.8rem",
+                                      borderRadius: "10px",
+                                      background: "#3c2e5e",
+                                      color: "#fff",
+                                      border: "none",
+                                      fontSize: "1.1rem",
+                                      marginBottom: "0.7rem",
+                                    }}
+                                    required
+                                  >
+                                    <option value="">Select Student</option>
+                                    {messageStudents.map((u) => (
+                                      <option
+                                        key={u._id || u.email}
+                                        value={u._id || u.email}
+                                      >
+                                        {u.name || u.username || u.email}
+                                      </option>
+                                    ))}
+                                  </select>
+                                  <textarea
+                                    name="content"
+                                    value={editMsgForm.content}
+                                    onChange={handleEditMsgFormChange}
+                                    placeholder="Message"
+                                    style={{
+                                      width: "100%",
+                                      minHeight: "120px",
+                                      borderRadius: "10px",
+                                      background: "#3c2e5e",
+                                      color: "#fff",
+                                      border: "2px solid #bdbdbd",
+                                      fontSize: "1.1rem",
+                                      padding: "0.8rem",
+                                    }}
+                                    required
+                                  />
+                                </div>
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    marginTop: "1rem",
+                                  }}
+                                >
+                                  <button
+                                    type="submit"
+                                    style={{
+                                      background: "#7338a0",
+                                      color: "#fff",
+                                      border: "none",
+                                      borderRadius: "10px",
+                                      fontWeight: "bold",
+                                      fontSize: "1.5rem",
+                                      padding: "0.7rem 2rem",
+                                      cursor: "pointer",
+                                    }}
+                                  >
+                                    Apply
+                                  </button>
+                                  <button
+                                    type="button"
+                                    style={{
+                                      background: "#e74c3c",
+                                      color: "#fff",
+                                      border: "none",
+                                      borderRadius: "10px",
+                                      fontWeight: "bold",
+                                      fontSize: "1.5rem",
+                                      padding: "0.7rem 2rem",
+                                      cursor: "pointer",
+                                    }}
+                                    onClick={handleDeleteMsg}
+                                  >
+                                    Delete
+                                  </button>
+                                </div>
+                              </form>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
                   )}
@@ -1783,56 +1799,101 @@ const SuperAdmin = () => {
 
               {/* Progress modal (SuperAdmin uses this) */}
               {showProgressTracker && (
-                <div
-                  className="progress-modal-container"
-                  style={{
-                    top: "50%",
-                    transform: "translate(-40%, -50%)",
-                    width: "73vh",
-                    height: "100vh",
-                    borderRadius: "30px",
-                    zIndex: 1000,
-                    backgroundColor: "#1a1230",
-                    border: "3px solid #7338a0",
-                    position: "fixed",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignContent: "center",
-                    justifyContent: "center",
-                    right: "20%",
-                  }}
-                >
+                <>
+                  {/* Overlay to darken background and block clicks */}
                   <div
+                    className="progress-modal-overlay"
                     style={{
                       position: "fixed",
-                      top: "15px",
-                      right: "92%",
-                      zIndex: 2,
+                      top: 0,
+                      left: 0,
+                      width: "100vw",
+                      height: "100vh",
+                      background: "rgba(20, 10, 40, 0.75)",
+                      zIndex: 999,
+                      pointerEvents: "auto",
+                    }}
+                  />
+                  <div
+                    className="progress-modal-container"
+                    style={{
+                      position: "fixed",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-48%, -50%)", // shift content a bit to the left
+                      width: "73vh",
+                      height: "100vh",
+                      borderRadius: "30px",
+                      zIndex: 1001,
+                      backgroundColor: "#1a1230",
+                      border: "3px solid #7338a0",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      boxSizing: "border-box",
+                      paddingLeft: "0", // remove left padding
+                      paddingRight: "24px", // add a little right padding if needed
                     }}
                   >
+                    {/* Close button in upper right, always on top */}
                     <button
                       type="button"
                       className="btn-close"
                       onClick={handleClose}
                       aria-label="Close"
                       style={{
-                        backgroundColor: "red",
+                        position: "absolute",
+                        top: "24px",
+                        right: "32px",
+                        backgroundColor: "#e9170f",
                         borderRadius: "20%",
                         padding: "4px",
+                        width: "40px",
+                        height: "40px",
+                        fontSize: "2rem",
+                        color: "#fff",
+                        border: "none",
+                        zIndex: 2000,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        boxShadow: "0 2px 12px rgba(0,0,0,0.25)",
                       }}
-                    ></button>
+                    >
+                      {/* Only white X, no black shadow or border */}
+                      <span
+                        style={{
+                          color: "#fff",
+                          fontWeight: "bold",
+                          fontSize: "2rem",
+                          lineHeight: "1",
+                        }}
+                      >
+                        ×
+                      </span>
+                    </button>
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flex-start", // align content to the left
+                        paddingLeft: "12px", // add a bit of left padding for balance
+                      }}
+                    >
+                      <ProgressTracker
+                        key={
+                          unwrapDefault(showProgressTracker.email) ||
+                          unwrapDefault(showProgressTracker.username) ||
+                          Date.now()
+                        }
+                        student={showProgressTracker}
+                      />
+                    </div>
                   </div>
-
-                  {/* key ensures remount when different student is opened */}
-                  <ProgressTracker
-                    key={
-                      unwrapDefault(showProgressTracker.email) ||
-                      unwrapDefault(showProgressTracker.username) ||
-                      Date.now()
-                    }
-                    student={showProgressTracker}
-                  />
-                </div>
+                </>
               )}
             </div>
           )}

@@ -202,16 +202,47 @@
   z-index: 1;
 }
 
+/* Progress Tracker Modal Overlay */
+.progress-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(20, 10, 40, 0.75);
+  z-index: 999;
+  pointer-events: auto;
+}
+
+.btn-close {
+  position: absolute;
+  top: 24px;
+  right: 32px;
+  background-color: #e9170f;
+  border-radius: 20%;
+  width: 40px;
+  height: 40px;
+  font-size: 2rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  border: none;
+  z-index: 1100;
+}
+.btn-close:hover {
+  background-color: #e05a4f;
+}
 
 @media (max-width: 375px) {
-
-   .contentsuper {
+  .contentsuper {
     max-width: 96%;
     overflow-x: auto;
   }
 
-
-  .supertitle{
+  .supertitle {
     font-size: 1rem !important;
   }
 
