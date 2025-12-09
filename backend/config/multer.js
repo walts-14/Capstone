@@ -44,9 +44,6 @@ export const uploadImage = multer({
   },
 });
 
-// default export: profile picture middleware (used by routes expecting uploadImage as default)
-export default uploadImage;
-
 // ---------- Video Upload Middleware ----------
 // ensure uploads/videos directory exists
 try {
