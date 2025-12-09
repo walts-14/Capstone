@@ -6,6 +6,10 @@ const videoLessonSchema = new mongoose.Schema({
     required: true,
     // The URL or path to the video file representing the sign/word
   },
+  publicId: {
+    type: String,
+    // Cloudinary public ID for generating optimized URLs
+  },
   word: {
     type: String,
     required: true,
