@@ -5,7 +5,7 @@ import { uploadVideo as uploadVideoController, getVideos } from "../controllers/
 const router = express.Router();
 
 // POST /api/videos/upload - Upload video
-router.post("/upload", protect, uploadVideoMiddleware.single("file"), uploadVideoController);
+router.post("/upload", uploadVideoMiddleware.single("file"), uploadVideoController);
 
 // GET /api/videos - Retrieve videos with optional query parameters
 router.get("/", getVideos);
