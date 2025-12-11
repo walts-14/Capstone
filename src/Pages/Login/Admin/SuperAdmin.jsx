@@ -1565,236 +1565,252 @@ const SuperAdmin = () => {
               })()}
 
               {showForm && (
-                <div
-                  className="popup-form"
-                  style={{
-                    position: "fixed",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                    background: "#fff",
-                    borderRadius: "20px",
-                    border: "2px solid #e0e0e0",
-                    zIndex: 3000,
-                    width: "400px",
-                    boxShadow: "0 4px 24px rgba(0,0,0,0.18)",
-                    padding: "2rem 2rem 1.5rem 2rem",
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "flex-start",
-                  }}
-                >
-                  <div className="popup-content">
-                    <h3
-                      style={{
-                        color: "#2d254c",
-                        fontWeight: "bold",
-                        fontSize: "2rem",
-                        marginBottom: "1.5rem",
-                        textAlign: "center",
-                      }}
-                    >
-                      {formMode === "edit" ? "Edit" : "Add"}{" "}
-                      {activeTab.slice(0, -1)}
-                    </h3>
-                    <form onSubmit={handleFormSubmit}>
-                      <div className="form-group">
-                        <input
-                          name="name"
-                          value={formData.name}
-                          onChange={handleInputChange}
-                          className="form-control"
-                          placeholder="Name"
-                          required
-                          style={{
-                            width: "100%",
-                            marginBottom: "16px",
-                            padding: "12px 16px",
-                            borderRadius: "8px",
-                            border: "1px solid #d1d5db",
-                            background: "#6C7294",
-                            color: "#fff",
-                            fontSize: "1rem",
-                            "::placeholder": { color: "#bfc3d1", opacity: 1 },
-                          }}
-                          placeholderTextColor="#bfc3d1"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <input
-                          name="username"
-                          value={formData.username}
-                          onChange={handleInputChange}
-                          className="form-control text-yellow-400"
-                          placeholder="Username"
-                          required
-                          style={{
-                            width: "100%",
-                            marginBottom: "16px",
-                            padding: "12px 16px",
-                            borderRadius: "8px",
-                            border: "1px solid #d1d5db",
-                            background: "#6C7294",
-                            color: "#fff",
-                            fontSize: "1rem",
-                            "::placeholder": { color: "#bfc3d1", opacity: 1 },
-                          }}
-                          placeholderTextColor="#bfc3d1"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <select
-                          name="yearLevel"
-                          value={formData.yearLevel}
-                          onChange={handleInputChange}
-                          className="form-control"
-                          required
-                          style={{
-                            width: "100%",
-                            marginBottom: "16px",
-                            padding: "12px 16px",
-                            borderRadius: "8px",
-                            border: "1px solid #d1d5db",
-                            background: "#6C7294",
-                            color: "#fff",
-                            fontSize: "1rem",
-                          }}
-                        >
-                          <option value="" style={{ color: "#bfc3d1" }}>
-                            -- Select Year Level --
-                          </option>
-                          <option value="Grade 7">Grade 7</option>
-                          <option value="Grade 8">Grade 8</option>
-                          <option value="Grade 9">Grade 9</option>
-                          <option value="Grade 10">Grade 10</option>
-                          <option value="Grade 11">Grade 11</option>
-                          <option value="Grade 12">Grade 12</option>
-                        </select>
-                      </div>
-                      <div className="form-group">
-                        <input
-                          type="email"
-                          name="email"
-                          value={formData.email}
-                          onChange={handleInputChange}
-                          className="form-control"
-                          placeholder="Email"
-                          required
-                          style={{
-                            width: "100%",
-                            marginBottom: "16px",
-                            padding: "12px 16px",
-                            borderRadius: "8px",
-                            border: "1px solid #d1d5db",
-                            background: "#6C7294",
-                            color: "#fff",
-                            fontSize: "1rem",
-                            "::placeholder": { color: "#bfc3d1", opacity: 1 },
-                          }}
-                          placeholderTextColor="#bfc3d1"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <input
-                          type="password"
-                          name="password"
-                          value={formData.password}
-                          onChange={handleInputChange}
-                          className="form-control"
-                          placeholder="Your password"
-                          required={formMode !== "edit"}
-                          style={{
-                            width: "100%",
-                            marginBottom: "16px",
-                            padding: "12px 16px",
-                            borderRadius: "8px",
-                            border: "1px solid #d1d5db",
-                            background: "#6C7294",
-                            color: "#fff",
-                            fontSize: "1rem",
-                            "::placeholder": { color: "#bfc3d1", opacity: 1 },
-                          }}
-                          placeholderTextColor="#bfc3d1"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <input
-                          type="password"
-                          name="confirmPassword"
-                          value={formData.confirmPassword}
-                          onChange={handleInputChange}
-                          className="form-control"
-                          placeholder="Repeat password"
-                          required={formMode !== "edit"}
-                          style={{
-                            width: "100%",
-                            marginBottom: "16px",
-                            padding: "12px 16px",
-                            borderRadius: "8px",
-                            border: "1px solid #d1d5db",
-                            background: "#6C7294",
-                            color: "#fff",
-                            fontSize: "1rem",
-                            "::placeholder": { color: "#bfc3d1", opacity: 1 },
-                          }}
-                          placeholderTextColor="#bfc3d1"
-                        />
-                      </div>
-                      <div
-                        className="form-actions"
+                <>
+                  {/* Modal overlay to darken background and block interaction */}
+                  <div
+                    className="edit-modal-overlay"
+                    style={{
+                      position: "fixed",
+                      top: 0,
+                      left: 0,
+                      width: "100vw",
+                      height: "100vh",
+                      background: "rgba(20, 10, 40, 0.75)",
+                      zIndex: 2999,
+                      pointerEvents: "auto",
+                    }}
+                  />
+                  <div
+                    className="popup-form"
+                    style={{
+                      position: "fixed",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%, -50%)",
+                      background: "#fff",
+                      borderRadius: "20px",
+                      border: "2px solid #e0e0e0",
+                      zIndex: 3000,
+                      width: "400px",
+                      boxShadow: "0 4px 24px rgba(0,0,0,0.18)",
+                      padding: "2rem 2rem 1.5rem 2rem",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "flex-start",
+                    }}
+                  >
+                    <div className="popup-content">
+                      <h3
                         style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: "10px",
-                          marginTop: "10px",
+                          color: "#2d254c",
+                          fontWeight: "bold",
+                          fontSize: "2rem",
+                          marginBottom: "1.5rem",
+                          textAlign: "center",
                         }}
                       >
-                        <button
-                          type="submit"
-                          className="btn-create"
-                          disabled={isSubmitting}
+                        {formMode === "edit" ? "Edit" : "Add"}{" "}
+                        {activeTab.slice(0, -1)}
+                      </h3>
+                      <form onSubmit={handleFormSubmit}>
+                        <div className="form-group">
+                          <input
+                            name="name"
+                            value={formData.name}
+                            onChange={handleInputChange}
+                            className="form-control"
+                            placeholder="Name"
+                            required
+                            style={{
+                              width: "100%",
+                              marginBottom: "16px",
+                              padding: "12px 16px",
+                              borderRadius: "8px",
+                              border: "1px solid #d1d5db",
+                              background: "#6C7294",
+                              color: "#fff",
+                              fontSize: "1rem",
+                              "::placeholder": { color: "#bfc3d1", opacity: 1 },
+                            }}
+                            placeholderTextColor="#bfc3d1"
+                          />
+                        </div>
+                        <div className="form-group">
+                          <input
+                            name="username"
+                            value={formData.username}
+                            onChange={handleInputChange}
+                            className="form-control text-yellow-400"
+                            placeholder="Username"
+                            required
+                            style={{
+                              width: "100%",
+                              marginBottom: "16px",
+                              padding: "12px 16px",
+                              borderRadius: "8px",
+                              border: "1px solid #d1d5db",
+                              background: "#6C7294",
+                              color: "#fff",
+                              fontSize: "1rem",
+                              "::placeholder": { color: "#bfc3d1", opacity: 1 },
+                            }}
+                            placeholderTextColor="#bfc3d1"
+                          />
+                        </div>
+                        <div className="form-group">
+                          <select
+                            name="yearLevel"
+                            value={formData.yearLevel}
+                            onChange={handleInputChange}
+                            className="form-control"
+                            required
+                            style={{
+                              width: "100%",
+                              marginBottom: "16px",
+                              padding: "12px 16px",
+                              borderRadius: "8px",
+                              border: "1px solid #d1d5db",
+                              background: "#6C7294",
+                              color: "#fff",
+                              fontSize: "1rem",
+                            }}
+                          >
+                            <option value="" style={{ color: "#bfc3d1" }}>
+                              -- Select Year Level --
+                            </option>
+                            <option value="Grade 7">Grade 7</option>
+                            <option value="Grade 8">Grade 8</option>
+                            <option value="Grade 9">Grade 9</option>
+                            <option value="Grade 10">Grade 10</option>
+                            <option value="Grade 11">Grade 11</option>
+                            <option value="Grade 12">Grade 12</option>
+                          </select>
+                        </div>
+                        <div className="form-group">
+                          <input
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            className="form-control"
+                            placeholder="Email"
+                            required
+                            style={{
+                              width: "100%",
+                              marginBottom: "16px",
+                              padding: "12px 16px",
+                              borderRadius: "8px",
+                              border: "1px solid #d1d5db",
+                              background: "#6C7294",
+                              color: "#fff",
+                              fontSize: "1rem",
+                              "::placeholder": { color: "#bfc3d1", opacity: 1 },
+                            }}
+                            placeholderTextColor="#bfc3d1"
+                          />
+                        </div>
+                        <div className="form-group">
+                          <input
+                            type="password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleInputChange}
+                            className="form-control"
+                            placeholder="Your password"
+                            required={formMode !== "edit"}
+                            style={{
+                              width: "100%",
+                              marginBottom: "16px",
+                              padding: "12px 16px",
+                              borderRadius: "8px",
+                              border: "1px solid #d1d5db",
+                              background: "#6C7294",
+                              color: "#fff",
+                              fontSize: "1rem",
+                              "::placeholder": { color: "#bfc3d1", opacity: 1 },
+                            }}
+                            placeholderTextColor="#bfc3d1"
+                          />
+                        </div>
+                        <div className="form-group">
+                          <input
+                            type="password"
+                            name="confirmPassword"
+                            value={formData.confirmPassword}
+                            onChange={handleInputChange}
+                            className="form-control"
+                            placeholder="Repeat password"
+                            required={formMode !== "edit"}
+                            style={{
+                              width: "100%",
+                              marginBottom: "16px",
+                              padding: "12px 16px",
+                              borderRadius: "8px",
+                              border: "1px solid #d1d5db",
+                              background: "#6C7294",
+                              color: "#fff",
+                              fontSize: "1rem",
+                              "::placeholder": { color: "#bfc3d1", opacity: 1 },
+                            }}
+                            placeholderTextColor="#bfc3d1"
+                          />
+                        </div>
+                        <div
+                          className="form-actions"
                           style={{
-                            width: "100%",
-                            padding: "12px 0",
-                            borderRadius: "8px",
-                            border: "none",
-                            fontSize: "1rem",
-                            fontWeight: "bold",
-                            cursor: "pointer",
-                            background: "#2563eb",
-                            color: "#fff",
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "10px",
+                            marginTop: "10px",
                           }}
                         >
-                          {isSubmitting
-                            ? formMode === "edit"
-                              ? "Saving..."
-                              : "Creating..."
-                            : formMode === "edit"
-                            ? "Save Changes"
-                            : "Create"}
-                        </button>
-                        <button
-                          type="button"
-                          className="btn-cancel"
-                          onClick={() => setShowForm(false)}
-                          style={{
-                            width: "100%",
-                            padding: "12px 0",
-                            borderRadius: "8px",
-                            border: "none",
-                            fontSize: "1rem",
-                            fontWeight: "bold",
-                            cursor: "pointer",
-                            background: "#ef4444",
-                            color: "#fff",
-                          }}
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    </form>
+                          <button
+                            type="submit"
+                            className="btn-create"
+                            disabled={isSubmitting}
+                            style={{
+                              width: "100%",
+                              padding: "12px 0",
+                              borderRadius: "8px",
+                              border: "none",
+                              fontSize: "1rem",
+                              fontWeight: "bold",
+                              cursor: "pointer",
+                              background: "#2563eb",
+                              color: "#fff",
+                            }}
+                          >
+                            {isSubmitting
+                              ? formMode === "edit"
+                                ? "Saving..."
+                                : "Creating..."
+                              : formMode === "edit"
+                              ? "Save Changes"
+                              : "Create"}
+                          </button>
+                          <button
+                            type="button"
+                            className="btn-cancel"
+                            onClick={() => setShowForm(false)}
+                            style={{
+                              width: "100%",
+                              padding: "12px 0",
+                              borderRadius: "8px",
+                              border: "none",
+                              fontSize: "1rem",
+                              fontWeight: "bold",
+                              cursor: "pointer",
+                              background: "#ef4444",
+                              color: "#fff",
+                            }}
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </form>
+                    </div>
                   </div>
-                </div>
+                </>
               )}
 
               {/* Progress modal (SuperAdmin uses this) */}

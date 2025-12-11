@@ -558,105 +558,121 @@ const DashboardAdmin = () => {
               </div> */}
 
               {showForm && (
-                <div className="popup-form">
-                  <div className="popup-content">
-                    <h3>{formData.id ? "Edit Student" : "Add Student"}</h3>
-                    <form onSubmit={handleFormSubmit}>
-                      <div className="form-group">
-                        <input
-                          name="name"
-                          value={formData.name}
-                          onChange={handleInputChange}
-                          className="form-control"
-                          placeholder="Name"
-                          required
-                        />
-                      </div>
-                      <div className="form-group">
-                        <input
-                          name="username"
-                          value={formData.username}
-                          onChange={handleInputChange}
-                          className="form-control"
-                          placeholder="Username"
-                          required
-                        />
-                      </div>
-                      <div className="form-group">
-                        <select
-                          name="yearLevel"
-                          value={formData.yearLevel}
-                          onChange={handleInputChange}
-                          className="form-control"
-                          required
-                        >
-                          <option value="">-- Select Year Level --</option>
-                          <option value="Grade 7">Grade 7</option>
-                          <option value="Grade 8">Grade 8</option>
-                          <option value="Grade 9">Grade 9</option>
-                          <option value="Grade 10">Grade 10</option>
-                          <option value="Grade 11">Grade 11</option>
-                          <option value="Grade 12">Grade 12</option>
-                        </select>
-                      </div>
-                      <div className="form-group">
-                        <input
-                          type="email"
-                          name="email"
-                          value={formData.email}
-                          onChange={handleInputChange}
-                          className="form-control"
-                          placeholder="Email"
-                          required
-                        />
-                      </div>
-                      <div className="form-group">
-                        <input
-                          type="password"
-                          name="password"
-                          value={formData.password}
-                          onChange={handleInputChange}
-                          className="form-control"
-                          placeholder="Password"
-                          required={!formData.id}
-                        />
-                      </div>
-                      <div className="form-group">
-                        <input
-                          type="password"
-                          name="confirmPassword"
-                          value={formData.confirmPassword}
-                          onChange={handleInputChange}
-                          className="form-control"
-                          placeholder="Confirm Password"
-                          required={!formData.id}
-                        />
-                      </div>
-                      <div className="form-actions">
-                        <button
-                          type="submit"
-                          className="btn-create"
-                          disabled={isSubmitting}
-                        >
-                          {isSubmitting
-                            ? formData.id
-                              ? "Saving..."
-                              : "Creating..."
-                            : formData.id
-                            ? "Save Changes"
-                            : "Create"}
-                        </button>
-                        <button
-                          type="button"
-                          className="btn-cancel"
-                          onClick={() => setShowForm(false)}
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    </form>
+                <>
+                  {/* Modal overlay to darken background and block interaction */}
+                  <div
+                    className="edit-modal-overlay"
+                    style={{
+                      position: "fixed",
+                      top: 0,
+                      left: 0,
+                      width: "100vw",
+                      height: "100vh",
+                      background: "rgba(20, 10, 40, 0.75)",
+                      zIndex: 999,
+                      pointerEvents: "auto",
+                    }}
+                  />
+                  <div className="popup-form" style={{ zIndex: 1000 }}>
+                    <div className="popup-content">
+                      <h3>{formData.id ? "Edit Student" : "Add Student"}</h3>
+                      <form onSubmit={handleFormSubmit}>
+                        <div className="form-group">
+                          <input
+                            name="name"
+                            value={formData.name}
+                            onChange={handleInputChange}
+                            className="form-control"
+                            placeholder="Name"
+                            required
+                          />
+                        </div>
+                        <div className="form-group">
+                          <input
+                            name="username"
+                            value={formData.username}
+                            onChange={handleInputChange}
+                            className="form-control"
+                            placeholder="Username"
+                            required
+                          />
+                        </div>
+                        <div className="form-group">
+                          <select
+                            name="yearLevel"
+                            value={formData.yearLevel}
+                            onChange={handleInputChange}
+                            className="form-control"
+                            required
+                          >
+                            <option value="">-- Select Year Level --</option>
+                            <option value="Grade 7">Grade 7</option>
+                            <option value="Grade 8">Grade 8</option>
+                            <option value="Grade 9">Grade 9</option>
+                            <option value="Grade 10">Grade 10</option>
+                            <option value="Grade 11">Grade 11</option>
+                            <option value="Grade 12">Grade 12</option>
+                          </select>
+                        </div>
+                        <div className="form-group">
+                          <input
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            className="form-control"
+                            placeholder="Email"
+                            required
+                          />
+                        </div>
+                        <div className="form-group">
+                          <input
+                            type="password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleInputChange}
+                            className="form-control"
+                            placeholder="Password"
+                            required={!formData.id}
+                          />
+                        </div>
+                        <div className="form-group">
+                          <input
+                            type="password"
+                            name="confirmPassword"
+                            value={formData.confirmPassword}
+                            onChange={handleInputChange}
+                            className="form-control"
+                            placeholder="Confirm Password"
+                            required={!formData.id}
+                          />
+                        </div>
+                        <div className="form-actions">
+                          <button
+                            type="submit"
+                            className="btn-create"
+                            disabled={isSubmitting}
+                          >
+                            {isSubmitting
+                              ? formData.id
+                                ? "Saving..."
+                                : "Creating..."
+                              : formData.id
+                              ? "Save Changes"
+                              : "Create"}
+                          </button>
+                          <button
+                            type="button"
+                            className="btn-cancel"
+                            onClick={() => setShowForm(false)}
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </form>
+                    </div>
                   </div>
-                </div>
+                </>
               )}
 
               {showProgressTracker && (
