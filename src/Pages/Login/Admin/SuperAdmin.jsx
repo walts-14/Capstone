@@ -1861,7 +1861,7 @@ const SuperAdmin = () => {
                       style={{
                         position: "absolute",
                         top: "24px",
-                        right: "32px",
+                        right: "38rem",
                         backgroundColor: "#e9170f",
                         borderRadius: "20%",
                         padding: "4px",

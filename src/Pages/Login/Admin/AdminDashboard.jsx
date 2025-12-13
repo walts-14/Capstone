@@ -502,7 +502,7 @@ const DashboardAdmin = () => {
                       color: "#222",
                       textAlign: "center",
                       position: "relative",
-                      marginRight: "10%",
+                      marginRight: "1%",
                     }}
                   >
                     <h3>Confirm Deletion</h3>
@@ -718,7 +718,7 @@ const DashboardAdmin = () => {
                       style={{
                         position: "absolute",
                         top: "24px",
-                        right: "32px",
+                        left: "32px",
                         backgroundColor: "red",
                         borderRadius: "20%",
                         padding: "4px",
