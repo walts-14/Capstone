@@ -80,12 +80,13 @@ export default function ResultBanner({ isCorrect }) {
         {/* Responsive styles for smooth transition */}
       <style>{`
         /* Tablet sidenav and logo - show between 640px-1024px */
+        
         @media (min-width: 640px) and (max-width: 768px) {
           .result-ans {
             height: 68px !important;
             width: 42vw !important;
             top: 15.2vh !important;
-        
+          
             text-align: center !important;
           }
           .result-ans span{
@@ -99,12 +100,13 @@ export default function ResultBanner({ isCorrect }) {
             margin-left: 0.8rem !important;
           }
         }
-        
+         
         /* Mobile sidenav - only show below 640px */
         @media (max-width: 639px) {
           .result-ans {
             height: 68px !important;
             width: 99.9vw !important;
+            z-index: 999 !important;
             top: 30vh !important;
             border-radius: 0px 0px   !important;
             text-align: center !important;
@@ -123,7 +125,7 @@ export default function ResultBanner({ isCorrect }) {
             margin-right: 10rem !important;
           }
         }
-        
+       
         /* Desktop sidenav - show above 1024px */
         @media (min-width: 1024px) {
              .result-ans {
@@ -163,6 +165,7 @@ export default function ResultBanner({ isCorrect }) {
             height: 35px !important;
             margin-left: 0rem !important;
           }
+     
         }
 
       `}</style>

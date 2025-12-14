@@ -1,7 +1,12 @@
 // src/Pages/VideoList.jsx
 import React, { useEffect, useState } from "react";
+import { Cloudinary } from "@cloudinary/url-gen";
+import {scale} from "@cloudinary/url-gen/actions/resize";
+import {quality, format} from "@cloudinary/url-gen/actions/delivery";
+import {auto} from "@cloudinary/url-gen/qualifiers/quality";
+import {auto as autoFormat} from "@cloudinary/url-gen/qualifiers/format";
 
-const CLOUD_NAME = "deohrrkw9"; // your Cloudinary cloud name
+const cld = new Cloudinary({cloud: {cloudName: 'deohrrkw9'}});
 
 const VideoList = () => {
   const [videos, setVideos] = useState([]);
@@ -20,16 +25,25 @@ const VideoList = () => {
     fetch("/api/videos")
       .then((res) => res.json())
       .then((data) => {
-        const transformed = data.map((v) => ({
-          id: v._id,
-          word: v.word || "Lesson video",
-          description: v.description || "",
-          // High-quality Cloudinary fallback
-          video: v.videoUrl || (v.publicId
-            ? `https://res.cloudinary.com/${CLOUD_NAME}/video/upload/f_mp4,q_100/${v.publicId}.mp4`
-            : null),
-        }));
-        setVideos(transformed);
+  const transformed = data.map((v) => {
+    console.log("Video publicId:", v.publicId); // Debug line
+    
+    return {
+      id: v._id,
+      word: v.word || "Lesson video",
+      description: v.description || "",
+      video: v.publicId
+        ? cld.video(v.publicId)
+            .resize(scale().width(1000))
+            .delivery(quality(auto()))
+            .delivery(format(autoFormat()))
+            .toURL()
+        : v.videoUrl,
+    };
+  });
+  
+  console.log("Transformed URLs:", transformed.map(v => v.video)); // See final URLs
+  setVideos(transformed);
         localStorage.setItem(cacheKey, JSON.stringify(transformed));
         setLoading(false);
       })

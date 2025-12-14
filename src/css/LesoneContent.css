@@ -236,6 +236,7 @@ body {
     height: auto;
     position: relative;
     top: 2rem;
+    margin-top: 6rem;
   }
   .text-container {
     width: 90vw;
@@ -404,6 +405,7 @@ body {
     height: fit-content;
     border-width: 10px;
     border-radius: 30px;
+     margin-top: 0rem;
   }
   .text-container {
     width: 80vw;
@@ -472,7 +474,13 @@ body {
     left: 13rem;
   }
 }
+@media (min-width: 1024px) {
+   .text-container {
+    position: relative;
+    bottom: 8rem;
+  }
 
+}
 @media (min-width: 1440px) {
   .container-lecture {
     max-width: 20vw;
@@ -491,8 +499,8 @@ body {
     padding-left: 0rem;
   }
   .tryone-container video {
-    width: 200vw;
-    max-width: 500px;
+    width: 360%;
+    max-width: 124rem;
     height: fit-content;
     border-width: 10px;
     border-radius: 30px;
@@ -503,7 +511,7 @@ body {
   .text-container {
     width: 40vw;
     left: auto;
-    top: auto;
+    top: 20px;
     bottom: auto;
     padding-top: 0.5rem;
     gap: 2.5rem;

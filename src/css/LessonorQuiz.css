@@ -75,6 +75,9 @@
   align-items: center;
   justify-content: flex-start;
   padding-top: 5rem;
+  /* Ensure these interactive tiles sit above absolute overlays on small screens */
+  z-index: 10;
+  pointer-events: auto;
 }
 
 .lecture-outer {

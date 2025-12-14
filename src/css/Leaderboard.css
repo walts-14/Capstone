@@ -33,49 +33,101 @@
   background-color: var(--background);
   min-height: 100vh;
   padding: 1rem;
-  width: 100%;
-  max-width: 500px;
+  width: 120%;
+  max-width: 120rem;
+  
+  
+}
+.leaderboard-content {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 2rem 1rem;
+  overflow-y: auto;
+  height: auto;
+  /* limit the height so the list can scroll inside the viewport */
+  max-height: calc(100vh - 180px);
+
+}
+.leaderboard-content1 {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 1rem;
+  overflow-y: hidden;
+  height: 100vh;
+  margin-left: 14rem;
 }
 
-/* Top 3 podium styles */
-.top-three-container {
+.leaderboard-wrapper {
+  width: 100%;
+  max-width: 1000px; 
+  height: fit-content;
+  margin: 0 auto;
+}
+
+.leaderboard-wrapper .leaderboard-header {
+  background-color: var(--purple);
+  border-radius: 20px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1rem;
   display: flex;
-  align-items: end;
-  justify-content: center;
-  margin-bottom: 2rem;
-  gap: 1rem;
-  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  
+}
+
+.leaderboard-wrapper .header-text {
+  font-family: "Baloo", sans-serif;
+  color: var(--white);
+  font-size: 1rem;
+  font-weight: bold;
+}
+/* Top 3 podium styles */
+
+/* Top three arranged as a pyramid using CSS Grid:
+   - first place spans the full width on the top row
+   - second and third share the row beneath it */
+.top-three-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: 0rem;
+  gap: 0rem;
+  justify-items: center;
+  align-items: center;
+  margin-bottom: 0rem;
+  margin-top: 12rem;
+  width: 100%;
 }
 
 .podium-position {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   text-align: center;
 }
 
 .podium-first {
-  order: 2;
-  margin-bottom: 2rem;
+  /* first spans both columns (top center) */
+  grid-column: 1 / -1;
+  justify-self: center;
+  margin-bottom: 0rem;
 }
 
-.podium-second {
-  order: 1;
-}
-
-.podium-third {
-  order: 3;
-}
+.podium-second { grid-column: 1 / 2; margin-bottom: 10rem;}
+.podium-third { grid-column: 2 / 3; margin-bottom: 10rem;}
 
 .medal-image {
-  width: 60px;
-  height: 60px;
+  max-width: 6rem;
+  max-height: 6rem;
   margin-bottom: 0.5rem;
 }
 
 .podium-avatar {
-  width: 50px;
-  height: 50px;
+  max-width: 4rem;
+  max-height: 4rem;
   border-radius: 50%;
   object-fit: cover;
   margin-bottom: 0.5rem;
@@ -104,28 +156,14 @@
 }
 
 /* Table header */
-.leaderboard-header {
-  background-color: var(--purple);
-  border-radius: 20px;
-  padding: 1rem 1.5rem;
-  margin-bottom: 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
 
-.header-text {
-  font-family: "Baloo", sans-serif;
-  color: var(--white);
-  font-size: 1.2rem;
-  font-weight: bold;
-}
 
 /* User list */
 .user-list {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  padding-bottom: 8rem;
 }
 
 .user-rank {
@@ -178,21 +216,7 @@
   font-weight: bold;
 }
 
-.leaderboard-content {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 2rem 1rem;
-  overflow-y: auto;
-  height: 100vh;
-}
 
-.leaderboard-wrapper {
-  width: 100%;
-  max-width: 400px; 
-  height: fit-content;
-}
 
 /* Scrollbar styles for the content */
 .leaderboard-content::-webkit-scrollbar {
@@ -228,162 +252,7 @@
 }
 
 
-/* Mobile responsiveness */
-@media (max-width: 768px) {
-  .leaderboard-container{
-    /* padding: 5rem;
-    margin: 2rem */
-    margin-left: 2rem;
-  }
 
-  .top-three-container {
-    flex-direction: row;
-    align-items: center;
-    gap: 5rem;
-  }
-  
-  .podium-first, .podium-second, .podium-third {
-    order: initial;
-    margin-bottom: 0;
-  }
-  
-  .leaderboard-header {
-    padding: 0.75rem 1rem;
-  }
-  
-  .header-text {
-    font-size: 1rem;
-  }
-  
-  .user-rank {
-    padding: 0.5rem 0.75rem;
-  }
-  
-  .user-avatar {
-    width: 35px;
-    height: 35px;
-  }
-  
-  .medal-image {
-    width: 50px;
-    height: 50px;
-  }
-  
-  .podium-avatar {
-    width: 45px;
-    height: 45px;
-  }
-}
-
-/* Tablet and larger screens */
-@media (min-width: 769px) {
-  .leaderboard-wrapper {
-    max-width: 600px; /* Wider for tablets */
-  }
-  
-  .medal-image {
-    width: 70px;
-    height: 70px;
-  }
-  
-  .podium-avatar {
-    width: 60px;
-    height: 60px;
-  }
-  
-  .user-avatar {
-    width: 45px;
-    height: 45px;
-  }
-  
-  .leaderboard-header {
-    padding: 1.2rem 2rem;
-  }
-  
-  .header-text {
-    font-size: 1.3rem;
-  }
-  
-  .user-rank {
-    padding: 1rem 1.5rem;
-  }
-  
-  .rank-number {
-    font-size: 1.2rem;
-  }
-  
-  .user-name {
-    font-size: 1.1rem;
-  }
-  
-  .points-text {
-    font-size: 1.1rem;
-  }
-}
-
-/* Desktop and laptop screens */
-@media (min-width: 1024px) {
-  .leaderboard-container{
-    /* padding: 5rem;
-    margin: 2rem */
-    margin-left: 7rem;
-  }
-
-  .leaderboard-wrapper {
-    max-width: 750px; /* Even wider for laptops/desktops */
-  }
-  
-  .top-three-container {
-    gap: 8rem;
-  }
-
-  .medal-image {
-    width: 100px;
-    height: 100px;
-  }
-  
-  .podium-avatar {
-    width: 100px;
-    height: 100px;
-  }
-  
-  .user-avatar {
-    width: 50px;
-    height: 50px;
-  }
-  
-  .leaderboard-header {
-    padding: 1.5rem 2.5rem;
-  }
-  
-  .header-text {
-    font-size: 1.5rem;
-  }
-  
-  .user-rank {
-    padding: 1.2rem 2rem;
-  }
-  
-  .rank-number {
-    font-size: 1.3rem;
-  }
-  
-  .user-name {
-    font-size: 1.2rem;
-  }
-  
-  .points-text {
-    font-size: 1.2rem;
-  }
-  
-  .podium-name {
-    font-size: 1.1rem;
-  }
-  
-  .podium-points {
-    font-size: 1rem;
-  }
-}
 
 /* Large desktop screens */
 @media (min-width: 1440px) {
@@ -391,6 +260,7 @@
     /* padding: 5rem;
     margin: 2rem */
     margin-left: 6rem;
+    width: 120rem;
   }
   
   .top-three-container {
@@ -444,18 +314,237 @@
     font-size: 1rem;
   }
 }
-@media (min-width: 425px) {
+/* Desktop and laptop screens */
+
+@media (max-width: 1024px) {
   .leaderboard-container{
     /* padding: 5rem;
     margin: 2rem */
-    margin-left: 00rem;
-  }
-}
-@media (min-width: 375px) {
-  .leaderboard-container{
-    /* padding: 5rem;
-    margin: 2rem */
-    margin-left: 00rem;
+    margin-right: 12rem;
   }
 
+  .leaderboard-wrapper {
+    max-width: 750px; /* Even wider for laptops/desktops */
+    margin-left: 0.5rem;
+  }
+  
+  .top-three-container {
+    gap: 8rem;
+  }
+
+  .medal-image {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .podium-avatar {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .user-avatar {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .leaderboard-header {
+    padding: 1.5rem 2.5rem;
+  }
+  
+  .header-text {
+    font-size: 1.5rem;
+  }
+  
+  .user-rank {
+    padding: 1.2rem 2rem;
+  }
+  
+  .rank-number {
+    font-size: 1.3rem;
+  }
+  
+  .user-name {
+    font-size: 1.2rem;
+  }
+  
+  .points-text {
+    font-size: 1.2rem;
+  }
+  
+  .podium-name {
+    font-size: 1.1rem;
+  }
+  
+  .podium-points {
+    font-size: 1rem;
+  }
+}
+/* Tablet and larger screens */
+@media (max-width: 769px) {
+  .top-three-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: 0rem;
+  gap: 0rem;
+  justify-items: center;
+  align-items: center;
+  margin-bottom: 0rem;
+  margin-top: 19rem;
+  width: 100%;
+}
+
+.podium-first {
+  /* first spans both columns (top center) */
+  grid-column: 1 / -1;
+  justify-self: center;
+  margin-bottom: 18rem;
+}
+.podium-third {
+  margin-left: 3rem;
+}
+  .leaderboard-wrapper {
+    max-width: 800px; /* Wider for tablets */
+  }
+  .leaderboard-container{
+    /* padding: 5rem;
+    margin: 2rem */
+    margin-left: 0rem;
+    max-width: 750px; /* Wider for tablets */
+  } 
+  .leaderboard-content1{
+    /* padding: 5rem;
+    margin: 2rem */
+    margin-left: 2rem;
+  } 
+  .medal-image {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .podium-avatar {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .user-avatar {
+    width: 45px;
+    height: 45px;
+  }
+  
+  .leaderboard-header {
+    padding: 2rem 2rem;
+  }
+  
+  .header-text {
+    font-size: 1.3rem;
+  }
+  
+  .user-rank {
+    padding: 1rem 1.5rem;
+  }
+  
+  .rank-number {
+    font-size: 1.2rem;
+  }
+  
+  .user-name {
+    font-size: 1.1rem;
+  }
+  
+  .points-text {
+    font-size: 1.1rem;
+  }
+}
+@media (max-width: 426px) {
+  .top-three-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: 2rem;
+    gap: 0rem;
+    margin-top: 12rem;
+
+  }
+ .Pcontain {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+ }   
+.podium-position {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: center;
+}
+.top-three-container  .podium-first {
+   margin-bottom: 10rem;
+  }
+.top-three-container  .podium-second,  .top-three-container  .podium-third{
+   margin-bottom: 5rem;
+  }
+.user-list {
+  
+  padding-bottom: 10rem;
+}
+.podium-name {
+  font-size: 0.9rem;
+}
+
+.medal-image {
+  max-width: 3rem;
+  max-height: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.podium-avatar {
+  max-width: 2.5rem;
+  max-height: 2.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 0.5rem;
+  border: 2px solid var(--purple);
+}
+
+  .leaderboard-container{
+    margin: 0px;
+    width: 100%;
+    max-width: 120rem;
+    padding: 0.5rem;
+  }
+  .leaderboard-content1{
+    margin-left: 0rem;
+  }
+  .podium-first {
+  /* first spans both columns (top center) */
+  grid-column: 1 / -1;
+  justify-self: center;
+  margin-right: 18px;
+}
+
+.podium-second { grid-column: 1 / 2; margin-bottom: 10rem; margin-right: 32px;}
+.podium-third { grid-column: 2 / 3; margin-bottom: 10rem;}
+}
+@media (max-width: 376px) {
+  .top-three-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: 2rem;
+  gap: 0rem;
+  margin-top: -24rem;
+
+}
+  .top-three-container .podium-first {
+    margin-bottom: 14rem;
+  }
+  .leaderboard-container{
+    /* padding: 5rem;
+    margin: 2rem */
+    margin-left: 00rem;
+    height: 20rem;
+    
+  }
+  .leaderboard-content1{
+    margin-left: 0rem;
+    height: 80rem;
+  }
 }

@@ -15,8 +15,8 @@ export default function Introduction() {
   return (
     <>
       <Sidenav />
-      <div className="introduction-container">
-        <div className="intro-header">
+    
+      <div className="intro-header">
           <div className="intro-text">INTRODUCTION</div>
           <div className="twobuttons">
             <button
@@ -36,7 +36,9 @@ export default function Introduction() {
               Instructions
             </button>
           </div>
-        </div>
+      </div>
+      <div className="introduction-container">
+        
 
         <div className="scroll-area">
           <div className="component-display">

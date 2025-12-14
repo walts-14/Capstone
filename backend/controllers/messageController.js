@@ -279,9 +279,20 @@ export const markAsRead = async (req, res) => {
     if (!msg) return res.status(404).json({ message: "Message not found" });
 
     const role = String(user.role || "").toLowerCase();
+    const userIdStr = String(user._id || user.id || user.userId || "");
+    const userIdObj = toObjectId(userIdStr);
+
+    // Allow admins to mark broadcasts or direct messages; support ObjectId, string, or embedded ids
+    const recipientMatch = (rid) => {
+      if (!rid) return false;
+      const ridStr = String(rid._id || rid.id || rid.value || rid);
+      return ridStr === userIdStr;
+    };
+
     const isRecipient =
       (msg.isBroadcast && role.includes("admin")) ||
-      (msg.recipientIds || []).some((rid) => String(rid) === String(user._id));
+      (msg.recipientRole === "admin" && role.includes("admin")) ||
+      (msg.recipientIds || []).some(recipientMatch);
 
     if (!isRecipient) return res.status(403).json({ message: "Not authorized" });
 
@@ -471,9 +482,16 @@ export const deleteMessage = async (req, res) => {
     }
 
     // Otherwise, if the requester is a recipient, soft-delete for that user only
+    const recipientMatch = (rid) => {
+      if (!rid) return false;
+      const ridStr = String(rid._id || rid.id || rid.value || rid);
+      return ridStr === String(userIdStr);
+    };
+
     const isRecipientForThis =
       (message.isBroadcast && role.includes("admin")) ||
-      (message.recipientIds || []).some((rid) => String(rid) === String(user._id));
+      (message.recipientRole === "admin" && role.includes("admin")) ||
+      (message.recipientIds || []).some(recipientMatch);
 
     if (isRecipientForThis) {
       // add to deletedFor if not present
@@ -489,6 +507,202 @@ export const deleteMessage = async (req, res) => {
     return res.status(403).json({ message: "Forbidden: You can't delete this message" });
   } catch (err) {
     console.error("deleteMessage error", err);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const replyToMessage = async (req, res) => {
+  try {
+    const user = req.user;
+    const { id } = req.params;
+    const { body: replyBody, text } = req.body;
+
+    if (!user) return res.status(401).json({ message: "Unauthorized" });
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid message ID" });
+    }
+
+    const role = String(user.role || "").toLowerCase();
+    if (!role.includes("admin")) {
+      return res.status(403).json({ message: "Forbidden: Only admins can reply" });
+    }
+
+    const content = String((replyBody ?? text ?? '').trim());
+    if (!content) {
+      return res.status(400).json({ message: 'Reply body cannot be empty' });
+    }
+
+    const originalMessage = await Message.findById(id);
+    if (!originalMessage) {
+      return res.status(404).json({ message: "Message not found" });
+    }
+
+    // Check if the user is a recipient of the original message
+    const isRecipient =
+      (originalMessage.isBroadcast && role.includes("admin")) ||
+      (originalMessage.recipientRole === "admin" && role.includes("admin")) ||
+      (originalMessage.recipientIds || []).some((rid) => String(rid) === String(user._id));
+
+    if (!isRecipient) {
+      return res.status(403).json({ message: "Forbidden: You are not a recipient of this message" });
+    }
+
+    // Create a reply message
+    const replyMessage = await Message.create({
+      senderId: user._id,
+      senderRole: user.role,
+      senderEmail: user.email || "",
+      body: content,
+      title: `Re: ${originalMessage.title || "Message"}`,
+      recipientIds: [originalMessage.senderId], // reply goes back to the original sender
+      recipientRole: "admin",
+      isBroadcast: false,
+      parentMessageId: id, // reference to original message
+      grade: originalMessage.grade || "",
+      teacherId: originalMessage.teacherId || null,
+      teacherName: originalMessage.teacherName || "",
+      studentId: originalMessage.studentId || null,
+      studentName: originalMessage.studentName || "",
+    });
+
+    await replyMessage.populate("senderId", "name email role");
+
+    console.log("replyToMessage: created reply", {
+      id: String(replyMessage._id),
+      senderId: String(replyMessage.senderId?._id || replyMessage.senderId),
+      parentMessageId: id,
+    });
+
+    // Socket emit notification
+    try {
+      const io = req.app.get("io");
+      if (io) {
+        io.to(`admin_${originalMessage.senderId}`).emit("newMessage", replyMessage.toObject());
+      }
+    } catch (emitErr) {
+      console.warn("socket emit failed", emitErr);
+    }
+
+    return res.status(201).json({
+      message: "Reply sent successfully",
+      reply: replyMessage.toObject ? replyMessage.toObject() : replyMessage,
+    });
+  } catch (err) {
+    console.error("replyToMessage error", err.message, err.stack);
+    return res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
+
+/**
+ * Mark all messages as read for the logged-in admin
+ * PUT /api/messages/all/read
+ */
+export const markAllAsRead = async (req, res) => {
+  try {
+    const user = req.user;
+    if (!user) return res.status(401).json({ message: "Unauthorized" });
+
+    const role = String(user.role || "").toLowerCase();
+    if (!role.includes("admin")) return res.status(403).json({ message: "Forbidden" });
+
+    const userIdStr = String(user._id || user.id || user.userId || "");
+    if (!userIdStr) return res.status(400).json({ message: "Invalid user" });
+    const userIdObj = toObjectId(userIdStr);
+
+    // Find all messages targeted to this admin (broadcast or direct)
+    const orConditions = [
+      { isBroadcast: true, recipientRole: "admin" },
+      { recipientRole: "admin" }, // Standalone: all messages where recipientRole is admin
+    ];
+    if (userIdObj) orConditions.push({ recipientIds: userIdObj });
+    orConditions.push({ recipientIds: userIdStr });
+    orConditions.push({
+      recipientIds: {
+        $elemMatch: {
+          $or: [
+            { _id: userIdObj || userIdStr },
+            { id: userIdObj || userIdStr },
+            { value: userIdObj || userIdStr },
+          ],
+        },
+      },
+    });
+
+    const query = { $or: orConditions };
+
+    // Exclude soft-deleted messages
+    const norArr = [];
+    if (userIdObj) norArr.push({ deletedFor: userIdObj });
+    norArr.push({ deletedFor: userIdStr });
+    if (norArr.length) query.$nor = norArr;
+
+    // Update all matching messages: add this user to readBy if not already there
+    const result = await Message.updateMany(query, {
+      $addToSet: { readBy: { userId: user._id, at: new Date() } },
+    });
+
+    console.log("markAllAsRead - updated:", result.modifiedCount);
+
+    return res.json({ success: true, markedCount: result.modifiedCount });
+  } catch (err) {
+    console.error("markAllAsRead error", err);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+/**
+ * Delete all messages for the logged-in admin (soft-delete)
+ * DELETE /api/messages/all
+ */
+export const deleteAllMessages = async (req, res) => {
+  try {
+    const user = req.user;
+    if (!user) return res.status(401).json({ message: "Unauthorized" });
+
+    const role = String(user.role || "").toLowerCase();
+    if (!role.includes("admin")) return res.status(403).json({ message: "Forbidden" });
+
+    const userIdStr = String(user._id || user.id || user.userId || "");
+    if (!userIdStr) return res.status(400).json({ message: "Invalid user" });
+    const userIdObj = toObjectId(userIdStr);
+
+    // Find all messages targeted to this admin (broadcast, direct recipientIds, or recipientRole === admin)
+    const orConditions = [
+      { isBroadcast: true, recipientRole: "admin" },
+      { recipientRole: "admin" }, // All messages where recipientRole is admin
+    ];
+    if (userIdObj) orConditions.push({ recipientIds: userIdObj });
+    orConditions.push({ recipientIds: userIdStr });
+    orConditions.push({
+      recipientIds: {
+        $elemMatch: {
+          $or: [
+            { _id: userIdObj || userIdStr },
+            { id: userIdObj || userIdStr },
+            { value: userIdObj || userIdStr },
+          ],
+        },
+      },
+    });
+
+    const query = { $or: orConditions };
+
+    // Exclude already soft-deleted messages
+    const norArr = [];
+    if (userIdObj) norArr.push({ deletedFor: userIdObj });
+    norArr.push({ deletedFor: userIdStr });
+    if (norArr.length) query.$nor = norArr;
+
+    // Soft-delete: add user to deletedFor array
+    const result = await Message.updateMany(query, {
+      $addToSet: { deletedFor: user._id },
+    });
+
+    console.log("deleteAllMessages - deleted for user:", result.modifiedCount);
+
+    return res.json({ success: true, deletedCount: result.modifiedCount });
+  } catch (err) {
+    console.error("deleteAllMessages error", err);
     return res.status(500).json({ message: "Server error" });
   }
 };

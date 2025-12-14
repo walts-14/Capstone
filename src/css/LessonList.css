@@ -101,7 +101,7 @@
     grid-template-columns: repeat(1, 1fr);
     gap: 0.75rem;
     padding: 0.75rem 1rem 8rem; /* bottom space for mobile nav */
-    margin-top: 6rem;
+    margin-top: 12rem;
     width: 100%;
     max-height: calc(150vh - 33rem);
     overflow-y: auto; /* make grid scrollable */
@@ -110,7 +110,7 @@
   }
   .lesson-list {
     position: relative;
-    top: 12rem;
+    top: 11rem;
     left: 18px;
     width: 90%;
     height: 50%;
@@ -126,7 +126,8 @@
     position: relative;
     right: 0rem;
     width: 100%;
-    top: 0rem;
+    top: 4rem;
+    
   }
   .lessonTitle h2 {
     font-size: 0.9rem;
@@ -142,7 +143,7 @@
     grid-template-columns: repeat(1, 1fr);
     gap: 0.75rem;
     padding: 0.75rem 1rem 8rem; /* bottom space for mobile nav */
-    margin-top: 4rem;
+    margin-top: 5.5rem;
     width: 100%;
     max-height: calc(110vh - 18rem);
     overflow-y: auto; /* make grid scrollable */
@@ -151,7 +152,7 @@
   }
   .lesson-list {
     position: relative;
-    top: 9.5rem;
+    top: 11rem;
     left: 15px;
     width: 90%;
     height: 50%;
@@ -296,7 +297,7 @@
 /* Large Desktop (1440px) */
 @media (min-width: 1440px) {
   .terms-list {
-    max-width: 1200px;
+    max-width: 1000px;
     width: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(600px, 2fr));
@@ -304,7 +305,7 @@
     height: 500px; /* Set a fixed height */
     overflow-y: auto; /* Enable vertical scrolling */
     scrollbar-width: none;
-    margin-top: 10rem;
+    margin-top: 13rem;
     margin-left: 14rem !important;
     gap: 0rem;
   }
@@ -320,7 +321,7 @@
     background-color: var(--semidark-blue);
     box-sizing: border-box;
     position: absolute; /* keep this from the second block */
-    top: -2rem;
+    top: -1rem;
     left: -1.5rem;
     bottom: 5rem;
     display: flex;

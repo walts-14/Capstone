@@ -132,6 +132,11 @@ export const uploadProfilePicture = async (req, res) => {
         use_filename: true,
         unique_filename: true,
         overwrite: false,
+        transformation: [
+          {width: 1000, crop: "scale"},
+          {quality: "auto"},
+          {fetch_format: "auto"}
+        ]
       });
     } catch (cloudErr) {
       console.error('uploadProfilePicture: cloudinary upload failed', cloudErr);

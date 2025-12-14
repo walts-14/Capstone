@@ -375,7 +375,7 @@ function LectureorQuiz() {
           .status-bar {
             display: flex !important;
             position: absolute !important;
-            top: 5.5rem !important;
+            top: 7.5rem !important;
           }
           .MobileIntroduction {
             display: flex !important;
@@ -387,7 +387,7 @@ function LectureorQuiz() {
             display: none !important;
           }
           .progress-bar-container {
-            margin-top: 8.5rem !important;
+            margin-top: 11rem !important;
             width: 55% !important;
           }
           .progress-step{
@@ -442,7 +442,19 @@ function LectureorQuiz() {
             margin-top: .2rem !important;
          }
        }
-        
+         @media (min-width: 390px) {
+          .quiz-inner, .practice-inner {
+              width: 7.6rem !important;
+              height: 11vh !important;
+              margin-top: 1.8rem !important;
+              border-radius: 1.5rem !important;
+          }
+           .MobileIntroduction {
+              position: absolute !important;
+              bottom: 48rem !important;
+              left: 19.5rem !important;
+          }
+        } 
         /* Mobile sidenav - only show below 640px */
         @media (min-width: 425px) {
            .back {
@@ -479,7 +491,7 @@ function LectureorQuiz() {
             display: none !important;
           }
           .progress-bar-container {
-            margin-top: 8.5rem !important;
+            margin-top: 10rem !important;
             width: 35% !important;
           }
           .progress-step{
@@ -668,7 +680,7 @@ function LectureorQuiz() {
             
 
             .progress-bar-container {
-            margin-top: z.3rem !important;
+            margin-top: 8.5rem !important;
             width:34% !important;
           }
           .container {
@@ -688,9 +700,11 @@ function LectureorQuiz() {
           .lecture-quiz-container {
             display: flex !important;
             flex-direction: row !important;
+            align-items: start !important;
             font-size: 1rem !important;
             width: 48rem !important;
             gap: 2rem !important;
+
           }
           .lecture-quiz-container p{
             font-size: 2rem !important;
@@ -698,20 +712,20 @@ function LectureorQuiz() {
           
           .lecture-outer {
             width: 17.5rem !important;
-            height: 23rem !important;
+            height: 21rem !important;
             border-radius: 1.5rem !important;
 
           }
             
           .lecture-inner {
             width: 17rem !important;
-            height: 18.5rem !important;
+            height: 16.5rem !important;
             border-radius: 1.5rem !important;
           }
          
           .quiz-outer, .practice-outer {
             width: 17.5rem !important;
-            height: 10.5rem !important;
+            height: 9.5rem !important;
             padding: 0px !important;
             border-radius: 1.5rem !important;
         
@@ -767,7 +781,7 @@ function LectureorQuiz() {
             }    
             
             .progress-bar-container {
-            margin-top: 8.5rem !important;
+            margin-top: 9rem !important;
             width:26% !important;
           }
           .container {
@@ -779,6 +793,7 @@ function LectureorQuiz() {
             width: 4rem !important;    
             height: 4rem!important;
             font-size: 2rem !important;
+            margin-bottom: 0.5rem !important;
           }
           .progress-line {
             height: 1.1rem !important;

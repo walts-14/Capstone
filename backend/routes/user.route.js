@@ -6,7 +6,7 @@ import {
   getUserByEmail,
 } from "../controllers/user.controller.js";
 import { verifyToken } from "../middlewares/auth.js";
-import uploadImage from "../config/multer.js";
+import { uploadImage } from "../config/multer.js";
 
 export const router = express.Router();
 

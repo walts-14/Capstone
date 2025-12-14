@@ -89,7 +89,7 @@ function LivesandDiamonds({ showDiamonds = true, showLives = true }) {
             className="diamond-icon w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 object-contain"
             alt="Points"
           />
-          <p className="points-number m-0 font-bold text-xl sm:text-2xl md:text-3xl ml-1">{points}</p>
+          <p className="points-number m-0 font-bold text-xl sm:text-2xl md:text-3xl ml-1" style={{ color: '#FFCB5B' }}>{points}</p>
         </div>
       )}
 

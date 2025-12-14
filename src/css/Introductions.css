@@ -109,15 +109,127 @@
   width: 100%;
 }
 
-@media (min-width: 1024px) {
+
+
+@media (min-width: 1440px) {
   .introduction-container {
-    margin-left: 15em; /* Ensure proper sidebar spacing */
+    margin-left: 20em;
     padding-top: 2rem;
     padding-bottom: 5rem;
+    height: 80vh;
   }
   
   .intro-header {
-    margin: 0 2rem 3rem 2rem;
+    margin: 0 3rem 1rem 10rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .intro-text {
+    font-size: 3rem;
+    padding: 1.5rem 3rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .twobuttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 3rem;
+  }
+  
+  .twobuttons button {
+    font-size: 1.8rem;
+    padding: 1.2rem 2.5rem;
+    min-width: 180px;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: var(--purple);
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .twobuttons button:hover {
+    background-color: var(--mid-purple);
+  }
+  
+  .twobuttons button.active-btn {
+    background-color: var(--light-purple);
+    color: var(--background);
+  }
+  
+  .interpreter-container {
+    padding: 1rem 1rem;
+  }
+  
+  .interpreter-intro {
+    max-width: 1100px;
+    height: auto;
+    min-height: 400px;
+    padding: 3rem;
+    margin-bottom: 4rem;
+    border-radius: 1rem;
+  }
+  
+  .interpreter-video {
+    width:160rem;
+    height: 260px;
+    margin-right: 0rem;
+    border-radius: 0.5rem;
+    object-fit: cover;
+  }
+  
+  .interpreter-details {
+    flex: 1;
+    padding: 2rem;
+  }
+  
+  .interpreter-details p:nth-child(1) {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .interpreter-details p {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+  
+  .interpreter-details p span {
+    font-size: 1.5rem;
+    color: var(--light-purple);
+  }
+  
+  .howtoplay-container {
+    padding: 3rem 4rem;
+    gap: 3rem;
+  }
+  
+  .how {
+    max-width: 1800px;
+    margin: 0 auto 3rem auto;
+  }
+  
+  .how img {
+    width: 100%;
+    height: auto;
+    max-width: 1800px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .introduction-container {
+    margin-left: 15em; /* Ensure proper sidebar spacing */
+    padding-top: 0rem;
+    padding-bottom: 5rem;
+    height: 60vh;
+  }
+  
+  .intro-header {
+    margin: 1rem 2rem 1rem 18rem;
     width: auto;
     display: flex;
     flex-direction: column;
@@ -167,7 +279,7 @@
     max-width: 900px;
     height: auto;
     min-height: 350px;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     padding: 2rem;
     margin-bottom: 3rem;
@@ -175,8 +287,8 @@
   }
   
   .interpreter-video {
-    width: 40%;
-    height: 280px;
+    width: 100%;
+    height: 200px;
     margin-right: 2rem;
     margin-bottom: 0;
     border-radius: 0.5rem;
@@ -209,132 +321,22 @@
   .howtoplay-container {
     padding: 2rem 3rem;
     gap: 2rem;
+    height: 200px;
   }
   
   .how {
     width: 100%;
-    max-width: 900px;
+    max-width: 500px;
     margin: 0 auto 2rem auto;
   }
   
   .how img {
-    width: 100%;
+    width: 50%;
     height: auto;
     border-radius: 1rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   }
 }
-
-@media (min-width: 1440px) {
-  .introduction-container {
-    margin-left: 20em;
-    padding-top: 2rem;
-    padding-bottom: 5rem;
-  }
-  
-  .intro-header {
-    margin: 0 3rem 4rem 3rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .intro-text {
-    font-size: 3rem;
-    padding: 1.5rem 3rem;
-    margin-bottom: 2.5rem;
-  }
-  
-  .twobuttons {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    gap: 3rem;
-  }
-  
-  .twobuttons button {
-    font-size: 1.8rem;
-    padding: 1.2rem 2.5rem;
-    min-width: 180px;
-    border: none;
-    border-radius: 0.5rem;
-    background-color: var(--purple);
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .twobuttons button:hover {
-    background-color: var(--mid-purple);
-  }
-  
-  .twobuttons button.active-btn {
-    background-color: var(--light-purple);
-    color: var(--background);
-  }
-  
-  .interpreter-container {
-    padding: 0 4rem 4rem 4rem;
-  }
-  
-  .interpreter-intro {
-    max-width: 1200px;
-    height: auto;
-    min-height: 400px;
-    padding: 3rem;
-    margin-bottom: 4rem;
-    border-radius: 1rem;
-  }
-  
-  .interpreter-video {
-    width: 45%;
-    height: 350px;
-    margin-right: 3rem;
-    border-radius: 0.5rem;
-    object-fit: cover;
-  }
-  
-  .interpreter-details {
-    flex: 1;
-    padding: 2rem;
-  }
-  
-  .interpreter-details p:nth-child(1) {
-    font-size: 2.5rem;
-    margin-bottom: 1.5rem;
-    font-weight: bold;
-  }
-  
-  .interpreter-details p {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    line-height: 1.5;
-  }
-  
-  .interpreter-details p span {
-    font-size: 1.5rem;
-    color: var(--light-purple);
-  }
-  
-  .howtoplay-container {
-    padding: 3rem 4rem;
-    gap: 3rem;
-  }
-  
-  .how {
-    max-width: 1200px;
-    margin: 0 auto 3rem auto;
-  }
-  
-  .how img {
-    width: 100%;
-    height: auto;
-    border-radius: 1rem;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-  }
-}
-/* @media (min-width: 749px) {} */
-
 /* Add these styles for larger video in modal context */
 .modal-content .interpreter-video {
   width: 60% !important;
@@ -350,21 +352,8 @@
 
 /* Mobile responsive styles */
 @media (max-width: 768px) {
-  .introduction-container {
-    margin-left: 6em; /* Remove sidebar space on mobile */
-    padding: 0;
-    padding-top: 1rem; /* Add top padding to account for mobile navbar */
-    padding-bottom: 5rem;
-  }
-
-  .interpreter-container{
-    margin: 0;
-    padding: 1rem;
-    width: 100%;
-  }
-
   .intro-header {
-    margin: 1rem; /* Add bottom margin for spacing */
+    margin: 0rem 1rem 0rem 7rem; /* Add bottom margin for spacing */
     padding: 1rem;
     width: auto; /* Change from 60vw to auto for better fit */
     display: flex;
@@ -372,6 +361,14 @@
     justify-content: center;
     position: relative;
     z-index: 1;
+  }
+
+  .introduction-container {
+    margin-left: 6em; /* Remove sidebar space on mobile */
+    padding-top: 0rem; /* Add top padding to account for mobile navbar */
+    padding-bottom: 5rem;
+    width: 80vw;
+    align-items: center;
   }
   
   .intro-text {
@@ -411,7 +408,12 @@
     background-color: var(--light-purple);
     color: var(--background);
   }
-  
+  .interpreter-container{
+    margin: 0;
+    padding: 1rem;
+    width: 100%;
+    height: 110rem;
+  }
   .interpreter-intro {
     width: calc(100% - 2rem); /* Account for container padding */
     height: auto;
@@ -424,9 +426,9 @@
   
   .interpreter-video {
     width: 80%;
-    max-width: 300px;
-    height: 180px;
-    margin-bottom: 1rem;
+    max-width: 640px;
+    height: 240px;
+    margin-top: 0.5rem;
     margin-right: 0;
     border-radius: 0.5rem;
     object-fit: contain; /* Changed from cover to contain to prevent cropping */
@@ -463,6 +465,7 @@
   .howtoplay-container {
     padding: 1rem;
     gap: 1rem;
+    height:90rem;
   }
   
   .how {
@@ -492,15 +495,41 @@
 }
 
 @media (max-width: 426px) {
+ .introduction-container {
+    position: relative;
+    right: 3rem;
+  }
+  .intro-header {
+    margin: 0rem 0rem 0rem 0rem; /* Add bottom margin for spacing */
+    padding: 1rem;
+    width: auto; /* Change from 60vw to auto for better fit */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+  }
+  .intro-text {
+    font-size: 1.5rem;
+  }
+  .twobuttons button {
+    font-size: 1.2rem;
+    padding: 0.7rem 1.2rem;
+    min-width: 150px;
+    width: 70%;
+    max-width: 200px;
+  }
+  
   .interpreter-intro {
     width: 100%;
-    height: auto;
+    height: 80vh;
   }
   
   .interpreter-video {
     width: 100%;
-    max-width: 350px;
+    max-width: 280px;
     height: 160px;
+   
   }
   
   .modal-content .interpreter-video {
@@ -508,6 +537,29 @@
     height: 180px !important;
     max-width: 350px !important;
   }
+   .interpreter-details p:nth-child(1) {
+    font-size: 1.4rem;
+    font-weight: bold;
+  }
+  
+  .interpreter-details p {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+  }
+  
+  .interpreter-details p span {
+    font-size: 1rem;
+    color: var(--light-purple);
+  }
+
+  .howtoplay-container {
+    padding: 1rem;
+    gap: 1rem;
+    height:58rem;
+  }
+  
+
 }
 
 /* instructions-----------------------------------------------------------------------------------------------------------------------*/
@@ -528,37 +580,90 @@
 }
 
 .how img {
-  width: 100%; /* Use full container width */
+  width: 100%; /* Use full container width by default */
   height: auto; /* Maintain aspect ratio */
+  /* Allow controlling max size via max-width; change this value to resize the image */
+  max-width: 600px;
 }
 
-@media (min-width: 375px) {  
+/* Large-screen override: ensure `.how img` is larger on wide viewports.
+   Placed at the end so it overrides earlier/global rules. Adjust `max-width` as needed. */
+@media (min-width: 1440px) {
+  .how img {
+    width: auto; /* let image keep natural width up to max-width */
+    max-width: 1000px; /* change this value to control image size at >=1440px */
+    height: auto;
+  }
+}
+
+@media (max-width: 376px) {  
   .introduction-container {
-    margin-left: 0rem;
-    padding: 0rem;
-    height: 90vh;
-    margin-bottom: 10rem;
-  } 
-  .interpreter-intro {
-    width: 20rem;
-  }
-  .interpreter-container {
-      margin-left: 0.8rem;
-  }
-  .scroll-area {
-    width: 20rem;
+    position: relative;
+    right: 3rem;
   }
   .intro-header {
-    width: 20rem;
+    margin: 0rem 0rem 0rem 0rem; /* Add bottom margin for spacing */
+    padding: 1rem;
+    width: auto; /* Change from 60vw to auto for better fit */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
   }
-  .twobuttons button{
-    max-width: 2rem;
-    height: 2;
+  .intro-text {
+    font-size: 1.5rem;
   }
+  .twobuttons button {
+    font-size: 1.2rem;
+    padding: 0.7rem 1.2rem;
+    min-width: 150px;
+    width: 70%;
+    max-width: 200px;
+  }
+  .interpreter-container {
+   
+    height: 120rem;
+  }
+  .interpreter-intro {
+    width: 100%;
+    height: 90vh;
+  }
+  
+  .interpreter-video {
+    width: 100%;
+    max-width: 280px;
+    height: 160px;
+    border-radius: 10px;
+    object-fit: contain;
+  }
+  
+  .modal-content .interpreter-video {
+    width: 100% !important;
+    height: 180px !important;
+    max-width: 350px !important;
+  }
+   .interpreter-details p:nth-child(1) {
+    font-size: 1.4rem;
+    font-weight: bold;
+  }
+  
+  .interpreter-details p {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+  }
+  
+  .interpreter-details p span {
+    font-size: 1rem;
+    color: var(--light-purple);
+  }
+
   .howtoplay-container {
-    width: 23rem;
-    margin-left: 1.8rem;
-    
+    padding: 1rem;
+    gap: 1rem;
+    height:50rem;
   }
+  
 
 }

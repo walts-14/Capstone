@@ -29,10 +29,16 @@ export const uploadVideo = async (req, res) => {
     const result = await cloudinary.uploader.upload(req.file.path, {
       resource_type: "video",
       folder: folderPath,
+      transformation: [
+        {width: 1000, crop: "scale"},
+        {quality: "auto"},
+        {fetch_format: "auto"}
+      ]
     });
 
     const newVideo = new Video({
       videoUrl: result.secure_url,
+      publicId: result.public_id,
       word,
       description,
       level,

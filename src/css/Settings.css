@@ -772,6 +772,275 @@
 
 }
 
+@media (max-width: 415px) {
+  .settings-container {
+    background-color: #271d3e;
+    width: 90vw;
+    height: 58vh;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    top: 2rem;
+    left: -1rem;
+    transform: translateX(-50%) translateX(14rem); /* center + offset */
+    padding: 1rem;
+    border-radius: 1rem;
+  }
+  .profile-picture-wrapper {
+    margin: 0px;
+     margin-left: 0rem;
+  }
+  .profile-pic-container {
+    display: flex;
+    justify-content: center;
+    width: 7rem;
+    height: 7rem;
+    margin-left: 0.5rem;
+  
+  }
+  .profile-btn {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+  }
+  .change-pic {
+    background-color: var(--input-gray);
+    height: auto;
+    width: clamp(200px, 17vw, 300px);
+    font-size: 1rem;
+    font-family: "Baloo", sans-serif;
+    padding: 10px;
+  }
+  .delete-btn {
+    background-color: #d7443e;  
+    height: auto;
+    width: clamp(200px, 17vw, 300px);
+    font-size: 1rem;
+    font-family: "Baloo", sans-serif;
+    padding: 10px;
+  }
+  .profile-picture-wrapper {
+    width: 50vw; /* adjust based on your original image size */
+    height: 50vh;
+  }
+  .settings-container img {
+    position: relative;
+    left: 1.5em;
+    top: 0;
+  }
+
+
+  .students-information {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 6rem;
+    margin-right: 0px;
+    gap: 0.5rem;
+
+  }
+  .name-stud {
+    font-family: "Baloo", sans-serif;
+    left: 16em;
+    top: 1em;
+    font-size: 1rem;
+  }
+  .username-stud {
+    font-family: "Baloo", sans-serif;
+    left: 16em;
+    top: 5.5em;
+    font-size: 1rem;
+  }
+  .email-stud {
+    font-family: "Baloo", sans-serif;
+    left: 16em;
+    top: 10em;
+    font-size: 1rem;
+  }
+  .student-details {
+    height: auto;
+    width: 80vw;
+    padding-left: 0.5rem;
+    background-color: var(--background);
+    font-size: 1rem;
+    font-family: "Baloo", sans-serif;
+    left: 12.5em;
+    top: 1.8em;
+    color: var(--grey-purple);
+  }
+  .username-stud-view {
+    height: auto;
+    width: 80vw;
+    padding-left: 0.5rem;
+    background-color: var(--background);
+    font-size: 1rem;
+    font-family: "Baloo", sans-serif;
+    left: 12.5em;
+    top: 3.3em;
+    color: var(--grey-purple);
+  }
+  .email-stud-view {
+    height: auto;
+    width: 80vw;
+    padding-left: 0.5rem;
+    background-color: var(--background);
+    font-size: 1rem;
+    font-family: "Baloo", sans-serif;
+    left: 12.5em;
+    top: 5em;
+    color: var(--grey-purple);
+  }
+   .student-details p, .username-stud-view p, .email-stud-view p {
+    margin-bottom: 0px;
+  }
+
+  .btn-logout-wrapper button {
+    position: absolute;
+    bottom: 4rem;
+    left: 22%;
+    background-color: #d7443e; 
+    font-size: 1rem;
+    padding: 5px 20px;
+    width: 12rem;
+  }
+}
+
+
+@media (max-width: 391px) {
+  .settings-container {
+    background-color: #271d3e;
+    width: 90vw;
+    height: 62vh;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    top: 2rem;
+    left: -1.5rem;
+    transform: translateX(-50%) translateX(14rem); /* center + offset */
+    padding: 1rem;
+    border-radius: 1rem;
+  }
+  .profile-picture-wrapper {
+    margin: 0px;
+     margin-left: 0rem;
+  }
+  .profile-pic-container {
+    display: flex;
+    justify-content: center;
+    width: 7rem;
+    height: 7rem;
+    margin-left: 0.5rem;
+  
+  }
+  .profile-btn {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+  }
+  .change-pic {
+    background-color: var(--input-gray);
+    height: auto;
+    width: clamp(200px, 17vw, 300px);
+    font-size: 1rem;
+    font-family: "Baloo", sans-serif;
+    padding: 10px;
+  }
+  .delete-btn {
+    background-color: #d7443e;  
+    height: auto;
+    width: clamp(200px, 17vw, 300px);
+    font-size: 1rem;
+    font-family: "Baloo", sans-serif;
+    padding: 10px;
+  }
+  .profile-picture-wrapper {
+    width: 50vw; /* adjust based on your original image size */
+    height: 50vh;
+  }
+  .settings-container img {
+    position: relative;
+    left: 1.5em;
+    top: 0;
+  }
+
+
+  .students-information {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 6rem;
+    margin-right: 0px;
+    gap: 0.5rem;
+
+  }
+  .name-stud {
+    font-family: "Baloo", sans-serif;
+    left: 16em;
+    top: 1em;
+    font-size: 1rem;
+  }
+  .username-stud {
+    font-family: "Baloo", sans-serif;
+    left: 16em;
+    top: 5.5em;
+    font-size: 1rem;
+  }
+  .email-stud {
+    font-family: "Baloo", sans-serif;
+    left: 16em;
+    top: 10em;
+    font-size: 1rem;
+  }
+  .student-details {
+    height: auto;
+    width: 80vw;
+    padding-left: 0.5rem;
+    background-color: var(--background);
+    font-size: 1rem;
+    font-family: "Baloo", sans-serif;
+    left: 12.5em;
+    top: 1.8em;
+    color: var(--grey-purple);
+  }
+  .username-stud-view {
+    height: auto;
+    width: 80vw;
+    padding-left: 0.5rem;
+    background-color: var(--background);
+    font-size: 1rem;
+    font-family: "Baloo", sans-serif;
+    left: 12.5em;
+    top: 3.3em;
+    color: var(--grey-purple);
+  }
+  .email-stud-view {
+    height: auto;
+    width: 80vw;
+    padding-left: 0.5rem;
+    background-color: var(--background);
+    font-size: 1rem;
+    font-family: "Baloo", sans-serif;
+    left: 12.5em;
+    top: 5em;
+    color: var(--grey-purple);
+  }
+   .student-details p, .username-stud-view p, .email-stud-view p {
+    margin-bottom: 0px;
+  }
+
+  .btn-logout-wrapper button {
+    position: absolute;
+    bottom: 4rem;
+    left: 22%;
+    background-color: #d7443e; 
+    font-size: 1rem;
+    padding: 5px 20px;
+    width: 12rem;
+  }
+}
+
 @media (max-width: 376px) {
   .settings-container {
     background-color: #271d3e;
