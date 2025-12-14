@@ -19,6 +19,7 @@ import LbComponent from "../../Leaderboard/LbComponent";
 import ProgressTracker from "../../Dashboard/ProgressTracker";
 import SidenavAdmins from "../../../Components/SidenavAdmins.jsx";
 import QRModal from "../../../Components/QRCode/QRModal.jsx";
+import ReplyModal from "../../../Components/ReplyModal";
 
 const DashboardAdmin = () => {
   const navigate = useNavigate();
@@ -41,6 +42,7 @@ const DashboardAdmin = () => {
   const [showNotificationModal, setShowNotificationModal] = useState(false);
   const [messages, setMessages] = useState([]); // fetched from /api/messages/for-admin
   const [loadingMessages, setLoadingMessages] = useState(false);
+  const [replyingToMessage, setReplyingToMessage] = useState(null);
 
   // Fetch messages for admin
 
@@ -124,6 +126,39 @@ const fetchAdminMessages = async (grade = "") => {
       const serverMsg = err?.response?.data?.message || "Failed to delete message.";
       toast.error(serverMsg);
     }
+  };
+
+  const handleMarkAllAsRead = async () => {
+    try {
+      await axios.put("/api/messages/all/read");
+      setMessages((prev) => prev.map((m) => ({ ...m, isRead: true })));
+      toast.success("All messages marked as read");
+    } catch (err) {
+      console.error("Failed to mark all as read", err?.response?.data || err);
+      toast.error("Failed to mark all as read");
+    }
+  };
+
+  const handleDeleteAll = async () => {
+    if (!window.confirm("Delete all messages? This cannot be undone.")) return;
+    try {
+      await axios.delete("/api/messages/all");
+      setMessages([]);
+      toast.success("All messages deleted");
+    } catch (err) {
+      console.error("Failed to delete all messages", err?.response?.data || err);
+      toast.error("Failed to delete all messages");
+    }
+  };
+
+  const handleReplyClick = (message) => {
+    setReplyingToMessage(message);
+  };
+
+  const handleReplySent = (reply) => {
+    setReplyingToMessage(null);
+    setMessages((prev) => [reply, ...prev]);
+    toast.success("Reply sent");
   };
 
   // Helper to sanitize progress data if it has a 'default' key
@@ -703,206 +738,307 @@ const fetchAdminMessages = async (grade = "") => {
 
               {/* Notification Modal */}
               {showNotificationModal && (
-                <div
-                  className="notification-modal"
-                  style={{
-                    position: "fixed",
-                    top: "12%",
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    width: "70vw",
-                    minWidth: "700px",
-                    maxWidth: "1100px",
-                    zIndex: 5000,
-                    background: "#fff",
-                    borderRadius: "18px",
-                    border: "2px solid #7338a0",
-                    boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
-                    color: "#222",
-                    padding: "2.5rem 2.5rem 2rem 2.5rem",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "flex-start",
-                    maxHeight: "80vh",
-                    overflowY: "auto",
-                  }}
-                >
-                  {/* Close button in top right */}
-                  <button
-                    className="notification-close-btn"
+                <>
+                  {/* Overlay backdrop */}
+                  <div
                     style={{
-                      position: "absolute",
-                      top: "18px",
-                      right: "28px",
-                      background: "#e53935",
-                      color: "#fff",
-                      border: "none",
-                      borderRadius: "15%",
-                      width: "38px",
-                      height: "38px",
-                      fontSize: "1.5rem",
-                      fontWeight: "bold",
-                      cursor: "pointer",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      zIndex: 10,
+                      position: "fixed",
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      background: "rgba(0, 0, 0, 0.5)",
+                      zIndex: 4999,
+                      onClick: () => setShowNotificationModal(false),
                     }}
-                    onClick={() => setShowNotificationModal(false)}
-                    aria-label="Close"
-                  >
-                    &times;
-                  </button>
-
-                  <h1
-                    className="notification-title"
+                  />
+                  {/* Modal */}
+                  <div
+                    className="notification-modal"
                     style={{
-                      fontWeight: "bold",
-                      fontSize: "2.5rem",
-                      marginBottom: "2rem",
+                      position: "fixed",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%, -50%)",
+                      width: "70vw",
+                      minWidth: "700px",
+                      maxWidth: "1100px",
+                      zIndex: 5000,
+                      background: "#fff",
+                      borderRadius: "18px",
+                      border: "2px solid #7338a0",
+                      boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
                       color: "#222",
+                      padding: "2.5rem 2.5rem 2rem 2.5rem",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "flex-start",
+                      maxHeight: "80vh",
+                      overflowY: "auto",
                     }}
                   >
-                    Notification
-                  </h1>
+                    {/* Close button in top right */}
+                    <button
+                      className="notification-close-btn"
+                      style={{
+                        position: "absolute",
+                        top: "18px",
+                        right: "28px",
+                        background: "#e53935",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: "15%",
+                        width: "38px",
+                        height: "38px",
+                        fontSize: "1.5rem",
+                        fontWeight: "bold",
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        zIndex: 10,
+                      }}
+                      onClick={() => setShowNotificationModal(false)}
+                      aria-label="Close"
+                    >
+                      &times;
+                    </button>
 
-                  <div style={{ width: "100%" }}>
-                    {loadingMessages ? (
-                      <div style={{ color: "#222", textAlign: "center" }}>
-                        Loading...
-                      </div>
-                    ) : messages.length === 0 ? (
-                      <div style={{ color: "#222", textAlign: "center" }}>
-                        No notifications.
-                      </div>
-                    ) : (
-                      messages.map((msg) => (
-                        <div
-                          key={msg._id}
-                          className="notification-card"
-                          style={{
-                            background: "#6C7294",
-                            border: "1px solid #e0e0e0",
-                            borderRadius: "10px",
-                            marginBottom: "1rem",
-                            padding: "1rem",
-                            color: "#fff",
-                            opacity: msg.isRead ? 0.7 : 1,
-                            display: "flex",
-                            justifyContent: "space-between",
-                            gap: "1rem",
-                            boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
-                          }}
-                        >
-                          <div style={{ flex: 1 }}>
-                            <div
-                              className="notification-tags"
-                              style={{
-                                display: "flex",
-                                gap: "0.5rem",
-                                marginBottom: "0.5rem",
-                                alignItems: "center",
-                              }}
-                            >
-                              <span
-                                className="notification-tag"
+                    <h1
+                      className="notification-title"
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "2.5rem",
+                        marginBottom: "2rem",
+                        color: "#222",
+                      }}
+                    >
+                      Notification
+                    </h1>
+
+                    {/* Bulk Actions */}
+                    <div style={{ marginBottom: "1.5rem", display: "flex", gap: "1rem" }}>
+                      <button
+                        onClick={handleMarkAllAsRead}
+                        style={{
+                          background: "#4f46e5",
+                          color: "#fff",
+                          border: "none",
+                          borderRadius: "8px",
+                          padding: "0.6rem 1.2rem",
+                          cursor: "pointer",
+                          fontWeight: "bold",
+                          fontSize: "1rem",
+                        }}
+                      >
+                        Mark All as Read
+                      </button>
+                      <button
+                        onClick={handleDeleteAll}
+                        style={{
+                          background: "#e53935",
+                          color: "#fff",
+                          border: "none",
+                          borderRadius: "8px",
+                          padding: "0.6rem 1.2rem",
+                          cursor: "pointer",
+                          fontWeight: "bold",
+                          fontSize: "1rem",
+                        }}
+                      >
+                        Delete All
+                      </button>
+                    </div>
+
+                    <div style={{ width: "100%" }}>
+                      {loadingMessages ? (
+                        <div style={{ color: "#222", textAlign: "center" }}>
+                          Loading...
+                        </div>
+                      ) : messages.length === 0 ? (
+                        <div style={{ color: "#222", textAlign: "center" }}>
+                          No notifications.
+                        </div>
+                      ) : (
+                        messages.map((msg) => (
+                          <div
+                            key={msg._id}
+                            className="notification-card"
+                            style={{
+                              background: "#6C7294",
+                              border: "1px solid #e0e0e0",
+                              borderRadius: "10px",
+                              marginBottom: "1rem",
+                              padding: "1rem",
+                              color: "#fff",
+                              opacity: msg.isRead ? 0.7 : 1,
+                              display: "flex",
+                              justifyContent: "space-between",
+                              gap: "1rem",
+                              boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+                            }}
+                          >
+                            <div style={{ flex: 1 }}>
+                              <div
+                                className="notification-tags"
                                 style={{
-                                  background: "#fff",
-                                  color: "#6C7294",
-                                  borderRadius: "8px",
-                                  padding: "0.2rem 0.8rem",
-                                  fontWeight: "bold",
-                                  fontSize: "1rem",
+                                  display: "flex",
+                                  gap: "0.5rem",
+                                  marginBottom: "0.5rem",
+                                  alignItems: "center",
                                 }}
                               >
-                                {msg.grade || "All Grades"}
-                              </span>
-
-                              <span
-                                className="notification-tag"
-                                style={{
-                                  background: "#e0e0e0",
-                                  color: "#6C7294",
-                                  borderRadius: "8px",
-                                  padding: "0.2rem 0.8rem",
-                                  fontWeight: "bold",
-                                  fontSize: "1rem",
-                                }}
-                              >
-                                {msg.teacherName ||
-                                  msg.senderId?.name ||
-                                  "Teacher"}
-                              </span>
-
-                              {msg.studentName && (
                                 <span
                                   className="notification-tag"
                                   style={{
-                                    background: "#bdbdbd",
+                                    background: "#fff",
                                     color: "#6C7294",
                                     borderRadius: "8px",
                                     padding: "0.2rem 0.8rem",
                                     fontWeight: "bold",
+                                    fontSize: "1rem",
                                   }}
                                 >
-                                  {msg.studentName}
+                                  {msg.grade || "All Grades"}
                                 </span>
-                              )}
+
+                                <span
+                                  className="notification-tag"
+                                  style={{
+                                    background: "#e0e0e0",
+                                    color: "#6C7294",
+                                    borderRadius: "8px",
+                                    padding: "0.2rem 0.8rem",
+                                    fontWeight: "bold",
+                                    fontSize: "1rem",
+                                  }}
+                                >
+                                  {msg.teacherName ||
+                                    msg.senderId?.name ||
+                                    "Teacher"}
+                                </span>
+
+                                {msg.studentName && (
+                                  <span
+                                    className="notification-tag"
+                                    style={{
+                                      background: "#bdbdbd",
+                                      color: "#6C7294",
+                                      borderRadius: "8px",
+                                      padding: "0.2rem 0.8rem",
+                                      fontWeight: "bold",
+                                    }}
+                                  >
+                                    {msg.studentName}
+                                  </span>
+                                )}
+                              </div>
+
+                              <div
+                                className="notification-body"
+                                style={{ color: "#fff", fontSize: "1rem" }}
+                              >
+                                {msg.body}
+                              </div>
+
+                              <div
+                                className="notification-time"
+                                style={{
+                                  marginTop: "0.5rem",
+                                  color: "#e0e0e0",
+                                  fontSize: "0.85rem",
+                                }}
+                              >
+                                {msg.createdAt
+                                  ? new Date(msg.createdAt).toLocaleString()
+                                  : ""}
+                              </div>
                             </div>
 
                             <div
-                              className="notification-body"
-                              style={{ color: "#fff", fontSize: "1rem" }}
-                            >
-                              {msg.body}
-                            </div>
-
-                            <div
-                              className="notification-time"
+                              className="notification-actions"
                               style={{
-                                marginTop: "0.5rem",
-                                color: "#e0e0e0",
-                                fontSize: "0.85rem",
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: "0.5rem",
+                                marginLeft: "1rem",
                               }}
                             >
-                              {msg.createdAt
-                                ? new Date(msg.createdAt).toLocaleString()
-                                : ""}
-                            </div>
-                          </div>
-
-                          <div
-                            className="notification-actions"
-                            style={{
-                              display: "flex",
-                              flexDirection: "column",
-                              gap: "0.5rem",
-                              marginLeft: "1rem",
-                            }}
-                          >
-                            {!msg.isRead && (
+                              {!msg.isRead && (
+                                <button
+                                  onClick={() => markMessageAsRead(msg._id)}
+                                  className="notification-mark-read-btn"
+                                  style={{
+                                    background: "#4f46e5",
+                                    color: "#fff",
+                                    border: "none",
+                                    borderRadius: "8px",
+                                    padding: "0.4rem 0.8rem",
+                                    cursor: "pointer",
+                                    fontWeight: "bold",
+                                    fontSize: "0.9rem",
+                                  }}
+                                >
+                                  Mark read
+                                </button>
+                              )}
                               <button
-                                onClick={() => markMessageAsRead(msg._id)}
-                                className="notification-mark-read-btn"
+                                onClick={() => handleReplyClick(msg)}
                                 style={{
-                                  background: "#4f46e5",
+                                  background: "#2196F3",
                                   color: "#fff",
                                   border: "none",
                                   borderRadius: "8px",
                                   padding: "0.4rem 0.8rem",
                                   cursor: "pointer",
                                   fontWeight: "bold",
+                                  fontSize: "0.9rem",
                                 }}
                               >
-                                Mark read
+                                Reply
                               </button>
-                            )}
+                              <button
+                                onClick={() => deleteMessage(msg._id)}
+                                style={{
+                                  background: "#e53935",
+                                  color: "#fff",
+                                  border: "none",
+                                  borderRadius: "8px",
+                                  padding: "0.4rem 0.8rem",
+                                  cursor: "pointer",
+                                  fontWeight: "bold",
+                                  fontSize: "0.9rem",
+                                }}
+                              >
+                                Delete
+                              </button>
+                            </div>
                           </div>
-                        </div>
-                      ))
+                        ))
+                      )}
+                    </div>
+
+                    {/* Reply Modal */}
+                    {replyingToMessage && (
+                      <ReplyModal
+                        message={replyingToMessage}
+                        token={token}
+                        onClose={() => setReplyingToMessage(null)}
+                        onSent={handleReplySent}
+                      />
                     )}
                   </div>
-                </div>
+                </>
+              )}
+
+              {/* Reply Modal (when notification modal is closed) */}
+              {!showNotificationModal && replyingToMessage && (
+                <ReplyModal
+                  message={replyingToMessage}
+                  token={token}
+                  onClose={() => setReplyingToMessage(null)}
+                  onSent={handleReplySent}
+                />
               )}
             </div>
           )}

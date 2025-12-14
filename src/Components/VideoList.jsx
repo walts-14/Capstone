@@ -25,20 +25,25 @@ const VideoList = () => {
     fetch("/api/videos")
       .then((res) => res.json())
       .then((data) => {
-        const transformed = data.map((v) => ({
-          id: v._id,
-          word: v.word || "Lesson video",
-          description: v.description || "",
-          // Optimized Cloudinary video URL using SDK
-          video: v.publicId
-            ? cld.video(v.publicId)
-                .resize(scale().width(1000))
-                .delivery(quality(auto()))
-                .delivery(format(autoFormat()))
-                .toURL()
-            : v.videoUrl,
-        }));
-        setVideos(transformed);
+  const transformed = data.map((v) => {
+    console.log("Video publicId:", v.publicId); // Debug line
+    
+    return {
+      id: v._id,
+      word: v.word || "Lesson video",
+      description: v.description || "",
+      video: v.publicId
+        ? cld.video(v.publicId)
+            .resize(scale().width(1000))
+            .delivery(quality(auto()))
+            .delivery(format(autoFormat()))
+            .toURL()
+        : v.videoUrl,
+    };
+  });
+  
+  console.log("Transformed URLs:", transformed.map(v => v.video)); // See final URLs
+  setVideos(transformed);
         localStorage.setItem(cacheKey, JSON.stringify(transformed));
         setLoading(false);
       })

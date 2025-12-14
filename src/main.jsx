@@ -40,6 +40,7 @@ import QuizUpload from "./Pages/QuizUpload.jsx"; // adjust the path accordingly
 import IntroductionModal from "./Components/IntroductionModal.jsx"; // adjust the path accordingly
 import Maintenance from "./Components/Maintenance/MaintenanceModal.jsx"; // adjust the path accordingly
 import LivesRunOut from "./Pages/Quizzes/Livesrunout.jsx";
+import AdminMessages from './Pages/AdminMessages';
 
 const router = createBrowserRouter([
   { path: "/", element: <Navigate to="/login" replace /> }, // Redirect "/" to "/login"
@@ -78,6 +79,7 @@ const router = createBrowserRouter([
       { path: "maintenance", element: <Maintenance /> },
       { path: "livesrunout", element: <LivesRunOut /> },
       { path: "practice/:lessonKey", element: <Practice /> },
+      { path: "admin/messages", element: <AdminMessages /> }
     ],
   },
 

@@ -12,6 +12,8 @@ const ReadBySchema = new Schema(
 );
 
 const MessageSchema = new Schema({
+  parentMessageId: { type: mongoose.Schema.Types.ObjectId, ref: "Message", default: null },
+
   senderId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   senderRole: { type: String, required: true },
 

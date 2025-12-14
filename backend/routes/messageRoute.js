@@ -8,6 +8,9 @@ import {
   getUsersByGradeLevel,
   editMessage,
   deleteMessage,
+  replyToMessage,
+  markAllAsRead,
+  deleteAllMessages,
 } from "../controllers/messageController.js";
 import { authMiddleware } from "../middlewares/auth.js"; // keep path you actually use
 
@@ -23,6 +26,15 @@ router.get("/for-admin", authMiddleware, getMessagesForAdmin);
 
 // Mark message read
 router.put("/:id/read", authMiddleware, markAsRead);
+
+// Admin replies to a message from Super Admin
+router.post("/:id/reply", authMiddleware, replyToMessage);
+
+// Bulk: Mark all messages as read
+router.put("/all/read", authMiddleware, markAllAsRead);
+
+// Bulk: Delete all messages (soft-delete for user)
+router.delete("/all", authMiddleware, deleteAllMessages);
 
 // Get messages sent by current user (SuperAdmin view)
 router.get("/sent", authMiddleware, getMessagesSentBySender);
