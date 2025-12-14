@@ -766,7 +766,7 @@ const SuperAdmin = () => {
                     transition: "all 0.3s ease",
                   }}
                 >
-                  Users
+                  Student
                 </button>
                 <button
                   className={`tabss ${
@@ -816,7 +816,7 @@ const SuperAdmin = () => {
                   className="Create"
                   style={{ display: "flex", alignItems: "center" }}
                 >
-                  <div style={{ marginRight: "1.5rem" }}>
+                  <div style={{ marginRight: "0rem" }}>
                     <button
                       className="btn text-light px-1 py-1"
                       style={{
@@ -1032,7 +1032,7 @@ const SuperAdmin = () => {
                                 <div style={{ marginBottom: "0.7rem" }}>
                                   <label
                                     style={{
-                                      color: "#000000",
+                                      color: "#222222",
                                       fontWeight: "bold",
                                       fontSize: "1.1rem",
                                     }}
@@ -1862,8 +1862,8 @@ const SuperAdmin = () => {
                       aria-label="Close"
                       style={{
                         position: "absolute",
-                        top: "24px",
-                        right: "38rem",
+                        top: "18px",
+                        right: "33rem",
                         backgroundColor: "#e9170f",
                         borderRadius: "20%",
                         padding: "4px",
@@ -1880,18 +1880,9 @@ const SuperAdmin = () => {
                       }}
                     >
                       {/* Only white X, no black shadow or border */}
-                      <span
-                        style={{
-                          color: "#fff",
-                          fontWeight: "bold",
-                          fontSize: "2rem",
-                          lineHeight: "1",
-                        }}
-                      >
-                        ×
-                      </span>
                     </button>
                     <div
+                      className="superadmin-progress-wrapper"
                       style={{
                         width: "100%",
                         height: "100%",
