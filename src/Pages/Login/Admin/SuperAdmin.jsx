@@ -743,7 +743,7 @@ const SuperAdmin = () => {
                           borderRadius: "30px",
                           border: "2px solid #e0e0e0",
                           zIndex: 2000,
-                          width: "45%",
+                          width: "60%",
                           height: "80%",
                           boxShadow: "0 4px 24px rgba(0,0,0,0.18)",
                           padding: "2rem 2.5rem 2rem 2.5rem",
