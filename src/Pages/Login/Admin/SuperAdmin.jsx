@@ -600,6 +600,7 @@ const SuperAdmin = () => {
           setShowLeaderboard={setShowLeaderboard}
           showLeaderboard={showLeaderboard}
           role="superadmin"
+          logout={logout}
         />
       </aside>
 
@@ -1778,10 +1779,10 @@ const SuperAdmin = () => {
           )}
         </main>
 
-        {/* Footer */}
+        {/* Footer: Show logout for desktop/laptop, hide for tablet/mobile */}
         <footer className="holy-grail-footer">
           <button
-            className="btn-logout"
+            className="btn-logout logout-desktop"
             onClick={logout}
             style={{
               backgroundColor: "#e74c3c",

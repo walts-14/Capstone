@@ -10,19 +10,24 @@ const Sidebar = ({
   setShowLeaderboard,
   showLeaderboard,
   role = "admin",
+  logout,
 }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [activeItem, setActiveItem] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 600);
+  const [isTablet, setIsTablet] = useState(
+    window.innerWidth > 600 && window.innerWidth <= 1024
+  );
   const [selectedGradeLocal, setSelectedGradeLocal] = useState("");
 
   // Handle window resize
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-      if (window.innerWidth > 768) {
+      setIsMobile(window.innerWidth <= 600);
+      setIsTablet(window.innerWidth > 600 && window.innerWidth <= 1024);
+      if (window.innerWidth > 1024) {
         setSidebarOpen(false);
       }
     };
@@ -65,7 +70,7 @@ const Sidebar = ({
   return (
     <>
       {/* Mobile Toggle Button */}
-      {isMobile && (
+      {(isMobile || isTablet) && (
         <button
           className="sidebar-toggle"
           onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -79,7 +84,9 @@ const Sidebar = ({
       <div
         className={`sidebar-overlay ${sidebarOpen ? "open" : ""}`}
         onClick={() => setSidebarOpen(false)}
-        style={{ display: isMobile && sidebarOpen ? "block" : "none" }}
+        style={{
+          display: (isMobile || isTablet) && sidebarOpen ? "block" : "none",
+        }}
       />
 
       {/* Sidebar - with holy-grail-sidebar parent class compatibility */}
@@ -99,9 +106,7 @@ const Sidebar = ({
             borderBottom: "2px solid #6c7294",
           }}
         >
-          {String(role).toLowerCase() === "superadmin"
-            ? "WeSign"
-            : "WeSign"}
+          {String(role).toLowerCase() === "superadmin" ? "WeSign" : "WeSign"}
         </h2>
         <div className="sidebar-box">
           <div
@@ -110,7 +115,11 @@ const Sidebar = ({
             }`}
             onClick={handleDashboardClick}
           >
-            <img src={DashboardIcon} alt="Dashboard" className="sidebar-icon img-icon" />
+            <img
+              src={DashboardIcon}
+              alt="Dashboard"
+              className="sidebar-icon img-icon"
+            />
             <span>Dashboard</span>
           </div>
 
@@ -153,6 +162,32 @@ const Sidebar = ({
                 </div>
               );
             })}
+          </div>
+        )}
+
+        {/* Mobile and Tablet Logout Button in Sidebar */}
+        {(isMobile || isTablet) && sidebarOpen && (
+          <div style={{ marginTop: "1rem", textAlign: "center" }}>
+            <button
+              className="btn-logout"
+              onClick={logout}
+              style={{
+                backgroundColor: "#e74c3c",
+                color: "#fff",
+                fontFamily: "Baloo, sans-serif",
+                fontSize: "1.2rem",
+                border: "none",
+                borderRadius: "50px",
+                cursor: "pointer",
+                padding: "0.6rem 2rem",
+                transition: "all 0.3s ease",
+                marginTop: "1.5rem",
+                marginLeft: "2.8rem",
+                width: "auto",
+              }}
+            >
+              Logout
+            </button>
           </div>
         )}
       </div>

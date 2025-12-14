@@ -57,8 +57,8 @@
 
 .CreateAccount {
   position: absolute;
-  top: 70px; /* Adjust position relative to the top */
-  right: 50px; /* Align to the right */
+  top: 70px;
+  right: 50px;
   background-color: #4a2574;
   color: #ffffff;
   border-radius: 10px;
@@ -69,9 +69,52 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 20; /* Ensure the button is above other elements */
+  z-index: 20;
 }
 
+@media (max-width: 425px) {
+  .CreateAccount {
+    position: static;
+    font-size: 0.95rem;
+    padding: 6px 10px;
+    min-width: 80px;
+    max-width: 110px;
+    width: 100%;
+    margin: 0 2px 0 0;
+    box-sizing: border-box;
+  }
+  .divtabs {
+    margin: 0.5rem 0 0 0;
+    flex-direction: column;
+    width: 100%;
+    align-items: stretch;
+    gap: 0.3rem;
+    display: flex;
+  }
+  .tabs {
+    width: 100%;
+    flex-direction: row;
+    gap: 0.3rem;
+    padding: 0;
+    display: flex;
+  }
+  .tabss {
+    font-size: 0.85rem;
+    padding: 7px 0;
+    min-width: 60px;
+    max-width: 90px;
+    border-width: 3px;
+    margin: 0 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: normal;
+  }
+}
 .divtabs {
   margin: 1rem 0 0 18.75rem;
   /* Adjust margin for proper alignment */
@@ -189,13 +232,14 @@
   margin-left: 10rem;
 }
 
-.logout-container .btn {
-  background-color: var(--midlight-red);
-  display: flex;
-  justify-content: center; /* Center the button horizontally */
-  align-items: center;
-  margin-top: 650px; /* Add spacing above the button */
-  width: 10%; /* Ensure it spans the full width of the container */
+/* Show logout-desktop only on desktop/laptop (min-width: 1025px) */
+.logout-desktop {
+  display: block;
+}
+@media (max-width: 1024px) {
+  .logout-desktop {
+    display: none !important;
+  }
 }
 
 /* Ensure buttons are on top */
@@ -326,6 +370,12 @@
     font-size: 1.5rem !important;
     margin-bottom: 1rem !important;
   }
+  .btn-logout {
+    margin-right: 2rem;
+    height: auto;
+    width: auto;
+    margin-bottom: 1rem;
+  }
 }
 
 @media (max-width: 425px) {
@@ -399,6 +449,12 @@
   .message-form-title {
     font-size: 1.75rem !important;
     margin-bottom: 1.25rem !important;
+  }
+  .btn-logout {
+    margin-right: 3.8rem;
+    height: auto;
+    width: auto;
+    margin-bottom: 1rem;
   }
 }
 

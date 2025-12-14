@@ -1,3 +1,12 @@
+/* Utility: flex row right align for header controls */
+.header-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.7rem;
+  width: 100%;
+}
 @font-face {
   font-family: "Baloo";
   src: url("/src/font/Baloo-Regular.ttf") format("truetype");
@@ -147,8 +156,8 @@
 .Create {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  gap: 1rem;
+  justify-content: center;
+  gap: 0.7rem;
   background-color: transparent;
   color: #ffffff;
   border-radius: 10px;
@@ -503,6 +512,22 @@
   .contentdiv {
     max-width: 80%;
     overflow-x: auto;
+  }
+
+  .header-actions {
+    justify-content: flex-end !important;
+    flex-direction: row !important;
+    width: 100% !important;
+    margin-bottom: 1rem;
+  }
+  .Create {
+    justify-content: center;
+    width: auto;
+    min-width: 90px;
+    max-width: 150px;
+    font-size: 1rem;
+    margin-left: auto;
+    gap: 0.5rem;
   }
 }
 

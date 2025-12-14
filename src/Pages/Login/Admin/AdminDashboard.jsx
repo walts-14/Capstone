@@ -153,7 +153,10 @@ const DashboardAdmin = () => {
       setMessages([]);
       toast.success("All messages deleted");
     } catch (err) {
-      console.error("Failed to delete all messages", err?.response?.data || err);
+      console.error(
+        "Failed to delete all messages",
+        err?.response?.data || err
+      );
       toast.error("Failed to delete all messages");
     }
   };
@@ -608,7 +611,10 @@ const DashboardAdmin = () => {
                       pointerEvents: "auto",
                     }}
                   />
-                  <div className="popup-form" style={{ zIndex: 1000 }}>
+                  <div
+                    className="popup-form"
+                    style={{ zIndex: 1000, marginTop: "4rem" }}
+                  >
                     <div className="popup-content">
                       <h3>{formData.id ? "Edit Student" : "Add Student"}</h3>
                       <form onSubmit={handleFormSubmit}>
@@ -867,7 +873,13 @@ const DashboardAdmin = () => {
                     </h1>
 
                     {/* Bulk Actions */}
-                    <div style={{ marginBottom: "1.5rem", display: "flex", gap: "1rem" }}>
+                    <div
+                      style={{
+                        marginBottom: "1.5rem",
+                        display: "flex",
+                        gap: "1rem",
+                      }}
+                    >
                       <button
                         onClick={handleMarkAllAsRead}
                         style={{
@@ -1095,8 +1107,8 @@ const DashboardAdmin = () => {
         </main>
 
         {/* Footer */}
-        <footer className="holy-grail-footer ">
-          <button className="btn-logout" onClick={logout}>
+        <footer className="holy-grail-footer">
+          <button className="btn-logout logout-desktop" onClick={logout}>
             Logout
           </button>
         </footer>
