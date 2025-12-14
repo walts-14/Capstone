@@ -83,175 +83,18 @@ const mapMessage = (msg) => ({
 });
 
 const SuperAdmin = () => {
-  // State for showing message form
+  // State declarations (moved isSubmitting up to prevent errors)
   const [showMessageForm, setShowMessageForm] = useState(false);
-  // State for new message form
   const [newMessage, setNewMessage] = useState({
     teacher: "",
     grade: "",
     student: "",
     content: "",
   });
-
-  // State for sending to all admins
   const [sendToAllAdmins, setSendToAllAdmins] = useState(false);
-
-  // Handler for plus button
-  const handlePlusClick = () => {
-    fetchUsers();
-    fetchTeachers();
-    // Do NOT fetch students until a grade is selected
-    setShowMessageForm(true);
-  };
-  const handleMessageFormClose = () => {
-    setShowMessageForm(false);
-    setNewMessage({ teacher: "", grade: "", student: "", content: "" });
-  };
-  // Handler for form input
-  const handleMessageInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewMessage((prev) => ({ ...prev, [name]: value }));
-
-    if (name === "grade") {
-      // fetch students for that grade (these students are for monitoring / selection only)
-      fetchStudentsForMessage(value);
-      // optionally keep the modal's teacher list in sync:
-      // fetchTeachers(value);
-    }
-  };
-  // ...removed duplicate handleSendMessage...
-  // Message popup state
   const [showMessagesPopup, setShowMessagesPopup] = useState(false);
-  // Actual messages from backend
   const [messages, setMessages] = useState([]);
-
   const [messageStudents, setMessageStudents] = useState([]);
-
-  const fetchStudentsForMessage = async (grade = "") => {
-    if (!grade) return; // Do not call API if grade is not selected
-    try {
-      const url = `/api/messages/users/year/${encodeURIComponent(grade)}`;
-      const res = await axios.get(url, {
-        baseURL:
-          import.meta.env.VITE_API_BASE ||
-          "https://wesign-backend-cef3encxhphtg0ds.eastasia-01.azurewebsites.net",
-      });
-      const raw = res.data.data || [];
-      setMessageStudents(raw.map((u) => sanitizeObjectRecursive(u)));
-    } catch (err) {
-      console.error("fetchStudentsForMessage error", err);
-      toast.error("Failed to load students for selected grade.");
-    }
-  };
-
-  // Fetch all messages sent by superadmin
-  const fetchMessages = async () => {
-    try {
-      // Use the 'sent' endpoint which returns messages created by the logged-in sender
-      // (the previous endpoint was for admin recipients and rejects non-admin roles)
-      const res = await axios.get("/api/messages/sent", {
-        baseURL: "",
-      });
-      const raw = Array.isArray(res.data) ? res.data : res.data || [];
-      // Map server message objects into the UI-friendly shape
-      const mapped = raw.map((m) => mapMessage(m));
-      setMessages(mapped);
-    } catch (err) {
-      console.error("Failed to fetch messages", err);
-    }
-  };
-
-  useEffect(() => {
-    if (showMessagesPopup) fetchMessages();
-  }, [showMessagesPopup]);
-
-  // Send a new message
-  const handleSendMessage = async (e) => {
-    e.preventDefault();
-    if (
-      !newMessage.content ||
-      (!sendToAllAdmins && !newMessage.teacher && !newMessage.student)
-    ) {
-      toast.error(
-        "Please select teacher/student or choose 'Send to All Admins' and enter message."
-      );
-      return;
-    }
-    setIsSubmitting(true);
-
-    try {
-      // If sending to all admins, collect all teacher IDs
-      let recipientIds = [];
-      let teacherName = "";
-      let teacherId = null;
-      if (sendToAllAdmins) {
-        recipientIds = teachers.map((t) => t._id);
-        teacherName = "All Admins";
-      } else {
-        teacherId = newMessage.teacher || null;
-        const teacherObj = teachers.find(
-          (t) => String(t._id) === String(teacherId)
-        );
-        teacherName = teacherObj
-          ? teacherObj.name || teacherObj.username || teacherObj.email
-          : "";
-        if (teacherId) recipientIds = [teacherId];
-      }
-
-      // studentId from the users select (we set value to u._id)
-      // existing studentId retrieval
-      const studentId = newMessage.student || null;
-      // find it in messageStudents (these are the grade-filtered students)
-      const studentObj = messageStudents.find(
-        (u) => String(u._id) === String(studentId)
-      );
-      const studentName = studentObj
-        ? studentObj.name || studentObj.username || studentObj.email
-        : "";
-
-      const payload = {
-        title: `${teacherName || "Teacher"} → ${studentName || "Student"}`,
-        body: newMessage.content,
-        grade: newMessage.grade,
-        recipientIds,
-        isBroadcast: sendToAllAdmins,
-        teacherId: teacherId || null,
-        teacherName,
-        studentId: studentId || null,
-        studentName,
-      };
-
-      const res = await axios.post("/api/messages", payload);
-      toast.success(
-        sendToAllAdmins ? "Message sent to all admins" : "Message sent"
-      );
-      setShowMessageForm(false);
-      setNewMessage({ teacher: "", grade: "", student: "", content: "" });
-      setSendToAllAdmins(false);
-      await fetchMessages(); // refresh superadmin's sent list
-    } catch (err) {
-      console.error("Failed to send message:", err?.response?.data || err);
-      const msg = err?.response?.data?.message || "Failed to send message";
-      toast.error(msg);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  // Handler for message button
-  const handleMessageButtonClick = () => {
-    setShowMessagesPopup(true);
-  };
-  const handleCloseMessagesPopup = () => {
-    setShowMessagesPopup(false);
-    setShowMessageForm(false);
-    setNewMessage({ teacher: "", grade: "", student: "", content: "" });
-  };
-  const navigate = useNavigate();
-  const location = useLocation();
-  const token = localStorage.getItem("token");
-
-  // State
   const [users, setUsers] = useState([]);
   const [teachers, setTeachers] = useState([]);
   const [activeTab, setActiveTab] = useState("Users");
@@ -260,15 +103,11 @@ const SuperAdmin = () => {
   const [showProgressTracker, setShowProgressTracker] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [formMode, setFormMode] = useState("create");
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [isSubmitting, setIsSubmitting] = useState(false); // ← Fixed: Moved up
   const [qrModalVisible, setQrModalVisible] = useState(false);
   const [qrDataUrl, setQrDataUrl] = useState(null);
   const [magicUrl, setMagicUrl] = useState(null);
   const [qrStudentEmail, setQrStudentEmail] = useState(null);
-
-  // Add state for editing message
   const [editingMsgId, setEditingMsgId] = useState(null);
   const [editMsgForm, setEditMsgForm] = useState({
     teacher: "",
@@ -277,19 +116,29 @@ const SuperAdmin = () => {
     content: "",
   });
 
+  const [formData, setFormData] = useState({
+    name: "",
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    yearLevel: "",
+  });
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const token = localStorage.getItem("token");
+
   // Prepare a sanitized student object suitable for ProgressTracker
   const sanitizeUserForTracker = (user) => {
     if (!user || typeof user !== "object") return null;
-    // Unwrap primitives we care about
     const name = unwrapDefault(user.name);
     const username = unwrapDefault(user.username);
     const email = unwrapDefault(user.email);
     const yearLevel = unwrapDefault(user.yearLevel);
-    // Only sanitize progress shape — ProgressTracker expects progress grouped by level/lesson
     const progress = sanitizeProgress(
       user.progress || user.progress === null ? user.progress : null
     );
-
     return {
       ...user,
       name,
@@ -301,7 +150,6 @@ const SuperAdmin = () => {
   };
 
   const handleClick = (user) => {
-    // Sanitize minimal fields and progress, then open tracker
     const sanitizedUser =
       sanitizeUserForTracker(user) || sanitizeObjectRecursive(user);
     console.log(
@@ -314,15 +162,6 @@ const SuperAdmin = () => {
   const handleClose = () => {
     setShowProgressTracker(null);
   };
-
-  const [formData, setFormData] = useState({
-    name: "",
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    yearLevel: "",
-  });
 
   useEffect(() => {
     if (token)
@@ -343,7 +182,6 @@ const SuperAdmin = () => {
           "https://wesign-backend-cef3encxhphtg0ds.eastasia-01.azurewebsites.net",
       });
       const raw = res.data.data || [];
-      // Keep raw list but sanitize each user shallowly so UI renders safely
       setUsers(raw.map((u) => sanitizeObjectRecursive(u)));
     } catch (err) {
       console.error(err);
@@ -367,6 +205,140 @@ const SuperAdmin = () => {
       console.error(err);
       toast.error("Failed to load teachers.");
     }
+  };
+
+  const fetchStudentsForMessage = async (grade = "") => {
+    if (!grade) return;
+    try {
+      const url = `/api/messages/users/year/${encodeURIComponent(grade)}`;
+      const res = await axios.get(url, {
+        baseURL:
+          import.meta.env.VITE_API_BASE ||
+          "https://wesign-backend-cef3encxhphtg0ds.eastasia-01.azurewebsites.net",
+      });
+      const raw = res.data.data || [];
+      setMessageStudents(raw.map((u) => sanitizeObjectRecursive(u)));
+    } catch (err) {
+      console.error("fetchStudentsForMessage error", err);
+      toast.error("Failed to load students for selected grade.");
+    }
+  };
+
+  const fetchMessages = async () => {
+    try {
+      const res = await axios.get("/api/messages/sent", {
+        baseURL: "",
+      });
+      const raw = Array.isArray(res.data) ? res.data : res.data || [];
+      // ← Fixed: Preserve raw message for editing
+      const mapped = raw.map((m) => ({
+        ...mapMessage(m),
+        raw: m,
+      }));
+      setMessages(mapped);
+    } catch (err) {
+      console.error("Failed to fetch messages", err);
+    }
+  };
+
+  useEffect(() => {
+    if (showMessagesPopup) fetchMessages();
+  }, [showMessagesPopup]);
+
+  const handlePlusClick = () => {
+    fetchUsers();
+    fetchTeachers();
+    setShowMessageForm(true);
+  };
+
+  const handleMessageFormClose = () => {
+    setShowMessageForm(false);
+    setNewMessage({ teacher: "", grade: "", student: "", content: "" });
+  };
+
+  const handleMessageInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewMessage((prev) => ({ ...prev, [name]: value }));
+    if (name === "grade") {
+      fetchStudentsForMessage(value);
+    }
+  };
+
+  const handleSendMessage = async (e) => {
+    e.preventDefault();
+    if (isSubmitting) return;
+    if (
+      !newMessage.content ||
+      (!sendToAllAdmins && !newMessage.teacher && !newMessage.student)
+    ) {
+      toast.error(
+        "Please select teacher/student or choose 'Send to All Admins' and enter message."
+      );
+      return;
+    }
+    setIsSubmitting(true);
+    try {
+      let recipientIds = [];
+      let teacherName = "";
+      let teacherId = null;
+      if (sendToAllAdmins) {
+        recipientIds = teachers.map((t) => t._id);
+        teacherName = "All Admins";
+      } else {
+        teacherId = newMessage.teacher || null;
+        const teacherObj = teachers.find(
+          (t) => String(t._id) === String(teacherId)
+        );
+        teacherName = teacherObj
+          ? teacherObj.name || teacherObj.username || teacherObj.email
+          : "";
+        if (teacherId) recipientIds = [teacherId];
+      }
+
+      const studentId = newMessage.student || null;
+      const studentObj = messageStudents.find(
+        (u) => String(u._id) === String(studentId)
+      );
+      const studentName = studentObj
+        ? studentObj.name || studentObj.username || studentObj.email
+        : "";
+
+      const payload = {
+        title: `${teacherName || "Teacher"} → ${studentName || "Student"}`,
+        body: newMessage.content,
+        grade: newMessage.grade,
+        recipientIds,
+        isBroadcast: sendToAllAdmins,
+        teacherId: teacherId || null,
+        teacherName,
+        studentId: studentId || null,
+        studentName,
+      };
+
+      await axios.post("/api/messages", payload);
+      toast.success(
+        sendToAllAdmins ? "Message sent to all admins" : "Message sent"
+      );
+      setShowMessageForm(false);
+      setNewMessage({ teacher: "", grade: "", student: "", content: "" });
+      setSendToAllAdmins(false);
+      await fetchMessages();
+    } catch (err) {
+      console.error("Failed to send message:", err?.response?.data || err);
+      toast.error(err?.response?.data?.message || "Failed to send message");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleMessageButtonClick = () => {
+    setShowMessagesPopup(true);
+  };
+
+  const handleCloseMessagesPopup = () => {
+    setShowMessagesPopup(false);
+    setShowMessageForm(false);
+    setNewMessage({ teacher: "", grade: "", student: "", content: "" });
   };
 
   const handleGradeSelection = (grade) => {
@@ -406,17 +378,14 @@ const SuperAdmin = () => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-
-    // basic client validation
     if (formData.password !== formData.confirmPassword) {
       return toast.error("Passwords do not match!");
     }
     if (!formData.name || !formData.username || !formData.email) {
       return toast.error("All fields are required!");
     }
-
+    if (isSubmitting) return;
     setIsSubmitting(true);
-
     try {
       const payload = {
         name: formData.name,
@@ -426,27 +395,21 @@ const SuperAdmin = () => {
         yearLevel: formData.yearLevel || undefined,
         role: activeTab === "Teachers" ? "admin" : "user",
       };
-
       const urlBase =
         formMode === "edit"
           ? activeTab === "Users"
             ? `/api/superadmin/users/${encodeURIComponent(formData.email)}`
             : `/api/superadmin/admins/${encodeURIComponent(formData.email)}`
           : "/api/superadmin/create-account";
-
       const method = formMode === "edit" ? axios.put : axios.post;
       const res = await method(urlBase, payload);
       const returned = res?.data?.data;
 
-      // Show QR modal for both admin and user after creation (backend now sends QR for both)
       if (formMode !== "edit" && (returned?.qrDataUrl || returned?.magicUrl)) {
         setQrDataUrl(returned.qrDataUrl || null);
         setMagicUrl(returned.magicUrl || null);
         setQrStudentEmail(returned.user?.email || payload.email);
         setQrModalVisible(true);
-      } else {
-        if (formMode !== "edit")
-          console.log("No qrDataUrl or magicUrl in response:", returned);
       }
 
       toast.success(
@@ -489,80 +452,50 @@ const SuperAdmin = () => {
     navigate("/login");
   };
 
-  // Handler for clicking a message to edit
-  // Handler for clicking a message to edit — uses real data
+  // ← Fixed: Use raw message and prefer IDs
   const handleEditMsg = (msg) => {
-    // msg is the mapped object with msg.raw === original server message
-    const raw = msg.raw || {};
-
-    // Prefer canonical ids when available (teacherId/studentId), otherwise fallback to names
-    const teacherId = raw.teacherId || raw.teacher || "";
-    const teacherName =
-      raw.teacherName ||
-      (raw.senderId && (raw.senderId.name || raw.senderId.email)) ||
-      msg.sender ||
-      "";
-    const studentId = raw.studentId || raw.student || "";
-    const studentName = raw.studentName || msg.recipient || "";
-    const grade = raw.grade || msg.grade || "";
+    const raw = msg.raw || msg;
 
     setEditingMsgId(msg.id);
-
     setEditMsgForm({
-      teacher: teacherId || teacherName, // value may be an id or name depending on available data
-      grade,
-      student: studentId || studentName,
-      content: msg.content || raw.body || raw.text || "",
+      teacher: raw.teacherId || "",
+      grade: raw.grade || msg.grade || "",
+      student: raw.studentId || "",
+      content: msg.content || raw.body || "",
     });
 
-    // Preload students for this grade so edit dropdown is populated
-    if (grade) fetchStudentsForMessage(grade);
+    if (raw.grade) fetchStudentsForMessage(raw.grade);
   };
 
-  // Handler for edit form changes
   const handleEditMsgFormChange = (e) => {
     const { name, value } = e.target;
     setEditMsgForm((prev) => ({ ...prev, [name]: value }));
-
-    // if grade changed in edit modal, fetch students for that grade
     if (name === "grade") {
-      // normalize grade value to the same format used elsewhere, if necessary
       fetchStudentsForMessage(value);
     }
   };
 
-  // Handler for apply changes
-
-  // Apply edited message to backend and update UI (robust + debug)
   const handleApplyMsgEdit = async (e) => {
     e.preventDefault();
     if (!editingMsgId) return toast.error("No message selected to edit.");
     if (!editMsgForm.content || !editMsgForm.content.trim())
       return toast.error("Message content cannot be empty.");
-
+    if (isSubmitting) return;
     setIsSubmitting(true);
-
     try {
-      // --- Debug: show token and editing id ---
       const token = localStorage.getItem("token");
-      console.log("handleApplyMsgEdit: token:", token);
       if (!token) {
         toast.error("Not authenticated. Please login.");
         setIsSubmitting(false);
         return;
       }
 
-      const url = `/api/messages/edit/${encodeURIComponent(editingMsgId)}`;
-
-      // Resolve teacher/student objects where possible
       const teacherObj = teachers.find(
         (t) => String(t._id) === String(editMsgForm.teacher)
       );
-      const studentObj =
-        messageStudents.find(
-          (s) => String(s._id) === String(editMsgForm.student)
-        ) ||
-        messageStudents.find((s) => s.email && s.email === editMsgForm.student);
+      const studentObj = messageStudents.find(
+        (s) => String(s._id) === String(editMsgForm.student)
+      );
 
       const payload = {
         body: editMsgForm.content.trim(),
@@ -577,35 +510,21 @@ const SuperAdmin = () => {
           : editMsgForm.student,
       };
 
-      // Build headers explicitly
-      const headers = {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      };
-      console.log(
-        "handleApplyMsgEdit: PUT",
-        url,
-        "payload:",
+      const res = await axios.put(
+        `/api/messages/edit/${encodeURIComponent(editingMsgId)}`,
         payload,
-        "headers:",
-        headers
+        {
+          baseURL:
+            import.meta.env.VITE_API_BASE ||
+            "https://wesign-backend-cef3encxhphtg0ds.eastasia-01.azurewebsites.net",
+        }
       );
 
-      const res = await axios.put(url, payload, {
-        baseURL:
-          import.meta.env.VITE_API_BASE ||
-          "https://wesign-backend-cef3encxhphtg0ds.eastasia-01.azurewebsites.net",
-        headers,
-      });
-
       const updated = res?.data?.updatedMessage || res?.data || null;
-      console.log("handleApplyMsgEdit: response:", res?.status, res?.data);
-
       if (updated && (updated._id || updated.id)) {
-        const mapped = mapMessage(updated);
-        const newItem = { ...mapped, raw: updated };
+        const mapped = { ...mapMessage(updated), raw: updated };
         setMessages((prev) =>
-          prev.map((m) => (m.id === mapped.id ? newItem : m))
+          prev.map((m) => (m.id === mapped.id ? mapped : m))
         );
         toast.success("Message updated");
       } else {
@@ -615,13 +534,7 @@ const SuperAdmin = () => {
             m.id === editingMsgId
               ? {
                   ...m,
-                  sender: teacherObj
-                    ? teacherObj.name || teacherObj.email
-                    : m.sender,
                   grade: editMsgForm.grade,
-                  recipient: studentObj
-                    ? studentObj.name || studentObj.email
-                    : m.recipient,
                   content: editMsgForm.content,
                 }
               : m
@@ -629,83 +542,47 @@ const SuperAdmin = () => {
         );
         toast.success("Message updated (local)");
       }
-
       setEditingMsgId(null);
     } catch (err) {
       console.error("handleApplyMsgEdit error:", err?.response?.data || err);
-
-      // If axios error and backend returned 401
-      if (
-        err?.response?.status === 401 ||
-        (err?.response?.data && err.response.data.message === "Unauthorized")
-      ) {
+      if (err?.response?.status === 401) {
         toast.error("Session expired or unauthorized. Please login again.");
-        // optional: redirect to login
-        // navigate('/login');
-        setEditingMsgId(null);
-        setIsSubmitting(false);
-        return;
+      } else {
+        toast.error(err?.response?.data?.message || "Failed to update message");
       }
-
-      const msg = err?.response?.data?.message || "Failed to update message";
-      toast.error(msg);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // Handler for delete message
-  // Delete message both in DB and UI
-  // Delete message both in DB and UI (robust + debug)
   const handleDeleteMsg = async () => {
     if (!editingMsgId) {
       toast.error("No message selected to delete.");
       return;
     }
     if (!window.confirm("Delete this message? This cannot be undone.")) return;
-
+    if (isSubmitting) return;
     setIsSubmitting(true);
-
     try {
       const token = localStorage.getItem("token");
-      console.log("handleDeleteMsg: token:", token);
       if (!token) {
         toast.error("Not authenticated. Please login.");
         setIsSubmitting(false);
         return;
       }
 
-      const url = `/api/messages/${encodeURIComponent(editingMsgId)}`;
-      const headers = {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      };
-
-      console.log("handleDeleteMsg: DELETE", url, "headers:", headers);
-
-      const res = await axios.delete(url, {
+      await axios.delete(`/api/messages/${encodeURIComponent(editingMsgId)}`, {
         baseURL:
           import.meta.env.VITE_API_BASE ||
           "https://wesign-backend-cef3encxhphtg0ds.eastasia-01.azurewebsites.net",
-        headers,
       });
 
-      console.log("handleDeleteMsg: response:", res?.status, res?.data);
-
-      // remove from UI
       setMessages((prev) => prev.filter((m) => m.id !== editingMsgId));
       setEditingMsgId(null);
       toast.success("Message deleted");
     } catch (err) {
       console.error("handleDeleteMsg error:", err?.response?.data || err);
-      if (err?.response?.status === 401) {
-        toast.error("Unauthorized. Please login again.");
-        // navigate('/login'); // optional redirect
-        setIsSubmitting(false);
-        return;
-      }
-      const msg = err?.response?.data?.message || "Failed to delete message";
-      toast.error(msg);
+      toast.error(err?.response?.data?.message || "Failed to delete message");
     } finally {
       setIsSubmitting(false);
     }
@@ -740,7 +617,7 @@ const SuperAdmin = () => {
             }}
           >
             <h1 className="supertitle" style={{ margin: 0, fontSize: "2rem" }}>
-              Super Admin Dashboard
+              SNED Coordinator Dashboard
             </h1>
             {!showLeaderboard && (
               <div style={{ display: "flex", gap: "0.5rem" }}>
@@ -809,8 +686,6 @@ const SuperAdmin = () => {
             </div>
           ) : (
             <div className="dashboard-main-content">
-              {/* Levels moved to `SidenavAdmins.jsx` - removed duplicate grade buttons here */}
-
               <div className="">
                 <div
                   className="Create"
@@ -832,7 +707,6 @@ const SuperAdmin = () => {
                       }}
                       onClick={handleMessageButtonClick}
                     >
-                      {/* Envelope icon SVG */}
                       <svg
                         width="32"
                         height="32"
@@ -854,6 +728,7 @@ const SuperAdmin = () => {
                       </svg>
                     </button>
                   </div>
+
                   {/* Messages Popup Modal */}
                   {showMessagesPopup && (
                     <div>
@@ -875,11 +750,10 @@ const SuperAdmin = () => {
                           display: "flex",
                           flexDirection: "column",
                           overflowY: "auto",
-                          scrollbarWidth: "none", // Firefox
-                          msOverflowStyle: "none", // IE/Edge
+                          scrollbarWidth: "none",
+                          msOverflowStyle: "none",
                         }}
                       >
-                        {/* Close button - square, centered X */}
                         <button
                           type="button"
                           onClick={handleCloseMessagesPopup}
@@ -917,7 +791,7 @@ const SuperAdmin = () => {
                             ×
                           </span>
                         </button>
-                        {/* Plus icon */}
+
                         <button
                           type="button"
                           aria-label="Add Message"
@@ -946,6 +820,7 @@ const SuperAdmin = () => {
                             +
                           </span>
                         </button>
+
                         <h2
                           className="message-title"
                           style={{
@@ -957,205 +832,221 @@ const SuperAdmin = () => {
                         >
                           Message
                         </h2>
+
                         {/* Message Form Popup */}
                         {showMessageForm && (
-                          <div
-                            className="message-form-modal"
-                            style={{
-                              position: "fixed",
-                              top: "50%",
-                              left: "50%",
-                              transform: "translate(-50%, -50%)",
-                              background: "#fff",
-                              borderRadius: "20px",
-                              border: "2px solid #e0e0e0",
-                              zIndex: 3000,
-                              width: "400px",
-                              boxShadow: "0 4px 24px rgba(0,0,0,0.18)",
-                              padding: "2rem 2rem 1.5rem 2rem",
-                              display: "flex",
-                              flexDirection: "column",
-                              justifyContent: "flex-start",
-                            }}
-                          >
-                            <button
-                              type="button"
-                              onClick={handleMessageFormClose}
-                              aria-label="Close"
-                              className="message-form-close-btn"
+                          <>
+                            <div
                               style={{
-                                position: "absolute",
-                                top: "18px",
-                                right: "18px",
-                                backgroundColor: "#e74c3c",
-                                color: "#fff",
-                                border: "none",
-                                borderRadius: "8px",
-                                width: "32px",
-                                height: "32px",
-                                fontWeight: "bold",
-                                fontSize: "1.5rem",
-                                cursor: "pointer",
-                                zIndex: 2,
+                                position: "fixed",
+                                top: 0,
+                                left: 0,
+                                width: "100vw",
+                                height: "100vh",
+                                background: "rgba(20, 10, 40, 0.75)",
+                                zIndex: 2999,
+                                pointerEvents: "auto",
+                              }}
+                            />
+                            <div
+                              className="message-form-modal"
+                              style={{
+                                position: "fixed",
+                                top: "50%",
+                                left: "50%",
+                                transform: "translate(-50%, -50%)",
+                                background: "#3F3653",
+                                borderRadius: "20px",
+                                border: "2px solid #7338A0",
+                                zIndex: 3000,
+                                width: "400px",
+                                boxShadow: "0 4px 24px rgba(0,0,0,0.18)",
+                                padding: "2rem 2rem 1.5rem 2rem",
                                 display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                padding: 0,
+                                flexDirection: "column",
+                                justifyContent: "flex-start",
                               }}
                             >
-                              <span
+                              <button
+                                type="button"
+                                onClick={handleMessageFormClose}
+                                aria-label="Close"
+                                className="message-form-close-btn"
                                 style={{
+                                  position: "absolute",
+                                  top: "18px",
+                                  right: "18px",
+                                  backgroundColor: "#e74c3c",
+                                  color: "#fff",
+                                  border: "none",
+                                  borderRadius: "8px",
+                                  width: "32px",
+                                  height: "32px",
+                                  fontWeight: "bold",
+                                  fontSize: "1.5rem",
+                                  cursor: "pointer",
+                                  zIndex: 2,
                                   display: "flex",
                                   alignItems: "center",
                                   justifyContent: "center",
-                                  width: "100%",
-                                  height: "100%",
+                                  padding: 0,
                                 }}
                               >
-                                ×
-                              </span>
-                            </button>
-                            <h2
-                              className="message-form-title"
-                              style={{
-                                color: "#222",
-                                fontWeight: "bold",
-                                fontSize: "2rem",
-                                marginBottom: "1.5rem",
-                                textAlign: "center",
-                              }}
-                            >
-                              Message
-                            </h2>
-                            <form onSubmit={handleSendMessage}>
-                              <div style={{ marginBottom: "1rem" }}>
-                                <div style={{ marginBottom: "0.7rem" }}>
-                                  <label
+                                <span
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    width: "100%",
+                                    height: "100%",
+                                  }}
+                                >
+                                  ×
+                                </span>
+                              </button>
+                              <h2
+                                className="message-form-title"
+                                style={{
+                                  color: "#fff",
+                                  fontWeight: "bold",
+                                  fontSize: "2rem",
+                                  marginBottom: "1.5rem",
+                                  textAlign: "center",
+                                }}
+                              >
+                                Message
+                              </h2>
+                              <form onSubmit={handleSendMessage}>
+                                <div style={{ marginBottom: "1rem" }}>
+                                  <div style={{ marginBottom: "0.7rem" }}>
+                                    <label
+                                      style={{
+                                        color: "#fff",
+                                        fontWeight: "bold",
+                                        fontSize: "1.1rem",
+                                      }}
+                                    >
+                                      <input
+                                        type="checkbox"
+                                        checked={sendToAllAdmins}
+                                        onChange={(e) =>
+                                          setSendToAllAdmins(e.target.checked)
+                                        }
+                                        style={{ marginRight: "0.5rem" }}
+                                      />
+                                      Send to All Admins
+                                    </label>
+                                  </div>
+                                  <select
+                                    name="teacher"
+                                    value={newMessage.teacher}
+                                    onChange={handleMessageInputChange}
                                     style={{
-                                      color: "#222222",
-                                      fontWeight: "bold",
+                                      width: "100%",
+                                      padding: "0.8rem",
+                                      borderRadius: "10px",
+                                      background: "#e9e9ee",
+                                      color: "#222",
+                                      border: "1px solid #bdbdbd",
                                       fontSize: "1.1rem",
+                                      marginBottom: "0.7rem",
+                                    }}
+                                    disabled={sendToAllAdmins}
+                                  >
+                                    <option value="">Select Teacher</option>
+                                    {teachers.map((t) => (
+                                      <option key={t._id} value={t._id}>
+                                        {t.name || t.username || t.email}
+                                      </option>
+                                    ))}
+                                  </select>
+                                  <select
+                                    name="grade"
+                                    value={newMessage.grade}
+                                    onChange={handleMessageInputChange}
+                                    style={{
+                                      width: "100%",
+                                      padding: "0.8rem",
+                                      borderRadius: "10px",
+                                      background: "#e9e9ee",
+                                      color: "#222",
+                                      border: "1px solid #bdbdbd",
+                                      fontSize: "1.1rem",
+                                      marginBottom: "0.7rem",
                                     }}
                                   >
-                                    <input
-                                      type="checkbox"
-                                      checked={sendToAllAdmins}
-                                      onChange={(e) =>
-                                        setSendToAllAdmins(e.target.checked)
-                                      }
-                                      style={{ marginRight: "0.5rem" }}
-                                    />
-                                    Send to All Admins
-                                  </label>
+                                    <option value="">Grade</option>
+                                    <option value="GRADE 7">GRADE 7</option>
+                                    <option value="GRADE 8">GRADE 8</option>
+                                    <option value="GRADE 9">GRADE 9</option>
+                                    <option value="GRADE 10">GRADE 10</option>
+                                    <option value="GRADE 11">GRADE 11</option>
+                                    <option value="GRADE 12">GRADE 12</option>
+                                  </select>
+                                  <select
+                                    name="student"
+                                    value={newMessage.student}
+                                    onChange={handleMessageInputChange}
+                                    style={{
+                                      width: "100%",
+                                      padding: "0.8rem",
+                                      borderRadius: "10px",
+                                      background: "#e9e9ee",
+                                      color: "#222",
+                                      border: "1px solid #bdbdbd",
+                                      fontSize: "1.1rem",
+                                      marginBottom: "0.7rem",
+                                    }}
+                                  >
+                                    <option value="">Select Student</option>
+                                    {messageStudents.map((u) => (
+                                      <option
+                                        key={u._id || u.email}
+                                        value={u._id || u.email}
+                                      >
+                                        {u.name || u.username || u.email}
+                                      </option>
+                                    ))}
+                                  </select>
+                                  <textarea
+                                    name="content"
+                                    value={newMessage.content}
+                                    onChange={handleMessageInputChange}
+                                    placeholder="Message"
+                                    style={{
+                                      width: "100%",
+                                      minHeight: "120px",
+                                      borderRadius: "10px",
+                                      background: "#e9e9ee",
+                                      color: "#222",
+                                      border: "1px solid #bdbdbd",
+                                      fontSize: "1.1rem",
+                                      padding: "0.8rem",
+                                    }}
+                                  />
                                 </div>
-                                <select
-                                  name="teacher"
-                                  value={newMessage.teacher}
-                                  onChange={handleMessageInputChange}
+                                <button
+                                  type="submit"
                                   style={{
                                     width: "100%",
-                                    padding: "0.8rem",
+                                    background: "#1976d2",
+                                    color: "#fff",
+                                    border: "none",
                                     borderRadius: "10px",
-                                    background: "#e9e9ee",
-                                    color: "#222",
-                                    border: "1px solid #bdbdbd",
-                                    fontSize: "1.1rem",
-                                    marginBottom: "0.7rem",
-                                  }}
-                                  disabled={sendToAllAdmins}
-                                >
-                                  <option value="">Select Teacher</option>
-                                  {teachers.map((t) => (
-                                    <option key={t._id} value={t._id}>
-                                      {t.name || t.username || t.email}
-                                    </option>
-                                  ))}
-                                </select>
-                                <select
-                                  name="grade"
-                                  value={newMessage.grade}
-                                  onChange={handleMessageInputChange}
-                                  style={{
-                                    width: "100%",
-                                    padding: "0.8rem",
-                                    borderRadius: "10px",
-                                    background: "#e9e9ee",
-                                    color: "#222",
-                                    border: "1px solid #bdbdbd",
-                                    fontSize: "1.1rem",
-                                    marginBottom: "0.7rem",
+                                    fontWeight: "bold",
+                                    fontSize: "1.5rem",
+                                    padding: "0.7rem 0",
+                                    marginTop: "0.5rem",
+                                    cursor: "pointer",
                                   }}
                                 >
-                                  <option value="">Grade</option>
-                                  <option value="GRADE 7">GRADE 7</option>
-                                  <option value="GRADE 8">GRADE 8</option>
-                                  <option value="GRADE 9">GRADE 9</option>
-                                  <option value="GRADE 10">GRADE 10</option>
-                                  <option value="GRADE 11">GRADE 11</option>
-                                  <option value="GRADE 12">GRADE 12</option>
-                                </select>
-                                <select
-                                  name="student"
-                                  value={newMessage.student}
-                                  onChange={handleMessageInputChange}
-                                  style={{
-                                    width: "100%",
-                                    padding: "0.8rem",
-                                    borderRadius: "10px",
-                                    background: "#e9e9ee",
-                                    color: "#222",
-                                    border: "1px solid #bdbdbd",
-                                    fontSize: "1.1rem",
-                                    marginBottom: "0.7rem",
-                                  }}
-                                >
-                                  <option value="">Select Student</option>
-                                  {messageStudents.map((u) => (
-                                    <option
-                                      key={u._id || u.email}
-                                      value={u._id || u.email}
-                                    >
-                                      {u.name || u.username || u.email}
-                                    </option>
-                                  ))}
-                                </select>
-                                <textarea
-                                  name="content"
-                                  value={newMessage.content}
-                                  onChange={handleMessageInputChange}
-                                  placeholder="Message"
-                                  style={{
-                                    width: "100%",
-                                    minHeight: "120px",
-                                    borderRadius: "10px",
-                                    background: "#e9e9ee",
-                                    color: "#222",
-                                    border: "1px solid #bdbdbd",
-                                    fontSize: "1.1rem",
-                                    padding: "0.8rem",
-                                  }}
-                                />
-                              </div>
-                              <button
-                                type="submit"
-                                style={{
-                                  width: "100%",
-                                  background: "#1976d2",
-                                  color: "#fff",
-                                  border: "none",
-                                  borderRadius: "10px",
-                                  fontWeight: "bold",
-                                  fontSize: "1.5rem",
-                                  padding: "0.7rem 0",
-                                  marginTop: "0.5rem",
-                                  cursor: "pointer",
-                                }}
-                              >
-                                Send
-                              </button>
-                            </form>
-                          </div>
+                                  Send
+                                </button>
+                              </form>
+                            </div>
+                          </>
                         )}
+
                         <div
                           style={{
                             width: "100%",
@@ -1548,27 +1439,19 @@ const SuperAdmin = () => {
               </div>
 
               {/* QR Modal */}
-              {(() => {
-                console.log("SuperAdmin QR modal state:", {
-                  qrModalVisible,
-                  qrDataUrl,
-                  magicUrl,
-                  qrStudentEmail,
-                });
-                return qrModalVisible ? (
-                  <QRModal
-                    visible={qrModalVisible}
-                    onClose={() => setQrModalVisible(false)}
-                    dataUrl={qrDataUrl}
-                    magicUrl={magicUrl}
-                    studentEmail={qrStudentEmail}
-                  />
-                ) : null;
-              })()}
+              {qrModalVisible && (
+                <QRModal
+                  visible={qrModalVisible}
+                  onClose={() => setQrModalVisible(false)}
+                  dataUrl={qrDataUrl}
+                  magicUrl={magicUrl}
+                  studentEmail={qrStudentEmail}
+                />
+              )}
 
+              {/* Create/Edit Form Modal */}
               {showForm && (
                 <>
-                  {/* Modal overlay to darken background and block interaction */}
                   <div
                     className="edit-modal-overlay"
                     style={{
@@ -1632,9 +1515,7 @@ const SuperAdmin = () => {
                               background: "#6C7294",
                               color: "#fff",
                               fontSize: "1rem",
-                              "::placeholder": { color: "#bfc3d1", opacity: 1 },
                             }}
-                            placeholderTextColor="#bfc3d1"
                           />
                         </div>
                         <div className="form-group">
@@ -1642,7 +1523,7 @@ const SuperAdmin = () => {
                             name="username"
                             value={formData.username}
                             onChange={handleInputChange}
-                            className="form-control text-yellow-400"
+                            className="form-control"
                             placeholder="Username"
                             required
                             style={{
@@ -1654,9 +1535,7 @@ const SuperAdmin = () => {
                               background: "#6C7294",
                               color: "#fff",
                               fontSize: "1rem",
-                              "::placeholder": { color: "#bfc3d1", opacity: 1 },
                             }}
-                            placeholderTextColor="#bfc3d1"
                           />
                         </div>
                         <div className="form-group">
@@ -1677,9 +1556,7 @@ const SuperAdmin = () => {
                               fontSize: "1rem",
                             }}
                           >
-                            <option value="" style={{ color: "#bfc3d1" }}>
-                              -- Select Year Level --
-                            </option>
+                            <option value="">-- Select Year Level --</option>
                             <option value="Grade 7">Grade 7</option>
                             <option value="Grade 8">Grade 8</option>
                             <option value="Grade 9">Grade 9</option>
@@ -1706,9 +1583,7 @@ const SuperAdmin = () => {
                               background: "#6C7294",
                               color: "#fff",
                               fontSize: "1rem",
-                              "::placeholder": { color: "#bfc3d1", opacity: 1 },
                             }}
-                            placeholderTextColor="#bfc3d1"
                           />
                         </div>
                         <div className="form-group">
@@ -1729,9 +1604,7 @@ const SuperAdmin = () => {
                               background: "#6C7294",
                               color: "#fff",
                               fontSize: "1rem",
-                              "::placeholder": { color: "#bfc3d1", opacity: 1 },
                             }}
-                            placeholderTextColor="#bfc3d1"
                           />
                         </div>
                         <div className="form-group">
@@ -1752,9 +1625,7 @@ const SuperAdmin = () => {
                               background: "#6C7294",
                               color: "#fff",
                               fontSize: "1rem",
-                              "::placeholder": { color: "#bfc3d1", opacity: 1 },
                             }}
-                            placeholderTextColor="#bfc3d1"
                           />
                         </div>
                         <div
@@ -1815,10 +1686,9 @@ const SuperAdmin = () => {
                 </>
               )}
 
-              {/* Progress modal (SuperAdmin uses this) */}
+              {/* Progress Tracker Modal */}
               {showProgressTracker && (
                 <>
-                  {/* Overlay to darken background and block clicks */}
                   <div
                     className="progress-modal-overlay"
                     style={{
@@ -1838,7 +1708,7 @@ const SuperAdmin = () => {
                       position: "fixed",
                       top: "50%",
                       left: "50%",
-                      transform: "translate(-48%, -50%)", // shift content a bit to the left
+                      transform: "translate(-48%, -50%)",
                       width: "73vh",
                       height: "100vh",
                       borderRadius: "30px",
@@ -1850,11 +1720,11 @@ const SuperAdmin = () => {
                       alignItems: "center",
                       justifyContent: "center",
                       boxSizing: "border-box",
-                      paddingLeft: "0", // remove left padding
-                      paddingRight: "24px", // add a little right padding if needed
+                      paddingLeft: "0",
+                      paddingRight: "24px",
                     }}
                   >
-                    {/* Close button in upper right, always on top */}
+                    {/* Fixed: Close button position */}
                     <button
                       type="button"
                       className="btn-close"
@@ -1863,7 +1733,7 @@ const SuperAdmin = () => {
                       style={{
                         position: "absolute",
                         top: "18px",
-                        right: "33rem",
+                        right: "20px", // ← Fixed from "33rem"
                         backgroundColor: "#e9170f",
                         borderRadius: "20%",
                         padding: "4px",
@@ -1879,7 +1749,7 @@ const SuperAdmin = () => {
                         boxShadow: "0 2px 12px rgba(0,0,0,0.25)",
                       }}
                     >
-                      {/* Only white X, no black shadow or border */}
+                      ×
                     </button>
                     <div
                       className="superadmin-progress-wrapper"
@@ -1888,8 +1758,8 @@ const SuperAdmin = () => {
                         height: "100%",
                         display: "flex",
                         alignItems: "center",
-                        justifyContent: "flex-start", // align content to the left
-                        paddingLeft: "12px", // add a bit of left padding for balance
+                        justifyContent: "flex-start",
+                        paddingLeft: "12px",
                       }}
                     >
                       <ProgressTracker

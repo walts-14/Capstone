@@ -336,7 +336,7 @@ const DashboardAdmin = () => {
       <div className="holy-grail-content-wrapper">
         {/* Header */}
         <header className="holy-grail-header ">
-          <h1>Admin Dashboard</h1>
+          <h1>Teacher Dashboard</h1>
         </header>
 
         {/* Main Content */}
