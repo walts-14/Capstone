@@ -868,13 +868,15 @@ const SuperAdmin = () => {
                           borderRadius: "30px",
                           border: "2px solid #e0e0e0",
                           zIndex: 2000,
-                          width: "600px",
-                          height: "550px",
+                          width: "45%",
+                          height: "70%",
                           boxShadow: "0 4px 24px rgba(0,0,0,0.18)",
                           padding: "2rem 2.5rem 2rem 2.5rem",
                           display: "flex",
                           flexDirection: "column",
                           overflowY: "auto",
+                          scrollbarWidth: "none", // Firefox
+                          msOverflowStyle: "none", // IE/Edge
                         }}
                       >
                         {/* Close button - square, centered X */}
@@ -1030,7 +1032,7 @@ const SuperAdmin = () => {
                                 <div style={{ marginBottom: "0.7rem" }}>
                                   <label
                                     style={{
-                                      color: "#fff",
+                                      color: "#000000",
                                       fontWeight: "bold",
                                       fontSize: "1.1rem",
                                     }}
