@@ -16,6 +16,7 @@ const MessageSchema = new Schema({
 
   senderId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   senderRole: { type: String, required: true },
+  senderEmail: { type: String, default: "" },
 
   // teacher/student metadata (optional but useful for UI)
   teacherId: { type: Schema.Types.ObjectId, ref: "User", default: null },

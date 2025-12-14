@@ -585,11 +585,11 @@ export const replyToMessage = async (req, res) => {
 
     return res.status(201).json({
       message: "Reply sent successfully",
-      reply: replyMessage,
+      reply: replyMessage.toObject ? replyMessage.toObject() : replyMessage,
     });
   } catch (err) {
-    console.error("replyToMessage error", err);
-    return res.status(500).json({ message: "Server error" });
+    console.error("replyToMessage error", err.message, err.stack);
+    return res.status(500).json({ message: "Server error", error: err.message });
   }
 };
 
@@ -610,7 +610,10 @@ export const markAllAsRead = async (req, res) => {
     const userIdObj = toObjectId(userIdStr);
 
     // Find all messages targeted to this admin (broadcast or direct)
-    const orConditions = [{ isBroadcast: true, recipientRole: "admin" }];
+    const orConditions = [
+      { isBroadcast: true, recipientRole: "admin" },
+      { recipientRole: "admin" }, // Standalone: all messages where recipientRole is admin
+    ];
     if (userIdObj) orConditions.push({ recipientIds: userIdObj });
     orConditions.push({ recipientIds: userIdStr });
     orConditions.push({
@@ -663,8 +666,11 @@ export const deleteAllMessages = async (req, res) => {
     if (!userIdStr) return res.status(400).json({ message: "Invalid user" });
     const userIdObj = toObjectId(userIdStr);
 
-    // Find all messages targeted to this admin (broadcast or direct)
-    const orConditions = [{ isBroadcast: true, recipientRole: "admin" }];
+    // Find all messages targeted to this admin (broadcast, direct recipientIds, or recipientRole === admin)
+    const orConditions = [
+      { isBroadcast: true, recipientRole: "admin" },
+      { recipientRole: "admin" }, // All messages where recipientRole is admin
+    ];
     if (userIdObj) orConditions.push({ recipientIds: userIdObj });
     orConditions.push({ recipientIds: userIdStr });
     orConditions.push({
