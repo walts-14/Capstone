@@ -9,6 +9,7 @@ import {
   editMessage,
   deleteMessage,
   replyToMessage,
+  getRepliesForMessage,
   markAllAsRead,
   deleteAllMessages,
 } from "../controllers/messageController.js";
@@ -38,6 +39,9 @@ router.get("/sent", authMiddleware, getMessagesSentBySender);
 router.get("/users/year/:grade", authMiddleware, getUsersByGradeLevel);
 
 // Single message operations (these use /:id pattern, so must come after /all and /sent)
+// Fetch replies for a specific message
+router.get("/:id/replies", authMiddleware, getRepliesForMessage);
+
 // Mark message read
 router.put("/:id/read", authMiddleware, markAsRead);
 

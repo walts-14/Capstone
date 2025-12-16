@@ -547,15 +547,19 @@ export const replyToMessage = async (req, res) => {
       return res.status(403).json({ message: "Forbidden: You are not a recipient of this message" });
     }
 
-    // Create a reply message
-    const replyMessage = await Message.create({
+    // Decide where the reply goes: if the original has a valid senderId, send directly; otherwise fall back to senderRole
+    const senderIdValid =
+      originalMessage.senderId && mongoose.Types.ObjectId.isValid(String(originalMessage.senderId));
+
+    const recipientRole = originalMessage.senderRole || "superadmin";
+
+    const replyPayload = {
       senderId: user._id,
       senderRole: user.role,
       senderEmail: user.email || "",
       body: content,
       title: `Re: ${originalMessage.title || "Message"}`,
-      recipientIds: [originalMessage.senderId], // reply goes back to the original sender
-      recipientRole: "admin",
+      recipientRole,
       isBroadcast: false,
       parentMessageId: id, // reference to original message
       grade: originalMessage.grade || "",
@@ -563,7 +567,13 @@ export const replyToMessage = async (req, res) => {
       teacherName: originalMessage.teacherName || "",
       studentId: originalMessage.studentId || null,
       studentName: originalMessage.studentName || "",
-    });
+    };
+
+    if (senderIdValid) {
+      replyPayload.recipientIds = [originalMessage.senderId];
+    }
+
+    const replyMessage = await Message.create(replyPayload);
 
     await replyMessage.populate("senderId", "name email role");
 
@@ -589,6 +599,46 @@ export const replyToMessage = async (req, res) => {
     });
   } catch (err) {
     console.error("replyToMessage error", err.message, err.stack);
+    return res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
+
+/**
+ * Fetch replies for a given message (visible to sender/recipient; superadmin can view their threads)
+ * GET /api/messages/:id/replies
+ */
+export const getRepliesForMessage = async (req, res) => {
+  try {
+    const user = req.user;
+    const { id } = req.params;
+
+    if (!user) return res.status(401).json({ message: "Unauthorized" });
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid message ID" });
+    }
+
+    const role = String(user.role || "").toLowerCase();
+    const userIdStr = String(user._id || user.id || user.userId || "");
+
+    const original = await Message.findById(id);
+    if (!original) return res.status(404).json({ message: "Message not found" });
+
+    const isSender = original.senderId && String(original.senderId) === userIdStr;
+    const isRecipient = (original.recipientIds || []).some((rid) => String(rid) === userIdStr);
+    const isSuperAdmin = role.includes("superadmin") || role.includes("super_admin");
+
+    if (!isSender && !isRecipient && !isSuperAdmin) {
+      return res.status(403).json({ message: "Forbidden" });
+    }
+
+    const replies = await Message.find({ parentMessageId: id })
+      .sort({ createdAt: -1 })
+      .populate("senderId", "name email role")
+      .lean();
+
+    return res.json({ replies });
+  } catch (err) {
+    console.error("getRepliesForMessage error", err.message, err.stack);
     return res.status(500).json({ message: "Server error", error: err.message });
   }
 };

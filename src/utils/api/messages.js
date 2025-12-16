@@ -12,7 +12,7 @@ export async function replyToMessage(messageId, body, token) {
     let errMsg = "Failed to send reply";
     try {
       const data = await res.json();
-      errMsg = data?.message || errMsg;
+      errMsg = data?.error || data?.message || errMsg;
     } catch {}
     throw new Error(errMsg);
   }

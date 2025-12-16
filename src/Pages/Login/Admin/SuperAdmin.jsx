@@ -94,6 +94,9 @@ const SuperAdmin = () => {
   const [sendToAllAdmins, setSendToAllAdmins] = useState(false);
   const [showMessagesPopup, setShowMessagesPopup] = useState(false);
   const [messages, setMessages] = useState([]);
+  const [threadMessage, setThreadMessage] = useState(null);
+  const [threadReplies, setThreadReplies] = useState([]);
+  const [threadLoading, setThreadLoading] = useState(false);
   const [messageStudents, setMessageStudents] = useState([]);
   const [users, setUsers] = useState([]);
   const [teachers, setTeachers] = useState([]);
@@ -241,6 +244,39 @@ const SuperAdmin = () => {
     }
   };
 
+  const fetchRepliesForMessage = async (msg) => {
+    if (!msg) return;
+    setThreadLoading(true);
+    try {
+      const res = await axios.get(`/api/messages/${msg.id}/replies`, {
+        baseURL: "",
+      });
+      const payload =
+        Array.isArray(res.data?.replies)
+          ? res.data.replies
+          : Array.isArray(res.data)
+          ? res.data
+          : [];
+      setThreadReplies(payload);
+    } catch (err) {
+      console.error("Failed to load replies", err?.response?.data || err);
+      toast.error("Failed to load replies");
+      setThreadReplies([]);
+    } finally {
+      setThreadLoading(false);
+    }
+  };
+
+  const openThread = (msg) => {
+    setThreadMessage(msg);
+    fetchRepliesForMessage(msg);
+  };
+
+  const closeThread = () => {
+    setThreadMessage(null);
+    setThreadReplies([]);
+  };
+
   useEffect(() => {
     if (showMessagesPopup) fetchMessages();
   }, [showMessagesPopup]);
@@ -339,6 +375,8 @@ const SuperAdmin = () => {
     setShowMessagesPopup(false);
     setShowMessageForm(false);
     setNewMessage({ teacher: "", grade: "", student: "", content: "" });
+    setThreadMessage(null);
+    setThreadReplies([]);
   };
 
   const handleGradeSelection = (grade) => {
@@ -1073,9 +1111,7 @@ const SuperAdmin = () => {
                                     padding: "1rem",
                                     marginBottom: "1rem",
                                     color: "#fff",
-                                    cursor: "pointer",
                                   }}
-                                  onClick={() => handleEditMsg(msg)}
                                 >
                                   <div
                                     className="message-tags"
@@ -1125,6 +1161,45 @@ const SuperAdmin = () => {
                                     style={{ color: "#fff", fontSize: "1rem" }}
                                   >
                                     {msg.content}
+                                  </div>
+                                  <div
+                                    style={{
+                                      marginTop: "0.75rem",
+                                      display: "flex",
+                                      gap: "0.5rem",
+                                      flexWrap: "wrap",
+                                    }}
+                                  >
+                                    <button
+                                      type="button"
+                                      onClick={() => openThread(msg)}
+                                      style={{
+                                        background: "#7c6ae3",
+                                        color: "#fff",
+                                        border: "none",
+                                        borderRadius: "8px",
+                                        padding: "0.4rem 0.8rem",
+                                        cursor: "pointer",
+                                        fontWeight: "bold",
+                                      }}
+                                    >
+                                      View replies
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => handleEditMsg(msg)}
+                                      style={{
+                                        background: "#f7c948",
+                                        color: "#222",
+                                        border: "none",
+                                        borderRadius: "8px",
+                                        padding: "0.4rem 0.8rem",
+                                        cursor: "pointer",
+                                        fontWeight: "bold",
+                                      }}
+                                    >
+                                      Edit
+                                    </button>
                                   </div>
                                 </div>
                               ))
@@ -1332,6 +1407,127 @@ const SuperAdmin = () => {
                           )}
                         </div>
                       </div>
+
+                      {threadMessage && (
+                        <>
+                          <div
+                            style={{
+                              position: "fixed",
+                              inset: 0,
+                              background: "rgba(0,0,0,0.45)",
+                              zIndex: 3000,
+                            }}
+                            onClick={closeThread}
+                          />
+                          <div
+                            style={{
+                              position: "fixed",
+                              top: "50%",
+                              left: "50%",
+                              transform: "translate(-50%, -50%)",
+                              width: "520px",
+                              maxWidth: "90vw",
+                              maxHeight: "80vh",
+                              background: "#1f1730",
+                              color: "#fff",
+                              borderRadius: "18px",
+                              border: "2px solid #7338a0",
+                              padding: "1.5rem",
+                              zIndex: 3001,
+                              boxShadow: "0 10px 40px rgba(0,0,0,0.35)",
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: "1rem",
+                            }}
+                          >
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                              <h3 style={{ margin: 0, fontSize: "1.4rem", fontWeight: "bold" }}>
+                                Thread
+                              </h3>
+                              <button
+                                type="button"
+                                onClick={closeThread}
+                                style={{
+                                  background: "#e74c3c",
+                                  border: "none",
+                                  color: "#fff",
+                                  borderRadius: "8px",
+                                  width: "36px",
+                                  height: "36px",
+                                  fontSize: "1.4rem",
+                                  cursor: "pointer",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                ×
+                              </button>
+                            </div>
+
+                            <div
+                              style={{
+                                background: "#2d2342",
+                                borderRadius: "12px",
+                                padding: "0.75rem 0.9rem",
+                                border: "1px solid #4b3a69",
+                              }}
+                            >
+                              <div style={{ fontWeight: "bold", marginBottom: "0.35rem" }}>
+                                {threadMessage.sender}
+                              </div>
+                              <div style={{ color: "#e0dff5", marginBottom: "0.35rem" }}>
+                                {threadMessage.content}
+                              </div>
+                              <div style={{ fontSize: "0.85rem", color: "#b9b6d3" }}>
+                                {threadMessage.grade && `Grade: ${threadMessage.grade}`}
+                              </div>
+                            </div>
+
+                            <div
+                              style={{
+                                background: "#2a2338",
+                                borderRadius: "12px",
+                                padding: "0.75rem 0.9rem",
+                                border: "1px solid #4b3a69",
+                                flex: 1,
+                                overflowY: "auto",
+                                maxHeight: "38vh",
+                              }}
+                            >
+                              <div style={{ marginBottom: "0.5rem", fontWeight: "bold" }}>
+                                Replies
+                              </div>
+                              {threadLoading ? (
+                                <div>Loading replies...</div>
+                              ) : threadReplies.length === 0 ? (
+                                <div style={{ color: "#b9b6d3" }}>No replies yet.</div>
+                              ) : (
+                                threadReplies.map((rep) => (
+                                  <div
+                                    key={rep._id || rep.id}
+                                    style={{
+                                      padding: "0.55rem 0.65rem",
+                                      borderRadius: "10px",
+                                      border: "1px solid #3f315a",
+                                      background: "#241b34",
+                                      marginBottom: "0.5rem",
+                                    }}
+                                  >
+                                    <div style={{ fontWeight: "bold" }}>
+                                      {rep.senderId?.name || rep.senderId?.email || rep.senderRole || "Admin"}
+                                    </div>
+                                    <div style={{ color: "#e4e2f5", marginTop: "0.25rem" }}>
+                                      {rep.body}
+                                    </div>
+                                    <div style={{ color: "#b3aecf", fontSize: "0.8rem", marginTop: "0.25rem" }}>
+                                      {rep.createdAt ? new Date(rep.createdAt).toLocaleString() : ""}
+                                    </div>
+                                  </div>
+                                ))
+                              )}
+                            </div>
+                          </div>
+                        </>
+                      )}
                     </div>
                   )}
 
