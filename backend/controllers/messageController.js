@@ -201,7 +201,10 @@ export const getMessagesForAdmin = async (req, res) => {
     const userIdObj = toObjectId(userIdStr);
 
     // Build flexible OR conditions:
-    const orConditions = [{ isBroadcast: true, recipientRole: "admin" }];
+    const orConditions = [
+      { isBroadcast: true, recipientRole: "admin" },
+      { recipientRole: "admin" }, // Include all messages where recipientRole === admin
+    ];
 
     if (userIdObj) {
       orConditions.push({ recipientIds: userIdObj });
@@ -239,14 +242,14 @@ export const getMessagesForAdmin = async (req, res) => {
       if (v && v._bsontype === "ObjectID") return String(v);
       return v;
     }));
-   //console.log("getMessagesForAdmin - built query:", JSON.stringify(queryForLog, null, 2));
+    console.log("getMessagesForAdmin - user:", userIdStr, "query:", JSON.stringify(queryForLog, null, 2));
 
     const messages = await Message.find(query)
       .sort({ createdAt: -1 })
       .populate("senderId", "name email role")
       .lean();
 
-    console.log("getMessagesForAdmin - found:", Array.isArray(messages) ? messages.length : 0);
+    console.log("getMessagesForAdmin - found:", Array.isArray(messages) ? messages.length : 0, "messages");
 
     const data = messages.map((m) => {
       const isRead = (m.readBy || []).some((r) => String(r.userId) === userIdStr);
@@ -527,6 +530,12 @@ export const replyToMessage = async (req, res) => {
       return res.status(403).json({ message: "Forbidden: Only admins can reply" });
     }
 
+    // Extract userId from token (can be user._id, user.id, etc.)
+    const userId = user._id || user.id || user.userId;
+    if (!userId) {
+      return res.status(400).json({ message: "Invalid user in token" });
+    }
+
     const content = String((replyBody ?? text ?? '').trim());
     if (!content) {
       return res.status(400).json({ message: 'Reply body cannot be empty' });
@@ -541,7 +550,7 @@ export const replyToMessage = async (req, res) => {
     const isRecipient =
       (originalMessage.isBroadcast && role.includes("admin")) ||
       (originalMessage.recipientRole === "admin" && role.includes("admin")) ||
-      (originalMessage.recipientIds || []).some((rid) => String(rid) === String(user._id));
+      (originalMessage.recipientIds || []).some((rid) => String(rid) === String(userId));
 
     if (!isRecipient) {
       return res.status(403).json({ message: "Forbidden: You are not a recipient of this message" });
@@ -554,7 +563,7 @@ export const replyToMessage = async (req, res) => {
     const recipientRole = originalMessage.senderRole || "superadmin";
 
     const replyPayload = {
-      senderId: user._id,
+      senderId: userId, // Ensure this is the extracted userId
       senderRole: user.role,
       senderEmail: user.email || "",
       body: content,
